@@ -1,14 +1,12 @@
 #include <bits/stdc++.h>
-#include <cstdio>
 #include <windows.h>
-#include <cstdlib>
-#include <conio.h>
 #include <iostream>
-#include <cstring>
 #include <ctime>
-#include <io.h>
-#include <fstream>
-#include <sys/stat.h>
+
+//获取管理员权限所需
+#include <tchar.h>
+#include <shellapi.h>
+
 #define S(i) Sleep(i)
 #define cls system("cls");
 #define ei else if
@@ -34,7 +32,7 @@ struct CMDset {
 		cfi.dwFontSize.X = 0;
 		cfi.dwFontSize.Y = size;//设置字体大小
 		cfi.FontFamily = FF_DONTCARE;
-		cfi.FontWeight = FW_NORMAL;//字体粗细 FW_BOLD,原始为FW_NORMAL
+		cfi.FontWeight = FW_BOLD;//字体粗细 FW_BOLD,原始为FW_NORMAL
 		wcscpy_s(cfi.FaceName, L"Consolas");//设置字体，必须是控制台已有的
 		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -152,27 +150,181 @@ void about() {
 	cout << "\n卓然第三帝国联合赞助\n";
 }
 
-int main() {
-	//start.powerOn();
-	//cls
-	//S(10);
-	//cls
+BOOL IsUserAnAdmin() {
+	BOOL bResult = FALSE;
+	SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
+	PSID pSid = NULL;
+	if (AllocateAndInitializeSid(&sia, 2,
+	                             SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
+	                             0, 0, 0, 0, 0, 0, &pSid)) {
+		// 检查当前线程或进程的访问令牌是否包含该SID
+		if (!CheckTokenMembership(NULL, pSid, &bResult)) {
+			// 如果CheckTokenMembership失败，则可能不是管理员，但也可能因为其他原因
+			// 这里简单地将结果设为FALSE
+			bResult = FALSE;
+		}
+		// 释放SID
+		FreeSid(pSid);
+	} else {
+		// 如果SID分配失败，则默认不是管理员
+		bResult = FALSE;
+	}
+	return bResult;
+}
+bool getadmin() {
+	// 获取当前程序的完整路径
+	TCHAR szPath[MAX_PATH];
+	GetModuleFileName(NULL, szPath, MAX_PATH);
+
+	// 检查当前用户是否是管理员
+	if (!IsUserAnAdmin()) {
+		// 如果不是管理员，则以管理员权限运行当前程序
+		SHELLEXECUTEINFO sei = {0};
+		sei.cbSize = sizeof(SHELLEXECUTEINFO);
+		sei.lpFile = szPath;
+		sei.nShow = SW_SHOWNORMAL;
+		sei.lpVerb = _T("runas"); // 指定操作为以管理员身份运行
+
+		ShellExecuteEx(&sei);
+		return false;
+	} else {
+		// 如果已经是管理员，则正常继续
+		cout << "已获得管理员权限\n";
+		return true;
+	}
+}
+
+void taskkill(bool KillSeewoService) {
 	cout << "正在结束进程：轻录播\n";
 	cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 	system("TASKKILL /F /IM EasiRecorder.exe");
-	system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
-	cout << "完成\n";
-
 	cout << "正在结束进程：班级优化大师\n";
 	cout << "TASKKILL /F /IM EasiCare.exe\n";
 	system("TASKKILL /F /IM EasiCare.exe");
 	cout << "TASKKILL /F /IM EasiCareLauncher.exe\n";
 	system("TASKKILL /F /IM EasiCareLauncher.exe");
+	if (KillSeewoService == true) {
+		cout << "正在结束进程：希沃管家\n";
+		cout << "-正在结束子进程1/3\n";
+		cout << "TASKKILL /F /IM SeewoServiceAssistant.exe\n";
+		system("TASKKILL /F /IM SeewoServiceAssistant.exe");
+		cout << "正在结束子进程2/3\n";
+		cout << "TASKKILL /F /IM SeewoAbility.exe\n";
+		system("TASKKILL /F /IM SeewoAbility.exe");
+		cout << "正在结束子进程3/3\n";
+		cout << "TASKKILL /F /IM SeewoCore.exe\n";
+		system("TASKKILL /F /IM SeewoCore.exe");
+	}
+	return;
+}
+
+int main() {
+	start.powerOn();
+	cls
+	S(10);
+	//cls
+	/*system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
+	cout << "完成\n";
+
 	system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"");
 
-	cout<<"卸载EasiAgent\n";
-	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
-	system("pause");
+	cout << "卸载EasiAgent\n";
+	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");*/
+	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
+	//	return 0;
+	//}//返回1确定，2取消
+
+	ShowWindow(hwnd, SW_MAXIMIZE);
+	//获取程序路径
+	char path[MAX_PATH];
+	GetModuleFileNameA(NULL, path, MAX_PATH);
+	string executable_path = path;
+	size_t position = executable_path.find_last_of('\\');
+	executable_path = executable_path.substr(0, position);
+	string xwbbpath = executable_path;
+	//选择界面
+	while (true) {
+		cls
+		int choose;
+		SetColorAndBackground(7, 0);
+		cout << "1:每日例行程序  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻";
+		SetColorAndBackground(6, 5);
+		cout << "Beta";
+		SetColorAndBackground(7, 0);
+		cout << "  5:修改希沃白板启动图片";
+		cout << "  6:恢复希沃白板启动图片";
+		SetColorAndBackground(7, 0);
+		cout << "  7:获取管理员权限  8:关于";
+		cout << "\n请选择：";
+		cin >> choose;
+		switch (choose) {
+			case 2: {
+				while (true) {
+					taskkill(true);
+					cls
+				}
+				break;
+			}
+			case 4: {
+				string unfreezepath = executable_path + "\\!SeewoFreezeUI.bat";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				DWORD dwExitCode;
+				if (fSuccess) { //把主进程暂停，等待子进程终止
+					CloseHandle(pi.hThread);
+					//暂停主进程的执行，直到child终止，该代码才可以继续运行
+					WaitForSingleObject(pi.hProcess, INFINITE);
+					CloseHandle(pi.hProcess);
+				}
+				break;
+			}
+			case 5: {
+				string xwbbsetpath = xwbbpath + "\\set.bat";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				DWORD dwExitCode;
+				if (fSuccess) { //把主进程暂停，等待子进程终止
+					CloseHandle(pi.hThread);
+					//暂停主进程的执行，直到child终止，该代码才可以继续运行
+					WaitForSingleObject(pi.hProcess, INFINITE);
+					CloseHandle(pi.hProcess);
+				}
+				break;
+			}
+			case 6: {
+				string xwbbsetpath = xwbbpath + "\\restore.bat";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				DWORD dwExitCode;
+				if (fSuccess) { //把主进程暂停，等待子进程终止
+					CloseHandle(pi.hThread);
+					//暂停主进程的执行，直到child终止，该代码才可以继续运行
+					WaitForSingleObject(pi.hProcess, INFINITE);
+					CloseHandle(pi.hProcess);
+				}
+				break;
+			}
+			case 7: {
+				if (getadmin() == false) {
+					return 0;
+				}
+				break;
+			}
+			case 8: {
+				about();
+				system("pause");
+				return 0;
+			}
+		}
+		//--------
+		system("pause");
+	}
 	return 0;
 }
 /*
