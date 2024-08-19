@@ -1,6 +1,6 @@
 [Project]
 FileName=SeewoKiller.dev
-Name=SlytherinOS
+Name=SeewoKiller
 Type=1
 Ver=2
 ObjFiles=
@@ -13,13 +13,13 @@ Compiler=
 CppCompiler=
 Linker=
 IsCpp=1
-Icon=SlytherinOS.ico
+Icon=SeewoKiller.ico
 ExeOutput=
 ObjectOutput=
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=SlytherinOS.exe
+OverrideOutputName=SeewoKiller.exe
 HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
