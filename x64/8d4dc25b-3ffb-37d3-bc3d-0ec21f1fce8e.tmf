@@ -1,0 +1,11 @@
+// PDB:  E:\JenkinsSlave\workspace\MIS_CPP\MIS_Component\SeewoFreeze_Prerelease\SWFreeze\..\SeewoFreeze\Release\x64\SWFreeze_x64.pdb
+// PDB:  Last Updated :2023-6-25:7:41:6:828 (UTC) [tracepdb]
+8d4dc25b-3ffb-37d3-bc3d-0ec21f1fce8e SWFreeze // SRC=WppLog.cpp MJ= MN=
+#typev WppLog_cpp98 11 "%0%10!s!" //   LEVEL=INIT FUNC=WppLog::Log
+{
+_buff, ItemString -- 10
+}
+#typev WppLog_cpp89 10 "%0%10!s! " //   LEVEL=INIT FUNC=WppLog::Log
+{
+pmd->buff, ItemString -- 10
+}
