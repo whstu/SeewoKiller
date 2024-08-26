@@ -139,13 +139,13 @@ void about() {
 	//写入版本号
 	CreateDirectory("./info", NULL );
 	ofstream info("./info/info.txt");
-	info << "Seewo Killer 0.1_Build20240819194853_PublicBeta3" << endl;
-	info << "版本代号000112" << endl;
+	info << "Seewo Killer 0.2_Build20240826131725" << endl;
+	info << "版本代号000200" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();
 	//----------
-	cout << "\nSeewo Killer 0.1_Build20240819194853_PublicBeta3\n";
-	cout << "\n版本代号000112\n";
+	cout << "\nSeewo Killer 0.2_Build20240826131725\n";
+	cout << "\n版本代号000200\n";
 	cout << "\nSeewo Killer\n";
 	cout << "\n卓然第三帝国联合赞助\n";
 }
