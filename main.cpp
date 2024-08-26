@@ -140,7 +140,7 @@ void about() {
 	CreateDirectory("./info", NULL );
 	ofstream info("./info/info.txt");
 	info << "Seewo Killer 0.1_Build20240819194853_PublicBeta3" << endl;
-	info << "版本代号000101" << endl;
+	info << "版本代号000112" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();
 	//----------
@@ -160,7 +160,6 @@ BOOL IsUserAnAdmin() {
 		// 检查当前线程或进程的访问令牌是否包含该SID
 		if (!CheckTokenMembership(NULL, pSid, &bResult)) {
 			// 如果CheckTokenMembership失败，则可能不是管理员，但也可能因为其他原因
-			// 这里简单地将结果设为FALSE
 			bResult = FALSE;
 		}
 		// 释放SID
@@ -218,22 +217,24 @@ void taskkill(bool KillSeewoService) {
 	return;
 }
 
+void uninstall() {
+	cls
+	cout << "正在卸载EasiRecorder\n";
+	system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
+	cout << "正在卸载Easicare\n";
+	system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"");
+	cout << "正在卸载EasiAgent\n";
+	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
+	return;
+}
+
 int main() {
 	start.powerOn();
 	cls
 	S(10);
-	//cls
-	/*system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
-	cout << "完成\n";
-
-	system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"");
-
-	cout << "卸载EasiAgent\n";
-	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");*/
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
 	//	return 0;
 	//}//返回1确定，2取消
-
 	ShowWindow(hwnd, SW_MAXIMIZE);
 	//获取程序路径
 	char path[MAX_PATH];
@@ -258,6 +259,10 @@ int main() {
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
+			case 1:{
+				uninstall();
+				break;
+			}
 			case 2: {
 				while (true) {
 					taskkill(true);
@@ -265,7 +270,23 @@ int main() {
 				}
 				break;
 			}
+			case 3:{
+				uninstall();
+				break;
+			}
 			case 4: {
+				string password = "seewofreeze";
+				string input;
+				for (;;) {
+					cout << "\n请输入密码：";
+					cin >> input;
+					if(input==password){
+						break;
+					}else{
+						cout<<"密码错误";
+						continue;
+					}
+				}
 				string unfreezepath = executable_path + "\\!SeewoFreezeUI.bat";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
