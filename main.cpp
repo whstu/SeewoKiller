@@ -139,13 +139,13 @@ void about() {
 	//写入版本号
 	CreateDirectory("./info", NULL );
 	ofstream info("./info/info.txt");
-	info << "Seewo Killer 0.2_Build20240826131725" << endl;
-	info << "版本代号000200" << endl;
+	info << "Seewo Killer 0.3.0.2" << endl;
+	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();
 	//----------
-	cout << "\nSeewo Killer 0.2_Build20240826131725\n";
-	cout << "\n版本代号000200\n";
+	cout << "\nSeewo Killer 0.3.0.2\n";
+	cout << "\n版本代号000300002\n";
 	cout << "\nSeewo Killer\n";
 	cout << "\n卓然第三帝国联合赞助\n";
 }
@@ -197,20 +197,12 @@ void taskkill(bool KillSeewoService) {
 	cout << "正在结束进程：轻录播\n";
 	cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 	system("TASKKILL /F /IM EasiRecorder.exe");
-	cout << "正在结束进程：班级优化大师\n";
-	cout << "TASKKILL /F /IM EasiCare.exe\n";
-	system("TASKKILL /F /IM EasiCare.exe");
-	cout << "TASKKILL /F /IM EasiCareLauncher.exe\n";
-	system("TASKKILL /F /IM EasiCareLauncher.exe");
 	if (KillSeewoService == true) {
 		cout << "正在结束进程：希沃管家\n";
-		cout << "-正在结束子进程1/3\n";
 		cout << "TASKKILL /F /IM SeewoServiceAssistant.exe\n";
 		system("TASKKILL /F /IM SeewoServiceAssistant.exe");
-		cout << "正在结束子进程2/3\n";
 		cout << "TASKKILL /F /IM SeewoAbility.exe\n";
 		system("TASKKILL /F /IM SeewoAbility.exe");
-		cout << "正在结束子进程3/3\n";
 		cout << "TASKKILL /F /IM SeewoCore.exe\n";
 		system("TASKKILL /F /IM SeewoCore.exe");
 	}
@@ -229,6 +221,11 @@ void uninstall() {
 }
 
 int main() {
+	if (IsUserAnAdmin() == false) {
+		if (getadmin() == false) {
+			return 0;
+		}
+	}
 	start.powerOn();
 	cls
 	S(10);
@@ -252,14 +249,11 @@ int main() {
 		SetColorAndBackground(6, 5);
 		cout << "Beta";
 		SetColorAndBackground(7, 0);
-		cout << "  5:修改希沃白板启动图片";
-		cout << "  6:恢复希沃白板启动图片";
-		SetColorAndBackground(7, 0);
-		cout << "  7:获取管理员权限  8:关于";
+		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
-			case 1:{
+			case 1: {
 				uninstall();
 				break;
 			}
@@ -270,7 +264,7 @@ int main() {
 				}
 				break;
 			}
-			case 3:{
+			case 3: {
 				uninstall();
 				break;
 			}
@@ -280,10 +274,10 @@ int main() {
 				for (;;) {
 					cout << "\n请输入密码：";
 					cin >> input;
-					if(input==password){
+					if (input == password) {
 						break;
-					}else{
-						cout<<"密码错误";
+					} else {
+						cout << "密码错误";
 						continue;
 					}
 				}
@@ -301,7 +295,7 @@ int main() {
 				}
 				break;
 			}
-			case 5: {
+			/*case 5: {
 				string xwbbsetpath = xwbbpath + "\\set.bat";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
@@ -330,14 +324,30 @@ int main() {
 					CloseHandle(pi.hProcess);
 				}
 				break;
-			}
-			case 7: {
-				if (getadmin() == false) {
-					return 0;
+			}*/
+			case 5: {
+				while (true) {
+					taskkill(true);
+					cout << "正在结束进程：设置\n";
+					cout << "TASKKILL /F /IM SystemSettings.exe\n";
+					system("TASKKILL /F /IM SystemSettings.exe");
+					cout << "正在结束进程：控制面板\n";
+					cout << "TASKKILL /F /IM control.exe\n";
+					system("taskkill /f /fi \"WINDOWTITLE eq 控制面板\\网络和 Internet\\网络连接\"");
 				}
 				break;
 			}
-			case 8: {
+			case 6: {
+				if (IsUserAnAdmin() == false) {
+					if (getadmin() == false) {
+						return 0;
+					}
+				} else {
+					cout << "已经获得管理员权限！\n";
+				}
+				break;
+			}
+			case 7: {
 				about();
 				system("pause");
 				return 0;
@@ -348,7 +358,3 @@ int main() {
 	}
 	return 0;
 }
-/*
-Seewo Killer 版本0.1
-最后更新:20240819
-*/
