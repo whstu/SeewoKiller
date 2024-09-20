@@ -332,8 +332,8 @@ int main() {
 					cout << "TASKKILL /F /IM SystemSettings.exe\n";
 					system("TASKKILL /F /IM SystemSettings.exe");
 					cout << "正在结束进程：控制面板\n";
-					cout << "TASKKILL /F /IM control.exe\n";
-					system("taskkill /f /fi \"WINDOWTITLE eq 控制面板\\网络和 Internet\\网络连接\"");
+					cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
+					system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
 				}
 				break;
 			}
