@@ -134,20 +134,39 @@ void about() {
 	SetColorAndBackground(15, 8);
 	cout << " S t u d i o ";
 	SetColorAndBackground(7, 0);
-	S(3000);
+	S(1000);
 	cout << "\n";
 	//写入版本号
-	CreateDirectory("./info", NULL );
+	/*CreateDirectory("./info", NULL );
 	ofstream info("./info/info.txt");
 	info << "Seewo Killer 0.3.0.2" << endl;
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
-	info.close();
-	//----------
-	cout << "\nSeewo Killer 0.3.0.2\n";
-	cout << "\n版本代号000300002\n";
+	info.close();*/
+	cout << "\nSeewo Killer 1.0\n";
+	cout << "\n版本代号OPO\n";
 	cout << "\nSeewo Killer\n";
 	cout << "\n卓然第三帝国联合赞助\n";
+	cout << "按b+回车返回\n";
+	string ans;
+	while (true) {
+		cin >> ans;
+		if (ans == "b") {
+			return;
+		}
+		if(ans=="zhuoran"){
+			cout<<"   =====       =====       =====        //\n";S(10);
+			cout<<" //     \\\\    ||    \\\\   //     \\\\    / ||\n";S(10);
+			cout<<" ||     ||    ||    ||   ||     ||      ||\n";S(10);
+			cout<<" ||     ||    ||    //   ||     ||      ||\n";S(10);
+			cout<<" ||     ||    ||====     ||     ||      ||\n";S(10);
+			cout<<" ||     ||    ||         ||     ||      ||\n";S(10);
+			cout<<" ||     ||    ||         ||     ||      ||\n";S(10);
+			cout<<" \\\\     //    ||         \\\\     //      ||\n";S(10);
+			cout<<"   =====      ||           =====     ========\n";S(10);
+			system("pause");
+		}
+	}
 }
 
 BOOL IsUserAnAdmin() {
@@ -249,7 +268,7 @@ int main() {
 		SetColorAndBackground(6, 5);
 		cout << "Beta";
 		SetColorAndBackground(7, 0);
-		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于";
+		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于  8:退出";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
@@ -349,8 +368,15 @@ int main() {
 			}
 			case 7: {
 				about();
-				system("pause");
-				return 0;
+				break;
+			}
+			case 8: {
+				system("cls");
+				if (MessageBox(NULL, _T("确实要退出吗？"), _T("退出提示"), MB_OKCANCEL) == 1) {
+					return 0;
+				} else {
+					break;
+				}
 			}
 		}
 		//--------
