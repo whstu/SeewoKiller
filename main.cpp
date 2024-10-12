@@ -154,16 +154,25 @@ void about() {
 		if (ans == "b") {
 			return;
 		}
-		if(ans=="zhuoran"){
-			cout<<"   =====       =====       =====        //\n";S(10);
-			cout<<" //     \\\\    ||    \\\\   //     \\\\    / ||\n";S(10);
-			cout<<" ||     ||    ||    ||   ||     ||      ||\n";S(10);
-			cout<<" ||     ||    ||    //   ||     ||      ||\n";S(10);
-			cout<<" ||     ||    ||====     ||     ||      ||\n";S(10);
-			cout<<" ||     ||    ||         ||     ||      ||\n";S(10);
-			cout<<" ||     ||    ||         ||     ||      ||\n";S(10);
-			cout<<" \\\\     //    ||         \\\\     //      ||\n";S(10);
-			cout<<"   =====      ||           =====     ========\n";S(10);
+		if (ans == "zhuoran") {
+			cout << "   =====       =====       =====        //\n";
+			S(10);
+			cout << " //     \\\\    ||    \\\\   //     \\\\    / ||\n";
+			S(10);
+			cout << " ||     ||    ||    ||   ||     ||      ||\n";
+			S(10);
+			cout << " ||     ||    ||    //   ||     ||      ||\n";
+			S(10);
+			cout << " ||     ||    ||====     ||     ||      ||\n";
+			S(10);
+			cout << " ||     ||    ||         ||     ||      ||\n";
+			S(10);
+			cout << " ||     ||    ||         ||     ||      ||\n";
+			S(10);
+			cout << " \\\\     //    ||         \\\\     //      ||\n";
+			S(10);
+			cout << "   =====      ||           =====     ========\n";
+			S(10);
 			system("pause");
 		}
 	}
@@ -239,7 +248,102 @@ void uninstall() {
 	return;
 }
 
+struct GAME {
+	void numberdamn() {
+		cls
+		cmdset.setfont(300);
+		cout << "数";
+		S(100);
+		cout << "字";
+		S(100);
+		cout << "炸";
+		S(500);
+		gotoxy(0, 0);
+		cout << "                    ";
+		gotoxy(0, 0);
+		SetColorAndBackground(6, 4);
+		cmdset.setfont(500);
+		cout << "DAMN";
+		SetColorAndBackground(7, 0);
+		S(1500);
+		cls
+		cmdset.setfont(30);
+		system("title 数字炸damn");
+		long long min = 0, max = 100, ans = 0, input = 0;
+		cout << "请输入范围\n";
+		while (true) {
+			cout << "最大:";
+			cin >> max;
+			if (max < 2) {
+				cout << "最大值必须大于或等于2!\n";
+			} else {
+				break;
+			}
+		}
+		while (true) {
+			cout << "最小:";
+			cin >> min;
+			if (min < 0) {
+				cout << "最小值必须大于或等于0!\n";
+			} else {
+				if (min >= max - 1) {
+					cout << "最小值必须小于最大值-1!\n";
+				} else {
+					break;
+				}
+			}
+		}
+		cout << "输入完成，正在取数...\n";
+		ans = rand() % (max - min);
+		S(500);
+		cout << "取数完成，开始游戏！\n";
+		S(500);
+		cls
+		while (true) {
+			if (max - min == 2) {
+				SetColorAndBackground(6, 4);
+				cout << "DAMN!!!!!";
+				SetColorAndBackground(0, 7);
+				cout << "\n下一个人输了！\n炸弹是:" << ans << "\n";
+				break;
+			}
+			cout << min << "~" << max << "\n";
+			if (max - min == 3) {
+				SetColorAndBackground(6, 4);
+				cout << "二选一!!!!!";
+				SetColorAndBackground(7, 0);
+			}
+			cin >> input;
+			while (input <= min or input >= max) {
+				cout << "输入错误\n";
+				cout << min << "~" << max << "\n";
+				cin >> input;
+			}
+			if (input == ans) {
+				SetColorAndBackground(6, 4);
+				cout << "DAMN!!!!!";
+				SetColorAndBackground(0, 7);
+				cout << "\n你输了！\n炸弹是:" << ans << "\n";
+				if (max - ans == ans - min) {
+					cout << "中位数小丑！";
+				}
+				break;
+			} else {
+				if (input < ans) {
+					min = input;
+				} else {
+					max = input;
+				}
+			}
+		}
+		system("pause");
+		SetColorAndBackground(7, 0);
+		cmdset.setfont(16);
+	}
+} game;
+
 int main() {
+	srand((unsigned)time(NULL));
 	if (IsUserAnAdmin() == false) {
 		if (getadmin() == false) {
 			return 0;
@@ -247,7 +351,7 @@ int main() {
 	}
 	start.powerOn();
 	cls
-	S(10);
+	//S(10);
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
 	//	return 0;
 	//}//返回1确定，2取消
@@ -268,7 +372,7 @@ int main() {
 		SetColorAndBackground(6, 5);
 		cout << "Beta";
 		SetColorAndBackground(7, 0);
-		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于  8:退出";
+		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于  8:小游戏";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
@@ -353,6 +457,7 @@ int main() {
 					cout << "正在结束进程：控制面板\n";
 					cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
 					system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
+					cls
 				}
 				break;
 			}
@@ -371,15 +476,20 @@ int main() {
 				break;
 			}
 			case 8: {
-				system("cls");
-				if (MessageBox(NULL, _T("确实要退出吗？"), _T("退出提示"), MB_OKCANCEL) == 1) {
-					return 0;
-				} else {
-					break;
+				int ans;
+				cout << "1:数字炸弹\n";
+				cout << "请选择游戏:";
+				cin >> ans;
+				switch (ans) {
+					case 1: {
+						game.numberdamn();
+						break;
+					}
 				}
+				cls
+				break;
 			}
 		}
-		//--------
 		system("pause");
 	}
 	return 0;
