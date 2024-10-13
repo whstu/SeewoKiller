@@ -118,7 +118,7 @@ void about() {
 	gotoxy(0, 3);
 	//--------
 	cout << "\nPowered by\n\n ";
-	S(1000);
+	S(500);
 	SetColorAndBackground(4, 12);
 	cout << " W ";
 	SetColorAndBackground(6, 14);
@@ -134,7 +134,7 @@ void about() {
 	SetColorAndBackground(15, 8);
 	cout << " S t u d i o ";
 	SetColorAndBackground(7, 0);
-	S(1000);
+	S(500);
 	cout << "\n";
 	//写入版本号
 	/*CreateDirectory("./info", NULL );
@@ -143,9 +143,9 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 1.0\n";
-	cout << "\n版本代号OPO\n";
-	cout << "\nSeewo Killer\n";
+	cout << "\nSeewo Killer 1.1\n";
+	cout << "\n版本代号OPO 1\n";
+	cout << "\n希沃克星\n";
 	cout << "\n卓然第三帝国联合赞助\n";
 	cout << "按b+回车返回\n";
 	string ans;
@@ -257,12 +257,12 @@ struct GAME {
 		cout << "字";
 		S(100);
 		cout << "炸";
-		S(500);
+		S(150);
 		gotoxy(0, 0);
-		cout << "                    ";
-		gotoxy(0, 0);
-		SetColorAndBackground(6, 4);
+		cls
+		S(100);
 		cmdset.setfont(500);
+		SetColorAndBackground(6, 4);
 		cout << "DAMN";
 		SetColorAndBackground(7, 0);
 		S(1500);
@@ -343,19 +343,21 @@ struct GAME {
 } game;
 
 int main() {
+	system("title 正在初始化");
 	srand((unsigned)time(NULL));
+	system("title 正在检测管理员");
 	if (IsUserAnAdmin() == false) {
 		if (getadmin() == false) {
 			return 0;
 		}
 	}
+	system("title Seewo Killer Starting");
 	start.powerOn();
 	cls
 	//S(10);
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
 	//	return 0;
 	//}//返回1确定，2取消
-	ShowWindow(hwnd, SW_MAXIMIZE);
 	//获取程序路径
 	char path[MAX_PATH];
 	GetModuleFileNameA(NULL, path, MAX_PATH);
@@ -366,32 +368,33 @@ int main() {
 	//选择界面
 	while (true) {
 		cls
+		system("title 希沃克星");
 		int choose;
 		SetColorAndBackground(7, 0);
-		cout << "1:每日例行程序  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻";
+		cout << "1:退出  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻";
 		SetColorAndBackground(6, 5);
 		cout << "Beta";
 		SetColorAndBackground(7, 0);
-		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:关于  8:小游戏";
+		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:小游戏  8:关于";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
-			case 1: {
-				uninstall();
-				break;
-			}
+			case 1:
+				return 0;
 			case 2: {
+				system("title 循环清任务");
 				while (true) {
 					taskkill(true);
 					cls
 				}
-				break;
 			}
 			case 3: {
+				system("title 卸载");
 				uninstall();
 				break;
 			}
 			case 4: {
+				system("title 冰点还原");
 				string password = "seewofreeze";
 				string input;
 				for (;;) {
@@ -416,6 +419,7 @@ int main() {
 					WaitForSingleObject(pi.hProcess, INFINITE);
 					CloseHandle(pi.hProcess);
 				}
+				system("pause");
 				break;
 			}
 			/*case 5: {
@@ -449,6 +453,7 @@ int main() {
 				break;
 			}*/
 			case 5: {
+				system("title 制裁晚自习");
 				while (true) {
 					taskkill(true);
 					cout << "正在结束进程：设置\n";
@@ -459,7 +464,6 @@ int main() {
 					system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
 					cls
 				}
-				break;
 			}
 			case 6: {
 				if (IsUserAnAdmin() == false) {
@@ -469,15 +473,13 @@ int main() {
 				} else {
 					cout << "已经获得管理员权限！\n";
 				}
+				system("pause");
 				break;
 			}
 			case 7: {
-				about();
-				break;
-			}
-			case 8: {
+				system("title 玩游戏");
 				int ans;
-				cout << "1:数字炸弹\n";
+				cout << "1:数字炸弹  2:返回";
 				cout << "请选择游戏:";
 				cin >> ans;
 				switch (ans) {
@@ -485,12 +487,17 @@ int main() {
 						game.numberdamn();
 						break;
 					}
+					case 2:
+						break;
 				}
-				cls
+				break;
+			}
+			case 8: {
+				system("title 关于");
+				about();
 				break;
 			}
 		}
-		system("pause");
 	}
 	return 0;
 }
