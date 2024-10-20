@@ -7,6 +7,9 @@
 #include <tchar.h>
 #include <shellapi.h>
 
+//猜数字：cin错误去除
+#include <limits>
+
 #define S(i) Sleep(i)
 #define cls system("cls");
 #define ei else if
@@ -265,7 +268,7 @@ struct GAME {
 		SetColorAndBackground(6, 4);
 		cout << "DAMN";
 		SetColorAndBackground(7, 0);
-		S(1500);
+		S(700);
 		cls
 		cmdset.setfont(30);
 		system("title 数字炸damn");
@@ -274,8 +277,10 @@ struct GAME {
 		while (true) {
 			cout << "最大:";
 			cin >> max;
-			if (max < 2) {
-				cout << "最大值必须大于或等于2!\n";
+			if (max < 2 or cin.fail()) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "最大值必须大于或等于2,或输入错误\n";
 			} else {
 				break;
 			}
@@ -283,23 +288,28 @@ struct GAME {
 		while (true) {
 			cout << "最小:";
 			cin >> min;
-			if (min < 0) {
-				cout << "最小值必须大于或等于0!\n";
+			if (min < 0 or min >= max - 1 or cin.fail()) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "最小值必须大于或等于0,且最小值必须小于最大值-1,或输入错误\n";
 			} else {
-				if (min >= max - 1) {
-					cout << "最小值必须小于最大值-1!\n";
-				} else {
-					break;
-				}
+				break;
 			}
 		}
 		cout << "输入完成，正在取数...\n";
-		ans = rand() % (max - min);
+		for (ans = rand() % (max - min); ans == 0; ans = rand() % (max - min)) {
+		}
+		ans = ans + min;
 		S(500);
 		cout << "取数完成，开始游戏！\n";
 		S(500);
 		cls
 		while (true) {
+			if (max - min == 1) {
+				cout << "程序错误，请重试\n";
+				cout << min << "~" << max << "\n";
+				break;
+			}
 			if (max - min == 2) {
 				SetColorAndBackground(6, 4);
 				cout << "DAMN!!!!!";
@@ -314,8 +324,10 @@ struct GAME {
 				SetColorAndBackground(7, 0);
 			}
 			cin >> input;
-			while (input <= min or input >= max) {
+			while (input <= min or input >= max or cin.fail()/*cin数字错误*/) {
 				cout << "输入错误\n";
+				cin.clear();//清除错误数据
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
 				cout << min << "~" << max << "\n";
 				cin >> input;
 			}
@@ -479,7 +491,7 @@ int main() {
 			case 7: {
 				system("title 玩游戏");
 				int ans;
-				cout << "1:数字炸弹  2:返回";
+				cout << "1:数字炸弹  2:返回\n";
 				cout << "请选择游戏:";
 				cin >> ans;
 				switch (ans) {
@@ -489,12 +501,27 @@ int main() {
 					}
 					case 2:
 						break;
+					default: {
+						if (cin.fail()) {
+							cin.clear();
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+							cout << "\n输入错误，请检查是否输入了字母";
+						}
+					}
 				}
 				break;
 			}
 			case 8: {
 				system("title 关于");
 				about();
+				break;
+			}
+			default: {
+				if (cin.fail()) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "\n输入错误，请检查是否输入了字母";
+				}
 				break;
 			}
 		}
