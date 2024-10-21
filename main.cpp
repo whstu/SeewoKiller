@@ -64,7 +64,7 @@ struct Start {
 		SetColorAndBackground(15, 8);
 		cout << "Studio";
 		SetColorAndBackground(7, 0);
-		S(5000);
+		S(3000);
 		cls
 		gotoxy(13, 10);
 		cout << "S";
@@ -104,7 +104,7 @@ struct Start {
 		cout << "e";
 		S(100);
 		cout << "r";
-		S(4000);
+		S(1000);
 		system("cls");
 		cmdset.setfont(16);
 		return;
@@ -387,7 +387,7 @@ int main() {
 		SetColorAndBackground(6, 5);
 		cout << "Beta";
 		SetColorAndBackground(7, 0);
-		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:小游戏  8:关于";
+		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:小游戏  8:ClassIsland  9:关于";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
@@ -515,6 +515,10 @@ int main() {
 				break;
 			}
 			case 8: {
+				system("D:\\新建文件夹\\ClassIsland.exe");
+				break;
+			}
+			case 9: {
 				system("title 关于");
 				about();
 				break;
