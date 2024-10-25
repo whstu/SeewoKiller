@@ -27,89 +27,275 @@ void gotoxy(long long x, long long y) {
 	pos.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
-struct CMDset {
-	void setfont(int size) {//字体、大小、粗细
-		CONSOLE_FONT_INFOEX cfi;
-		cfi.cbSize = sizeof cfi;
-		cfi.nFont = 0;
-		cfi.dwFontSize.X = 0;
-		cfi.dwFontSize.Y = size;//设置字体大小
-		cfi.FontFamily = FF_DONTCARE;
-		cfi.FontWeight = FW_BOLD;//字体粗细 FW_BOLD,原始为FW_NORMAL
-		wcscpy_s(cfi.FaceName, L"Consolas");//设置字体，必须是控制台已有的
-		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
-		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-		CONSOLE_FONT_INFO consoleCurrentFont;
-		GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
-	}
-} cmdset;
 
-struct Start {
-	void powerOn() {
-		ShowWindow(hwnd, SW_MAXIMIZE);
-		cmdset.setfont(30);
-		cout << "\n  ";
-		SetColorAndBackground(4, 12);
-		cout << "W";
-		SetColorAndBackground(6, 14);
-		cout << "H";
-		SetColorAndBackground(2, 10);
-		cout << "S";
-		SetColorAndBackground(1, 9);
-		cout << "T";
-		SetColorAndBackground(13, 5);
-		cout << "U";
-		SetColorAndBackground(0, 0);
-		cout << " ";
-		SetColorAndBackground(15, 8);
-		cout << "Studio";
-		SetColorAndBackground(7, 0);
-		S(3000);
-		cls
-		gotoxy(13, 10);
-		cout << "S";
-		Sleep(1000);
-		cout << "\b\bS  ";
-		S(100);
-		cout << "\b\b\b\bS  ";
-		S(100);
-		cout << "\b\b\b\bS  ";
-		S(100);
-		cout << "\b\b\b\bS  ";
-		S(100);
-		cout << "\b\b\b\bS  ";
-		S(100);
-		cout << "\b\b\b\bS \b";
-		S(100);
-		cout << "e";
-		S(100);
-		cout << "e";
-		S(100);
-		cout << "w";
-		S(100);
-		cout << "o";
-		S(100);
-		cout << " ";
-		S(100);
-		cout << " ";
-		S(100);
-		cout << "K";
-		S(100);
-		cout << "i";
-		S(100);
-		cout << "l";
-		S(100);
-		cout << "l";
-		S(100);
-		cout << "e";
-		S(100);
-		cout << "r";
-		S(1000);
-		system("cls");
-		cmdset.setfont(16);
-		return;
+void setfont(int size) {//字体、大小、粗细
+	CONSOLE_FONT_INFOEX cfi;
+	cfi.cbSize = sizeof cfi;
+	cfi.nFont = 0;
+	cfi.dwFontSize.X = 0;
+	cfi.dwFontSize.Y = size;//设置字体大小
+	cfi.FontFamily = FF_DONTCARE;
+	cfi.FontWeight = FW_BOLD;//字体粗细 FW_BOLD,原始为FW_NORMAL
+	wcscpy_s(cfi.FaceName, L"Consolas");//设置字体，必须是控制台已有的
+	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_FONT_INFO consoleCurrentFont;
+	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
+}
+
+void poweron() {
+	ShowWindow(hwnd, SW_MAXIMIZE);
+	setfont(30);
+	S(500);
+	SetColorAndBackground(0, 4);
+	for (long long i = 0; i < 4; i++) {
+		for (long long j = 0; j < 150; j++) {
+			cout << " ";
+		}
+		S(10);
+		cout << "\n";
 	}
-} start;
+	SetColorAndBackground(0, 6);
+	for (long long i = 0; i < 150; i++) {
+		cout << " ";
+	}
+	S(10);
+	cout << "\n";
+//第2行
+	for (int i = 0; i < 3; i++) {//W-1
+		SetColorAndBackground(0, 6);
+		cout << "   ";
+		SetColorAndBackground(0, 0);
+		cout << "  ";
+	}
+	SetColorAndBackground(0, 6);
+	cout << "   ";
+	SetColorAndBackground(0, 0);//H-1a
+	cout << "  ";
+	SetColorAndBackground(0, 6);//H-1mid
+	cout << "       ";
+	SetColorAndBackground(0, 0);//H-1b
+	cout << "  ";
+	SetColorAndBackground(0, 6);
+	cout << "      ";
+	SetColorAndBackground(0, 0);//S-1
+	cout << "         ";
+	SetColorAndBackground(0, 6);
+	cout << "    ";
+	SetColorAndBackground(0, 0);//T-1
+	cout << "           ";
+	SetColorAndBackground(0, 6);
+	cout << "    ";
+	SetColorAndBackground(0, 0);//U-1a
+	cout << "  ";
+	SetColorAndBackground(0, 6);
+	cout << "       ";
+	SetColorAndBackground(0, 0);//U-1b
+	cout << "  ";
+	SetColorAndBackground(0, 6);
+	cout << "          ";
+	S(10);
+	cout << "\n";
+//第3,4行
+	for (int a = 0; a < 2; a++) {
+		for (int i = 0; i < 3; i++) {//W-2
+			SetColorAndBackground(0, 6);
+			cout << "   ";
+			SetColorAndBackground(0, 0);
+			cout << "  ";
+		}
+		SetColorAndBackground(6, 6);
+		cout << "   ";
+		SetColorAndBackground(0, 0);//H-2a
+		cout << "  ";
+		SetColorAndBackground(6, 6);//H-2mid
+		cout << "       ";
+		SetColorAndBackground(0, 0);//H-2b
+		cout << "  ";
+		SetColorAndBackground(6, 6);
+		cout << "    ";
+		SetColorAndBackground(0, 0); //S-2
+		cout << "  ";
+		SetColorAndBackground(6, 6);
+		cout << "                  ";
+		SetColorAndBackground(0, 0); //T-2
+		cout << " ";
+		SetColorAndBackground(6, 6);
+		cout << "         ";
+		SetColorAndBackground(0, 0); //U-2a
+		cout << "  ";
+		SetColorAndBackground(6, 6);
+		cout << "       ";
+		SetColorAndBackground(0, 0); //U-2b
+		cout << "  ";
+		SetColorAndBackground(6, 6);
+		cout << "          ";
+		S(10);
+		cout << "\n";
+	}
+//第5行
+	for (int i = 0; i < 3; i++) {//W-4
+		SetColorAndBackground(0, 6);
+		cout << "   ";
+		SetColorAndBackground(0, 0);
+		cout << "  ";
+	}
+	SetColorAndBackground(0, 6);
+	cout << "   ";
+	SetColorAndBackground(0, 0); //H-4
+	cout << "           ";
+	SetColorAndBackground(0, 6);
+	cout << "      ";
+	SetColorAndBackground(0, 0); //S-4
+	cout << "       ";
+	SetColorAndBackground(0, 6);
+	cout << "           ";
+	SetColorAndBackground(0, 0); //T-4
+	cout << " ";
+	SetColorAndBackground(0, 6);
+	cout << "         ";
+	SetColorAndBackground(0, 0); //U-4a
+	cout << "  ";
+	SetColorAndBackground(0, 6);
+	cout << "       ";
+	SetColorAndBackground(0, 0); //U-4b
+	cout << "  ";
+	SetColorAndBackground(0, 6);
+	cout << "          ";
+	S(10);
+	cout << "\n";
+//第1行
+	for (int i = 0; i < 3; i++) {//W-5
+		SetColorAndBackground(0, 2);
+		cout << "   ";
+		SetColorAndBackground(0, 0);
+		cout << "  ";
+	}
+	SetColorAndBackground(0, 2);
+	cout << "   ";
+	SetColorAndBackground(0, 0);//H-5a
+	cout << "  ";
+	SetColorAndBackground(0, 2);//H-5mid
+	cout << "       ";
+	SetColorAndBackground(0, 0);//H-5b
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "             ";
+	SetColorAndBackground(0, 0); //S-5
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "         ";
+	SetColorAndBackground(0, 0); //T-5
+	cout << " ";
+	SetColorAndBackground(0, 2);
+	cout << "         ";
+	SetColorAndBackground(0, 0); //U-5a
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "       ";
+	SetColorAndBackground(0, 0); //U-5b
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "          ";
+	S(10);
+	cout << "\n";
+//第2行
+	for (int i = 0; i < 3; i++) {//W-6
+		SetColorAndBackground(0, 2);
+		cout << "   ";
+		SetColorAndBackground(0, 0);
+		cout << "  ";
+	}
+	SetColorAndBackground(0, 2);
+	cout << "   ";
+	SetColorAndBackground(0, 0);//H-6a
+	cout << "  ";
+	SetColorAndBackground(0, 2);//H-6mid
+	cout << "       ";
+	SetColorAndBackground(0, 0);//H-6b
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "             ";
+	SetColorAndBackground(0, 0); //S-6
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "         ";
+	SetColorAndBackground(0, 0); //T-6
+	cout << " ";
+	SetColorAndBackground(0, 2);
+	cout << "         ";
+	SetColorAndBackground(0, 0); //U-6a
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "       ";
+	SetColorAndBackground(0, 0); //U-6b
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "          ";
+	S(10);
+	cout << "\n";
+//第3行
+	SetColorAndBackground(0, 2);
+	cout << "     ";
+	SetColorAndBackground(0, 0);
+	cout << "   ";
+	SetColorAndBackground(0, 2);
+	cout << "  ";
+	SetColorAndBackground(0, 0);
+	cout << "   ";
+	SetColorAndBackground(0, 2);
+	cout << "     ";
+	SetColorAndBackground(0, 0);//H-7a
+	cout << "  ";
+	SetColorAndBackground(0, 2);//H-7mid
+	cout << "       ";
+	SetColorAndBackground(0, 0);//H-7b
+	cout << "  ";
+	SetColorAndBackground(0, 2);
+	cout << "    ";
+	SetColorAndBackground(0, 0); //S-7
+	cout << "         ";
+	SetColorAndBackground(0, 2);
+	cout << "           ";
+	SetColorAndBackground(0, 0); //T-7
+	cout << " ";
+	SetColorAndBackground(0, 2);
+	cout << "           ";
+	SetColorAndBackground(0, 0); //U-7a
+	cout << "       ";
+	SetColorAndBackground(0, 2);
+	cout << "              ";
+	S(10);
+	cout << "\n";
+
+	SetColorAndBackground(0, 2);
+	for (long long i = 0; i < 2; i++) {
+		for (long long j = 0; j < 150; j++) {
+			cout << " ";
+		}
+		S(10);
+		cout << "\n";
+	}
+	SetColorAndBackground(0, 1);
+	for (long long i = 0; i < 5; i++) {
+		for (long long j = 0; j < 150; j++) {
+			cout << " ";
+		}
+		S(10);
+		cout << "\n";
+	}
+	SetColorAndBackground(0, 5);
+	for (long long i = 0; i < 5; i++) {
+		for (long long j = 0; j < 150; j++) {
+			cout << " ";
+		}
+		S(10);
+		cout << "\n";
+	}
+	SetColorAndBackground(7,0);
+	S(1000);
+	return;
+}
 
 void about() {
 	//初始化
@@ -146,8 +332,8 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 1.1\n";
-	cout << "\n版本代号OPO 1\n";
+	cout << "\nSeewo Killer 1.2\n";
+	cout << "\n版本代号  陈轩\n";
 	cout << "\n希沃克星\n";
 	cout << "\n卓然第三帝国联合赞助\n";
 	cout << "按b+回车返回\n";
@@ -254,7 +440,7 @@ void uninstall() {
 struct GAME {
 	void numberdamn() {
 		cls
-		cmdset.setfont(300);
+		setfont(300);
 		cout << "数";
 		S(100);
 		cout << "字";
@@ -264,13 +450,13 @@ struct GAME {
 		gotoxy(0, 0);
 		cls
 		S(100);
-		cmdset.setfont(500);
+		setfont(500);
 		SetColorAndBackground(6, 4);
 		cout << "DAMN";
 		SetColorAndBackground(7, 0);
 		S(700);
 		cls
-		cmdset.setfont(30);
+		setfont(30);
 		system("title 数字炸damn");
 		long long min = 0, max = 100, ans = 0, input = 0;
 		cout << "请输入范围\n";
@@ -350,7 +536,7 @@ struct GAME {
 		}
 		system("pause");
 		SetColorAndBackground(7, 0);
-		cmdset.setfont(16);
+		setfont(16);
 	}
 } game;
 
@@ -364,7 +550,7 @@ int main() {
 		}
 	}
 	system("title Seewo Killer Starting");
-	start.powerOn();
+	poweron();
 	cls
 	//S(10);
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
@@ -383,11 +569,7 @@ int main() {
 		system("title 希沃克星");
 		int choose;
 		SetColorAndBackground(7, 0);
-		cout << "1:退出  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻";
-		SetColorAndBackground(6, 5);
-		cout << "Beta";
-		SetColorAndBackground(7, 0);
-		cout << "  5:晚自习制裁模式  6:获取管理员权限  7:小游戏  8:ClassIsland  9:关于";
+		cout << "1:退出  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻\n5:晚自习制裁模式  6:获取管理员权限  7:一键防屏保(Beta)  8:小游戏  9:关于";
 		cout << "\n请选择：";
 		cin >> choose;
 		switch (choose) {
@@ -407,17 +589,25 @@ int main() {
 			}
 			case 4: {
 				system("title 冰点还原");
+				bool back = false;
 				string password = "seewofreeze";
 				string input;
 				for (;;) {
-					cout << "\n请输入密码：";
+					cout << "\n请输入密码(输入0返回)：";
 					cin >> input;
 					if (input == password) {
 						break;
 					} else {
-						cout << "密码错误";
-						continue;
+						if (input == "0") {
+							back = true;
+							break;
+						} else {
+							cout << "密码错误";
+						}
 					}
+				}
+				if (back == true) {
+					break;
 				}
 				string unfreezepath = executable_path + "\\!SeewoFreezeUI.bat";
 				STARTUPINFO si = { sizeof(si) };//0
@@ -474,7 +664,7 @@ int main() {
 					cout << "正在结束进程：控制面板\n";
 					cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
 					system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
-					cout<<"正在结束进程：Edge\n";
+					cout << "正在结束进程：Edge\n";
 					cout << "TASKKILL /F /IM msedge.exe\n";
 					system("TASKKILL /F /IM msedge.exe");
 					cls
@@ -492,6 +682,20 @@ int main() {
 				break;
 			}
 			case 7: {
+				cout<<"每10秒点击屏幕一次，请将鼠标移动至合适位置\n";
+				system("pause");
+				long long i=0;
+				while (true) {
+					cout<<"\b\b\b\b\b\b\b\b\b\b\b\b\b\b"<<i;
+					POINT cur_pos;
+					GetCursorPos(&cur_pos);
+					mouse_event(MOUSEEVENTF_LEFTDOWN, cur_pos.x, cur_pos.y, 0, 0);
+					mouse_event(MOUSEEVENTF_LEFTUP, cur_pos.x, cur_pos.y, 0, 0);
+					S(10000);
+					i++;
+				}
+			}
+			case 8: {
 				system("title 玩游戏");
 				int ans;
 				cout << "1:数字炸弹  2:返回\n";
@@ -512,10 +716,6 @@ int main() {
 						}
 					}
 				}
-				break;
-			}
-			case 8: {
-				system("D:\\新建文件夹\\ClassIsland.exe");
 				break;
 			}
 			case 9: {
