@@ -679,6 +679,9 @@ int main() {
 					cout << "正在结束进程：Edge\n";
 					cout << "TASKKILL /F /IM msedge.exe\n";
 					system("TASKKILL /F /IM msedge.exe");
+					cout << "正在结束进程：IE\n";
+					cout << "TASKKILL /F /IM iexplore.exe\n";
+					system("TASKKILL /F /IM iexplore.exe");
 					cls
 				}
 			}
