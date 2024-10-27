@@ -36,7 +36,7 @@ void setfont(int size) {//字体、大小、粗细
 	cfi.dwFontSize.Y = size;//设置字体大小
 	cfi.FontFamily = FF_DONTCARE;
 	cfi.FontWeight = FW_BOLD;//字体粗细 FW_BOLD,原始为FW_NORMAL
-	wcscpy_s(cfi.FaceName, L"Consolas");//设置字体，必须是控制台已有的
+	wcscpy_s(cfi.FaceName, L"System");//设置字体，必须是控制台已有的
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_FONT_INFO consoleCurrentFont;
@@ -83,7 +83,7 @@ void poweron() {
 	SetColorAndBackground(0, 6);
 	cout << "    ";
 	SetColorAndBackground(0, 0);//T-1
-	cout << "           ";
+	cout << "            ";
 	SetColorAndBackground(0, 6);
 	cout << "    ";
 	SetColorAndBackground(0, 0);//U-1a
@@ -93,7 +93,7 @@ void poweron() {
 	SetColorAndBackground(0, 0);//U-1b
 	cout << "  ";
 	SetColorAndBackground(0, 6);
-	cout << "          ";
+	cout << "                    ";
 	S(10);
 	cout << "\n";
 //第3,4行
@@ -119,7 +119,7 @@ void poweron() {
 		SetColorAndBackground(6, 6);
 		cout << "                  ";
 		SetColorAndBackground(0, 0); //T-2
-		cout << " ";
+		cout << "  ";
 		SetColorAndBackground(6, 6);
 		cout << "         ";
 		SetColorAndBackground(0, 0); //U-2a
@@ -129,7 +129,7 @@ void poweron() {
 		SetColorAndBackground(0, 0); //U-2b
 		cout << "  ";
 		SetColorAndBackground(6, 6);
-		cout << "          ";
+		cout << "                    ";
 		S(10);
 		cout << "\n";
 	}
@@ -151,7 +151,7 @@ void poweron() {
 	SetColorAndBackground(0, 6);
 	cout << "           ";
 	SetColorAndBackground(0, 0); //T-4
-	cout << " ";
+	cout << "  ";
 	SetColorAndBackground(0, 6);
 	cout << "         ";
 	SetColorAndBackground(0, 0); //U-4a
@@ -161,7 +161,7 @@ void poweron() {
 	SetColorAndBackground(0, 0); //U-4b
 	cout << "  ";
 	SetColorAndBackground(0, 6);
-	cout << "          ";
+	cout << "                    ";
 	S(10);
 	cout << "\n";
 //第1行
@@ -186,7 +186,7 @@ void poweron() {
 	SetColorAndBackground(0, 2);
 	cout << "         ";
 	SetColorAndBackground(0, 0); //T-5
-	cout << " ";
+	cout << "  ";
 	SetColorAndBackground(0, 2);
 	cout << "         ";
 	SetColorAndBackground(0, 0); //U-5a
@@ -196,7 +196,7 @@ void poweron() {
 	SetColorAndBackground(0, 0); //U-5b
 	cout << "  ";
 	SetColorAndBackground(0, 2);
-	cout << "          ";
+	cout << "                    ";
 	S(10);
 	cout << "\n";
 //第2行
@@ -221,7 +221,7 @@ void poweron() {
 	SetColorAndBackground(0, 2);
 	cout << "         ";
 	SetColorAndBackground(0, 0); //T-6
-	cout << " ";
+	cout << "  ";
 	SetColorAndBackground(0, 2);
 	cout << "         ";
 	SetColorAndBackground(0, 0); //U-6a
@@ -231,7 +231,7 @@ void poweron() {
 	SetColorAndBackground(0, 0); //U-6b
 	cout << "  ";
 	SetColorAndBackground(0, 2);
-	cout << "          ";
+	cout << "                    ";
 	S(10);
 	cout << "\n";
 //第3行
@@ -258,13 +258,13 @@ void poweron() {
 	SetColorAndBackground(0, 2);
 	cout << "           ";
 	SetColorAndBackground(0, 0); //T-7
-	cout << " ";
+	cout << "  ";
 	SetColorAndBackground(0, 2);
 	cout << "           ";
 	SetColorAndBackground(0, 0); //U-7a
 	cout << "       ";
 	SetColorAndBackground(0, 2);
-	cout << "              ";
+	cout << "                      ";
 	S(10);
 	cout << "\n";
 
@@ -277,7 +277,17 @@ void poweron() {
 		cout << "\n";
 	}
 	SetColorAndBackground(0, 1);
-	for (long long i = 0; i < 5; i++) {
+	for(long long i=0;i<31;i++){
+		cout<<" ";
+	}
+	SetColorAndBackground(0,7);
+	cout<<" SEEWO  KILLER ";
+	SetColorAndBackground(0,1);
+	for(long long i=0;i<100;i++){
+		cout<<" ";
+	}
+	SetColorAndBackground(0, 1);
+	for (long long i = 0; i < 4; i++) {
 		for (long long j = 0; j < 150; j++) {
 			cout << " ";
 		}
@@ -293,7 +303,9 @@ void poweron() {
 		cout << "\n";
 	}
 	SetColorAndBackground(7,0);
+	gotoxy(0,0);
 	S(1000);
+	setfont(30);
 	return;
 }
 
@@ -536,7 +548,7 @@ struct GAME {
 		}
 		system("pause");
 		SetColorAndBackground(7, 0);
-		setfont(16);
+		setfont(30);
 	}
 } game;
 
@@ -682,16 +694,19 @@ int main() {
 				break;
 			}
 			case 7: {
-				cout<<"每10秒点击屏幕一次，请将鼠标移动至合适位置\n";
+				SetColorAndBackground(4,6);
+				cout<<"警告：请勿用于正常上课！\n";
+				SetColorAndBackground(0,7);
+				cout<<"每100秒点击屏幕一次，请将鼠标移动至合适位置\n";
 				system("pause");
 				long long i=0;
 				while (true) {
+					S(100000);
 					cout<<"\b\b\b\b\b\b\b\b\b\b\b\b\b\b"<<i;
 					POINT cur_pos;
 					GetCursorPos(&cur_pos);
 					mouse_event(MOUSEEVENTF_LEFTDOWN, cur_pos.x, cur_pos.y, 0, 0);
 					mouse_event(MOUSEEVENTF_LEFTUP, cur_pos.x, cur_pos.y, 0, 0);
-					S(10000);
 					i++;
 				}
 			}
