@@ -2,18 +2,38 @@
 #include <windows.h>
 #include <iostream>
 #include <ctime>
+#include <conio.h>
 
 //获取管理员权限所需
 #include <tchar.h>
 #include <shellapi.h>
 
-//猜数字：cin错误去除
+//cin错误去除
 #include <limits>
 
 #define S(i) Sleep(i)
 #define cls system("cls");
 #define ei else if
 using namespace std;
+
+char path[MAX_PATH];
+string executable_path;
+size_t position;
+string xwbbpath;
+
+int box = 1/*板块*/, boxn = 3/*板块总数*/;
+struct Word {
+	string box[4] {"NULL", "常用", "所有", "设置"};
+	int recentn = 3;
+	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
+	int alln = 6;
+	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏"};
+	int settingn = 2;
+	string setting[3] = {"NULL", "启动画面显示时长", "关于"};
+	int gamen = 2;
+	string game[3] = {"NULL", "数字炸弹", "返回"};
+} word;
+
 HWND hwnd = GetConsoleWindow();
 void SetColorAndBackground(int ForgC, int BackC) {//单个字的颜色
 //1深蓝，2深绿，3深青，4深红，5深紫，6深黄，7灰白（默认），8深灰
@@ -277,14 +297,14 @@ void poweron() {
 		cout << "\n";
 	}
 	SetColorAndBackground(0, 1);
-	for(long long i=0;i<31;i++){
-		cout<<" ";
+	for (long long i = 0; i < 31; i++) {
+		cout << " ";
 	}
-	SetColorAndBackground(0,7);
-	cout<<" SEEWO  KILLER ";
-	SetColorAndBackground(0,1);
-	for(long long i=0;i<100;i++){
-		cout<<" ";
+	SetColorAndBackground(0, 7);
+	cout << " SEEWO  KILLER ";
+	SetColorAndBackground(0, 1);
+	for (long long i = 0; i < 100; i++) {
+		cout << " ";
 	}
 	SetColorAndBackground(0, 1);
 	for (long long i = 0; i < 4; i++) {
@@ -302,8 +322,8 @@ void poweron() {
 		S(10);
 		cout << "\n";
 	}
-	SetColorAndBackground(7,0);
-	gotoxy(0,0);
+	SetColorAndBackground(7, 0);
+	gotoxy(0, 0);
 	S(1000);
 	setfont(30);
 	return;
@@ -422,7 +442,7 @@ bool getadmin() {
 	}
 }
 
-void taskkill(bool KillSeewoService) {
+void taskkill(bool KillSeewoService, bool Wanzixi) {
 	cout << "正在结束进程：轻录播\n";
 	cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 	system("TASKKILL /F /IM EasiRecorder.exe");
@@ -434,6 +454,20 @@ void taskkill(bool KillSeewoService) {
 		system("TASKKILL /F /IM SeewoAbility.exe");
 		cout << "TASKKILL /F /IM SeewoCore.exe\n";
 		system("TASKKILL /F /IM SeewoCore.exe");
+	}
+	if (Wanzixi == true) {
+		cout << "正在结束进程：设置\n";
+		cout << "TASKKILL /F /IM SystemSettings.exe\n";
+		system("TASKKILL /F /IM SystemSettings.exe");
+		cout << "正在结束进程：控制面板\n";
+		cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
+		system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
+		cout << "正在结束进程：Edge\n";
+		cout << "TASKKILL /F /IM msedge.exe\n";
+		system("TASKKILL /F /IM msedge.exe");
+		cout << "正在结束进程：IE\n";
+		cout << "TASKKILL /F /IM iexplore.exe\n";
+		system("TASKKILL /F /IM iexplore.exe");
 	}
 	return;
 }
@@ -447,6 +481,24 @@ void uninstall() {
 	cout << "正在卸载EasiAgent\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
 	return;
+}
+
+void pingbaoservice() {
+	SetColorAndBackground(4, 6);
+	cout << "警告：请勿用于正常上课！\n";
+	SetColorAndBackground(0, 7);
+	cout << "每100秒点击屏幕一次，请将鼠标移动至合适位置\n";
+	system("pause");
+	long long i = 0;
+	while (true) {
+		S(100000);
+		cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << i;
+		POINT cur_pos;
+		GetCursorPos(&cur_pos);
+		mouse_event(MOUSEEVENTF_LEFTDOWN, cur_pos.x, cur_pos.y, 0, 0);
+		mouse_event(MOUSEEVENTF_LEFTUP, cur_pos.x, cur_pos.y, 0, 0);
+		i++;
+	}
 }
 
 struct GAME {
@@ -552,6 +604,249 @@ struct GAME {
 	}
 } game;
 
+struct Launcher {
+	int listname(bool allowA, bool allowD, string liststring[], int n) {
+		gotoxy(0, 3);
+		int channel = 1;
+		SetColorAndBackground(7, 0);
+		for (int i = 1; i < channel; i++) {
+			cout << liststring[i] << "\n";
+		}
+		SetColorAndBackground(0, 7);
+		cout << liststring[channel] << "\n";
+		SetColorAndBackground(7, 0);
+		for (int i = channel + 1; i <= n; i++) {
+			cout << liststring[i] << "\n";
+		}
+		while (1) {
+			if ( _kbhit() ) {
+				char x = _getch();
+				switch (x) {
+					case 's': {
+						if (channel < n) {
+							channel++;
+						}
+						gotoxy(0, 3);
+						SetColorAndBackground(7, 0);
+						for (int i = 1; i < channel; i++) {
+							cout << liststring[i] << "\n";
+						}
+						SetColorAndBackground(0, 7);
+						cout << liststring[channel] << "\n";
+						SetColorAndBackground(7, 0);
+						for (int i = channel + 1; i <= n; i++) {
+							cout << liststring[i] << "\n";
+						}
+						break;
+					}
+					case 'w': {
+						if (channel > 1) {
+							channel--;
+						}
+						gotoxy(0, 3);
+						SetColorAndBackground(7, 0);
+						for (int i = 1; i < channel; i++) {
+							cout << liststring[i] << "\n";
+						}
+						SetColorAndBackground(0, 7);
+						cout << liststring[channel] << "\n";
+						SetColorAndBackground(7, 0);
+						for (int i = channel + 1; i <= n; i++) {
+							cout << liststring[i] << "\n";
+						}
+						break;
+					}
+					case 'a': {
+						if (allowA == true) {
+							if (box > 1) {
+								box--;
+							}
+						}
+						return -1;
+					}
+					case 'd': {
+						if (allowD == true) {
+							if (box < boxn) {
+								box++;
+							}
+						}
+						return -1;
+					}
+					case ' ': {
+						return channel;
+					}
+				}
+			}
+		}
+		return -2;
+	}
+	void lcmain() {
+		gotoxy(0, 1);
+		SetColorAndBackground(0, 7);
+		cout << "|  " << word.box[1] << "  |";
+		SetColorAndBackground(7, 0);
+		cout << "  " << word.box[2] << "  |  " << word.box[3] << "  |\n-----------------";
+		int s = listname(true, true, word.recent, word.recentn);
+		while (1) {
+			//主页面
+			switch (s) {
+				case 1: {
+					switch (box) {
+						case 1: {
+							s=4;
+							box=2;
+							break;
+						}
+						case 2: {
+							taskkill(true, false);
+							break;
+						}
+						case 3: {
+							break;
+						}
+					}
+					break;
+				}
+				case 2: {
+					switch (box) {
+						case 1: {
+							s=5;
+							box=2;
+							break;
+						}
+						case 2: {
+							uninstall();
+							break;
+						}
+						case 3: {
+							about();
+							break;
+						}
+					}
+					break;
+				}
+				case 3: {
+					switch (box) {
+						case 1: {
+							s=6;
+							box=2;
+							break;
+						}
+						case 2: {
+							system("title 冰点还原");
+							bool back = false;
+							string password = "seewofreeze";
+							string input;
+							for (;;) {
+								cout << "\n请输入密码(输入0返回)：";
+								cin >> input;
+								if (input == password) {
+									break;
+								} else {
+									if (input == "0") {
+										back = true;
+										break;
+									} else {
+										cout << "密码错误";
+									}
+								}
+							}
+							if (back == true) {
+								break;
+							}
+							string unfreezepath = executable_path + "\\!SeewoFreezeUI.bat";
+							STARTUPINFO si = { sizeof(si) };//0
+							PROCESS_INFORMATION pi;
+							LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
+							BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+							DWORD dwExitCode;
+							if (fSuccess) { //把主进程暂停，等待子进程终止
+								CloseHandle(pi.hThread);
+								//暂停主进程的执行，直到child终止，该代码才可以继续运行
+								WaitForSingleObject(pi.hProcess, INFINITE);
+								CloseHandle(pi.hProcess);
+							}
+							system("pause");
+							break;
+						}
+					}
+					break;
+				}
+				case 4: {
+					switch (box) {
+						case 2: {
+							system("title 制裁晚自习");
+							while (true) {
+								taskkill(true, true);
+								cls
+							}
+						}
+					}
+					break;
+				}
+				case 5: {
+					switch (box) {
+						case 2: {
+							pingbaoservice();
+						}
+					}
+					break;
+				}
+				case 6: {
+					switch (box) {
+						case 2: {
+							cls
+							int d = listname(true, true, word.game, word.gamen);
+							switch (d) {
+								case 1: {
+									game.numberdamn();
+									break;
+								}
+								case 2: {
+									d = 0;
+									s = -1;
+									break;
+								}
+							}
+							break;
+						}
+					}
+					break;
+				}
+				case -1: {
+					cls
+					gotoxy(0, 1);
+					SetColorAndBackground(7, 0);
+					for (int i = 1; i < box; i++) {
+						cout << "|  " << word.box[i] << "  ";
+					}
+					SetColorAndBackground(0, 7);
+					cout << "|  " << word.box[box] << "  |";
+					SetColorAndBackground(7, 0);
+					for (int i = box + 1; i <= boxn; i++) {
+						cout << "  " << word.box[i] << "  |";
+					}
+					switch (box) {
+						case 1: {
+							s = listname(true, true, word.recent, word.recentn);
+							break;
+						}
+						case 2: {
+							s = listname(true, true, word.all, word.alln);
+							break;
+						}
+						case 3: {
+							s = listname(true, true, word.setting, word.settingn);
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+} lc;
+
 int main() {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
@@ -569,187 +864,41 @@ int main() {
 	//	return 0;
 	//}//返回1确定，2取消
 	//获取程序路径
-	char path[MAX_PATH];
 	GetModuleFileNameA(NULL, path, MAX_PATH);
-	string executable_path = path;
-	size_t position = executable_path.find_last_of('\\');
+	executable_path = path;
+	position = executable_path.find_last_of('\\');
 	executable_path = executable_path.substr(0, position);
-	string xwbbpath = executable_path;
-	//选择界面
-	while (true) {
-		cls
-		system("title 希沃克星");
-		int choose;
-		SetColorAndBackground(7, 0);
-		cout << "1:退出  2:循环清任务  3:一键卸载不需要的软件  4:冰点解冻\n5:晚自习制裁模式  6:获取管理员权限  7:一键防屏保(Beta)  8:小游戏  9:关于";
-		cout << "\n请选择：";
-		cin >> choose;
-		switch (choose) {
-			case 1:
-				return 0;
-			case 2: {
-				system("title 循环清任务");
-				while (true) {
-					taskkill(true);
-					cls
-				}
-			}
-			case 3: {
-				system("title 卸载");
-				uninstall();
-				break;
-			}
-			case 4: {
-				system("title 冰点还原");
-				bool back = false;
-				string password = "seewofreeze";
-				string input;
-				for (;;) {
-					cout << "\n请输入密码(输入0返回)：";
-					cin >> input;
-					if (input == password) {
-						break;
-					} else {
-						if (input == "0") {
-							back = true;
-							break;
-						} else {
-							cout << "密码错误";
-						}
+	xwbbpath = executable_path;
+	lc.lcmain();
+	/*case 5: {
+					string xwbbsetpath = xwbbpath + "\\set.bat";
+					STARTUPINFO si = { sizeof(si) };//0
+					PROCESS_INFORMATION pi;
+					LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
+					BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+					DWORD dwExitCode;
+					if (fSuccess) { //把主进程暂停，等待子进程终止
+						CloseHandle(pi.hThread);
+						//暂停主进程的执行，直到child终止，该代码才可以继续运行
+						WaitForSingleObject(pi.hProcess, INFINITE);
+						CloseHandle(pi.hProcess);
 					}
-				}
-				if (back == true) {
 					break;
 				}
-				string unfreezepath = executable_path + "\\!SeewoFreezeUI.bat";
-				STARTUPINFO si = { sizeof(si) };//0
-				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-				DWORD dwExitCode;
-				if (fSuccess) { //把主进程暂停，等待子进程终止
-					CloseHandle(pi.hThread);
-					//暂停主进程的执行，直到child终止，该代码才可以继续运行
-					WaitForSingleObject(pi.hProcess, INFINITE);
-					CloseHandle(pi.hProcess);
-				}
-				system("pause");
-				break;
-			}
-			/*case 5: {
-				string xwbbsetpath = xwbbpath + "\\set.bat";
-				STARTUPINFO si = { sizeof(si) };//0
-				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-				DWORD dwExitCode;
-				if (fSuccess) { //把主进程暂停，等待子进程终止
-					CloseHandle(pi.hThread);
-					//暂停主进程的执行，直到child终止，该代码才可以继续运行
-					WaitForSingleObject(pi.hProcess, INFINITE);
-					CloseHandle(pi.hProcess);
-				}
-				break;
-			}
-			case 6: {
-				string xwbbsetpath = xwbbpath + "\\restore.bat";
-				STARTUPINFO si = { sizeof(si) };//0
-				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-				DWORD dwExitCode;
-				if (fSuccess) { //把主进程暂停，等待子进程终止
-					CloseHandle(pi.hThread);
-					//暂停主进程的执行，直到child终止，该代码才可以继续运行
-					WaitForSingleObject(pi.hProcess, INFINITE);
-					CloseHandle(pi.hProcess);
-				}
-				break;
-			}*/
-			case 5: {
-				system("title 制裁晚自习");
-				while (true) {
-					taskkill(true);
-					cout << "正在结束进程：设置\n";
-					cout << "TASKKILL /F /IM SystemSettings.exe\n";
-					system("TASKKILL /F /IM SystemSettings.exe");
-					cout << "正在结束进程：控制面板\n";
-					cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
-					system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
-					cout << "正在结束进程：Edge\n";
-					cout << "TASKKILL /F /IM msedge.exe\n";
-					system("TASKKILL /F /IM msedge.exe");
-					cout << "正在结束进程：IE\n";
-					cout << "TASKKILL /F /IM iexplore.exe\n";
-					system("TASKKILL /F /IM iexplore.exe");
-					cls
-				}
-			}
-			case 6: {
-				if (IsUserAnAdmin() == false) {
-					if (getadmin() == false) {
-						return 0;
+				case 6: {
+					string xwbbsetpath = xwbbpath + "\\restore.bat";
+					STARTUPINFO si = { sizeof(si) };//0
+					PROCESS_INFORMATION pi;
+					LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//有权限的都可以打开
+					BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+					DWORD dwExitCode;
+					if (fSuccess) { //把主进程暂停，等待子进程终止
+						CloseHandle(pi.hThread);
+						//暂停主进程的执行，直到child终止，该代码才可以继续运行
+						WaitForSingleObject(pi.hProcess, INFINITE);
+						CloseHandle(pi.hProcess);
 					}
-				} else {
-					cout << "已经获得管理员权限！\n";
-				}
-				system("pause");
-				break;
-			}
-			case 7: {
-				SetColorAndBackground(4,6);
-				cout<<"警告：请勿用于正常上课！\n";
-				SetColorAndBackground(0,7);
-				cout<<"每100秒点击屏幕一次，请将鼠标移动至合适位置\n";
-				system("pause");
-				long long i=0;
-				while (true) {
-					S(100000);
-					cout<<"\b\b\b\b\b\b\b\b\b\b\b\b\b\b"<<i;
-					POINT cur_pos;
-					GetCursorPos(&cur_pos);
-					mouse_event(MOUSEEVENTF_LEFTDOWN, cur_pos.x, cur_pos.y, 0, 0);
-					mouse_event(MOUSEEVENTF_LEFTUP, cur_pos.x, cur_pos.y, 0, 0);
-					i++;
-				}
-			}
-			case 8: {
-				system("title 玩游戏");
-				int ans;
-				cout << "1:数字炸弹  2:返回\n";
-				cout << "请选择游戏:";
-				cin >> ans;
-				switch (ans) {
-					case 1: {
-						game.numberdamn();
-						break;
-					}
-					case 2:
-						break;
-					default: {
-						if (cin.fail()) {
-							cin.clear();
-							cin.ignore(numeric_limits<streamsize>::max(), '\n');
-							cout << "\n输入错误，请检查是否输入了字母";
-						}
-					}
-				}
-				break;
-			}
-			case 9: {
-				system("title 关于");
-				about();
-				break;
-			}
-			default: {
-				if (cin.fail()) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					cout << "\n输入错误，请检查是否输入了字母";
-				}
-				break;
-			}
-		}
-	}
+					break;
+				}*/
 	return 0;
 }
