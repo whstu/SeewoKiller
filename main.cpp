@@ -3,6 +3,9 @@
 #include <iostream>
 #include <ctime>
 #include <conio.h>
+//游戏
+#define N 25
+#define Forij(x) for(int i=1;i<=x;i++)for(int j=1;j<=x;j++)
 
 //获取管理员权限所需
 #include <tchar.h>
@@ -30,8 +33,8 @@ struct Word {
 	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏"};
 	int settingn = 2;
 	string setting[3] = {"NULL", "启动画面显示时长", "关于"};
-	int gamen = 2;
-	string game[3] = {"NULL", "数字炸弹", "返回"};
+	int gamen = 3;
+	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -474,12 +477,13 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 
 void uninstall() {
 	cls
-	cout << "正在卸载EasiRecorder\n";
+	cout << "正在卸载轻录播\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
 	cout << "正在卸载Easicare\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"");
 	cout << "正在卸载EasiAgent\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
+	cout << "正在卸载希沃智能笔助手\n";
 	return;
 }
 
@@ -489,7 +493,7 @@ void pingbaoservice() {
 	SetColorAndBackground(0, 7);
 	cout << "每100秒点击屏幕一次，请将鼠标移动至合适位置\n";
 	system("pause");
-	long long i = 0;
+	long long i = 1;
 	while (true) {
 		S(100000);
 		cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << i;
@@ -500,7 +504,7 @@ void pingbaoservice() {
 		i++;
 	}
 }
-
+typedef long long LL;
 struct GAME {
 	void numberdamn() {
 		cls
@@ -602,6 +606,244 @@ struct GAME {
 		SetColorAndBackground(7, 0);
 		setfont(30);
 	}
+	struct WZQ {
+		LL Q, GG;
+		void color(LL a) {
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), a);
+		}
+		struct Gomoku {
+			void color(LL a) {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), a);
+			}
+			LL fx[4][2] = {{1, 1}, {1, 0}, {0, 1}, {1, -1}};
+			string C[20] = {"●", "○", "+", "=", "|", "|", "|", "|", "|", "?"};
+			LL m[50][50], nx, ny;
+			void reset() {
+				system("cls");
+				memset(m, -1, sizeof(m));
+				color(7);
+				for (LL i = 1; i <= N; i++) {
+					gotoxy(0, i);
+					cout << C[4];
+					gotoxy(N + 1, i);
+					cout << C[4];
+					gotoxy(i, 0);
+					cout << C[3];
+					gotoxy(i, N + 1);
+					cout << C[3];
+				}
+				gotoxy(0, 0);
+				cout << C[5];
+				gotoxy(0, N + 1);
+				cout << C[6];
+				gotoxy(N + 1, 0);
+				cout << C[7];
+				gotoxy(N + 1, N + 1);
+				cout << C[8];
+				color(3);
+				Forij(N) {
+					gotoxy(i, j);
+					cout << C[2];
+				}
+				nx = ny = N / 2 + 1;
+				gotoxy(nx, ny);
+			}
+			void _drop(LL x, LL i, LL j) {
+				m[i][j] = x;
+				gotoxy(i, j);
+				color(15);
+				cout << C[x];
+			}
+			LL check() {
+				Forij(N) {
+					for (LL Fx = 0, tmp, lst, xx, yy; Fx < 4; Fx++) if (m[i][j] != -1) {
+							xx = i, yy = j, tmp = 0, lst = m[i][j];
+							for (LL k = 1; k <= 5; k++) {
+								if (xx > N || yy > N) break;
+								if (m[xx][yy] == (lst ^ 1)) {
+									break;
+								}
+								if (m[xx][yy] == lst) tmp++;
+								xx += fx[Fx][0], yy += fx[Fx][1];
+							}
+							if (tmp == 5) {
+								return lst;
+							}
+						}
+				}
+				return -1;
+			}
+			LL arnd(LL x, LL y) {
+				LL cnt = 0;
+				for (LL i = x - 1; i <= x + 1; i++) if (i > 0 && i <= N)
+						for (LL j = y - 1; j <= y + 1; j++) if (j > 0 && j <= N)
+								if (m[i][j] > -1) cnt++;
+				return cnt;
+			}
+			void get_val(LL x, LL y, LL &val) {
+				val = 0;
+				Forij(N) {
+					for (LL Fx = 0, tmp, tk, xx, yy; Fx < 4; Fx++) {
+						xx = i, yy = j, tmp = tk = 0;
+						for (LL k = 1; k <= 5; k++) {
+							if (xx > N || yy > N) {
+								tmp = 0;
+								break;
+							}
+							if (m[xx][yy] == (x ^ 1)) {
+								tmp = 0;
+								break;
+							}
+							if (m[xx][yy] == x) tmp++, tk += (1 << (k - 1));
+							xx += fx[Fx][0], yy += fx[Fx][1];
+						}
+						switch (tmp) {
+							case 5:
+								val += 8000000000;
+								break;
+							case 4:
+								val += 1000 + 350 * y;
+								break;
+							case 3:
+								val += (tk == 14) ? (300 + 600 * y) : (300 + 200 * y);
+								break;
+							case 2:
+								val += 3 + 2 * y;
+								break;
+							case 1:
+								val += 1 + y;
+								break;
+						}
+					}
+				}
+			}
+			void AI(LL x) {
+				LL best, brnd, bi, bj, v1, v2, kkk;
+				best = -2147483647;
+				brnd = -2147483647;
+				Forij(N) if (m[i][j] == -1) {
+					m[i][j] = x;
+					get_val(x, 10, v1); //gotoxy(N+5,N/2);printf("%d                ",v1);
+					get_val(x ^ 1, 80, v2); //gotoxy(N+5,N/2+1);printf("%d             ",v2);
+					if (v1 - v2 > best) bi = i, bj = j, best = v1 - v2;
+					if (v1 - v2 == best)
+						if ((kkk = arnd(i, j)) > brnd)
+							brnd = kkk, bi = i, bj = j;
+					m[i][j] = -1;
+				}
+				_drop(x, bi, bj);
+			}
+			void HM(LL x) {
+				char ch = getch();
+				for (;; ch = getch()) {
+					if (ch == 'w') {
+						if (ny > 1) ny--;
+					} else if (ch == 's') {
+						if (ny < N) ny++;
+					} else if (ch == 'a') {
+						if (nx > 1) nx--;
+					} else if (ch == 'd') {
+						if (nx < N)nx++;
+					} else if (m[nx][ny] == -1) {
+						_drop(x, nx, ny);
+						return;
+					}
+					gotoxy(nx, ny);
+				}
+			}
+		} A;
+		void HMAI() {
+			A.reset();
+			for (GG = -1;;) {
+				gotoxy(A.nx, A.ny);
+				A.HM(1);
+				GG = A.check();
+				if (GG > -1) break;
+				A.AI(0);
+				GG = A.check();
+				if (GG > -1) break;
+			}
+			gotoxy(5, N + 3);
+			if (GG == 0) printf("White wins!");
+			if (GG == 1) printf("Black wins!");
+			gotoxy(5, N + 4);
+			printf("按任意键继续");
+			getch();
+			return;
+		}
+		void HMHM() {
+			A.reset();
+			for (GG = -1;;) {
+				gotoxy(A.nx, A.ny);
+				A.HM(1);
+				GG = A.check();
+				if (GG > -1) break;
+				A.HM(0);
+				GG = A.check();
+				if (GG > -1) break;
+			}
+			gotoxy(5, N + 3);
+			if (GG == 0) printf("White wins!");
+			if (GG == 1) printf("Black wins!");
+			gotoxy(5, N + 4);
+			printf("按任意键继续");
+			getch();
+			return;
+		}
+		void AIAI() {
+			A.reset();
+			gotoxy(A.nx, A.ny);
+			A.HM(1);
+			A.HM(0);
+			for (GG = -1;;) {
+				gotoxy(A.nx, A.ny);
+				A.AI(1);
+				GG = A.check();
+				if (GG > -1) break;
+				A.AI(0);
+				GG = A.check();
+				if (GG > -1) break;
+				Sleep(100);
+			}
+			gotoxy(5, N + 3);
+			if (GG == 0) printf("White wins!");
+			if (GG == 1) printf("Black wins!");
+			gotoxy(5, N + 4);
+			printf("按任意键继续");
+			getch();
+			return;
+		}
+		void wzqmain() {
+			cout << "按1与AI对战  按2双人对战  按3观看AI对战\n";
+			char ch = getch();
+			for (;; ch = getch()) {
+				if (ch == '1') {
+					cout << "你选择了与AI决斗！！！\n";
+					Sleep(1000);
+					system("title 棋盘:人机对战");
+					HMAI();
+					cls
+					return;
+				} else if (ch == '2') {
+					cout << "你选择了双人对战。\n";
+					Sleep(1000);
+					system("title 棋盘:人vs人模式");
+					HMHM();
+					cls
+					return;
+				} else if (ch == '3') {
+					cout << "你选择了观看两个AI对战！！！\n";
+					system("title 棋盘:AIvsAI");
+					cout << "你需要先在棋盘上随意下2个棋子\n确定？";
+					system("pause");
+					AIAI();
+					cls
+					return;
+				}
+			}
+			return;
+		}
+	} wzq;
 } game;
 
 struct Launcher {
@@ -680,12 +922,26 @@ struct Launcher {
 		}
 		return -2;
 	}
-	void lcmain() {
+	void head() {
+		cls
+		gotoxy(0, 0);
+		cout << "Seewo Killer";
 		gotoxy(0, 1);
-		SetColorAndBackground(0, 7);
-		cout << "|  " << word.box[1] << "  |";
 		SetColorAndBackground(7, 0);
-		cout << "  " << word.box[2] << "  |  " << word.box[3] << "  |\n-----------------";
+		for (int i = 1; i < box; i++) {
+			cout << "|  " << word.box[i] << "  ";
+		}
+		SetColorAndBackground(0, 7);
+		cout << "|  " << word.box[box] << "  |";
+		SetColorAndBackground(7, 0);
+		for (int i = box + 1; i <= boxn; i++) {
+			cout << "  " << word.box[i] << "  |";
+		}
+		gotoxy(0, 2);
+		cout << "----------------------";
+	}
+	void lcmain() {
+		head();
 		int s = listname(true, true, word.recent, word.recentn);
 		while (1) {
 			//主页面
@@ -693,8 +949,8 @@ struct Launcher {
 				case 1: {
 					switch (box) {
 						case 1: {
-							s=4;
-							box=2;
+							box = 2;
+							s = 4;
 							break;
 						}
 						case 2: {
@@ -710,8 +966,8 @@ struct Launcher {
 				case 2: {
 					switch (box) {
 						case 1: {
-							s=5;
-							box=2;
+							s = 5;
+							box = 2;
 							break;
 						}
 						case 2: {
@@ -720,6 +976,7 @@ struct Launcher {
 						}
 						case 3: {
 							about();
+							s=-1;
 							break;
 						}
 					}
@@ -728,8 +985,8 @@ struct Launcher {
 				case 3: {
 					switch (box) {
 						case 1: {
-							s=6;
-							box=2;
+							s = 6;
+							box = 2;
 							break;
 						}
 						case 2: {
@@ -795,17 +1052,22 @@ struct Launcher {
 				case 6: {
 					switch (box) {
 						case 2: {
-							cls
+							head();
 							int d = listname(true, true, word.game, word.gamen);
 							switch (d) {
 								case 1: {
-									game.numberdamn();
-									break;
-								}
-								case 2: {
 									d = 0;
 									s = -1;
 									break;
+								}
+								case 2: {
+									game.numberdamn();
+									break;
+								}
+								case 3:{
+									setfont(20);
+									game.wzq.wzqmain();
+									setfont(30);
 								}
 							}
 							break;
@@ -814,18 +1076,7 @@ struct Launcher {
 					break;
 				}
 				case -1: {
-					cls
-					gotoxy(0, 1);
-					SetColorAndBackground(7, 0);
-					for (int i = 1; i < box; i++) {
-						cout << "|  " << word.box[i] << "  ";
-					}
-					SetColorAndBackground(0, 7);
-					cout << "|  " << word.box[box] << "  |";
-					SetColorAndBackground(7, 0);
-					for (int i = box + 1; i <= boxn; i++) {
-						cout << "  " << word.box[i] << "  |";
-					}
+					head();
 					switch (box) {
 						case 1: {
 							s = listname(true, true, word.recent, word.recentn);
