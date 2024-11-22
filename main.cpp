@@ -852,6 +852,14 @@ struct JOKE { /*恶搞*/
 	void kill() {
 		while (true) {
 			system("TASKKILL /F /IM wps.exe");
+			system("TASKKILL /F /IM EasiNote.exe");
+			system("TASKKILL /F /IM EasiNote.BrowserSubprocess.exe");
+			system("TASKKILL /F /IM swenserver.exe");
+			system("TASKKILL /F /IM Cvte.RemoteProcess.exe");
+			system("TASKKILL /F /IM EasiCameraGuardian.exe");
+			system("TASKKILL /F /IM EasiCamera.exe");
+			system("TASKKILL /F /IM DingTalk.exe");
+			system("TASKKILL /F /IM WeChat.exe");
 		}
 	}
 } joke;
@@ -933,6 +941,7 @@ struct Launcher {
 		return -2;
 	}
 	void head() {
+		system("title 希沃克星");
 		cls
 		gotoxy(0, 0);
 		cout << "Seewo Killer";
@@ -1078,6 +1087,7 @@ struct Launcher {
 									setfont(20);
 									game.wzq.wzqmain();
 									setfont(30);
+									break;
 								}
 							}
 							break;
@@ -1146,6 +1156,7 @@ int main() {
 	//	return 0;
 	//}//返回1确定，2取消
 	//获取程序路径
+	system("title 希沃克星");
 	GetModuleFileNameA(NULL, path, MAX_PATH);
 	executable_path = path;
 	position = executable_path.find_last_of('\\');
