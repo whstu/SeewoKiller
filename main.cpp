@@ -29,12 +29,14 @@ struct Word {
 	string box[4] {"NULL", "常用", "所有", "设置"};
 	int recentn = 3;
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
-	int alln = 6;
-	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏"};
+	int alln = 7;
+	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞"};
 	int settingn = 2;
 	string setting[3] = {"NULL", "启动画面显示时长", "关于"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
+	int joken = 2;
+	string joke[3] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -846,6 +848,14 @@ struct GAME {
 	} wzq;
 } game;
 
+struct JOKE { /*恶搞*/
+	void kill() {
+		while (true) {
+			system("TASKKILL /F /IM wps.exe");
+		}
+	}
+} joke;
+
 struct Launcher {
 	int listname(bool allowA, bool allowD, string liststring[], int n) {
 		gotoxy(0, 3);
@@ -976,7 +986,7 @@ struct Launcher {
 						}
 						case 3: {
 							about();
-							s=-1;
+							s = -1;
 							break;
 						}
 					}
@@ -1064,10 +1074,31 @@ struct Launcher {
 									game.numberdamn();
 									break;
 								}
-								case 3:{
+								case 3: {
 									setfont(20);
 									game.wzq.wzqmain();
 									setfont(30);
+								}
+							}
+							break;
+						}
+					}
+					break;
+				}
+				case 7: {
+					switch (box) {
+						case 2: {
+							head();
+							int d = listname(true, true, word.joke, word.joken);
+							switch (d) {
+								case 1: {
+									d = 0;
+									s = -1;
+									break;
+								}
+								case 2: {
+									joke.kill();
+									break;
 								}
 							}
 							break;
