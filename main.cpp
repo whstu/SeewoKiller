@@ -486,6 +486,7 @@ void uninstall() {
 	cout << "正在卸载EasiAgent\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
 	cout << "正在卸载希沃智能笔助手\n";
+	system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"");
 	return;
 }
 
