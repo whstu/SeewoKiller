@@ -978,6 +978,7 @@ struct Launcher {
 							break;
 						}
 						case 3: {
+							s=-1;
 							break;
 						}
 					}
@@ -992,6 +993,7 @@ struct Launcher {
 						}
 						case 2: {
 							uninstall();
+							s=-1;
 							break;
 						}
 						case 3: {
@@ -1044,6 +1046,7 @@ struct Launcher {
 								CloseHandle(pi.hProcess);
 							}
 							system("pause");
+							s=-1;
 							break;
 						}
 					}
