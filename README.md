@@ -41,7 +41,7 @@
 | :-: | :-: | :-: |
 |GitHub|[**下载**](https://github.com/whstu/SeewoKiller/releases/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
 |蓝奏云|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
-|官网|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)
+|官网|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载]()|
 
 
 
