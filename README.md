@@ -1,48 +1,37 @@
 <div align="center">
 
-# <image src="https://github.com/user-attachments/assets/1f721808-121d-4e7e-94ba-ab1ebcbe89d0" height="28"/> ClassIsland
+# <image src="https://image.whstu.us.kg/clabel_friends_badge.png" height="35"/> Seewo Killer|希沃克星
 
-![Banner](https://github.com/user-attachments/assets/a815dd7d-8343-4da5-aee4-3f754aa297e4)
+<!--![Banner](https://github.com/user-attachments/assets/a815dd7d-8343-4da5-aee4-3f754aa297e4)-->
 
-[![Stars](https://img.shields.io/github/stars/ClassIsland/ClassIsland?label=Stars)](https://github.com/ClassIsland/ClassIsland)
-[![正式版 Release](https://img.shields.io/github/v/release/ClassIsland/ClassIsland?style=flat-square&color=%233fb950&label=正式版)](https://github.com/ClassIsland/ClassIsland/releases/latest)
-[![测试版 Release](https://img.shields.io/github/v/release/ClassIsland/ClassIsland?include_prereleases&style=flat-square&label=测试版)](https://github.com/ClassIsland/ClassIsland/releases/)
-[![下载量](https://img.shields.io/github/downloads/ClassIsland/ClassIsland/total?style=social&label=下载量&logo=github)](https://github.com/ClassIsland/ClassIsland/releases/latest)
+[![Stars](https://img.shields.io/github/stars/whstu/SeewoKiller?label=Stars)](https://github.com/ClassIsland/ClassIsland)
+[![正式版 Release](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=正式版)](https://github.com/whstu/SeewoKiller/releases/latest)
+[![测试版 Release](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=测试版)](https://github.com/whstu/SeewoKiller/releases/)
+[![下载量](https://img.shields.io/github/downloads/whstu/SeewoKiller/total?style=social&label=下载量&logo=github)](https://github.com/whstu/SeewoKiller/releases/latest)
 
-ClassIsland 是一款适用于班级多媒体屏幕的课表信息显示工具，可以在 Windows 屏幕上显示各种信息。<br/>
-本应用的名字灵感源于 iOS 灵动岛（Dynamic Island）功能。
+希沃克星是一个专干希沃的工具。<br/>
+冰点还原、制裁晚自习、强制关闭希沃管家。。。
 
-#### 💬[Classlsland QQ 频道](https://pd.qq.com/s/grr6qwqwj) | [Classlsland QQ 群组](https://qm.qq.com/q/4NsDQKiAuQ)
+#### 💬![Static Badge](https://img.shields.io/badge/%E5%BC%80%E5%8F%91%E4%B8%AD-%E6%9A%82%E4%B8%8D%E5%BC%80%E6%94%BE-yellow)[Seewo Killer QQ频道](https://pd.qq.com/s/grr6qwqwj) | [Seewo Killer QQ 群](https://qm.qq.com/q/hjafI6eZBC)
 
-#### [🌐 官方网站](https://classisland.tech/)｜[📚 项目文档](https://docs.classisland.tech)｜[🗳 功能投票](https://github.com/ClassIsland/voting/discussions?discussions_q=is%3Aopen+sort%3Atop)
+#### [🌐 官方网站](https://whstu.us.kg/download/seewokiller/)｜[📚 项目文档](https://github.com/whstu/SeewoKiller/wiki)
+<!--｜[🗳 功能投票](https://github.com/ClassIsland/voting/discussions?discussions_q=is%3Aopen+sort%3Atop)-->
 
-###### [观看介绍视频，快速了解突破创新 →](https://bilibili.com/video/BV1Lt421n7op/)
+<!--###### [观看介绍视频，快速了解突破创新 →](https://bilibili.com/video/BV1Lt421n7op/)-->
 
 </div>
-
-## 仓库
-
-本组织下的一些主要仓库：
-
-- **[ClassIsland](https://github.com/ClassIsland/ClassIsland/)** - ClassIsland 应用主仓库
-- **[ManagementServer](https://github.com/ClassIsland/ManagementServer)** - ClassIsland 集控服务器
-- [ClassIsland-net6](https://github.com/ClassIsland/ClassIsland-net6) - ClassIsland .NET6 移植版（适用于 Windows 7）
-- [classisland-docs-next](https://github.com/ClassIsland/classisland-docs-next) - 应用本体的在线文档
-- [PluginIndex](https://github.com/ClassIsland/PluginIndex) - 插件索引
-- [ExamplePlugins](https://github.com/ClassIsland/ExamplePlugins) - 示例插件代码
-- [voting](https://github.com/ClassIsland/voting) - 存放功能投票的 discussions
 
 ## 开始使用
 
 **首先，请确保您的设备满足以下推荐需求：**
 
 - Windows 10 及以上版本的系统，x64 架构
-- 安装 [.NET 8.0 桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-8.0.7-windows-x64-installer)
 
 > [!IMPORTANT]
-> **详细安装说明请参阅 [ClassIsland 文档](https://docs.classisland.tech/app/setup)。**
->
-> 不建议在 Windows 10 以下的系统运行本应用。在 Windows 7 中，.NET 运行时会产生**严重的内存泄漏问题**。如果您执意要在 Windows 7 中使用 ClassIsland，请参阅 [在 Windows 7 中安装 ClassIsland](https://docs.classisland.tech/app/setup#检查系统需求)。
+> 不确保Seewo Killer能否在Windows 10以下的系统中运行（因为没有机器用来测试），
+> <br/>但是有证据表明Seewo Killer可在32位Windows XP上正常运行。
+> <br/>如果您需要再在Windows 10以下的系统中运行Seewo Killer，
+> <br/>请下载Release中的Source Code而非setup.exe。
 
 对于普通用户，可以在以下渠道下载到本软件，请根据自身网络环境选择合适的渠道。
 
