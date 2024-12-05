@@ -37,12 +37,13 @@
 
 > 测试版包含最新的功能，但也可能包含未完善和不稳定的功能。
 
-| 下载渠道  | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/ClassIsland/ClassIsland?style=flat-square&color=%233fb950&label=)](https://github.com/ClassIsland/ClassIsland/releases/latest) | 🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/ClassIsland/ClassIsland?include_prereleases&style=flat-square&label=)](https://github.com/ClassIsland/ClassIsland/releases/) |
-| :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|  GitHub   |                                                            [**下载**](https://github.com/ClassIsland/ClassIsland/releases/latest)                                                            |                                                              [下载](https://github.com/ClassIsland/ClassIsland/releases)                                                               |
-| AppCenter |                                    [**下载**](https://install.appcenter.ms/users/hellowrc/apps/classisland/distribution_groups/public/releases/latest)                                    |                                 [下载](https://install.appcenter.ms/users/hellowrc/apps/classisland/distribution_groups/publicbeta/releases/latest)                                 |
+| 下载渠道  | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=)](https://github.com/whstu/SeewoKiller/releases/latest) | 🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=)](https://github.com/whstu/SeewoKiller/releases/) |
+| :-: | :-: | :-: |
+|GitHub|[**下载**](https://github.com/whstu/SeewoKiller/releases/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
+|蓝奏云|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
+|官网|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)
 
-如果以上链接无法使用，可以从 [镜像链接](https://docs.classisland.tech/app/setup#%E4%B8%8B%E8%BD%BD%E5%BA%94%E7%94%A8%E6%9C%AC%E4%BD%93) 下载。
+
 
 下载完成后，将软件压缩包解压到一个**独立的文件夹（运行路径不能有中文）**，运行软件即可开始使用。解压时请不要解压到网盘同步文件夹、【下载】文件夹中，否则可能会出现**文件无法读写、文件丢失**等问题。
 
