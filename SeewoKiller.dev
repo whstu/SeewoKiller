@@ -37,19 +37,19 @@ UnitCount=1
 [VersionInfo]
 Major=1
 Minor=2
-Release=1
-Build=7
+Release=2
+Build=0
 LanguageID=2052
 CharsetID=1252
 CompanyName=WHSTU Studio
-FileVersion=1.2.1.7
+FileVersion=1.2.2.0
 FileDescription=Ï£ÎÖ¿ËÐÇ
 InternalName=
-LegalCopyright=
-LegalTrademarks=
+LegalCopyright=Copyright (C)2017-2024 WHSTU Studio
+LegalTrademarks=(R)WHSTU Studio
 OriginalFilename=
 ProductName=Seewo Killer
-ProductVersion=1.2.1.7
+ProductVersion=1.2.2.0
 AutoIncBuildNr=1
 SyncProduct=1
 

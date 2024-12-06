@@ -3,14 +3,17 @@
 #include <iostream>
 #include <ctime>
 #include <conio.h>
+#include <string>
+//重启explorer.exe
+#include <tlhelp32.h>
+//注册表修改
+#include <tchar.h>
 //游戏
 #define N 25
 #define Forij(x) for(int i=1;i<=x;i++)for(int j=1;j<=x;j++)
-
 //获取管理员权限所需
 #include <tchar.h>
 #include <shellapi.h>
-
 //cin错误去除
 #include <limits>
 
@@ -31,8 +34,8 @@ struct Word {
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
 	int alln = 7;
 	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞"};
-	int settingn = 2;
-	string setting[3] = {"NULL", "启动画面显示时长", "关于"};
+	int settingn = 4;
+	string setting[5] = {"NULL", "退出", "关于", "禁用任务栏右键菜单", "启用任务栏右键菜单"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
 	int joken = 2;
@@ -52,7 +55,6 @@ void gotoxy(long long x, long long y) {
 	pos.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
-
 void setfont(int size) {//字体、大小、粗细
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof cfi;
@@ -68,8 +70,56 @@ void setfont(int size) {//字体、大小、粗细
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
 
+/*注册表：无法打开任务栏右键菜单*/
+bool UsedReg = false;
+#define CHECK_ERROR(func) \
+	if (ERROR_SUCCESS != (func)) { \
+		std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
+		return false; \
+	}
+bool connot_close_reg(const char* Value) {//1禁止,0放行
+	HKEY hKey = NULL;
+	LONG result;
+	result = RegOpenKeyEx(
+	             HKEY_CURRENT_USER,
+	             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"), // 注册表路径
+	             0,
+	             KEY_SET_VALUE,
+	             &hKey
+	         );
+	CHECK_ERROR(result);
+	const char* valueName = "NoTrayContextMenu";//名称
+	const char* newValue = Value;//值
+	// 设置注册表值
+	result = RegSetValueEx(
+	             hKey,
+	             valueName,
+	             0,
+	             REG_DWORD, // 数据类型
+	             (const BYTE*)newValue, // 数据
+	             (strlen(newValue) + 1) * sizeof(char) // 数据大小
+	         );
+	CHECK_ERROR(result);
+	// 关闭注册表句柄
+	RegCloseKey(hKey);
+	return true;
+}
+
+/*屏蔽关闭按钮*/
+void connot_close_button() {
+	HMENU hmenu = GetSystemMenu(hwnd, false);
+	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+	LONG style = GetWindowLong(hwnd, GWL_STYLE);
+	style &= ~(WS_MINIMIZEBOX);
+	SetWindowLong(hwnd, GWL_STYLE, style);
+	SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
+	DestroyMenu(hmenu);
+	ReleaseDC(hwnd, NULL);
+}
+
 void poweron() {
-	ShowWindow(hwnd, SW_MAXIMIZE);
+	connot_close_button();
 	setfont(30);
 	S(500);
 	SetColorAndBackground(0, 4);
@@ -448,6 +498,8 @@ bool getadmin() {
 }
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
+	system("taskkill /f /t /im taskmgr.exe");
+	system("taskkill /f /t /im cmd.exe");
 	cout << "正在结束进程：轻录播\n";
 	cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 	system("TASKKILL /F /IM EasiRecorder.exe");
@@ -978,8 +1030,14 @@ struct Launcher {
 							break;
 						}
 						case 3: {
-							s=-1;
-							break;
+							if (UsedReg == true) {
+								connot_close_reg("0");
+								system("TASKKILL /F /IM explorer.exe");
+								cout << "杀进程成功，5秒后尝试重启";
+								Sleep(5000);
+								system("start explorer.exe");
+							}
+							return;
 						}
 					}
 					break;
@@ -993,7 +1051,7 @@ struct Launcher {
 						}
 						case 2: {
 							uninstall();
-							s=-1;
+							s = -1;
 							break;
 						}
 						case 3: {
@@ -1046,7 +1104,17 @@ struct Launcher {
 								CloseHandle(pi.hProcess);
 							}
 							system("pause");
-							s=-1;
+							s = -1;
+							break;
+						}
+						case 3: {
+							connot_close_reg("1");
+							UsedReg = true;
+							system("TASKKILL /F /IM explorer.exe");
+							cout << "杀进程成功，5秒后尝试重启";
+							Sleep(5000);
+							system("start explorer.exe");
+							s = -1;
 							break;
 						}
 					}
@@ -1060,6 +1128,16 @@ struct Launcher {
 								taskkill(true, true);
 								cls
 							}
+						}
+						case 3: {
+							connot_close_reg("0");
+							UsedReg = false;
+							system("TASKKILL /F /IM explorer.exe");
+							cout << "杀进程成功，5秒后尝试重启";
+							Sleep(5000);
+							system("start explorer.exe");													
+							s = -1;
+							break;
 						}
 					}
 					break;
