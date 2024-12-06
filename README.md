@@ -41,41 +41,30 @@
 | :-: | :-: | :-: |
 |GitHub|[**下载**](https://github.com/whstu/SeewoKiller/releases/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
 |蓝奏云|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
-|官网|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载]()|
+|官网|[**下载**](https://whstu.us.kg/download/seewokiller/)|[下载](https://whstu.us.kg/download/seewokiller/)|
 
-
-
-下载完成后，将软件压缩包解压到一个**独立的文件夹（运行路径不能有中文）**，运行软件即可开始使用。解压时请不要解压到网盘同步文件夹、【下载】文件夹中，否则可能会出现**文件无法读写、文件丢失**等问题。
-
-## 迁移到 ClassIsland
-
-- 从[Electron Class Schedule](https://github.com/EnderWolf006/ElectronClassSchedule)或者[ZongziTEK 黑板贴](https://github.com/STBBRD/ZongziTEK-Blackboard-Sticker)迁移：[网页链接🔗](https://migrate.classisland.tech)
-
+蓝奏云、官网下载的文件，下载完成后直接安装即可。
+Github下载的`.zip`文件，解压后即可使用。
 
 ## 获取帮助＆加入社区
 
 您可以访问以下页面来**获取帮助**：
 
-- [ClassIsland 帮助文档](https://docs.classisland.tech/app)
+- [帮助文档]([https://docs.classisland.tech/app](https://github.com/whstu/SeewoKiller/wiki))
 
 您也可以加入这些社区**寻求帮助**：
 
-[![GitHub Issues](https://img.shields.io/github/issues-search/ClassIsland/ClassIsland?query=is%3Aopen&style=flat-square&logo=github&label=Issues&color=%233fb950)](https://github.com/ClassIsland/ClassIsland/issues)
-[![GitHub Discussions](https://img.shields.io/github/discussions/ClassIsland/ClassIsland?style=flat-square&logo=Github&label=Discussions)](https://github.com/ClassIsland/ClassIsland/discussions)
-[![加入 QQ 频道](https://img.shields.io/badge/QQ_%E9%A2%91%E9%81%93-classisland-%230066cc?style=flat-square&logo=TencentQQ)](https://pd.qq.com/s/scb3wzia)
-[![加入 QQ 群](https://img.shields.io/badge/QQ_%E7%BE%A4-958840932-%230066cc?style=flat-square&logo=TencentQQ)](https://qm.qq.com/q/4NsDQKiAuQ)
+[![GitHub Issues](https://img.shields.io/github/issues-search/whstu/SeewoKiller?query=is%3Aopen&style=flat-square&logo=github&label=Issues&color=%233fb950)](https://github.com/whstu/SeewoKiller/issues)
+[![GitHub Discussions](https://img.shields.io/github/discussions/whstu/SeewoKiller?style=flat-square&logo=Github&label=Discussions)](https://github.com/whstu/SeewoKiller/discussions)
+[![加入 QQ 群](https://img.shields.io/badge/QQ_%E7%BE%A4-958840932-%230066cc?style=flat-square&logo=TencentQQ)](https://qm.qq.com/q/XTuoscm04S)
 
-如果您确定您遇到的问题是一个 **Bug**，或者您要提出一项**新的功能**，请[提交 Issue](https://github.com/ClassIsland/ClassIsland/issues/new/choose)。
+如果您确定您遇到的问题是一个 **Bug**，或者您要提出一项**新的功能**，请[提交 Issue](https://github.com/whstu/SeewoKiller/issues/new/choose)。
 
 ## Stars 历史
 
-### [ClassIsland](https://github.com/ClassIsland/ClassIsland/)
+### [ClassIsland](https://github.com/whstu/SeewoKiller/)
 
-[![Star 历史](https://starchart.cc/ClassIsland/ClassIsland.svg?variant=adaptive)](https://starchart.cc/ClassIsland/ClassIsland)
-
-### [ManagementServer](https://github.com/ClassIsland/ClassIsland/)
-
-[![Star 历史](https://starchart.cc/ClassIsland/ManagementServer.svg?variant=adaptive)](https://starchart.cc/ClassIsland/ManagementServer)
+[![Star 历史](https://starchart.cc/whstu/SeewoKiller.svg?variant=adaptive)](https://starchart.cc/whstu/SeewoKiller)
 
 <div align="center">
 
