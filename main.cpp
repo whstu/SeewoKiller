@@ -81,23 +81,23 @@ bool connot_close_reg(const char* Value) {//1禁止,0放行
 	HKEY hKey = NULL;
 	LONG result;
 	result = RegOpenKeyEx(
-	             HKEY_CURRENT_USER,
-	             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"), // 注册表路径
+	             HKEY_LOCAL_MACHINE,
+	             TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\"), // 注册表路径
 	             0,
 	             KEY_SET_VALUE,
 	             &hKey
 	         );
 	CHECK_ERROR(result);
 	const char* valueName = "NoTrayContextMenu";//名称
-	const char* newValue = Value;//值
+	DWORD newValue = atoi(Value);//值
 	// 设置注册表值
 	result = RegSetValueEx(
 	             hKey,
 	             valueName,
 	             0,
 	             REG_DWORD, // 数据类型
-	             (const BYTE*)newValue, // 数据
-	             (strlen(newValue) + 1) * sizeof(char) // 数据大小
+				(const BYTE*)&newValue, // 数据，注意使用 & 获取地址
+				sizeof(DWORD)
 	         );
 	CHECK_ERROR(result);
 	// 关闭注册表句柄
@@ -1033,9 +1033,11 @@ struct Launcher {
 							if (UsedReg == true) {
 								connot_close_reg("0");
 								system("TASKKILL /F /IM explorer.exe");
-								cout << "杀进程成功，5秒后尝试重启";
+								cout << "杀进程成功，5秒后尝试重启\n";
 								Sleep(5000);
-								system("start explorer.exe");
+								system("start C:\\Windows\\explorer.exe");
+								cout << "恢复中\n";
+								Sleep(2000);
 							}
 							return;
 						}
@@ -1111,9 +1113,11 @@ struct Launcher {
 							connot_close_reg("1");
 							UsedReg = true;
 							system("TASKKILL /F /IM explorer.exe");
-							cout << "杀进程成功，5秒后尝试重启";
+							cout << "杀进程成功，5秒后尝试重启\n";
 							Sleep(5000);
-							system("start explorer.exe");
+							system("start C:\\Windows\\explorer.exe");
+							cout << "恢复中\n";
+							Sleep(2000);
 							s = -1;
 							break;
 						}
@@ -1133,9 +1137,11 @@ struct Launcher {
 							connot_close_reg("0");
 							UsedReg = false;
 							system("TASKKILL /F /IM explorer.exe");
-							cout << "杀进程成功，5秒后尝试重启";
+							cout << "杀进程成功，5秒后尝试重启\n";
 							Sleep(5000);
-							system("start explorer.exe");													
+							system("start C:\\Windows\\explorer.exe");
+							cout << "恢复中\n";
+							Sleep(2000);
 							s = -1;
 							break;
 						}
