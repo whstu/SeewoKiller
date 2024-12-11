@@ -77,28 +77,47 @@ bool UsedReg = false;
 		std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
 		return false; \
 	}
-bool connot_close_reg(const char* Value) {//1禁止,0放行
+bool regedit(string root, string regpath, const char* valueName, string form, const char* Value) { //1禁止,0放行
 	HKEY hKey = NULL;
 	LONG result;
-	result = RegOpenKeyEx(
-	             HKEY_LOCAL_MACHINE,
-	             TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\"), // 注册表路径
-	             0,
-	             KEY_SET_VALUE,
-	             &hKey
-	         );
+	if (root == "HKEY_CLASSES_ROOT") {
+		result = RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+	} else if (root == "HKEY_CURRENT_USER") {
+		result = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+	} else if (root == "HKEY_LOCAL_MACHINE") {
+		result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+	} else if (root == "HKEY_USERS") {
+		result = RegOpenKeyEx(HKEY_USERS, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+	} else if (root == "HKEY_CURRENT_CONFIG") {
+		result = RegOpenKeyEx(HKEY_CURRENT_CONFIG, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+	} else {
+		cout << "根目录错误\n";
+		system("pause");
+		return false;
+	}
+	//result = RegOpenKeyEx(HKEY_LOCAL_MACHINE/*目录*/,TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\"), // 注册表路径0,KEY_SET_VALUE,&hKey);
 	CHECK_ERROR(result);
-	const char* valueName = "NoTrayContextMenu";//名称
+	//valueName = "NoTrayContextMenu";//名称
 	DWORD newValue = atoi(Value);//值
 	// 设置注册表值
-	result = RegSetValueEx(
-	             hKey,
-	             valueName,
-	             0,
-	             REG_DWORD, // 数据类型
-				(const BYTE*)&newValue, // 数据，注意使用 & 获取地址
-				sizeof(DWORD)
-	         );
+	if (form == "REG_SZ") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_SZ, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_BINARY") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_BINARY, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_DWORD") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_DWORD, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_QWORD") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_QWORD, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_MULTI_SZ") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_MULTI_SZ, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_EXPAND_SZ") {
+		result = RegSetValueEx(hKey, valueName, 0, REG_EXPAND_SZ, (const BYTE*)&newValue, sizeof(DWORD));
+	} else {
+		cout<<"数据类型错误\n";
+		system("pause");
+		return false;
+	}
+	//result = RegSetValueEx(hKey,valueName,0,REG_DWORD,(const BYTE*)&newValue,sizeof(DWORD));
 	CHECK_ERROR(result);
 	// 关闭注册表句柄
 	RegCloseKey(hKey);
@@ -1031,7 +1050,8 @@ struct Launcher {
 						}
 						case 3: {
 							if (UsedReg == true) {
-								connot_close_reg("0");
+								regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+								regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 								system("TASKKILL /F /IM explorer.exe");
 								cout << "杀进程成功，5秒后尝试重启\n";
 								Sleep(5000);
@@ -1110,7 +1130,8 @@ struct Launcher {
 							break;
 						}
 						case 3: {
-							connot_close_reg("1");
+							regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+							regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
 							UsedReg = true;
 							system("TASKKILL /F /IM explorer.exe");
 							cout << "杀进程成功，5秒后尝试重启\n";
@@ -1134,7 +1155,8 @@ struct Launcher {
 							}
 						}
 						case 3: {
-							connot_close_reg("0");
+							regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+							regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 							UsedReg = false;
 							system("TASKKILL /F /IM explorer.exe");
 							cout << "杀进程成功，5秒后尝试重启\n";
