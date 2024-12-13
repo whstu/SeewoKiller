@@ -10,7 +10,8 @@
 [![下载量](https://img.shields.io/github/downloads/whstu/SeewoKiller/total?style=social&label=下载量&logo=github)](https://github.com/whstu/SeewoKiller/releases/latest)
 
 希沃克星是一个专干希沃的工具。<br/>
-冰点还原、制裁晚自习、强制关闭希沃管家。。。
+冰点还原、制裁晚自习、强制关闭希沃管家。。。<br/>
+采用简单的图形界面冰点还原，而非繁琐的重启到Windows PE
 
 #### 💬![Static Badge](https://img.shields.io/badge/%E5%BC%80%E5%8F%91%E4%B8%AD-%E6%9A%82%E4%B8%8D%E5%BC%80%E6%94%BE-yellow)[Seewo Killer QQ频道](https://pd.qq.com/s/grr6qwqwj) | [Seewo Killer QQ 群](https://qm.qq.com/q/hjafI6eZBC)
 
