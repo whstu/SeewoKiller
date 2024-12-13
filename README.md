@@ -63,7 +63,7 @@ Github下载的`.zip`文件，解压后即可使用。
 
 ## Stars 历史
 
-### [ClassIsland](https://github.com/whstu/SeewoKiller/)
+### [Seewo Killer](https://github.com/whstu/SeewoKiller/)
 
 [![Star 历史](https://starchart.cc/whstu/SeewoKiller.svg?variant=adaptive)](https://starchart.cc/whstu/SeewoKiller)
 
