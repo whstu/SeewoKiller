@@ -36,6 +36,7 @@
 
 对于普通用户，可以在以下渠道下载到本软件，请根据自身网络环境选择合适的渠道。
 
+> [!WARNING]
 > 测试版包含最新的功能，但也可能包含未完善和不稳定的功能。
 
 | 下载渠道  | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=)](https://github.com/whstu/SeewoKiller/releases/latest) | 🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=)](https://github.com/whstu/SeewoKiller/releases/) |
