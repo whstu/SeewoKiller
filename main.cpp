@@ -32,14 +32,16 @@ struct Word {
 	string box[4] {"NULL", "常用", "所有", "设置"};
 	int recentn = 3;
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
-	int alln = 7;
-	string all[8] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞"};
+	int alln = 8;
+	string all[9] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞", "注册表"};
 	int settingn = 4;
 	string setting[5] = {"NULL", "退出", "关于", "禁用任务栏右键菜单", "启用任务栏右键菜单"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
 	int joken = 2;
 	string joke[3] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台"};
+	int regn = 5;
+	string reg[6] = {"NULL", "返回", "一键禁用", "一键启用", "禁用任务栏菜单", "启用任务栏菜单"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -70,7 +72,7 @@ void setfont(int size) {//字体、大小、粗细
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
 
-/*注册表：无法打开任务栏右键菜单*/
+/*注册表*/
 bool UsedReg = false;
 #define CHECK_ERROR(func) \
 	if (ERROR_SUCCESS != (func)) { \
@@ -113,7 +115,7 @@ bool regedit(string root, string regpath, const char* valueName, string form, co
 	} else if (form == "REG_EXPAND_SZ") {
 		result = RegSetValueEx(hKey, valueName, 0, REG_EXPAND_SZ, (const BYTE*)&newValue, sizeof(DWORD));
 	} else {
-		cout<<"数据类型错误\n";
+		cout << "数据类型错误\n";
 		system("pause");
 		return false;
 	}
@@ -1139,6 +1141,7 @@ struct Launcher {
 							system("start C:\\Windows\\explorer.exe");
 							cout << "恢复中\n";
 							Sleep(2000);
+							system("start C:\\Windows\\explorer.exe");
 							s = -1;
 							break;
 						}
@@ -1155,17 +1158,6 @@ struct Launcher {
 							}
 						}
 						case 3: {
-							regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-							regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-							UsedReg = false;
-							system("TASKKILL /F /IM explorer.exe");
-							cout << "杀进程成功，5秒后尝试重启\n";
-							Sleep(5000);
-							system("start C:\\Windows\\explorer.exe");
-							cout << "恢复中\n";
-							Sleep(2000);
-							s = -1;
-							break;
 						}
 					}
 					break;
@@ -1225,6 +1217,60 @@ struct Launcher {
 						}
 					}
 					break;
+				}
+				case 8: {
+					switch (box) {
+						case 2: {
+							head();
+							int d = listname(true, true, word.reg, word.regn);
+							switch (d) {
+								case 1: {
+									d = 0;
+									s = -1;
+									break;
+								}
+								case 2: {
+									//全部禁用
+									d = -1;
+									break;
+								}
+								case 3: {
+									//全部恢复
+									d = -1;
+									break;
+								}
+								case 4: {
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+									UsedReg = false;
+									system("TASKKILL /F /IM explorer.exe");
+									cout << "杀进程成功，5秒后尝试重启\n";
+									Sleep(5000);
+									system("start C:\\Windows\\explorer.exe");
+									cout << "恢复中\n";
+									Sleep(2000);
+									system("start C:\\Windows\\explorer.exe");
+									d = -1;
+									break;
+								}
+								case 5: {
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+									UsedReg = false;
+									system("TASKKILL /F /IM explorer.exe");
+									cout << "杀进程成功，5秒后尝试重启\n";
+									Sleep(5000);
+									system("start C:\\Windows\\explorer.exe");
+									cout << "恢复中\n";
+									Sleep(2000);
+									system("start C:\\Windows\\explorer.exe");
+									d = -1;
+									break;
+								}
+							}
+							break;
+						}
+					}
 				}
 				case -1: {
 					head();
