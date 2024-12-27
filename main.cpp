@@ -1295,7 +1295,7 @@ struct Launcher {
 	}
 } lc;
 
-int main() {
+int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
@@ -1304,6 +1304,25 @@ int main() {
 			return 0;
 		}
 	}
+	//启动参数
+	string cmdinput = argv[1];
+	if (cmdinput == "wanzixi") {
+		system("title 制裁晚自习");
+		while (true) {
+			taskkill(true, true);
+		}
+		return 0;
+	} else if (cmdinput == "uninstall") {
+		uninstall();
+		return 0;
+	}
+	//参数的数量
+	//cout << argc << " arguments:" << endl;
+	//循环打印所有参数
+	/*for (int i = 0; i < argc; i++) {
+		cout << argv[i] << endl;
+	}*/
+	//system(".\\SeewoKiller.exe qwert asdfg");
 	system("title Seewo Killer Starting");
 	poweron();
 	cls
