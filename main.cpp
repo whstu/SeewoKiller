@@ -34,14 +34,14 @@ struct Word {
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
 	int alln = 8;
 	string all[9] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞", "注册表"};
-	int settingn = 4;
-	string setting[5] = {"NULL", "退出", "关于", "禁用任务栏右键菜单", "启用任务栏右键菜单"};
+	int settingn = 2;
+	string setting[5] = {"NULL", "退出", "关于"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
 	int joken = 2;
 	string joke[3] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台"};
-	int regn = 5;
-	string reg[6] = {"NULL", "返回", "一键禁用", "一键启用", "禁用任务栏菜单", "启用任务栏菜单"};
+	int regn = 11;
+	string reg[12] = {"NULL", "返回", "一键禁用(暂不可用)", "一键启用(暂不可用)", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息","登录时显示提示","取消登录时显示提示"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -73,7 +73,6 @@ void setfont(int size) {//字体、大小、粗细
 }
 
 /*注册表*/
-bool UsedReg = false;
 #define CHECK_ERROR(func) \
 	if (ERROR_SUCCESS != (func)) { \
 		std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
@@ -1051,16 +1050,7 @@ struct Launcher {
 							break;
 						}
 						case 3: {
-							if (UsedReg == true) {
-								regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-								regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-								system("TASKKILL /F /IM explorer.exe");
-								cout << "杀进程成功，5秒后尝试重启\n";
-								Sleep(5000);
-								system("start C:\\Windows\\explorer.exe");
-								cout << "恢复中\n";
-								Sleep(2000);
-							}
+							//退出
 							return;
 						}
 					}
@@ -1131,20 +1121,6 @@ struct Launcher {
 							s = -1;
 							break;
 						}
-						case 3: {
-							regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-							regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-							UsedReg = true;
-							system("TASKKILL /F /IM explorer.exe");
-							cout << "杀进程成功，5秒后尝试重启\n";
-							Sleep(5000);
-							system("start C:\\Windows\\explorer.exe");
-							cout << "恢复中\n";
-							Sleep(2000);
-							system("start C:\\Windows\\explorer.exe");
-							s = -1;
-							break;
-						}
 					}
 					break;
 				}
@@ -1156,8 +1132,6 @@ struct Launcher {
 								taskkill(true, true);
 								cls
 							}
-						}
-						case 3: {
 						}
 					}
 					break;
@@ -1242,7 +1216,6 @@ struct Launcher {
 								case 4: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
 									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-									UsedReg = false;
 									system("TASKKILL /F /IM explorer.exe");
 									cout << "杀进程成功，5秒后尝试重启\n";
 									Sleep(5000);
@@ -1256,7 +1229,6 @@ struct Launcher {
 								case 5: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-									UsedReg = false;
 									system("TASKKILL /F /IM explorer.exe");
 									cout << "杀进程成功，5秒后尝试重启\n";
 									Sleep(5000);
@@ -1265,6 +1237,55 @@ struct Launcher {
 									Sleep(2000);
 									system("start C:\\Windows\\explorer.exe");
 									d = -1;
+									break;
+								}
+								case 6: {
+									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
+									system("TASKKILL /F /IM explorer.exe");
+									cout << "杀进程成功，5秒后尝试重启\n";
+									Sleep(5000);
+									system("start C:\\Windows\\explorer.exe");
+									cout << "恢复中\n";
+									Sleep(2000);
+									system("start C:\\Windows\\explorer.exe");
+									d = -1;
+									break;
+								}
+								case 7: {
+									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
+									system("TASKKILL /F /IM explorer.exe");
+									cout << "杀进程成功，5秒后尝试重启\n";
+									Sleep(5000);
+									system("start C:\\Windows\\explorer.exe");
+									cout << "恢复中\n";
+									Sleep(2000);
+									system("start C:\\Windows\\explorer.exe");
+									d = -1;
+									break;
+								}
+								case 8: {
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
+									break;
+								}
+								case 9: {
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
+									break;
+								}
+								case 10: {
+									cout<<"请输入主标题：";
+									char* title1;char* title2;
+									cin>>title1; 
+									cout<<"请输入副标题：";
+									cin>>title2;
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
+									system("pause");
+									break;
+								}
+								case 11: {
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
+									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
+									system("pause");
 									break;
 								}
 							}
@@ -1299,7 +1320,7 @@ int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
-	//启动参数 
+	//启动参数
 	if (argc > 1) {
 		if (IsUserAnAdmin() == false) {
 			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
@@ -1314,6 +1335,10 @@ int main(int argc, char *argv[]) {
 			return 0;
 		} else if (cmdinput == "uninstall") {
 			uninstall();
+			return 0;
+		} else if (cmdinput == "pingbao") {
+			system("title 一键防屏保");
+			pingbaoservice();
 			return 0;
 		}
 	}
