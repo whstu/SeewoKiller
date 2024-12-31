@@ -1299,22 +1299,28 @@ int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
+	//启动参数 
+	if (argc > 1) {
+		if (IsUserAnAdmin() == false) {
+			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
+			return 0;
+		}
+		string cmdinput = argv[1];
+		if (cmdinput == "wanzixi") {
+			system("title 制裁晚自习");
+			while (true) {
+				taskkill(true, true);
+			}
+			return 0;
+		} else if (cmdinput == "uninstall") {
+			uninstall();
+			return 0;
+		}
+	}
 	if (IsUserAnAdmin() == false) {
 		if (getadmin() == false) {
 			return 0;
 		}
-	}
-	//启动参数
-	string cmdinput = argv[1];
-	if (cmdinput == "wanzixi") {
-		system("title 制裁晚自习");
-		while (true) {
-			taskkill(true, true);
-		}
-		return 0;
-	} else if (cmdinput == "uninstall") {
-		uninstall();
-		return 0;
 	}
 	//参数的数量
 	//cout << argc << " arguments:" << endl;
