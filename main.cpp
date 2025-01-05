@@ -438,10 +438,10 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 1.2\n";
-	cout << "\n版本代号  陈轩\n";
+	cout << "\nSeewo Killer 2.0 Beta\n";
+	cout << "\n版本代号  郑子谦\n";
 	cout << "\n希沃克星\n";
-	cout << "\n卓然第三帝国联合赞助\n";
+	cout << "\n卓然第三帝国https://whstu.us.kg/提供技术支持\n";
 	cout << "按b+回车返回\n";
 	string ans;
 	while (true) {
