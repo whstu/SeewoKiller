@@ -41,7 +41,7 @@ struct Word {
 	int joken = 2;
 	string joke[3] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台"};
 	int regn = 11;
-	string reg[12] = {"NULL", "返回", "一键禁用(暂不可用)", "一键启用(暂不可用)", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息","登录时显示提示","取消登录时显示提示"};
+	string reg[12] = {"NULL", "返回", "一键禁用(暂不可用)", "一键启用(暂不可用)", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -78,49 +78,48 @@ void setfont(int size) {//字体、大小、粗细
 		std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
 		return false; \
 	}
-bool regedit(string root, string regpath, const char* valueName, string form, const char* Value) { //1禁止,0放行
+bool regedit(string root, string regpath, const char* valueName, string form, const char* Value) {
 	HKEY hKey = NULL;
 	LONG result;
+	HKEY hRootKey;
 	if (root == "HKEY_CLASSES_ROOT") {
-		result = RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+		hRootKey = HKEY_CLASSES_ROOT;
 	} else if (root == "HKEY_CURRENT_USER") {
-		result = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+		hRootKey = HKEY_CURRENT_USER;
 	} else if (root == "HKEY_LOCAL_MACHINE") {
-		result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+		hRootKey = HKEY_LOCAL_MACHINE;
 	} else if (root == "HKEY_USERS") {
-		result = RegOpenKeyEx(HKEY_USERS, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+		hRootKey = HKEY_USERS;
 	} else if (root == "HKEY_CURRENT_CONFIG") {
-		result = RegOpenKeyEx(HKEY_CURRENT_CONFIG, TEXT(regpath.c_str()), 0, KEY_SET_VALUE, &hKey);
+		hRootKey = HKEY_CURRENT_CONFIG;
 	} else {
-		cout << "根目录错误\n";
-		system("pause");
+		cerr << "Invalid root key." << endl;
 		return false;
 	}
-	//result = RegOpenKeyEx(HKEY_LOCAL_MACHINE/*目录*/,TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\"), // 注册表路径0,KEY_SET_VALUE,&hKey);
+	result = RegOpenKeyEx(hRootKey, regpath.c_str(), 0, KEY_SET_VALUE, &hKey);
 	CHECK_ERROR(result);
-	//valueName = "NoTrayContextMenu";//名称
-	DWORD newValue = atoi(Value);//值
-	// 设置注册表值
-	if (form == "REG_SZ") {
-		result = RegSetValueEx(hKey, valueName, 0, REG_SZ, (const BYTE*)&newValue, sizeof(DWORD));
-	} else if (form == "REG_BINARY") {
-		result = RegSetValueEx(hKey, valueName, 0, REG_BINARY, (const BYTE*)&newValue, sizeof(DWORD));
+	if (form == "REG_SZ" || form == "REG_EXPAND_SZ") {
+		result = RegSetValueEx(hKey, valueName, 0, (form == "REG_SZ") ? REG_SZ : REG_EXPAND_SZ, (const BYTE*)Value, strlen(Value) + 1);
 	} else if (form == "REG_DWORD") {
+		DWORD newValue = static_cast<DWORD>(strtol(Value, nullptr, 10));
 		result = RegSetValueEx(hKey, valueName, 0, REG_DWORD, (const BYTE*)&newValue, sizeof(DWORD));
+	} else if (form == "REG_BINARY") {
+		cerr << "REG_BINARY not implemented correctly." << endl;
+		RegCloseKey(hKey);
+		return false;
 	} else if (form == "REG_QWORD") {
-		result = RegSetValueEx(hKey, valueName, 0, REG_QWORD, (const BYTE*)&newValue, sizeof(DWORD));
+		ULONGLONG newValue = _strtoui64(Value, nullptr, 10);
+		result = RegSetValueEx(hKey, valueName, 0, REG_QWORD, (const BYTE*)&newValue, sizeof(ULONGLONG));
 	} else if (form == "REG_MULTI_SZ") {
-		result = RegSetValueEx(hKey, valueName, 0, REG_MULTI_SZ, (const BYTE*)&newValue, sizeof(DWORD));
-	} else if (form == "REG_EXPAND_SZ") {
-		result = RegSetValueEx(hKey, valueName, 0, REG_EXPAND_SZ, (const BYTE*)&newValue, sizeof(DWORD));
+		cerr << "REG_MULTI_SZ not implemented correctly." << endl;
+		RegCloseKey(hKey);
+		return false;
 	} else {
-		cout << "数据类型错误\n";
-		system("pause");
+		cerr << "Invalid data type." << endl;
+		RegCloseKey(hKey);
 		return false;
 	}
-	//result = RegSetValueEx(hKey,valueName,0,REG_DWORD,(const BYTE*)&newValue,sizeof(DWORD));
 	CHECK_ERROR(result);
-	// 关闭注册表句柄
 	RegCloseKey(hKey);
 	return true;
 }
@@ -518,35 +517,39 @@ bool getadmin() {
 }
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
-	system("taskkill /f /t /im taskmgr.exe");
-	system("taskkill /f /t /im cmd.exe");
-	cout << "正在结束进程：轻录播\n";
-	cout << "TASKKILL /F /IM EasiRecorder.exe\n";
-	system("TASKKILL /F /IM EasiRecorder.exe");
-	if (KillSeewoService == true) {
-		cout << "正在结束进程：希沃管家\n";
-		cout << "TASKKILL /F /IM SeewoServiceAssistant.exe\n";
-		system("TASKKILL /F /IM SeewoServiceAssistant.exe");
-		cout << "TASKKILL /F /IM SeewoAbility.exe\n";
-		system("TASKKILL /F /IM SeewoAbility.exe");
-		cout << "TASKKILL /F /IM SeewoCore.exe\n";
-		system("TASKKILL /F /IM SeewoCore.exe");
+	while (true) {
+		if ( _kbhit() ) {
+			return;
+		}
+		system("taskkill /f /t /im taskmgr.exe");
+		system("taskkill /f /t /im cmd.exe");
+		cout << "正在结束进程：轻录播\n";
+		cout << "TASKKILL /F /IM EasiRecorder.exe\n";
+		system("TASKKILL /F /IM EasiRecorder.exe");
+		if (KillSeewoService == true) {
+			cout << "正在结束进程：希沃管家\n";
+			cout << "TASKKILL /F /IM SeewoServiceAssistant.exe\n";
+			system("TASKKILL /F /IM SeewoServiceAssistant.exe");
+			cout << "TASKKILL /F /IM SeewoAbility.exe\n";
+			system("TASKKILL /F /IM SeewoAbility.exe");
+			cout << "TASKKILL /F /IM SeewoCore.exe\n";
+			system("TASKKILL /F /IM SeewoCore.exe");
+		}
+		if (Wanzixi == true) {
+			cout << "正在结束进程：设置\n";
+			cout << "TASKKILL /F /IM SystemSettings.exe\n";
+			system("TASKKILL /F /IM SystemSettings.exe");
+			cout << "正在结束进程：控制面板\n";
+			cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
+			system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
+			cout << "正在结束进程：Edge\n";
+			cout << "TASKKILL /F /IM msedge.exe\n";
+			system("TASKKILL /F /IM msedge.exe");
+			cout << "正在结束进程：IE\n";
+			cout << "TASKKILL /F /IM iexplore.exe\n";
+			system("TASKKILL /F /IM iexplore.exe");
+		}
 	}
-	if (Wanzixi == true) {
-		cout << "正在结束进程：设置\n";
-		cout << "TASKKILL /F /IM SystemSettings.exe\n";
-		system("TASKKILL /F /IM SystemSettings.exe");
-		cout << "正在结束进程：控制面板\n";
-		cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
-		system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
-		cout << "正在结束进程：Edge\n";
-		cout << "TASKKILL /F /IM msedge.exe\n";
-		system("TASKKILL /F /IM msedge.exe");
-		cout << "正在结束进程：IE\n";
-		cout << "TASKKILL /F /IM iexplore.exe\n";
-		system("TASKKILL /F /IM iexplore.exe");
-	}
-	return;
 }
 
 void uninstall() {
@@ -570,6 +573,14 @@ void pingbaoservice() {
 	system("pause");
 	long long i = 1;
 	while (true) {
+		if ( _kbhit() ) {
+			char x = _getch();
+			switch (x) {
+				case ' ': {
+					return;
+				}
+			}
+		}
 		S(100000);
 		cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << i;
 		POINT cur_pos;
@@ -1128,10 +1139,9 @@ struct Launcher {
 					switch (box) {
 						case 2: {
 							system("title 制裁晚自习");
-							while (true) {
-								taskkill(true, true);
-								cls
-							}
+							taskkill(true, true);
+							s=-1;
+							break;
 						}
 					}
 					break;
@@ -1140,6 +1150,8 @@ struct Launcher {
 					switch (box) {
 						case 2: {
 							pingbaoservice();
+							s=-1;
+							break;
 						}
 					}
 					break;
@@ -1205,12 +1217,10 @@ struct Launcher {
 								}
 								case 2: {
 									//全部禁用
-									d = -1;
 									break;
 								}
 								case 3: {
 									//全部恢复
-									d = -1;
 									break;
 								}
 								case 4: {
@@ -1223,7 +1233,6 @@ struct Launcher {
 									cout << "恢复中\n";
 									Sleep(2000);
 									system("start C:\\Windows\\explorer.exe");
-									d = -1;
 									break;
 								}
 								case 5: {
@@ -1236,7 +1245,6 @@ struct Launcher {
 									cout << "恢复中\n";
 									Sleep(2000);
 									system("start C:\\Windows\\explorer.exe");
-									d = -1;
 									break;
 								}
 								case 6: {
@@ -1248,7 +1256,6 @@ struct Launcher {
 									cout << "恢复中\n";
 									Sleep(2000);
 									system("start C:\\Windows\\explorer.exe");
-									d = -1;
 									break;
 								}
 								case 7: {
@@ -1260,31 +1267,43 @@ struct Launcher {
 									cout << "恢复中\n";
 									Sleep(2000);
 									system("start C:\\Windows\\explorer.exe");
-									d = -1;
 									break;
 								}
 								case 8: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
+									cout << "修改完成，请注销以检查是否修改成功。\n";
+									if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+										system("shutdown /l");
+									}
+									system("pause");
 									break;
 								}
 								case 9: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
+									cout << "修改完成，请注销以检查是否修改成功。\n";
+									system("pause");
 									break;
 								}
 								case 10: {
-									cout<<"请输入主标题：";
-									char* title1;char* title2;
-									cin>>title1; 
-									cout<<"请输入副标题：";
-									cin>>title2;
+									char title1[1010100];
+									char title2[1010100];
+									cout << "请输入主标题(505050字以内)：";
+									scanf_s("%s", title1, (unsigned)_countof(title1));
+									cout << "请输入副标题(505050字以内)：";
+									scanf_s("%s", title2, (unsigned)_countof(title2));
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
+									cout << "修改完成，请注销以检查是否修改成功。\n";
+									if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+										system("shutdown /l");
+									}
 									system("pause");
 									break;
 								}
 								case 11: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
+									cout << "修改完成，请注销以检查是否修改成功。\n";
 									system("pause");
 									break;
 								}
@@ -1292,6 +1311,7 @@ struct Launcher {
 							break;
 						}
 					}
+					break;
 				}
 				case -1: {
 					head();
