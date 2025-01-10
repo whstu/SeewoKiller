@@ -5,19 +5,19 @@
 #define SLYTHERINOS_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"2.-10.-10.-10"
+#define VER_STRING	"2.-10.-10.-9"
 #define VER_MAJOR	2
 #define VER_MINOR	-10
 #define VER_RELEASE	-10
-#define VER_BUILD	-10
+#define VER_BUILD	-9
 #define COMPANY_NAME	"WHSTU Studio"
-#define FILE_VERSION	"2.-10.-10.-10"
+#define FILE_VERSION	"2.-10.-10.-9"
 #define FILE_DESCRIPTION	"Ï£ÎÖ¿ËÐÇ"
 #define INTERNAL_NAME	""
 #define LEGAL_COPYRIGHT	"Copyright (C)2017-2024 WHSTU Studio"
 #define LEGAL_TRADEMARKS	"(R)WHSTU Studio"
 #define ORIGINAL_FILENAME	""
 #define PRODUCT_NAME	"Seewo Killer"
-#define PRODUCT_VERSION	"2.-10.-10.-10"
+#define PRODUCT_VERSION	"2.-10.-10.-9"
 
 #endif /*SLYTHERINOS_PRIVATE_H*/

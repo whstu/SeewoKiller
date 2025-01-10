@@ -450,23 +450,23 @@ void about() {
 			return;
 		}
 		if (ans == "zhuoran") {
-			cout << "   =====       =====       =====        //\n";
+			cout << "   =====       =====       =====\n";
 			S(10);
-			cout << " //     \\\\    ||    \\\\   //     \\\\    / ||\n";
+			cout << " //     \\\\    ||    \\\\   //     \\\\\n";
 			S(10);
-			cout << " ||     ||    ||    ||   ||     ||      ||\n";
+			cout << " ||     ||    ||    ||   ||     ||\n";
 			S(10);
-			cout << " ||     ||    ||    //   ||     ||      ||\n";
+			cout << " ||     ||    ||    //   ||     ||\n";
 			S(10);
-			cout << " ||     ||    ||====     ||     ||      ||\n";
+			cout << " ||     ||    ||====     ||     ||\n";
 			S(10);
-			cout << " ||     ||    ||         ||     ||      ||\n";
+			cout << " ||     ||    ||         ||     ||\n";
 			S(10);
-			cout << " ||     ||    ||         ||     ||      ||\n";
+			cout << " ||     ||    ||         ||     ||\n";
 			S(10);
-			cout << " \\\\     //    ||         \\\\     //      ||\n";
+			cout << " \\\\     //    ||         \\\\     //\n";
 			S(10);
-			cout << "   =====      ||           =====     ========\n";
+			cout << "   =====      ||           =====\n";
 			S(10);
 			system("pause");
 		}
@@ -1346,20 +1346,45 @@ int main(int argc, char *argv[]) {
 			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
 			return 0;
 		}
-		string cmdinput = argv[1];
+		string cmdinput=argv[1];
 		if (cmdinput == "wanzixi") {
 			system("title 制裁晚自习");
 			while (true) {
 				taskkill(true, true);
 			}
 			return 0;
-		} else if (cmdinput == "uninstall") {
+		}
+		if (cmdinput == "uninstall") {
 			uninstall();
 			return 0;
-		} else if (cmdinput == "pingbao") {
+		}
+		if (cmdinput == "pingbao") {
 			system("title 一键防屏保");
 			pingbaoservice();
 			return 0;
+		}
+		if(cmdinput=="joke"){//恶搞 
+			if(argc<=2){
+				cout<<"参数缺失，程序自动退出\n";
+				return 0;
+			}
+			string cmdinput2=argv[2];
+			if(cmdinput2=="-killapp"){
+				joke.kill();
+			}
+		}
+		if(cmdinput=="game"){//游戏 
+			if(argc<=2){
+				cout<<"参数缺失，程序自动退出\n";
+				return 0; 
+			}
+			string cmdinput2=argv[2];
+			if(cmdinput2=="-wzq"){
+				game.wzq.wzqmain();
+			}
+			if(cmdinput2=="-numberdamn"){
+				game.numberdamn();
+			}
 		}
 	}
 	if (IsUserAnAdmin() == false) {
