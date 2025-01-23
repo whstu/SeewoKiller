@@ -97,8 +97,8 @@ class MainWindow(QMainWindow):
         print("Settings:", item.text())
 
     def open_new_window(self):
-        new_window = NewWindow()
-        new_window.show()
+        self.new_window = NewWindow()
+        self.new_window.show()
 
 class NewWindow(QDialog):
     def __init__(self):
