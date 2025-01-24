@@ -59,7 +59,6 @@ class MainWindow(QMainWindow):
             button_number = self.common_buttons.index(button_name) + 1  # 获取按钮编号（从 1 开始）
             button.clicked.connect(lambda _, x=button_number: self.on_common_button_clicked(x))
             layout.addWidget(button)
-
         self.tab_common.setLayout(layout)
 
     def setup_all_tab(self):
@@ -77,7 +76,7 @@ class MainWindow(QMainWindow):
                 item.setData(Qt.UserRole,"open_new_window_regedit")
             self.list_widget.addItem(item)
 
-        self.list_widget.itemClicked.connect(self.on_list_item_clicked)
+        self.list_widget.itemClicked.connect(self.on_all_list_item_clicked)
 
         layout.addWidget(self.list_widget)
         self.tab_all.setLayout(layout)
@@ -97,9 +96,15 @@ class MainWindow(QMainWindow):
         self.tab_settings.setLayout(layout)
 
     def on_common_button_clicked(self, button_number):
-        print("123", button_number)
+        if button_number==1:
+            os.system(".\SeewoKiller.exe wanzixi")
+        if button_number==2:
+            os.system(".\SeewoKiller.exe pingbao")
+        if button_number==3:
+            self.open_new_window_game()
+        '''print("123", button_number)'''
 
-    def on_list_item_clicked(self, item):
+    def on_all_list_item_clicked(self, item):
         # 检查项文本或数据以确定是否打开新窗口
         if item.text() == "小游戏" or item.data(Qt.UserRole) == "open_new_window_game":
             self.open_new_window_game()
