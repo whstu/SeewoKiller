@@ -28,7 +28,7 @@
 
 - Windows 7 及以上版本的系统
 
-> [!IMPORTANT]
+> [!WARNING]
 >
 > 不确定SeewoKiller能否在Windows 7以下（不含）的Windows系统中运行，但有实验证明SeewoKiller可以在Windows XP上正常运行。如果您要在Windows 7(不含)以下的电脑上运行SeewoKiller，请直接下载Source Code而非setup.exe。
 
@@ -42,20 +42,22 @@
 |卓然第三帝国官网|[**下载**](https://whstu.us.kg/download/seewokiller/)|[下载](https://whstu.us.kg/download/seewokiller/)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
-下载完成后，将软件压缩包解压到一个**独立的文件夹（运行路径不能有中文）**，运行软件即可开始使用。解压时请不要解压到网盘同步文件夹、【下载】文件夹中，否则可能会出现**文件无法读写、文件丢失**等问题。
+对于下载Source Code的用户，解压后打开SeewoKiller.exe即可。对于下载setup及setup-small的用户，按安装程序安装后，点击桌面快捷方式即可使用。
+> [!IMPORTANT]
+> setup与setup-small的区别
+> setup为完整版，包含冰点还原。setup-small不包含冰点还原，建议不常使用冰点还原的用户安装，以防止误操作。
 
-## 获取帮助＆加入社区
+## 获取帮助
 
 您可以访问以下页面来**获取帮助**：
 
-- [ClassIsland 帮助文档](https://docs.classisland.tech/app)
+- [帮助文档](https://github.com/whstu/SeewoKiller/wiki)
 
 您也可以加入这些社区**寻求帮助**：
 
-[![GitHub Issues](https://img.shields.io/github/issues-search/ClassIsland/ClassIsland?query=is%3Aopen&style=flat-square&logo=github&label=Issues&color=%233fb950)](https://github.com/ClassIsland/ClassIsland/issues)
-[![GitHub Discussions](https://img.shields.io/github/discussions/ClassIsland/ClassIsland?style=flat-square&logo=Github&label=Discussions)](https://github.com/ClassIsland/ClassIsland/discussions)
-[![加入 QQ 频道](https://img.shields.io/badge/QQ_%E9%A2%91%E9%81%93-classisland-%230066cc?style=flat-square&logo=TencentQQ)](https://pd.qq.com/s/scb3wzia)
-[![加入 QQ 群](https://img.shields.io/badge/QQ_%E7%BE%A4-958840932-%230066cc?style=flat-square&logo=TencentQQ)](https://qm.qq.com/q/4NsDQKiAuQ)
+[![GitHub Issues](https://img.shields.io/github/issues-search/whstu/SeewoKiller?query=is%3Aopen&style=flat-square&logo=github&label=Issues&color=%233fb950)](https://github.com/whstu/SeewoKiller/issues)
+[![GitHub Discussions](https://img.shields.io/github/discussions/whstu/SeewoKiller?style=flat-square&logo=Github&label=Discussions)](https://github.com/whstu/SeewoKiller/discussions)
+[![加入 QQ 群](https://img.shields.io/badge/QQ_%E7%BE%A4-SeewoKiller-%230066cc?style=flat-square&logo=TencentQQ)](https://qm.qq.com/q/p5GrWT1EB2)
 
 如果您确定您遇到的问题是一个 **Bug**，或者您要提出一项**新的功能**，请[提交 Issue](https://github.com/ClassIsland/ClassIsland/issues/new/choose)。
 
