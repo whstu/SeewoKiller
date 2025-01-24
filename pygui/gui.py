@@ -92,15 +92,14 @@ class MainWindow(QMainWindow):
         # 检查项文本或数据以确定是否打开新窗口
         if item.text() == "小游戏" or item.data(Qt.UserRole) == "open_new_window_game":
             self.open_new_window_game()
-        else:
-            if item.text()== "恶搞" or item.data(Qt.UserRole) == "open_new_window_joke":
-                self.open_new_window_joke()
-            else:
-                if item.text()== "恶搞" or item.data(Qt.UserRole) == "open_new_window_regedit":
-                    self.open_new_window_regedit()
-                else:
-                    #print("456", item.text().split(' ')[1])
-                    print("456")
+        if item.text()== "恶搞" or item.data(Qt.UserRole) == "open_new_window_joke":
+            self.open_new_window_joke()
+        if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
+            self.open_new_window_regedit()
+        if item.text() == "循环清任务":
+            os.system("SeewoKiller.exe")
+            #print("456", item.text().split(' ')[1])
+            print("456")
             # 打印项文本（去掉前面的“项”字和编号后的空格）
 
     def on_settings_list_item_clicked(self, item):
