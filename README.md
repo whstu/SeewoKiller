@@ -29,9 +29,8 @@
 - Windows 7 及以上版本的系统
 
 > [!IMPORTANT]
-> **详细安装说明请参阅 [ClassIsland 文档](https://docs.classisland.tech/app/setup)。**
 >
-> 不建议在 Windows 10 以下的系统运行本应用。在 Windows 7 中，.NET 运行时会产生**严重的内存泄漏问题**。如果您执意要在 Windows 7 中使用 ClassIsland，请参阅 [在 Windows 7 中安装 ClassIsland](https://docs.classisland.tech/app/setup#检查系统需求)。
+> 不确定SeewoKiller能否在Windows 7以下（不含）的Windows系统中运行，但有实验证明SeewoKiller可以在Windows XP上正常运行。如果您要在Windows 7(不含)以下的电脑上运行SeewoKiller，请直接下载Source Code而非setup.exe。
 
 对于普通用户，可以在以下渠道下载到本软件，请根据自身网络环境选择合适的渠道。
 
