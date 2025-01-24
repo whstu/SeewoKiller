@@ -1116,8 +1116,8 @@ struct Launcher {
 							if (back == true) {
 								break;
 							}
-							/*
-							string unfreezepath = executable_path + "\\SeewoFreeze\\!SeewoFreezeUI.bat";
+							cout<<"\n请先关闭冰点窗口后再继续操作希沃克星。\n";
+							string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 							STARTUPINFO si = { sizeof(si) };//0
 							PROCESS_INFORMATION pi;
 							LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
@@ -1128,8 +1128,8 @@ struct Launcher {
 								//暂停主进程的执行，直到child终止，该代码才可以继续运行
 								WaitForSingleObject(pi.hProcess, INFINITE);
 								CloseHandle(pi.hProcess);
-							}*/
-							system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window");
+							}
+							//system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window");
 							system("pause");
 							s = -1;
 							break;
