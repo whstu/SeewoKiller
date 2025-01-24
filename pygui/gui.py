@@ -156,9 +156,14 @@ class NewWindow_game(QDialog):
         self.new_list_widget = QListWidget()
         for item_name in self.new_list_items:
             self.new_list_widget.addItem(item_name)
-
+        self.settings_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
         self.setLayout(layout)
+    def on_list_item_clicked(self, item):
+        if item.text() == "五子棋":
+            os.system(".\SeewoKiller.exe pingbao")
+            #print("456", item.text().split(' ')[1])
+            print("456")
 class NewWindow_regedit(QDialog):
     def __init__(self):
         super().__init__()
