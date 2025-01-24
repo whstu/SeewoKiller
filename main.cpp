@@ -123,7 +123,16 @@ bool regedit(string root, string regpath, const char* valueName, string form, co
 	RegCloseKey(hKey);
 	return true;
 }
-
+/*重启explorer.exe*/
+void restartexp() {
+	system("TASKKILL /F /IM explorer.exe");
+	cout << "杀进程成功，5秒后尝试重启\n";
+	Sleep(5000);
+	system("start C:\\Windows\\explorer.exe");
+	cout << "恢复中\n";
+	Sleep(2000);
+	system("start C:\\Windows\\explorer.exe");
+}
 /*屏蔽关闭按钮*/
 void connot_close_button() {
 	HMENU hmenu = GetSystemMenu(hwnd, false);
@@ -1228,47 +1237,23 @@ struct Launcher {
 								case 4: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
 									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-									system("TASKKILL /F /IM explorer.exe");
-									cout << "杀进程成功，5秒后尝试重启\n";
-									Sleep(5000);
-									system("start C:\\Windows\\explorer.exe");
-									cout << "恢复中\n";
-									Sleep(2000);
-									system("start C:\\Windows\\explorer.exe");
+									restartexp();
 									break;
 								}
 								case 5: {
 									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-									system("TASKKILL /F /IM explorer.exe");
-									cout << "杀进程成功，5秒后尝试重启\n";
-									Sleep(5000);
-									system("start C:\\Windows\\explorer.exe");
-									cout << "恢复中\n";
-									Sleep(2000);
-									system("start C:\\Windows\\explorer.exe");
+									restartexp();
 									break;
 								}
 								case 6: {
 									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
-									system("TASKKILL /F /IM explorer.exe");
-									cout << "杀进程成功，5秒后尝试重启\n";
-									Sleep(5000);
-									system("start C:\\Windows\\explorer.exe");
-									cout << "恢复中\n";
-									Sleep(2000);
-									system("start C:\\Windows\\explorer.exe");
+									restartexp();
 									break;
 								}
 								case 7: {
 									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
-									system("TASKKILL /F /IM explorer.exe");
-									cout << "杀进程成功，5秒后尝试重启\n";
-									Sleep(5000);
-									system("start C:\\Windows\\explorer.exe");
-									cout << "恢复中\n";
-									Sleep(2000);
-									system("start C:\\Windows\\explorer.exe");
+									restartexp();
 									break;
 								}
 								case 8: {
@@ -1342,7 +1327,7 @@ int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
-	//获取程序路径 
+	//获取程序路径
 	GetModuleFileNameA(NULL, path, MAX_PATH);
 	executable_path = path;
 	position = executable_path.find_last_of('\\');
@@ -1354,24 +1339,27 @@ int main(int argc, char *argv[]) {
 			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
 			return 0;
 		}
-		string cmdinput = argv[1];
-		if (cmdinput == "wanzixi") {
+		string cmd[100];
+		for (int i = 0; i < argc; i++) {
+			cmd[i] = argv[i];
+		}
+		if (cmd[1] == "wanzixi") {
 			system("title 制裁晚自习");
 			while (true) {
 				taskkill(true, true);
 			}
 			return 0;
 		}
-		if (cmdinput == "uninstall") {
+		if (cmd[1] == "uninstall") {
 			uninstall();
 			return 0;
 		}
-		if (cmdinput == "pingbao") {
+		if (cmd[1] == "pingbao") {
 			system("title 一键防屏保");
 			pingbaoservice();
 			return 0;
 		}
-		if (cmdinput == "seewofreeze") {
+		if (cmd[1] == "seewofreeze") {
 			cout << "\n请先关闭冰点窗口后再继续操作。\n";
 			string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 			STARTUPINFO si = { sizeof(si) };//0
@@ -1387,28 +1375,94 @@ int main(int argc, char *argv[]) {
 			}
 			return 0;
 		}
-		if (cmdinput == "joke") { //恶搞
+		if (cmd[1] == "joke") { //恶搞
 			if (argc <= 2) {
 				cout << "参数缺失，程序自动退出\n";
-				return 0;
 			}
-			string cmdinput2 = argv[2];
-			if (cmdinput2 == "-killapp") {
+			if (cmd[2] == "-killapp") {
 				joke.kill();
 			}
+			return 0;
 		}
-		if (cmdinput == "game") { //游戏
+		if (cmd[1] == "game") { //游戏
 			if (argc <= 2) {
 				cout << "参数缺失，程序自动退出\n";
-				return 0;
 			}
-			string cmdinput2 = argv[2];
-			if (cmdinput2 == "-wzq") {
+			if (cmd[2] == "-wzq") {
+				ShowWindow(hwnd, SW_MAXIMIZE);
 				game.wzq.wzqmain();
 			}
-			if (cmdinput2 == "-numberdamn") {
+			if (cmd[2] == "-numberdamn") {
+				ShowWindow(hwnd, SW_MAXIMIZE);
 				game.numberdamn();
 			}
+			return 0;
+		}
+		if (cmd[1] == "regedit") {
+			if (argc <= 2) {
+				cout << "参数缺失，程序自动退出\n";
+			}
+			if (cmd[2] == "-NoTrayContextMenu") {
+				if (cmd[3] == "true") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+					restartexp();
+				} else if (cmd[3] == "false") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+					restartexp();
+				} else {
+					cout << "参数错误\n";
+				}
+			}
+			if (cmd[2] == "-NoWinKeys") {
+				if (cmd[3] == "true") {
+					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
+					restartexp();
+				} else if (cmd[3] == "false") {
+					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
+					restartexp();
+				} else {
+					cout << "参数错误\n";
+				}
+			}
+			if (cmd[2] == "-VerboseStatus") {
+				if (cmd[3] == "true") {
+					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+						system("shutdown /l");
+					}
+				} else if (cmd[3] == "false") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+				} else {
+					cout << "参数错误\n";
+				}
+			}
+			if (cmd[2] == "-legalnotice") {
+				if (cmd[3] == "true") {
+					char title1[1010100];
+					char title2[1010100];
+					cout << "请输入主标题(505050字以内)：";
+					scanf_s("%s", title1, (unsigned)_countof(title1));
+					cout << "请输入副标题(505050字以内)：";
+					scanf_s("%s", title2, (unsigned)_countof(title2));
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+						system("shutdown /l");
+					}
+				} else if (cmd[3] == "false") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+				} else {
+					cout << "参数错误\n";
+				}
+			}
+			return 0;
 		}
 	}
 	if (IsUserAnAdmin() == false) {
