@@ -6,7 +6,7 @@
 
 <!-- ![软件截图 - 主界面](https://github.com/ClassIsland/ClassIsland/assets/55006226/65e2bdba-be83-444c-b42f-b893aaace9c3) -->
 
-# ![Banner](https://github.com/user-attachments/assets/a815dd7d-8343-4da5-aee4-3f754aa297e4)
+<!-- ![Banner](https://github.com/user-attachments/assets/a815dd7d-8343-4da5-aee4-3f754aa297e4)-->
 
 [![Stars](https://img.shields.io/github/stars/whstu/SeewoKiller?label=Stars)](https://github.com/whstu/SeewoKiller)
 [![正式版 Release](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=正式版)](https://github.com/whstu/SeewoKiller/releases/latest)
