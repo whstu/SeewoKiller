@@ -44,7 +44,7 @@
 
 对于下载Source Code的用户，解压后打开SeewoKiller.exe即可。对于下载setup及setup-small的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!IMPORTANT]
-> setup与setup-small的区别
+> setup与setup-small的区别<br/>
 > setup为完整版，包含冰点还原。setup-small不包含冰点还原，建议不常使用冰点还原的用户安装，以防止误操作。
 
 ## 获取帮助
