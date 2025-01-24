@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# <image src="ClassIsland/Assets/AppLogo_AppLogo.svg" height="28"/> ClassIsland
+# <image src="https://image.whstu.us.kg/clabel_friends_badge.png" height="28"/> SeewoKiller
 
 <!-- ![软件截图 - 主界面](https://github.com/ClassIsland/ClassIsland/assets/55006226/65e2bdba-be83-444c-b42f-b893aaace9c3) -->
 
