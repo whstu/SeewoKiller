@@ -1,4 +1,5 @@
 import sys
+import ctypes
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, QListWidgetItem, QDialog
 from PyQt5.QtCore import Qt
 
@@ -6,6 +7,16 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 import os
+
+'''管理员'''
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+    sys.exit()
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -97,7 +108,15 @@ class MainWindow(QMainWindow):
         if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
             self.open_new_window_regedit()
         if item.text() == "循环清任务":
-            os.system("SeewoKiller.exe")
+            '''os.system("SeewoKiller.exe")'''
+        if item.text() == "一键卸载":
+            os.system(".\SeewoKiller.exe uninstall")
+        if item.text() == "冰点解冻":
+            os.system(".\SeewoKiller.exe seewofreeze")
+        if item.text() == "晚自习制裁模式":
+            os.system(".\SeewoKiller.exe wanzixi")
+        if item.text() == "一键防屏保":
+            os.system(".\SeewoKiller.exe pingbao")
             #print("456", item.text().split(' ')[1])
             print("456")
             # 打印项文本（去掉前面的“项”字和编号后的空格）

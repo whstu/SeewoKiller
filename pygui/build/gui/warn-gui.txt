@@ -15,12 +15,12 @@ IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
             tracking down the missing module yourself. Thanks!
 
 missing module named pep517 - imported by importlib.metadata (delayed)
-missing module named 'org.python' - imported by copy (optional)
+missing module named org - imported by copy (optional)
 missing module named posix - imported by os (conditional, optional), shutil (conditional)
 missing module named resource - imported by posix (top-level)
 missing module named grp - imported by shutil (optional), tarfile (optional), pathlib (delayed, optional), subprocess (optional)
 missing module named pwd - imported by posixpath (delayed, conditional), shutil (optional), tarfile (optional), pathlib (delayed, conditional, optional), subprocess (optional)
-missing module named org - imported by pickle (optional)
+missing module named 'org.python' - imported by pickle (optional)
 missing module named _frozen_importlib_external - imported by importlib._bootstrap (delayed), importlib (optional), importlib.abc (optional), zipimport (top-level)
 excluded module named _frozen_importlib - imported by importlib (optional), importlib.abc (optional), zipimport (top-level)
 missing module named pyimod02_importers - imported by E:\python\APP\Python3.9\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgutil.py (delayed)

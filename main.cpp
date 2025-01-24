@@ -1116,7 +1116,7 @@ struct Launcher {
 							if (back == true) {
 								break;
 							}
-							cout<<"\n请先关闭冰点窗口后再继续操作希沃克星。\n";
+							cout << "\n请先关闭冰点窗口后再继续操作希沃克星。\n";
 							string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 							STARTUPINFO si = { sizeof(si) };//0
 							PROCESS_INFORMATION pi;
@@ -1142,7 +1142,7 @@ struct Launcher {
 						case 2: {
 							system("title 制裁晚自习");
 							taskkill(true, true);
-							s=-1;
+							s = -1;
 							break;
 						}
 					}
@@ -1152,7 +1152,7 @@ struct Launcher {
 					switch (box) {
 						case 2: {
 							pingbaoservice();
-							s=-1;
+							s = -1;
 							break;
 						}
 					}
@@ -1342,13 +1342,19 @@ int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
+	//获取程序路径 
+	GetModuleFileNameA(NULL, path, MAX_PATH);
+	executable_path = path;
+	position = executable_path.find_last_of('\\');
+	executable_path = executable_path.substr(0, position);
+	xwbbpath = executable_path;
 	//启动参数
 	if (argc > 1) {
 		if (IsUserAnAdmin() == false) {
 			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
 			return 0;
 		}
-		string cmdinput=argv[1];
+		string cmdinput = argv[1];
 		if (cmdinput == "wanzixi") {
 			system("title 制裁晚自习");
 			while (true) {
@@ -1365,26 +1371,42 @@ int main(int argc, char *argv[]) {
 			pingbaoservice();
 			return 0;
 		}
-		if(cmdinput=="joke"){//恶搞 
-			if(argc<=2){
-				cout<<"参数缺失，程序自动退出\n";
+		if (cmdinput == "seewofreeze") {
+			cout << "\n请先关闭冰点窗口后再继续操作。\n";
+			string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
+			STARTUPINFO si = { sizeof(si) };//0
+			PROCESS_INFORMATION pi;
+			LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
+			BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+			DWORD dwExitCode;
+			if (fSuccess) { //把主进程暂停，等待子进程终止
+				CloseHandle(pi.hThread);
+				//暂停主进程的执行，直到child终止，该代码才可以继续运行
+				WaitForSingleObject(pi.hProcess, INFINITE);
+				CloseHandle(pi.hProcess);
+			}
+			return 0;
+		}
+		if (cmdinput == "joke") { //恶搞
+			if (argc <= 2) {
+				cout << "参数缺失，程序自动退出\n";
 				return 0;
 			}
-			string cmdinput2=argv[2];
-			if(cmdinput2=="-killapp"){
+			string cmdinput2 = argv[2];
+			if (cmdinput2 == "-killapp") {
 				joke.kill();
 			}
 		}
-		if(cmdinput=="game"){//游戏 
-			if(argc<=2){
-				cout<<"参数缺失，程序自动退出\n";
-				return 0; 
+		if (cmdinput == "game") { //游戏
+			if (argc <= 2) {
+				cout << "参数缺失，程序自动退出\n";
+				return 0;
 			}
-			string cmdinput2=argv[2];
-			if(cmdinput2=="-wzq"){
+			string cmdinput2 = argv[2];
+			if (cmdinput2 == "-wzq") {
 				game.wzq.wzqmain();
 			}
-			if(cmdinput2=="-numberdamn"){
+			if (cmdinput2 == "-numberdamn") {
 				game.numberdamn();
 			}
 		}
@@ -1410,11 +1432,6 @@ int main(int argc, char *argv[]) {
 	//}//返回1确定，2取消
 	//获取程序路径
 	system("title 希沃克星");
-	GetModuleFileNameA(NULL, path, MAX_PATH);
-	executable_path = path;
-	position = executable_path.find_last_of('\\');
-	executable_path = executable_path.substr(0, position);
-	xwbbpath = executable_path;
 	lc.lcmain();
 	/*case 5: {
 					string xwbbsetpath = xwbbpath + "\\set.bat";
