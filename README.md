@@ -16,7 +16,7 @@
 希沃克星：冰点解冻、游戏和晚自习制裁！<br/>
 使用善良的GUI而不是进Windows PE
 
-#### 💬[Classlsland QQ 群组](https://qm.qq.com/q/6ZAbcZSK5y)
+#### 💬[SeewoKiller QQ 群组](https://qm.qq.com/q/6ZAbcZSK5y)
 
 #### [🌐 官方网站](https://whstu.us.kg/)｜[📚 项目文档](https://github.com/whstu/SeewoKiller/wiki)
 
