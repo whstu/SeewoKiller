@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星"
-#define MyAppVersion "2.-10.-10.-6"
+#define MyAppVersion "2.-10.-9.-9"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.us.kg/"
 #define MyAppExeName "SeewoKiller.exe"
