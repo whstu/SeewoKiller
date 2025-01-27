@@ -30,26 +30,26 @@ Folders=
 IncludeVersionInfo=1
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=000000a000000000000001000
+CompilerSettings=000000a000000000000010000
 UseUTF8=1
 UnitCount=1
 
 [VersionInfo]
 Major=2
 Minor=-10
-Release=-10
-Build=-6
+Release=-9
+Build=-9
 LanguageID=2052
 CharsetID=1252
 CompanyName=WHSTU Studio
-FileVersion=2.-10.-10.-6
+FileVersion=2.-10.-9.-9
 FileDescription=Ï£ÎÖ¿ËÐÇ
 InternalName=
 LegalCopyright=Copyright (C)2017-2024 WHSTU Studio
 LegalTrademarks=(R)WHSTU Studio
 OriginalFilename=
 ProductName=Seewo Killer
-ProductVersion=2.-10.-10.-6
+ProductVersion=2.-10.-9.-9
 AutoIncBuildNr=1
 SyncProduct=1
 

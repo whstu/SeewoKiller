@@ -1,19 +1,19 @@
 # Project: SeewoKiller
 # Makefile created by Dev-C++ 6.3-beta2
 
-CPP      = g++.exe -D__DEBUG__
-CC       = gcc.exe -D__DEBUG__
+CPP      = g++.exe
+CC       = gcc.exe
 WINDRES  = windres.exe
 RES      = SlytherinOS_private.res
 OBJ      = main.o $(RES)
 LINKOBJ  = main.o $(RES)
-LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/bin" -static-libstdc++ -static-libgcc -g3
+LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/bin" -static-libstdc++ -static-libgcc -s
 INCS     = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/include"
 CXXINCS  = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/i686-w64-mingw32" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/backward" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32"
 BIN      = SeewoKiller.exe
-CXXFLAGS = $(CXXINCS) -O2 -g3
+CXXFLAGS = $(CXXINCS) -O2
 ENCODINGS = -finput-charset=utf-8 -fexec-charset=gb2312
-CFLAGS   = $(INCS) -O2 -g3
+CFLAGS   = $(INCS) -O2
 RM       = rm.exe -f
 
 .PHONY: all all-before all-after clean clean-custom

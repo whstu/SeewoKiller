@@ -986,7 +986,7 @@ struct JOKE { /*恶搞*/
 } joke;
 
 struct Launcher {
-	int listname(bool allowA, bool allowD, string liststring[], int n) {
+	string listname(bool allowA, bool allowD, string liststring[], int n) {
 		gotoxy(0, 3);
 		int channel = 1;
 		SetColorAndBackground(7, 0);
@@ -1043,7 +1043,7 @@ struct Launcher {
 								box--;
 							}
 						}
-						return -1;
+						return "-1";
 					}
 					case 'd': {
 						if (allowD == true) {
@@ -1051,15 +1051,15 @@ struct Launcher {
 								box++;
 							}
 						}
-						return -1;
+						return "-1";
 					}
 					case ' ': {
-						return channel;
+						return liststring[channel];
 					}
 				}
 			}
 		}
-		return -2;
+		return "-2";
 	}
 	void head() {
 		system("title 希沃克星");
@@ -1081,283 +1081,189 @@ struct Launcher {
 		cout << "----------------------";
 	}
 	void lcmain() {
-		head();
-		int s = listname(true, true, word.recent, word.recentn);
+		string s = "-1";
 		while (1) {
 			//主页面
-			switch (s) {
-				case 1: {
-					switch (box) {
-						case 1: {
-							box = 2;
-							s = 4;
-							break;
-						}
-						case 2: {
-							taskkill(true, false);
-							break;
-						}
-						case 3: {
-							//退出
-							return;
-						}
+			if (s == "-1") {
+				cls
+				head();
+				switch (box) {
+					case 1: {
+						s = listname(false, true, word.recent, word.recentn);
+						break;
 					}
-					break;
-				}
-				case 2: {
-					switch (box) {
-						case 1: {
-							s = 5;
-							box = 2;
-							break;
-						}
-						case 2: {
-							uninstall();
-							s = -1;
-							break;
-						}
-						case 3: {
-							about();
-							s = -1;
-							break;
-						}
+					case 2: {
+						s = listname(true, true, word.all, word.alln);
+						break;
 					}
-					break;
-				}
-				case 3: {
-					switch (box) {
-						case 1: {
-							s = 6;
-							box = 2;
-							break;
-						}
-						case 2: {
-							system("title 冰点还原");
-							bool back = false;
-							string password = "seewofreeze";
-							string input;
-							for (;;) {
-								cout << "\n请输入密码(输入0返回)：";
-								cin >> input;
-								if (input == password) {
-									break;
-								} else {
-									if (input == "0") {
-										back = true;
-										break;
-									} else {
-										cout << "密码错误";
-									}
-								}
-							}
-							if (back == true) {
-								break;
-							}
-							cout << "\n请先关闭冰点窗口后再继续操作希沃克星。\n";
-							string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
-							STARTUPINFO si = { sizeof(si) };//0
-							PROCESS_INFORMATION pi;
-							LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
-							BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-							DWORD dwExitCode;
-							if (fSuccess) { //把主进程暂停，等待子进程终止
-								CloseHandle(pi.hThread);
-								//暂停主进程的执行，直到child终止，该代码才可以继续运行
-								WaitForSingleObject(pi.hProcess, INFINITE);
-								CloseHandle(pi.hProcess);
-							}
-							//system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window");
-							system("pause");
-							s = -1;
-							break;
-						}
-						case 3: {
-							string unfreezepath = executable_path + "\\gui.exe";
-							STARTUPINFO si = { sizeof(si) };//0
-							PROCESS_INFORMATION pi;
-							LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
-							BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-							DWORD dwExitCode;
-							if (fSuccess) { //把主进程暂停，等待子进程终止
-								return;
-							}
-						}
+					case 3: {
+						s = listname(true, false, word.setting, word.settingn);
+						break;
 					}
-					break;
-				}
-				case 4: {
-					switch (box) {
-						case 2: {
-							system("title 制裁晚自习");
-							taskkill(true, true);
-							s = -1;
-							break;
-						}
-					}
-					break;
-				}
-				case 5: {
-					switch (box) {
-						case 2: {
-							pingbaoservice();
-							s = -1;
-							break;
-						}
-					}
-					break;
-				}
-				case 6: {
-					switch (box) {
-						case 2: {
-							head();
-							int d = listname(true, true, word.game, word.gamen);
-							switch (d) {
-								case 1: {
-									d = 0;
-									s = -1;
-									break;
-								}
-								case 2: {
-									game.numberdamn();
-									break;
-								}
-								case 3: {
-									setfont(20);
-									game.wzq.wzqmain();
-									setfont(30);
-									break;
-								}
-							}
-							break;
-						}
-					}
-					break;
-				}
-				case 7: {
-					switch (box) {
-						case 2: {
-							head();
-							int d = listname(true, true, word.joke, word.joken);
-							switch (d) {
-								case 1: {
-									d = 0;
-									s = -1;
-									break;
-								}
-								case 2: {
-									joke.kill();
-									break;
-								}
-							}
-							break;
-						}
-					}
-					break;
-				}
-				case 8: {
-					switch (box) {
-						case 2: {
-							head();
-							int d = listname(true, true, word.reg, word.regn);
-							switch (d) {
-								case 1: {
-									d = 0;
-									s = -1;
-									break;
-								}
-								case 2: {
-									//全部禁用
-									break;
-								}
-								case 3: {
-									//全部恢复
-									break;
-								}
-								case 4: {
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
-									restartexp();
-									break;
-								}
-								case 5: {
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-									regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
-									restartexp();
-									break;
-								}
-								case 6: {
-									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
-									restartexp();
-									break;
-								}
-								case 7: {
-									regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
-									restartexp();
-									break;
-								}
-								case 8: {
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
-									cout << "修改完成，请注销以检查是否修改成功。\n";
-									if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
-										system("shutdown /l");
-									}
-									system("pause");
-									break;
-								}
-								case 9: {
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
-									cout << "修改完成，请注销以检查是否修改成功。\n";
-									system("pause");
-									break;
-								}
-								case 10: {
-									char title1[1010100];
-									char title2[1010100];
-									cout << "请输入主标题(505050字以内)：";
-									scanf_s("%s", title1, (unsigned)_countof(title1));
-									cout << "请输入副标题(505050字以内)：";
-									scanf_s("%s", title2, (unsigned)_countof(title2));
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
-									cout << "修改完成，请注销以检查是否修改成功。\n";
-									if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
-										system("shutdown /l");
-									}
-									system("pause");
-									break;
-								}
-								case 11: {
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
-									regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
-									cout << "修改完成，请注销以检查是否修改成功。\n";
-									system("pause");
-									break;
-								}
-							}
-							break;
-						}
-					}
-					break;
-				}
-				case -1: {
-					head();
-					switch (box) {
-						case 1: {
-							s = listname(true, true, word.recent, word.recentn);
-							break;
-						}
-						case 2: {
-							s = listname(true, true, word.all, word.alln);
-							break;
-						}
-						case 3: {
-							s = listname(true, true, word.setting, word.settingn);
-							break;
-						}
-					}
-					break;
 				}
 			}
+			if (s == "循环清任务") {
+				taskkill(true, false);
+			}
+			if (s == "一键卸载没用的软件") {
+				uninstall();
+				s = "-1";
+				continue;
+			}
+			if (s == "冰点解冻") {
+				system("title 冰点还原");
+				bool back = false;
+				string password = "seewofreeze";
+				string input;
+				for (;;) {
+					cout << "\n请输入密码(输入0返回)：";
+					cin >> input;
+					if (input == password) {
+						break;
+					} else {
+						if (input == "0") {
+							back = true;
+							break;
+						} else {
+							cout << "密码错误";
+						}
+					}
+				}
+				if (back == true) {
+					s = "-1";
+					continue;
+				}
+				cout << "\n请先关闭冰点窗口后再继续操作希沃克星。\n";
+				string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				DWORD dwExitCode;
+				if (fSuccess) { //把主进程暂停，等待子进程终止
+					CloseHandle(pi.hThread);
+					//暂停主进程的执行，直到child终止，该代码才可以继续运行
+					WaitForSingleObject(pi.hProcess, INFINITE);
+					CloseHandle(pi.hProcess);
+				}
+				//system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window");
+				system("pause");
+				s = "-1";
+				continue;
+			}
+			if (s == "晚自习制裁模式") {
+				system("title 制裁晚自习");
+				taskkill(true, true);
+			}
+			if (s == "一键防屏保") {
+				pingbaoservice();
+			}
+			if(s=="退出"){
+				return;
+			}
+			if(s=="关于"){
+				about();
+				s="-1";
+				continue;
+			}
+			if (s == "小游戏") {
+				head();
+				string d = listname(false, false, word.game, word.gamen);
+				if (d == "返回") {
+					s = "-1";
+					continue;
+				}
+				if (d == "数字炸弹") {
+					game.numberdamn();
+					d = "返回";
+				}
+				if (d == "五子棋") {
+					setfont(20);
+					game.wzq.wzqmain();
+					setfont(30);
+					d = "返回";
+				}
+			}
+			if (s == "恶搞") {
+				head();
+				string d = listname(false, false, word.joke, word.joken);
+				if (d == "返回") {
+					s = "-1";
+					continue;
+				}
+				if (d == "杀WPS+希沃白板+希沃视频展台") {
+					joke.kill();
+				}
+			}
+			if (s == "注册表") {
+				head();
+				string d = listname(false, false, word.reg, word.regn);
+				if (d == "返回") {
+					s = "-1";
+					continue;
+				}
+				if (d == "禁用任务栏菜单") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
+					restartexp();
+					d = "返回";
+				}
+				if (d == "启用任务栏菜单") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
+					restartexp();
+					d = "返回";
+				}
+				if (d == "禁用快捷键") {
+					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
+					restartexp();
+					d = "返回";
+				}
+				if (d == "启用快捷键") {
+					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
+					restartexp();
+					d = "返回";
+				}
+				if (d == "启用显示登录详细信息") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+						system("shutdown /l");
+					}
+					system("pause");
+					d = "返回";
+				}
+				if (d == "禁用显示登录详细信息") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					system("pause");
+					d = "返回";
+				}
+				if (d == "登录时显示提示") {
+					char title1[100];
+					char title2[100];
+					cout << "请输入主标题(50字以内)：";
+					scanf_s("%s", title1, (unsigned)_countof(title1));
+					cout << "请输入副标题(50字以内)：";
+					scanf_s("%s", title2, (unsigned)_countof(title2));
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+						system("shutdown /l");
+					}
+					system("pause");
+					d = "返回";
+				}
+				if (d == "取消登录时显示提示") {
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
+					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
+					cout << "修改完成，请注销以检查是否修改成功。\n";
+					system("pause");
+					d="返回"; 
+				}
+			}
+			//end
 		}
 	}
 } lc;
@@ -1381,7 +1287,7 @@ int main(int argc, char *argv[]) {
 			cmd[i] = argv[i];
 		}
 		//不需要admin
-		if(cmd[1]=="about"){
+		if (cmd[1] == "about") {
 			about();
 			return 0;
 		}
