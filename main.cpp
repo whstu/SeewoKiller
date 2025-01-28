@@ -16,6 +16,9 @@
 #include <shellapi.h>
 //cin错误去除
 #include <limits>
+//网络文件下载
+#include <wininet.h>
+//#pragma comment(lib,"wininet.lib")
 
 #define S(i) Sleep(i)
 #define cls system("cls");
@@ -508,6 +511,48 @@ void about() {
 			system("pause");
 		}
 	}
+}
+bool update() {
+	const string& url="https://seewokiller.whstu.us.kg/";
+	const string& filename="version.txt"; 
+    HINTERNET hInternet, hConnect;
+    DWORD bytesRead;
+    char buffer[1024];  // 缓冲区
+    // 初始化 WinINet 会话
+    hInternet = InternetOpen("FileDownloader", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+    if (hInternet == NULL) {
+        cerr << "Failed to initialize WinINet.\n";
+        return false;
+    }
+    // 打开指定的 URL
+    hConnect = InternetOpenUrlA(hInternet, url.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
+    if (hConnect == NULL) {
+        cerr << "Failed to open URL.\n";
+        InternetCloseHandle(hInternet);
+        return false;
+    }
+    // 打开本地文件以写入下载内容
+    ofstream outFile(filename, ios::binary);
+    if (!outFile) {
+        cerr << "Failed to open local file.\n";
+        InternetCloseHandle(hConnect);
+        InternetCloseHandle(hInternet);
+        return false;
+    }
+    // 读取远程文件并写入本地文件
+    while (true) {
+        if (InternetReadFile(hConnect, buffer, sizeof(buffer), &bytesRead) && bytesRead > 0) {
+            outFile.write(buffer, bytesRead);  // 将数据写入本地文件
+        } else {
+            break;
+        }
+    }
+    // 关闭文件和连接
+    outFile.close();
+    InternetCloseHandle(hConnect);
+    InternetCloseHandle(hInternet);
+    cout << "File downloaded successfully.\n";
+    return true;
 }
 
 BOOL IsUserAnAdmin() {
@@ -1341,6 +1386,9 @@ int main(int argc, char *argv[]) {
 		if (IsUserAnAdmin() == false and NoAdmin == false) {
 			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
 			return 0;
+		}
+		if(cmd[1]=="taskkill"){
+			taskkill(true,false);
 		}
 		if (cmd[1] == "wanzixi") {
 			system("title 制裁晚自习");

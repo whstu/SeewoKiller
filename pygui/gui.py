@@ -1,14 +1,14 @@
-import sys
 import ctypes
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, QListWidgetItem, QDialog
-from PyQt5.QtCore import Qt
-
+import sys
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-
+from os import system
 import os
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
+    QListWidgetItem, QDialog
 
-'''管理员'''
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+#管理员
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -17,6 +17,15 @@ def is_admin():
 if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
     sys.exit()
+
+def uninstall():
+    system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"")
+    print("正在卸载 Easicare\n")
+    system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"")
+    print("正在卸载 EasiAgent\n")
+    system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"")
+    print("正在卸载希沃智能笔助手\n")
+    system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -97,9 +106,9 @@ class MainWindow(QMainWindow):
 
     def on_common_button_clicked(self, button_number):
         if button_number==1:
-            os.system(".\SeewoKiller.exe wanzixi")
+            system(".\\SeewoKiller.exe wanzixi")
         if button_number==2:
-            os.system(".\SeewoKiller.exe pingbao")
+            system(".\\SeewoKiller.exe pingbao")
         if button_number==3:
             self.open_new_window_game()
         '''print("123", button_number)'''
@@ -113,24 +122,26 @@ class MainWindow(QMainWindow):
         if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
             self.open_new_window_regedit()
         if item.text() == "循环清任务":
-            '''os.system("SeewoKiller.exe")'''
+            system(".\\SeewoKiller.exe taskkill")
         if item.text() == "一键卸载":
-            os.system(".\SeewoKiller.exe uninstall")
+            uninstall()
         if item.text() == "冰点解冻":
-            os.system(".\SeewoKiller.exe seewofreeze")
+            system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
         if item.text() == "晚自习制裁模式":
-            os.system(".\SeewoKiller.exe wanzixi")
+            system(".\\SeewoKiller.exe wanzixi")
         if item.text() == "一键防屏保":
-            os.system(".\SeewoKiller.exe pingbao")
+            system(".\\SeewoKiller.exe pingbao")
             #print("456", item.text().split(' ')[1])
             print("456")
             # 打印项文本（去掉前面的“项”字和编号后的空格）
 
     def on_settings_list_item_clicked(self, item):
+        if item.text()=="退出":
+            sys.exit(app.exec_())
         if item.text() == "关于":
-            os.system(".\SeewoKiller.exe about")
+            system(".\\SeewoKiller.exe about")
         if item.text() == "使用经典界面":
-            os.system(".\SeewoKiller.exe run -oldui")
+            system(".\\SeewoKiller.exe run -oldui")
 
     def open_new_window_game(self):
         self.new_window_game = NewWindow_game()
@@ -163,9 +174,9 @@ class NewWindow_game(QDialog):
         self.setLayout(layout)
     def on_list_item_clicked(self, item):
         if item.text() == "五子棋":
-            os.system(".\SeewoKiller.exe game -wzq")
+            system(".\\SeewoKiller.exe game -wzq")
         if item.text()=="数字炸弹":
-            os.system(".\SeewoKiller.exe game -numberdamn")
+            system(".\\SeewoKiller.exe game -numberdamn")
 class NewWindow_regedit(QDialog):
     def __init__(self):
         super().__init__()
@@ -187,21 +198,21 @@ class NewWindow_regedit(QDialog):
         self.setLayout(layout)
     def on_list_item_clicked(self, item):
         if item.text() == "禁用任务栏菜单":
-            os.system(".\SeewoKiller.exe regedit -NoTrayContextMenu true")
+            system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
         if item.text()=="启用任务栏菜单":
-            os.system(".\SeewoKiller.exe regedit -NoTrayContextMenu false")
+            system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
         if item.text()=="禁用快捷键":
-            os.system(".\SeewoKiller.exe regedit -NoWinKeys true")
+            system(".\\SeewoKiller.exe regedit -NoWinKeys true")
         if item.text()=="启用快捷键":
-            os.system(".\SeewoKiller.exe regedit -NoWinKeys false")
+            system(".\\SeewoKiller.exe regedit -NoWinKeys false")
         if item.text()=="启用显示登录详细信息":
-            os.system(".\SeewoKiller.exe regedit -VerboseStatus true")
+            system(".\\SeewoKiller.exe regedit -VerboseStatus true")
         if item.text()=="禁用显示登录详细信息":
-            os.system(".\SeewoKiller.exe regedit -VerboseStatus false")
+            system(".\\SeewoKiller.exe regedit -VerboseStatus false")
         if item.text()=="登录时显示提示":
-            os.system(".\SeewoKiller.exe regedit -legalnotice true")
+            system(".\\SeewoKiller.exe regedit -legalnotice true")
         if item.text()=="取消登录时显示提示":
-            os.system(".\SeewoKiller.exe regedit -legalnotice false")
+            system(".\\SeewoKiller.exe regedit -legalnotice false")
 class NewWindow_joke(QDialog):
     def __init__(self):
         super().__init__()
@@ -224,7 +235,7 @@ class NewWindow_joke(QDialog):
 
     def on_list_item_clicked(self, item):
         if item.text() == "杀死所有有用的进程":
-            os.system(".\SeewoKiller.exe joke -killapp")
+            system(".\\SeewoKiller.exe joke -killapp")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
