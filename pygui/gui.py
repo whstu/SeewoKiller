@@ -5,16 +5,18 @@ from os import system
 import os
 #获取更新
 import urllib.request
+from bs4 import BeautifulSoup
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QRect
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QDialog
+from PyQt5.QtGui import QFont,QPixmap
+from PyQt5 import QtWidgets
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-#检查更新
-response=urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
 
 #管理员
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -33,15 +35,16 @@ def uninstall():
     print("正在卸载希沃智能笔助手\n")
     system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"")
 
+font = QFont('system', 20, QFont.Bold)
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("希沃克星")
-        self.setGeometry(100, 100, 600, 400)
-
+        self.setGeometry(200, 500, 600, 400)
         # 创建选项卡组件
         self.tab_widget = QTabWidget()
+        self.tab_widget.setFont(font)
         self.setCentralWidget(self.tab_widget)
 
         # 按钮名称数组
@@ -53,7 +56,7 @@ class MainWindow(QMainWindow):
 
         # 列表项名称数组（所有和设置选项卡共用）
         self.list_items_all = ["循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞","注册表"]
-        self.list_items_settings = ["关于", "使用经典界面"]
+        self.list_items_settings = ["退出","检查更新","关于", "使用经典界面"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
@@ -144,8 +147,12 @@ class MainWindow(QMainWindow):
     def on_settings_list_item_clicked(self, item):
         if item.text()=="退出":
             sys.exit(app.exec_())
+        if item.text()=="检查更新":
+            self.new_window_checkupdate=NewWindow_Update()
+            self.new_window_checkupdate.show()
         if item.text() == "关于":
-            system(".\\SeewoKiller.exe about")
+            self.new_window_about=NewWindow_About()
+            self.new_window_about.show()
         if item.text() == "使用经典界面":
             system(".\\SeewoKiller.exe run -oldui")
 
@@ -242,7 +249,70 @@ class NewWindow_joke(QDialog):
     def on_list_item_clicked(self, item):
         if item.text() == "杀死所有有用的进程":
             system(".\\SeewoKiller.exe joke -killapp")
-
+class NewWindow_About(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("关于")
+        self.setGeometry(100, 100, 300, 200)
+        layout = QVBoxLayout()
+        self.label=QtWidgets.QLabel()
+        #self.label.setGeometry(QRect(30,30,81,41))
+        self.label.setPixmap(QPixmap('.\\seewokiller2.png'))
+        self.label2=QtWidgets.QLabel()
+        self.label2.setFont(font)
+        self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持")
+        layout.addWidget(self.label)
+        layout.addWidget(self.label2)
+        self.setLayout(layout)
+class NewWindow_Update(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("检查更新")
+        self.setGeometry(100, 100, 300, 200)
+        layout = QVBoxLayout()
+        self.new_list_items = ["检查"]
+        # 创建列表并添加项（使用数组中的项名称）
+        self.new_list_widget = QListWidget()
+        for item_name in self.new_list_items:
+            self.new_list_widget.addItem(item_name)
+        self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.new_list_widget)
+        self.setLayout(layout)
+    def on_list_item_clicked(self, item):
+        if item.text() == "检查":
+            self.check_update()
+    def check_update(self):
+        response = urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
+        html = response.read()
+        soup = BeautifulSoup(html, 'html.parser')
+        p_tags = soup.find_all('p')
+        self.version1, self.version2, self.version3, self.version4 = 0, 0, 0, 0
+        if len(p_tags) >= 4:
+            for i, p_tag in enumerate(p_tags[:4]):
+                text = p_tag.get_text().strip()
+                try:
+                    number = int(text)
+                    if i == 0:
+                        version1 = number
+                    elif i == 1:
+                        version2 = number
+                    elif i == 2:
+                        version3 = number
+                    elif i == 3:
+                        version4 = number
+                except ValueError:
+                    continue
+        else:
+            print("Error:<p>Not Found.")
+        print(f"version1: {version1}")
+        print(f"version2: {version2}")
+        print(f"version3: {version3}")
+        print(f"version4: {version4}")
+        if localversion1<=self.version1 and localversion2<=self.version2 and localversion3<=self.version3 and localversion4<=self.version4:
+            print("有可用更新")
+        else:
+            print("暂无更新")
+localversion1,localversion2,localversion3,localversion4=2,-10,-10,-10
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
