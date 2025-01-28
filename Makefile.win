@@ -7,9 +7,9 @@ WINDRES  = windres.exe
 RES      = SlytherinOS_private.res
 OBJ      = main.o $(RES)
 LINKOBJ  = main.o $(RES)
-LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5" -L"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/bin" -static-libstdc++ -static-libgcc -s
-INCS     = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/include"
-CXXINCS  = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/i686-w64-mingw32" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/backward" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/SDL2-2.26.5/i686-w64-mingw32"
+LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -static-libstdc++ -static-libgcc -s
+INCS     = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed"
+CXXINCS  = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/i686-w64-mingw32" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/backward"
 BIN      = SeewoKiller.exe
 CXXFLAGS = $(CXXINCS) -O2
 ENCODINGS = -finput-charset=utf-8 -fexec-charset=gb2312

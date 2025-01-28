@@ -3,11 +3,17 @@ import sys
 import warnings
 from os import system
 import os
+#获取更新
+import urllib.request
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QDialog
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+#检查更新
+response=urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
+
 #管理员
 def is_admin():
     try:
