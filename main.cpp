@@ -176,6 +176,7 @@ void loop(int x, int y) {//19,16
 	gotoxy(x, y + 1);
 	SetColorAndBackground(7, 7);
 	cout << "  ";
+	SetColorAndBackground(7,0);
 	S(200);
 }
 void poweron(bool SkipCheckWinVer) {
@@ -399,7 +400,6 @@ void poweron(bool SkipCheckWinVer) {
 	gotoxy(16, 14);
 	cout << "正在验证系统版本";
 	loop(19, 16);
-	SetColorAndBackground(7, 0);
 	//检测Windows版本
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
 	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//加载DLL
@@ -414,16 +414,19 @@ void poweron(bool SkipCheckWinVer) {
 	float version = dwMajorInt + dwMinorInt * 0.1;
 	if (SkipCheckWinVer == false) {
 		if (version >= 6.1) {
-			string guipath = executable_path + "\\gui.exe";
-			STARTUPINFO si = { sizeof(si) };//0
-			PROCESS_INFORMATION pi;
-			LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//有权限的都可以打开
-			BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
-			DWORD dwExitCode;
-			if (fSuccess) {
-				closeapp = true;
-				return;
-			}
+			if (MessageBox(NULL, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
+				string guipath = executable_path + "\\gui.exe";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				DWORD dwExitCode;
+				loop(19,16);
+				if (fSuccess) {
+					closeapp = true;
+					return;
+				}
+			}//返回1确定，2取消
 		}
 	}
 	/*Windows 10-10.0
@@ -436,6 +439,9 @@ void poweron(bool SkipCheckWinVer) {
 	Windows 2000-5.0
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
+	gotoxy(15,14);
+	cout<<"                        ";
+	loop(19,16);
 	setfont(30);
 	return;
 }
