@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 from PyQt5.QtCore import Qt,QRect
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
-    QListWidgetItem, QDialog
+    QListWidgetItem, QDialog,QMessageBox
 from PyQt5.QtGui import QFont,QPixmap
 from PyQt5 import QtWidgets
 
@@ -35,16 +35,14 @@ def uninstall():
     print("正在卸载希沃智能笔助手\n")
     system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"")
 
-font = QFont('system', 20, QFont.Bold)
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("希沃克星")
-        self.setGeometry(200, 500, 600, 400)
+        self.setGeometry(100, 500, 600, 400)
         # 创建选项卡组件
         self.tab_widget = QTabWidget()
-        self.tab_widget.setFont(font)
         self.setCentralWidget(self.tab_widget)
 
         # 按钮名称数组
@@ -70,10 +68,12 @@ class MainWindow(QMainWindow):
 
     def setup_common_tab(self):
         layout = QVBoxLayout()
-
+        layout.setSpacing(20)
         # 使用数组中的按钮名称创建按钮
         for button_name in self.common_buttons:
             button = QPushButton(button_name)
+            button.setMinimumHeight(50)
+            button.setFont(QFont("system",20))
             button_number = self.common_buttons.index(button_name) + 1  # 获取按钮编号（从 1 开始）
             button.clicked.connect(lambda _, x=button_number: self.on_common_button_clicked(x))
             layout.addWidget(button)
@@ -84,8 +84,10 @@ class MainWindow(QMainWindow):
 
         # 创建列表并添加项（使用数组中的项名称）
         self.list_widget = QListWidget()
+        self.list_widget.setSpacing(5)
         for item_name in self.list_items_all:
             item = QListWidgetItem(item_name)
+            item.setFont(QFont("system",20))
             if item_name == "小游戏":
                 item.setData(Qt.UserRole, "open_new_window_game")
             if item_name == "恶搞":
@@ -104,9 +106,12 @@ class MainWindow(QMainWindow):
 
         # 创建列表并添加项（与“所有”选项卡相同，使用数组中的项名称）
         self.settings_list_widget = QListWidget()
+        self.settings_list_widget.setSpacing(5)
         for item_name in self.list_items_settings:
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("system",20))
             # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
-            self.settings_list_widget.addItem(item_name)
+            self.settings_list_widget.addItem(item)
 
         self.settings_list_widget.itemClicked.connect(self.on_settings_list_item_clicked)
 
@@ -166,12 +171,12 @@ class MainWindow(QMainWindow):
         self.new_window_regedit = NewWindow_regedit()
         self.new_window_regedit.show()
 
-class NewWindow_game(QDialog):
+class NewWindow_game(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("小游戏")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(750, 500, 300, 200)
 
         layout = QVBoxLayout()
 
@@ -180,8 +185,12 @@ class NewWindow_game(QDialog):
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
-            self.new_list_widget.addItem(item_name)
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("system",20))
+            self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
         self.setLayout(layout)
@@ -190,12 +199,12 @@ class NewWindow_game(QDialog):
             system(".\\SeewoKiller.exe game -wzq")
         if item.text()=="数字炸弹":
             system(".\\SeewoKiller.exe game -numberdamn")
-class NewWindow_regedit(QDialog):
+class NewWindow_regedit(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("注册表")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(750, 500, 300, 200)
 
         layout = QVBoxLayout()
 
@@ -204,8 +213,12 @@ class NewWindow_regedit(QDialog):
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
-            self.new_list_widget.addItem(item_name)
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("system",20))
+            self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
         self.setLayout(layout)
@@ -226,12 +239,12 @@ class NewWindow_regedit(QDialog):
             system(".\\SeewoKiller.exe regedit -legalnotice true")
         if item.text()=="取消登录时显示提示":
             system(".\\SeewoKiller.exe regedit -legalnotice false")
-class NewWindow_joke(QDialog):
+class NewWindow_joke(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("恶搞")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(750, 500, 300, 200)
 
         layout = QVBoxLayout()
 
@@ -240,8 +253,12 @@ class NewWindow_joke(QDialog):
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
-            self.new_list_widget.addItem(item_name)
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("system",20))
+            self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
         self.setLayout(layout)
@@ -253,13 +270,14 @@ class NewWindow_About(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("关于")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(100, 100, 500, 400)
         layout = QVBoxLayout()
         self.label=QtWidgets.QLabel()
         #self.label.setGeometry(QRect(30,30,81,41))
         self.label.setPixmap(QPixmap('.\\seewokiller2.png'))
         self.label2=QtWidgets.QLabel()
-        self.label2.setFont(font)
+        self.label2.setWordWrap(True)
+        self.label2.setFont(QFont("system",20))
         self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
@@ -267,20 +285,16 @@ class NewWindow_About(QWidget):
 class NewWindow_Update(QWidget):
     def __init__(self):
         super().__init__()
+        self.layout = QVBoxLayout()
+        self.layout.setSpacing(20)
         self.setWindowTitle("检查更新")
-        self.setGeometry(100, 100, 300, 200)
-        layout = QVBoxLayout()
-        self.new_list_items = ["检查"]
-        # 创建列表并添加项（使用数组中的项名称）
-        self.new_list_widget = QListWidget()
-        for item_name in self.new_list_items:
-            self.new_list_widget.addItem(item_name)
-        self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
-        layout.addWidget(self.new_list_widget)
-        self.setLayout(layout)
-    def on_list_item_clicked(self, item):
-        if item.text() == "检查":
-            self.check_update()
+        self.setGeometry(800, 800, 350, 30)
+        self.button = QPushButton("点此检查更新")
+        self.button.setMinimumHeight(50)
+        self.button.setFont(QFont("system", 20))
+        self.button.clicked.connect(self.check_update)
+        self.layout.addWidget(self.button)  # 正确添加按钮到布局
+        self.setLayout(self.layout)  # 布局设置给窗口而非按钮
     def check_update(self):
         response = urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
         html = response.read()
@@ -310,11 +324,20 @@ class NewWindow_Update(QWidget):
         print(f"version4: {version4}")
         if localversion1<=self.version1 and localversion2<=self.version2 and localversion3<=self.version3 and localversion4<=self.version4:
             print("有可用更新")
+            QMessageBox.information(NewWindow_Update,"提示",f"有可用更新{version1}.{version2}.{version3}.{version4}\n是否前往网页下载？",QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
         else:
             print("暂无更新")
+            msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
+            msg_box.exec_()
 localversion1,localversion2,localversion3,localversion4=2,-10,-10,-10
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    #设置字体
+    font = QFont()
+    font.setFamily("system")
+    font.setPointSize(20)
+    app.setFont(font)
+    #-------
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
