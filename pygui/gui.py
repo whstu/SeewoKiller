@@ -307,24 +307,26 @@ class NewWindow_Update(QWidget):
                 try:
                     number = int(text)
                     if i == 0:
-                        version1 = number
+                        self.version1 = number
                     elif i == 1:
-                        version2 = number
+                        self.version2 = number
                     elif i == 2:
-                        version3 = number
+                        self.version3 = number
                     elif i == 3:
-                        version4 = number
+                        self.version4 = number
                 except ValueError:
                     continue
         else:
             print("Error:<p>Not Found.")
-        print(f"version1: {version1}")
-        print(f"version2: {version2}")
-        print(f"version3: {version3}")
-        print(f"version4: {version4}")
+        print(f"Version Check Website: {self.version1}.{self.version2}.{self.version3}.{self.version4}")
+        print(f"Local Version: {localversion1}.{localversion2}.{localversion3}.{localversion4}")
         if localversion1<=self.version1 and localversion2<=self.version2 and localversion3<=self.version3 and localversion4<=self.version4:
             print("有可用更新")
-            QMessageBox.information(NewWindow_Update,"提示",f"有可用更新{version1}.{version2}.{version3}.{version4}\n是否前往网页下载？",QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
+            self.reply=QMessageBox.question(NewWindow_Update(),"提示",f"有可用更新{self.version1}.{self.version2}.{self.version3}.{self.version4}\n是否前往网页下载？",QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
+            print(self.reply)
+            if self.reply==QMessageBox.Yes:
+                import webbrowser
+                webbrowser.open("https://whstu.us.kg/download/seewokiller/")
         else:
             print("暂无更新")
             msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
