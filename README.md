@@ -1,12 +1,11 @@
 <!--markdownlint-disable MD001 MD033 MD041 MD051-->
-
+![Banner](https://image.whstu.us.kg/seewokiller2.png)
 <div align="center">
 
-# <image src="https://image.whstu.us.kg/clabel_friends_badge.png" height="28"/> SeewoKiller
+# <image src="https://seewokiller.whstu.us.kg/SeewoKiller.ico" height="35"/> SeewoKiller
 
-<!-- ![软件截图 - 主界面](https://github.com/ClassIsland/ClassIsland/assets/55006226/65e2bdba-be83-444c-b42f-b893aaace9c3) -->
+![软件截图 - 主界面](https://image.whstu.us.kg/seewokillershortcut.png)
 
-<!-- ![Banner](https://github.com/user-attachments/assets/a815dd7d-8343-4da5-aee4-3f754aa297e4)-->
 
 [![Stars](https://img.shields.io/github/stars/whstu/SeewoKiller?label=Stars)](https://github.com/whstu/SeewoKiller)
 [![正式版 Release](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=正式版)](https://github.com/whstu/SeewoKiller/releases/latest)
@@ -14,7 +13,7 @@
 [![下载量](https://img.shields.io/github/downloads/whstu/SeewoKiller/total?style=social&label=下载量&logo=github)](https://github.com/whstu/SeewoKiller/releases/latest)
 
 希沃克星：冰点解冻、游戏和晚自习制裁！<br/>
-使用善良的GUI而不是进Windows PE
+使用善良的 GUI 而不是进 Windows PE
 
 #### 💬[SeewoKiller QQ 群组](https://qm.qq.com/q/6ZAbcZSK5y)
 
@@ -30,7 +29,7 @@
 
 > [!WARNING]
 >
-> 不确定SeewoKiller能否在Windows 7以下（不含）的Windows系统中运行，但有实验证明SeewoKiller可以在Windows XP上正常运行。如果您要在Windows 7(不含)以下的电脑上运行SeewoKiller，请直接下载Source Code而非setup.exe。
+> 不确定 SeewoKiller 能否在 Windows 7 以下（不含）的 Windows 系统中运行，但有实验证明 SeewoKiller 可以在 Windows XP 上正常运行。如果您要在 Windows 7(不含) 以下的电脑上运行 SeewoKiller，请直接下载 Source Code 而非 setup.exe。
 
 对于普通用户，可以在以下渠道下载到本软件，请根据自身网络环境选择合适的渠道。
 
@@ -42,10 +41,10 @@
 |卓然第三帝国官网|[**下载**](https://whstu.us.kg/download/seewokiller/)|[下载](https://whstu.us.kg/download/seewokiller/)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
-对于下载Source Code的用户，解压后打开SeewoKiller.exe即可。对于下载setup及setup-small的用户，按安装程序安装后，点击桌面快捷方式即可使用。
+对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!IMPORTANT]
-> setup与setup-small的区别<br/>
-> setup为完整版，包含冰点还原。setup-small不包含冰点还原，建议不常使用冰点还原的用户安装，以防止误操作。
+> setup 与 setup-small 的区别<br/>
+> setup 为完整版，包含冰点还原。setup-small 不包含冰点还原，建议不常使用冰点还原的用户安装，以防止误操作。
 
 ## 获取帮助
 
