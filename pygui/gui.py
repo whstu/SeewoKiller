@@ -2,14 +2,13 @@ import ctypes
 import sys
 import warnings
 from os import system
-import os
 #获取更新
 import urllib.request
 from bs4 import BeautifulSoup
 
-from PyQt5.QtCore import Qt,QRect
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
-    QListWidgetItem, QDialog,QMessageBox
+    QListWidgetItem, QMessageBox
 from PyQt5.QtGui import QFont,QPixmap
 from PyQt5 import QtWidgets
 
@@ -331,7 +330,7 @@ class NewWindow_Update(QWidget):
             print("暂无更新")
             msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
             msg_box.exec_()
-localversion1,localversion2,localversion3,localversion4=2,-10,-19,-8
+localversion1,localversion2,localversion3,localversion4=2,-10,-9,-7
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #设置字体

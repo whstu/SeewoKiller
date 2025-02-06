@@ -680,7 +680,8 @@ struct GAME {
 			}
 		}
 		cout << "输入完成，正在取数...\n";
-		for (ans = rand() % (max - min); ans == 0; ans = rand() % (max - min)) {
+		while(ans==0){
+			ans = rand() % (max - min);
 		}
 		ans = ans + min;
 		S(500);
