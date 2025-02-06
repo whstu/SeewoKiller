@@ -27,7 +27,7 @@ $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
 
 main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS) 
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)  $(ENCODINGS) 
 
 SlytherinOS_private.res: SlytherinOS_private.rc 
 	$(WINDRES) -i SlytherinOS_private.rc --input-format=rc -o SlytherinOS_private.res -O coff 

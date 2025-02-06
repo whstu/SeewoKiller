@@ -62,16 +62,6 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
-UseUTF8=0
-
-[Unit3]
-FileName=SlytherinOS_private.rc
-Folder=Resources
-Compile=1
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
 UseUTF8=1
 
 [Unit4]
