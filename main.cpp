@@ -585,6 +585,7 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			cout << "正在结束进程：控制面板\n";
 			cout << "TASKKILL /F /FI \"WINDOWTITLE eq 网络连接\"\n";
 			system("taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
+			system("taskkill /f /fi \"WINDOWTITLE eq 控制面板\\网络和 Internet\\网络连接\"");
 			cout << "正在结束进程：Edge\n";
 			cout << "TASKKILL /F /IM msedge.exe\n";
 			system("TASKKILL /F /IM msedge.exe");

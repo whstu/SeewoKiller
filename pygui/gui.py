@@ -1,16 +1,16 @@
 import ctypes
 import sys
-import warnings
-from os import system
-#获取更新
+# 获取更新
 import urllib.request
+import warnings
 from bs4 import BeautifulSoup
 
+from os import system
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
-from PyQt5.QtGui import QFont,QPixmap
-from PyQt5 import QtWidgets
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
