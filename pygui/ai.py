@@ -1,8 +1,8 @@
 import requests
 from os import system
 
-API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/a2546c2a47f4bc285d64b52ba534493d/ai/run/"
-headers = {"Authorization": "Bearer QJ88d8Br8V2Yy9_xYsssGMxVBYhye7WRZv-bHs2J"}
+API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/***/ai/run/"
+headers = {"Authorization": "Bearer ***"}
 
 
 def run(model, inputs):
