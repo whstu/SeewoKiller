@@ -340,7 +340,7 @@ class NewWindow_Update(QWidget):
             print("暂无更新")
             msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
             msg_box.exec_()
-localversion1,localversion2,localversion3,localversion4=2,-10,-9,-7
+localversion1,localversion2,localversion3,localversion4=2,-10,-9,-6
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #设置字体
