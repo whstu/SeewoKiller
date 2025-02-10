@@ -1,4 +1,5 @@
 import ctypes
+import os
 import sys
 # 获取更新
 import urllib.request
@@ -6,16 +7,17 @@ import warnings
 from bs4 import BeautifulSoup
 
 from os import system
+import threading
+import subprocess
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QProcess
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
 #管理员
-
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -24,7 +26,6 @@ def is_admin():
 if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
     sys.exit()
-
 def uninstall():
     system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"")
     print("正在卸载 Easicare\n")
@@ -37,7 +38,7 @@ def uninstall():
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        self.process = QProcess(self)
         self.setWindowTitle("希沃克星")
         self.setGeometry(100, 500, 600, 400)
         # 创建选项卡组件
@@ -64,6 +65,9 @@ class MainWindow(QMainWindow):
         self.tab_settings = QWidget()
         self.tab_widget.addTab(self.tab_settings, "设置")
         self.setup_settings_tab()
+    #def run_command(self,command):
+        #self.process.start('cmd', ['/c', '.\\SeewoKiller.exe', command])
+        #system(command)
 
     def setup_common_tab(self):
         layout = QVBoxLayout()
@@ -120,6 +124,12 @@ class MainWindow(QMainWindow):
     def on_common_button_clicked(self, button_number):
         if button_number==1:
             system(".\\SeewoKiller.exe wanzixi")
+            #self.run_command("wanzixi")
+            #cmd=r'.\SeewoKiller.exe wanzixi'
+            #subprocess.run(cmd, shell=True, check=True,capture_output=True, text=True)
+            #command_thread=threading.Thread(target=self.run_command(".\\SeewoKiller.exe wanzixi"))
+            #command_thread.start()
+            #system(".\\SeewoKiller.exe wanzixi")
         if button_number==2:
             system(".\\SeewoKiller.exe pingbao")
         if button_number==3:

@@ -561,11 +561,7 @@ bool getadmin() {
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
 	while (true) {
-		if ( _kbhit() ) {
-			return;
-		}
 		system("taskkill /f /t /im taskmgr.exe");
-		system("taskkill /f /t /im cmd.exe");
 		cout << "正在结束进程：轻录播\n";
 		cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 		system("TASKKILL /F /IM EasiRecorder.exe");
@@ -1351,7 +1347,9 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 		if (cmd[1] == "taskkill") {
-			taskkill(true, false);
+			while(true){
+				taskkill(true, false);
+			}
 		}
 		if (cmd[1] == "wanzixi") {
 			system("title 制裁晚自习");
