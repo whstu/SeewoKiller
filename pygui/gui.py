@@ -1,14 +1,13 @@
 import ctypes
 import os
 import sys
+import threading
 # 获取更新
 import urllib.request
 import warnings
 from bs4 import BeautifulSoup
 
 from os import system
-import threading
-import subprocess
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QProcess
@@ -26,6 +25,63 @@ def is_admin():
 if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
     sys.exit()
+
+class SeewoKiller_run():
+    class Wanzixi(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe wanzixi")
+    class Pingbao(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe pingbao")
+    class Taskkill(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe taskkill")
+    class Uninstall(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe uninstall")
+    class SeewoFreeze(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe seewofreeze")
+    class OldUI(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe -oldui")
+    class Regedit():
+        class NoTrayContextMenu_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
+        class NoTrayContextMenu_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
+        class NoWinKeys_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoWinKeys true")
+        class NoWinKeys_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoWinKeys false")
+        class VerboseStatus_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -VerboseStatus true")
+        class VerboseStatus_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -VerboseStatus false")
+        class legalnotice_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -legalnotice true")
+        class legalnotice_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -legalnotice false")
+    class Joke():
+        class Killapp(threading.Thread):
+            def run(self):
+                system(".\\SeewoKIller.exe joke -killapp")
+    class Game():
+        class Wzq(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe -wzq")
+        class NumberDamn(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe -numberdamn")
+
 def uninstall():
     system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"")
     print("正在卸载 Easicare\n")
@@ -34,7 +90,6 @@ def uninstall():
     system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"")
     print("正在卸载希沃智能笔助手\n")
     system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"")
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -68,7 +123,6 @@ class MainWindow(QMainWindow):
     #def run_command(self,command):
         #self.process.start('cmd', ['/c', '.\\SeewoKiller.exe', command])
         #system(command)
-
     def setup_common_tab(self):
         layout = QVBoxLayout()
         layout.setSpacing(20)
@@ -123,15 +177,13 @@ class MainWindow(QMainWindow):
 
     def on_common_button_clicked(self, button_number):
         if button_number==1:
-            system(".\\SeewoKiller.exe wanzixi")
-            #self.run_command("wanzixi")
-            #cmd=r'.\SeewoKiller.exe wanzixi'
-            #subprocess.run(cmd, shell=True, check=True,capture_output=True, text=True)
-            #command_thread=threading.Thread(target=self.run_command(".\\SeewoKiller.exe wanzixi"))
-            #command_thread.start()
+            self.wanzixi=SeewoKiller_run.Wanzixi()
+            self.wanzixi.start()
             #system(".\\SeewoKiller.exe wanzixi")
         if button_number==2:
-            system(".\\SeewoKiller.exe pingbao")
+            self.pingbao=SeewoKiller_run.Pingbao()
+            self.pingbao.start()
+            #system(".\\SeewoKiller.exe pingbao")
         if button_number==3:
             self.open_new_window_game()
         '''print("123", button_number)'''
@@ -145,17 +197,24 @@ class MainWindow(QMainWindow):
         if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
             self.open_new_window_regedit()
         if item.text() == "循环清任务":
-            system(".\\SeewoKiller.exe taskkill")
+            self.taskkill=SeewoKiller_run.Taskkill()
+            self.taskkill.start()
+            #system(".\\SeewoKiller.exe taskkill")
         if item.text() == "一键卸载":
             uninstall()
         if item.text() == "冰点解冻":
-            system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
+            self.seewofreeze=SeewoKiller_run.SeewoFreeze()
+            self.seewofreeze.start()
+            #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
         if item.text() == "晚自习制裁模式":
-            system(".\\SeewoKiller.exe wanzixi")
+            self.wanzixi=SeewoKiller_run.Wanzixi()
+            self.wanzixi.start()
+            #system(".\\SeewoKiller.exe wanzixi")
         if item.text() == "一键防屏保":
-            system(".\\SeewoKiller.exe pingbao")
+            self.pingbao=SeewoKiller_run.Pingbao()
+            self.pingbao.start()
+            #system(".\\SeewoKiller.exe pingbao")
             #print("456", item.text().split(' ')[1])
-            print("456")
             # 打印项文本（去掉前面的“项”字和编号后的空格）
 
     def on_settings_list_item_clicked(self, item):
@@ -168,7 +227,9 @@ class MainWindow(QMainWindow):
             self.new_window_about=NewWindow_About()
             self.new_window_about.show()
         if item.text() == "使用经典界面":
-            system(".\\SeewoKiller.exe run -oldui")
+            self.oldui=SeewoKiller_run.OldUI()
+            self.oldui.start()
+            #system(".\\SeewoKiller.exe run -oldui")
 
     def open_new_window_game(self):
         self.new_window_game = NewWindow_game()
@@ -205,9 +266,13 @@ class NewWindow_game(QWidget):
         self.setLayout(layout)
     def on_list_item_clicked(self, item):
         if item.text() == "五子棋":
-            system(".\\SeewoKiller.exe game -wzq")
+            self.wzq=SeewoKiller_run.Game.Wzq()
+            self.wzq.start()
+            #system(".\\SeewoKiller.exe game -wzq")
         if item.text()=="数字炸弹":
-            system(".\\SeewoKiller.exe game -numberdamn")
+            self.numberdamn=SeewoKiller_run.Game.NumberDamn()
+            self.numberdamn.start()
+            #system(".\\SeewoKiller.exe game -numberdamn")
 class NewWindow_regedit(QWidget):
     def __init__(self):
         super().__init__()
@@ -233,21 +298,37 @@ class NewWindow_regedit(QWidget):
         self.setLayout(layout)
     def on_list_item_clicked(self, item):
         if item.text() == "禁用任务栏菜单":
-            system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
+            self.regedit=SeewoKiller_run.Regedit.NoTrayContextMenu_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
         if item.text()=="启用任务栏菜单":
-            system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
+            self.regedit = SeewoKiller_run.Regedit.NoTrayContextMenu_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
         if item.text()=="禁用快捷键":
-            system(".\\SeewoKiller.exe regedit -NoWinKeys true")
+            self.regedit = SeewoKiller_run.Regedit.NoWinKeys_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoWinKeys true")
         if item.text()=="启用快捷键":
-            system(".\\SeewoKiller.exe regedit -NoWinKeys false")
+            self.regedit = SeewoKiller_run.Regedit.NoWinKeys_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoWinKeys false")
         if item.text()=="启用显示登录详细信息":
-            system(".\\SeewoKiller.exe regedit -VerboseStatus true")
+            self.regedit = SeewoKiller_run.Regedit.VerboseStatus_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -VerboseStatus true")
         if item.text()=="禁用显示登录详细信息":
-            system(".\\SeewoKiller.exe regedit -VerboseStatus false")
+            self.regedit = SeewoKiller_run.Regedit.VerboseStatus_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -VerboseStatus false")
         if item.text()=="登录时显示提示":
-            system(".\\SeewoKiller.exe regedit -legalnotice true")
+            self.regedit=SeewoKiller_run.Regedit.legalnotice_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -legalnotice true")
         if item.text()=="取消登录时显示提示":
-            system(".\\SeewoKiller.exe regedit -legalnotice false")
+            self.regedit=SeewoKiller_run.Regedit.legalnotice_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -legalnotice false")
 class NewWindow_joke(QWidget):
     def __init__(self):
         super().__init__()
@@ -274,7 +355,9 @@ class NewWindow_joke(QWidget):
 
     def on_list_item_clicked(self, item):
         if item.text() == "杀死所有有用的进程":
-            system(".\\SeewoKiller.exe joke -killapp")
+            self.killapp=SeewoKiller_run.Joke.Killapp()
+            self.killapp.start()
+            #system(".\\SeewoKiller.exe joke -killapp")
 class NewWindow_About(QWidget):
     def __init__(self):
         super().__init__()
@@ -287,7 +370,7 @@ class NewWindow_About(QWidget):
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
         self.label2.setFont(QFont("system",20))
-        self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持")
+        self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
         self.setLayout(layout)
@@ -340,7 +423,7 @@ class NewWindow_Update(QWidget):
             print("暂无更新")
             msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
             msg_box.exec_()
-localversion1,localversion2,localversion3,localversion4=2,-10,-9,-6
+localversion1,localversion2,localversion3,localversion4=2,-10,-8,-10
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #设置字体
