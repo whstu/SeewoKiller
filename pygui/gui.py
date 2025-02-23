@@ -392,7 +392,7 @@ class NewWindow_Update(QWidget):
         html = response.read()
         soup = BeautifulSoup(html, 'html.parser')
         p_tags = soup.find_all('p')
-        self.version1, self.version2, self.version3, self.version4 = 0, 0, 0, 0
+        self.version1, self.version2, self.version3, self.version4 = -1, -1, -1, -1
         if len(p_tags) >= 4:
             for i, p_tag in enumerate(p_tags[:4]):
                 text = p_tag.get_text().strip()
@@ -423,7 +423,7 @@ class NewWindow_Update(QWidget):
             print("暂无更新")
             msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
             msg_box.exec_()
-localversion1,localversion2,localversion3,localversion4=2,-10,-8,-10
+localversion1,localversion2,localversion3,localversion4=2,-10,-8,-9
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #设置字体
