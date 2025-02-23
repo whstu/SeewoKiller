@@ -77,10 +77,10 @@ class SeewoKiller_run():
     class Game():
         class Wzq(threading.Thread):
             def run(self):
-                system(".\\SeewoKiller.exe -wzq")
+                system(".\\SeewoKiller.exe game -wzq")
         class NumberDamn(threading.Thread):
             def run(self):
-                system(".\\SeewoKiller.exe -numberdamn")
+                system(".\\SeewoKiller.exe game -numberdamn")
 
 def uninstall():
     system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"")
