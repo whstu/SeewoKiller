@@ -8,14 +8,36 @@ import warnings
 from bs4 import BeautifulSoup
 
 from os import system
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QProcess
+from PyQt5 import QtWidgets,QtCore
+from PyQt5.QtCore import Qt, QProcess
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
+localversion1,localversion2,localversion3,localversion4=2,-10,-8,-8
+#QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+#QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+def QhGetScreenResolution():
+    # 获取屏幕分辨率（显示&物理）
+    import tkinter as tk
+    import pyautogui
+    # 创建一个隐藏的 Tkinter 根窗口
+    QhRoot = tk.Tk()
+    QhRoot.withdraw()  # 隐藏根窗口
+    # 获取屏幕显示分辨率
+    QhXSwidth = QhRoot.winfo_screenwidth()
+    QhXSheight = QhRoot.winfo_screenheight()
+    # 关闭 Tkinter 根窗口
+    QhRoot.destroy()
+    print(f"屏幕显示分辨率 QH: {QhXSwidth}x{QhXSheight}")
+    # 获取屏幕物理分辨率
+    size = pyautogui.size()
+    QhWLwidth = size.width
+    QhWLheight = size.height
+    print(f"屏幕物理分辨率 QH: {QhWLwidth}x{QhWLheight}")
+    return QhXSwidth, QhXSheight, QhWLwidth, QhWLheight
+
 #管理员
 def is_admin():
     try:
@@ -130,7 +152,7 @@ class MainWindow(QMainWindow):
         for button_name in self.common_buttons:
             button = QPushButton(button_name)
             button.setMinimumHeight(50)
-            button.setFont(QFont("system",20))
+            button.setFont(QFont("微软雅黑",10))
             button_number = self.common_buttons.index(button_name) + 1  # 获取按钮编号（从 1 开始）
             button.clicked.connect(lambda _, x=button_number: self.on_common_button_clicked(x))
             layout.addWidget(button)
@@ -144,7 +166,7 @@ class MainWindow(QMainWindow):
         self.list_widget.setSpacing(5)
         for item_name in self.list_items_all:
             item = QListWidgetItem(item_name)
-            item.setFont(QFont("system",20))
+            item.setFont(QFont("微软雅黑",10))
             if item_name == "小游戏":
                 item.setData(Qt.UserRole, "open_new_window_game")
             if item_name == "恶搞":
@@ -166,7 +188,7 @@ class MainWindow(QMainWindow):
         self.settings_list_widget.setSpacing(5)
         for item_name in self.list_items_settings:
             item=QListWidgetItem(item_name)
-            item.setFont(QFont("system",20))
+            item.setFont(QFont("微软雅黑",10))
             # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
             self.settings_list_widget.addItem(item)
 
@@ -259,7 +281,7 @@ class NewWindow_game(QWidget):
         self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
             item=QListWidgetItem(item_name)
-            item.setFont(QFont("system",20))
+            item.setFont(QFont("微软雅黑",10))
             self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
@@ -291,7 +313,7 @@ class NewWindow_regedit(QWidget):
         self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
             item=QListWidgetItem(item_name)
-            item.setFont(QFont("system",20))
+            item.setFont(QFont("微软雅黑",10))
             self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
@@ -347,7 +369,7 @@ class NewWindow_joke(QWidget):
         self.new_list_widget.setMinimumSize(300,200)
         for item_name in self.new_list_items:
             item=QListWidgetItem(item_name)
-            item.setFont(QFont("system",20))
+            item.setFont(QFont("微软雅黑",10))
             self.new_list_widget.addItem(item)
         self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
         layout.addWidget(self.new_list_widget)
@@ -369,7 +391,7 @@ class NewWindow_About(QWidget):
         self.label.setPixmap(QPixmap('.\\seewokiller2.png'))
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
-        self.label2.setFont(QFont("system",20))
+        self.label2.setFont(QFont("微软雅黑",10))
         self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
@@ -383,10 +405,23 @@ class NewWindow_Update(QWidget):
         self.setGeometry(800, 800, 350, 30)
         self.button = QPushButton("点此检查更新")
         self.button.setMinimumHeight(50)
-        self.button.setFont(QFont("system", 20))
+        self.button.setFont(QFont("微软雅黑", 10))
         self.button.clicked.connect(self.check_update)
         self.layout.addWidget(self.button)  # 正确添加按钮到布局
         self.setLayout(self.layout)  # 布局设置给窗口而非按钮
+    def message_true(self):
+        print("有可用更新")
+        self.reply = QMessageBox.question(NewWindow_Update(), "提示",
+             f"有可用更新{self.version1}.{self.version2}.{self.version3}.{self.version4}\n是否前往网页下载？",
+             QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        print(self.reply)
+        if self.reply == QMessageBox.Yes:
+            import webbrowser
+            webbrowser.open("https://whstu.us.kg/download/seewokiller/")
+    def message_false(self):
+        print("暂无更新")
+        self.msg_box = QMessageBox(QMessageBox.Information, "提示", "暂无可用更新。")
+        self.msg_box.exec_()
     def check_update(self):
         response = urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
         html = response.read()
@@ -412,24 +447,53 @@ class NewWindow_Update(QWidget):
             print("Error:<p>Not Found.")
         print(f"Version Check Website: {self.version1}.{self.version2}.{self.version3}.{self.version4}")
         print(f"Local Version: {localversion1}.{localversion2}.{localversion3}.{localversion4}")
-        if localversion1<=self.version1 and localversion2<=self.version2 and localversion3<=self.version3 and localversion4<=self.version4:
-            print("有可用更新")
-            self.reply=QMessageBox.question(NewWindow_Update(),"提示",f"有可用更新{self.version1}.{self.version2}.{self.version3}.{self.version4}\n是否前往网页下载？",QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
-            print(self.reply)
-            if self.reply==QMessageBox.Yes:
-                import webbrowser
-                webbrowser.open("https://whstu.us.kg/download/seewokiller/")
+        if localversion1<self.version1:
+            self.message_true()
+        elif localversion1==self.version1:
+            if localversion2<self.version2:
+                self.message_true()
+            elif localversion2==self.version2:
+                if localversion3<self.version3:
+                    self.message_true()
+                elif localversion3==self.version3:
+                    if localversion4<self.version4:
+                        self.message_true()
+                    else:
+                        self.message_false()
+                else:
+                    self.message_false()
+            else:
+                self.message_false()
         else:
-            print("暂无更新")
-            msg_box=QMessageBox(QMessageBox.Information,"提示","暂无可用更新。")
-            msg_box.exec_()
-localversion1,localversion2,localversion3,localversion4=2,-10,-8,-9
+            self.message_false()
+
+
 if __name__ == "__main__":
+    QhShiPeiBeiShu = {
+        "3840": 2,
+    }
+    # 获取屏幕分辨率（显示&物理）
+    QhXSwidth, QhXSheight, QhWLwidth, QhWLheight = QhGetScreenResolution()
+    if QhWLwidth > 1920:
+        # 是否启动适配比例
+        QhFd = int(QhWLwidth / QhXSwidth)  # 计算缩放比例
+        # 设置 QT_SCREEN_SCALE_FACTORS 环境变量
+        if QhFd == 1:
+            QhFd0 = QhShiPeiBeiShu[str(QhWLwidth)]
+            os.environ["QT_SCREEN_SCALE_FACTORS"] = "{}".format(str(QhFd0))
+        elif QhFd > 1:
+            os.environ["QT_SCREEN_SCALE_FACTORS"] = "{}".format(str(QhFd))
+        # QApplication.setHighDpiScaleFactorRoundingPolicy(
+        #     Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+        # QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+        # QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+        QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)  # 适应高 DPI 设备
+        QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     app = QApplication(sys.argv)
     #设置字体
     font = QFont()
-    font.setFamily("system")
-    font.setPointSize(20)
+    font.setFamily("微软雅黑")
+    font.setPointSize(10)
     app.setFont(font)
     #-------
     window = MainWindow()
