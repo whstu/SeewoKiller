@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from os import system
 from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtCore import Qt, QProcess
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtGui import QFont, QPixmap,QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
@@ -490,6 +490,8 @@ if __name__ == "__main__":
         QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)  # 适应高 DPI 设备
         QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     app = QApplication(sys.argv)
+    #设置图标
+    app.setWindowIcon(QIcon('SeewoKiller.ico'))
     #设置字体
     font = QFont()
     font.setFamily("微软雅黑")
