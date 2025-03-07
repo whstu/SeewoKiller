@@ -14,7 +14,7 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
-localversion1,localversion2,localversion3,localversion4=2,-10,-8,-8
+localversion1,localversion2,localversion3,localversion4=2,-10,-8,-7
 #QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 #QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -66,7 +66,7 @@ class SeewoKiller_run():
             system(".\\SeewoKiller.exe seewofreeze")
     class OldUI(threading.Thread):
         def run(self):
-            system(".\\SeewoKiller.exe -oldui")
+            system(".\\SeewoKiller.exe run -oldui")
     class Regedit():
         class NoTrayContextMenu_True(threading.Thread):
             def run(self):

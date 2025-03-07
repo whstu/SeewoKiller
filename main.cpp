@@ -176,7 +176,7 @@ void loop(int x, int y) {//19,16
 	gotoxy(x, y + 1);
 	SetColorAndBackground(7, 7);
 	cout << "  ";
-	SetColorAndBackground(7,0);
+	SetColorAndBackground(7, 0);
 	S(200);
 }
 void poweron(bool SkipCheckWinVer) {
@@ -421,7 +421,7 @@ void poweron(bool SkipCheckWinVer) {
 				LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//有权限的都可以打开
 				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
 				DWORD dwExitCode;
-				loop(19,16);
+				loop(19, 16);
 				if (fSuccess) {
 					closeapp = true;
 					return;
@@ -439,9 +439,9 @@ void poweron(bool SkipCheckWinVer) {
 	Windows 2000-5.0
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
-	gotoxy(15,14);
-	cout<<"                        ";
-	loop(19,16);
+	gotoxy(15, 14);
+	cout << "                        ";
+	loop(19, 16);
 	setfont(30);
 	return;
 }
@@ -677,7 +677,7 @@ struct GAME {
 			}
 		}
 		cout << "输入完成，正在取数...\n";
-		while(ans==0){
+		while (ans == 0) {
 			ans = rand() % (max - min);
 		}
 		ans = ans + min;
@@ -1285,7 +1285,6 @@ int main(int argc, char *argv[]) {
 	//启动参数
 	bool skipcheck = false;
 	if (argc > 1) {
-		bool NoAdmin = false;
 		string cmd[100];
 		for (int i = 0; i < argc; i++) {
 			cmd[i] = argv[i];
@@ -1295,14 +1294,34 @@ int main(int argc, char *argv[]) {
 			about();
 			return 0;
 		}
+		if (cmd[1] == "game") { //游戏
+			if (argc <= 2) {
+				cout << "参数缺失，程序自动退出\n关于game的使用方法\n";
+				cout << "-wzq五子棋\n-numberdamn数字炸弹\n";
+			}
+			if (cmd[2] == "-wzq") {
+				ShowWindow(hwnd, SW_MAXIMIZE);
+				game.wzq.wzqmain();
+			}
+			if (cmd[2] == "-numberdamn") {
+				ShowWindow(hwnd, SW_MAXIMIZE);
+				game.numberdamn();
+			}
+			return 0;
+		}
+		//需要admin
+		if (IsUserAnAdmin() == false) {
+			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
+			return 0;
+		}
 		if (cmd[1] == "run") { //运行
 			if (argc <= 2) {
-				cout << "参数缺失，程序自动退出\n";
+				cout << "参数缺失，程序自动退出\n关于run的使用方法\n";
+				cout << "-newui强制新UI\n-oldui强制旧UI\n";
 				return 0;
 			}
 			if (cmd[2] == "-skipcheck") {
 				skipcheck = true;
-				NoAdmin = true;
 			}
 			if (cmd[2] == "-oldui") {
 				string unfreezepath = executable_path + "\\SeewoKiller.exe run -skipcheck";
@@ -1327,27 +1346,8 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-		if (cmd[1] == "game") { //游戏
-			if (argc <= 2) {
-				cout << "参数缺失，程序自动退出\n";
-			}
-			if (cmd[2] == "-wzq") {
-				ShowWindow(hwnd, SW_MAXIMIZE);
-				game.wzq.wzqmain();
-			}
-			if (cmd[2] == "-numberdamn") {
-				ShowWindow(hwnd, SW_MAXIMIZE);
-				game.numberdamn();
-			}
-			return 0;
-		}
-		//需要admin
-		if (IsUserAnAdmin() == false and NoAdmin == false) {
-			cout << "命令行未取得管理员权限，程序无法运行。\n请使用管理员权限启动终端。";
-			return 0;
-		}
 		if (cmd[1] == "taskkill") {
-			while(true){
+			while (true) {
 				taskkill(true, false);
 			}
 		}
@@ -1385,7 +1385,8 @@ int main(int argc, char *argv[]) {
 		}
 		if (cmd[1] == "joke") { //恶搞
 			if (argc <= 2) {
-				cout << "参数缺失，程序自动退出\n";
+				cout << "参数缺失，程序自动退出\n关于joke的使用方法\n";
+				cout << "-killapp杀上课用软件\n";
 			}
 			if (cmd[2] == "-killapp") {
 				joke.kill();

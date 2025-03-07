@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星简易版"
-#define MyAppVersion "2.-10.-8.-8"
+#define MyAppVersion "2.-10.-8.-7"
 #define MyAppProductVersion "2.0.0.0"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.us.kg/"
@@ -32,7 +32,7 @@ LicenseFile=E:\devc++\DEV\SeewoKiller\!Licence.txt
 InfoBeforeFile=E:\devc++\DEV\SeewoKiller\!install.txt
 OutputDir=E:\devc++\DEV\SeewoKiller\installer
 OutputBaseFilename=setup-small
-SetupIconFile=E:\devc++\DEV\SeewoKiller\SeewoKiller.ico
+SetupIconFile=E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico
 Compression=lzma
 SolidCompression=yes
 
