@@ -14,7 +14,7 @@ from PyQt5.QtGui import QFont, QPixmap,QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
-localversion1,localversion2,localversion3,localversion4=2,-10,-8,-7
+localversion1,localversion2,localversion3,localversion4=2,-10,-8,-6
 #QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 #QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -55,6 +55,9 @@ class SeewoKiller_run():
     class Pingbao(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe pingbao")
+    class AI(threading.Thread):
+        def run(self):
+            system(".\\ai.exe")
     class Taskkill(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe taskkill")
@@ -130,13 +133,19 @@ class MainWindow(QMainWindow):
         self.setup_common_tab()
 
         # 列表项名称数组（所有和设置选项卡共用）
-        self.list_items_all = ["循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞","注册表"]
+        self.list_items_all = ["循环清任务", "一键卸载","晚自习制裁模式", "一键防屏保", "小游戏", "恶搞","注册表"]
+        self.list_items_more = ["冰点还原破解","AI"]
         self.list_items_settings = ["退出","检查更新","关于", "使用经典界面"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
-        self.tab_widget.addTab(self.tab_all, "所有")
+        self.tab_widget.addTab(self.tab_all, "核心功能")
         self.setup_all_tab()
+
+        #创建“更多”选项卡
+        self.tab_more=QWidget()
+        self.tab_widget.addTab(self.tab_more,"附加功能")
+        self.setup_more_tab()
 
         # 创建“设置”选项卡
         self.tab_settings = QWidget()
@@ -175,10 +184,25 @@ class MainWindow(QMainWindow):
                 item.setData(Qt.UserRole,"open_new_window_regedit")
             self.list_widget.addItem(item)
 
-        self.list_widget.itemClicked.connect(self.on_all_list_item_clicked)
+        self.list_widget.itemClicked.connect(self.on_list_item_clicked)
 
         layout.addWidget(self.list_widget)
         self.tab_all.setLayout(layout)
+
+    def setup_more_tab(self):
+        layout = QVBoxLayout()
+
+        # 创建列表并添加项（与“所有”选项卡相同，使用数组中的项名称）
+        self.more_list_widget = QListWidget()
+        self.more_list_widget.setSpacing(5)
+        for item_name in self.list_items_more:
+            item = QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑", 10))
+            # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
+            self.more_list_widget.addItem(item)
+        self.more_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.more_list_widget)
+        self.tab_more.setLayout(layout)
 
     def setup_settings_tab(self):
         layout = QVBoxLayout()
@@ -192,7 +216,7 @@ class MainWindow(QMainWindow):
             # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
             self.settings_list_widget.addItem(item)
 
-        self.settings_list_widget.itemClicked.connect(self.on_settings_list_item_clicked)
+        self.settings_list_widget.itemClicked.connect(self.on_list_item_clicked)
 
         layout.addWidget(self.settings_list_widget)
         self.tab_settings.setLayout(layout)
@@ -210,7 +234,7 @@ class MainWindow(QMainWindow):
             self.open_new_window_game()
         '''print("123", button_number)'''
 
-    def on_all_list_item_clicked(self, item):
+    def on_list_item_clicked(self, item):
         # 检查项文本或数据以确定是否打开新窗口
         if item.text() == "小游戏" or item.data(Qt.UserRole) == "open_new_window_game":
             self.open_new_window_game()
@@ -224,10 +248,13 @@ class MainWindow(QMainWindow):
             #system(".\\SeewoKiller.exe taskkill")
         if item.text() == "一键卸载":
             uninstall()
-        if item.text() == "冰点解冻":
+        if item.text() == "冰点还原破解":
             self.seewofreeze=SeewoKiller_run.SeewoFreeze()
             self.seewofreeze.start()
             #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
+        if item.text()=="AI":
+            self.ai=SeewoKiller_run.AI()
+            self.ai.start()
         if item.text() == "晚自习制裁模式":
             self.wanzixi=SeewoKiller_run.Wanzixi()
             self.wanzixi.start()
@@ -238,8 +265,6 @@ class MainWindow(QMainWindow):
             #system(".\\SeewoKiller.exe pingbao")
             #print("456", item.text().split(' ')[1])
             # 打印项文本（去掉前面的“项”字和编号后的空格）
-
-    def on_settings_list_item_clicked(self, item):
         if item.text()=="退出":
             sys.exit(app.exec_())
         if item.text()=="检查更新":
@@ -251,7 +276,6 @@ class MainWindow(QMainWindow):
         if item.text() == "使用经典界面":
             self.oldui=SeewoKiller_run.OldUI()
             self.oldui.start()
-            #system(".\\SeewoKiller.exe run -oldui")
 
     def open_new_window_game(self):
         self.new_window_game = NewWindow_game()
@@ -392,7 +416,7 @@ class NewWindow_About(QWidget):
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
         self.label2.setFont(QFont("微软雅黑",10))
-        self.label2.setText("SeewoKiller 2.0 Beta\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
+        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
         self.setLayout(layout)

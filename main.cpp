@@ -30,13 +30,15 @@ int dwMajorInt;
 int dwMinorInt;
 bool closeapp = false;
 
-int box = 1/*板块*/, boxn = 3/*板块总数*/;
+int box = 1/*板块*/, boxn = 4/*板块总数*/;
 struct Word {
-	string box[4] {"NULL", "常用", "所有", "设置"};
+	string box[5] {"NULL", "常用", "核心功能", "附加功能", "设置"};
 	int recentn = 3;
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏"};
 	int alln = 8;
-	string all[9] = {"NULL", "循环清任务", "一键卸载", "冰点解冻", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞", "注册表"};
+	string all[9] = {"NULL", "循环清任务", "一键卸载", "晚自习制裁模式", "一键防屏保", "小游戏", "恶搞", "注册表"};
+	int moren = 2;
+	string more[3] = {"NULL", "冰点还原破解", "AI"};
 	int settingn = 3;
 	string setting[5] = {"NULL", "退出", "关于", "使用新版界面"};
 	int gamen = 3;
@@ -1101,6 +1103,10 @@ struct Launcher {
 						break;
 					}
 					case 3: {
+						s = listname(true, true, word.more, word.moren);
+						break;
+					}
+					case 4: {
 						s = listname(true, false, word.setting, word.settingn);
 						break;
 					}
@@ -1114,29 +1120,17 @@ struct Launcher {
 				s = "-1";
 				continue;
 			}
-			if (s == "冰点解冻") {
+			if (s == "AI") {
+				setfont(20);
+				string aipath = executable_path + "\\ai.exe";
+				system(aipath.c_str());
+				system("pause");
+				setfont(30);
+				s = "-1";
+				continue;
+			}
+			if (s == "冰点还原破解") {
 				system("title 冰点还原");
-				bool back = false;
-				string password = "seewofreeze";
-				string input;
-				for (;;) {
-					cout << "\n请输入密码(输入0返回)：";
-					cin >> input;
-					if (input == password) {
-						break;
-					} else {
-						if (input == "0") {
-							back = true;
-							break;
-						} else {
-							cout << "密码错误";
-						}
-					}
-				}
-				if (back == true) {
-					s = "-1";
-					continue;
-				}
 				cout << "\n请先关闭冰点窗口后再继续操作希沃克星。\n";
 				string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 				STARTUPINFO si = { sizeof(si) };//0
