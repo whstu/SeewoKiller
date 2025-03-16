@@ -4,10 +4,10 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-RES      = SlytherinOS_private.res
+RES      = SeewoKiller_private.res
 OBJ      = main.o $(RES)
 LINKOBJ  = main.o $(RES)
-LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -static-libstdc++ -static-libgcc -s
+LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -s
 INCS     = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed"
 CXXINCS  = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/i686-w64-mingw32" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/backward"
 BIN      = SeewoKiller.exe
@@ -29,6 +29,6 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)  $(ENCODINGS) 
 
-SlytherinOS_private.res: SlytherinOS_private.rc 
-	$(WINDRES) -i SlytherinOS_private.rc --input-format=rc -o SlytherinOS_private.res -O coff 
+SeewoKiller_private.res: SeewoKiller_private.rc 
+	$(WINDRES) -i SeewoKiller_private.rc --input-format=rc -o SeewoKiller_private.res -O coff 
 

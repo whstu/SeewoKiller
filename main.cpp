@@ -1279,9 +1279,13 @@ int main(int argc, char *argv[]) {
 	//启动参数
 	bool skipcheck = false;
 	if (argc > 1) {
+		if(argc>100){
+			cout<<"数组越界！\n";
+			return 0;
+		}
 		string cmd[100];
-		for (int i = 0; i < argc; i++) {
-			cmd[i] = argv[i];
+		for (int i = 0; i < argc && i<100; i++) {
+			cmd[i] = string(argv[i]);
 		}
 		//不需要admin
 		if (cmd[1] == "about") {

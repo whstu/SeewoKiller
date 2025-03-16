@@ -10,23 +10,23 @@ A ICON "SeewoKiller.ico"
 // TO CHANGE VERSION INFORMATION, EDIT PROJECT OPTIONS...
 //
 1 VERSIONINFO
-FILEVERSION 2,-10,-8,-6
-PRODUCTVERSION 2,-10,-8,-6
+FILEVERSION 2,-10,-7,-10
+PRODUCTVERSION 2,-10,-7,-10
 FILETYPE VFT_APP
 {
   BLOCK "StringFileInfo"
   {
     BLOCK "080404E4"
     {
-      VALUE "CompanyName", "WHSTU Studio"
-      VALUE "FileVersion", "2.-10.-8.-6"
-      VALUE "FileDescription", "Ï£ÎÖ¿ËÐÇ"
+      VALUE "CompanyName", ""
+      VALUE "FileVersion", "2.-10.-7.-10"
+      VALUE "FileDescription", "Developed using the Dev-C++ IDE"
       VALUE "InternalName", ""
-      VALUE "LegalCopyright", "Copyright (C)2017-2024 WHSTU Studio"
-      VALUE "LegalTrademarks", "(R)WHSTU Studio"
+      VALUE "LegalCopyright", ""
+      VALUE "LegalTrademarks", ""
       VALUE "OriginalFilename", ""
-      VALUE "ProductName", "Seewo Killer"
-      VALUE "ProductVersion", "2.-10.-8.-6"
+      VALUE "ProductName", ""
+      VALUE "ProductVersion", "2.-10.-7.-10"
     }
   }
   BLOCK "VarFileInfo"
