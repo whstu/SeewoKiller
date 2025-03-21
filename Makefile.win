@@ -1,34 +1,37 @@
 # Project: SeewoKiller
-# Makefile created by Dev-C++ 6.3-beta2
+# Makefile created by Red Panda C++ 3.2.2958
 
-CPP      = g++.exe
-CC       = gcc.exe
-WINDRES  = windres.exe
+CXX      = "g++.exe"
+CC       = "gcc.exe"
+WINDRES  = "windres.exe"
+RM       = del /q /f
+CD       = cd /d
+LIBS     = "-Wl,--stack,12582912" "-s" "-static"
+INCS     = 
+CXXINCS  = 
+CXXFLAGS = $(CXXINCS) "-O2" "-pipe"
+CFLAGS   = $(INCS) "-O2" "-pipe"
+WINDRESFLAGS = 
 RES      = SeewoKiller_private.res
 OBJ      = main.o $(RES)
-LINKOBJ  = main.o $(RES)
-LIBS     = -L"D:/APPS/Dev-Cpp/MinGW32/lib" -L"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/lib" -s
-INCS     = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed"
-CXXINCS  = -I"D:/APPS/Dev-Cpp/MinGW32/include" -I"D:/APPS/Dev-Cpp/MinGW32/i686-w64-mingw32/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include" -I"D:/APPS/Dev-Cpp/MinGW32/lib/gcc/i686-w64-mingw32/10.2.0/include-fixed" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/i686-w64-mingw32" -I"D:/APPS/Dev-Cpp/MinGW32/include/c++/10.2.0/backward"
 BIN      = SeewoKiller.exe
-CXXFLAGS = $(CXXINCS) -O2
-ENCODINGS = -finput-charset=utf-8 -fexec-charset=gb2312
-CFLAGS   = $(INCS) -O2
-RM       = rm.exe -f
+LINKOBJ  = "main.o" "SeewoKiller_private.res"
+CLEANOBJ = "main.o" "SeewoKiller_private.res" "SeewoKiller.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
 all: all-before $(BIN) all-after
 
 clean: clean-custom
-	${RM} $(OBJ) $(BIN)
+	-$(RM) $(CLEANOBJ) >NUL 2>&1
 
-$(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+SeewoKiller.exe: $(OBJ)
+
+	$(CXX) $(LINKOBJ) -o "SeewoKiller.exe" $(LIBS)
 
 main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)  $(ENCODINGS) 
+	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS) 
 
 SeewoKiller_private.res: SeewoKiller_private.rc 
-	$(WINDRES) -i SeewoKiller_private.rc --input-format=rc -o SeewoKiller_private.res -O coff 
+	$(WINDRES) -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff $(WINDRESFLAGS) 
 

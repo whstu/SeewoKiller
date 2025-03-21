@@ -1,8 +1,12 @@
-[Editors]
-Order=0
-Focused=0
-[Editor_0]
-CursorCol=19
-CursorRow=1283
-TopLine=1273
-LeftChar=1
+[
+    {
+        "caretX": 29,
+        "caretY": 660,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
+        "order": 0,
+        "top": 24776
+    }
+]

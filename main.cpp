@@ -1,21 +1,22 @@
 #include <bits/stdc++.h>
 #include <windows.h>
-#include <iostream>
 #include <ctime>
 #include <conio.h>
 #include <string>
-//é‡å¯explorer.exe
+//ÖØÆôexplorer.exe
 #include <tlhelp32.h>
-//æ³¨å†Œè¡¨ä¿®æ”¹
+//×¢²á±íĞŞ¸Ä
 #include <tchar.h>
-//æ¸¸æˆ
+//ÓÎÏ·
 #define N 25
 #define Forij(x) for(int i=1;i<=x;i++)for(int j=1;j<=x;j++)
-//è·å–ç®¡ç†å‘˜æƒé™æ‰€éœ€
+//»ñÈ¡¹ÜÀíÔ±È¨ÏŞËùĞè
 #include <tchar.h>
 #include <shellapi.h>
-//ciné”™è¯¯å»é™¤
+//cin´íÎóÈ¥³ı
 #include <limits>
+//ÎÄ¼ş¿ØÖÆ
+#include <fstream>
 
 #define S(i) Sleep(i)
 #define cls system("cls");
@@ -29,30 +30,31 @@ string xwbbpath;
 int dwMajorInt;
 int dwMinorInt;
 bool closeapp = false;
+bool write_log_when_killapp=false;
 
-int box = 1/*æ¿å—*/, boxn = 4/*æ¿å—æ€»æ•°*/;
+int box = 1/*°å¿é*/, boxn = 4/*°å¿é×ÜÊı*/;
 struct Word {
-	string box[5] {"NULL", "å¸¸ç”¨", "æ ¸å¿ƒåŠŸèƒ½", "é™„åŠ åŠŸèƒ½", "è®¾ç½®"};
+	string box[5] {"NULL", "³£ÓÃ", "ºËĞÄ¹¦ÄÜ", "¸½¼Ó¹¦ÄÜ", "ÉèÖÃ"};
 	int recentn = 3;
-	string recent[4] = {"NULL", "æ™šè‡ªä¹ åˆ¶è£æ¨¡å¼", "ä¸€é”®é˜²å±ä¿", "å°æ¸¸æˆ"};
-	int alln = 8;
-	string all[9] = {"NULL", "å¾ªç¯æ¸…ä»»åŠ¡", "ä¸€é”®å¸è½½", "æ™šè‡ªä¹ åˆ¶è£æ¨¡å¼", "ä¸€é”®é˜²å±ä¿", "å°æ¸¸æˆ", "æ¶æ", "æ³¨å†Œè¡¨"};
+	string recent[4] = {"NULL", "Íí×ÔÏ°ÖÆ²ÃÄ£Ê½", "Ò»¼ü·ÀÆÁ±£", "Ğ¡ÓÎÏ·>>>"};
+	int alln = 7;
+	string all[8] = {"NULL", "Ñ­»·ÇåÈÎÎñ", "Ò»¼üĞ¶ÔØ", "Íí×ÔÏ°ÖÆ²ÃÄ£Ê½", "Ò»¼ü·ÀÆÁ±£", "Ğ¡ÓÎÏ·>>>", "¶ñ¸ã>>>", "×¢²á±í>>>"};
 	int moren = 2;
-	string more[3] = {"NULL", "å†°ç‚¹è¿˜åŸç ´è§£", "AI"};
-	int settingn = 3;
-	string setting[5] = {"NULL", "é€€å‡º", "å…³äº", "ä½¿ç”¨æ–°ç‰ˆç•Œé¢"};
+	string more[3] = {"NULL", "±ùµã»¹Ô­ÆÆ½â", "AI"};
+	int settingn = 4;
+	string setting[5] = {"NULL", "ÍË³ö", "Ê¹ÓÃĞÂ°æ½çÃæ", "Æô¶¯³õÑ§ÕßÒıµ¼", "¹ØÓÚ"};
 	int gamen = 3;
-	string game[4] = {"NULL", "è¿”å›", "æ•°å­—ç‚¸å¼¹", "äº”å­æ£‹"};
+	string game[4] = {"NULL", "·µ»Ø", "Êı×ÖÕ¨µ¯", "Îå×ÓÆå"};
 	int joken = 2;
-	string joke[3] = {"NULL", "è¿”å›", "æ€WPS+å¸Œæ²ƒç™½æ¿+å¸Œæ²ƒè§†é¢‘å±•å°"};
+	string joke[3] = {"NULL", "·µ»Ø", "É±WPS+Ï£ÎÖ°×°å+Ï£ÎÖÊÓÆµÕ¹Ì¨"};
 	int regn = 11;
-	string reg[12] = {"NULL", "è¿”å›", "ä¸€é”®ç¦ç”¨(æš‚ä¸å¯ç”¨)", "ä¸€é”®å¯ç”¨(æš‚ä¸å¯ç”¨)", "ç¦ç”¨ä»»åŠ¡æ èœå•", "å¯ç”¨ä»»åŠ¡æ èœå•", "ç¦ç”¨å¿«æ·é”®", "å¯ç”¨å¿«æ·é”®", "å¯ç”¨æ˜¾ç¤ºç™»å½•è¯¦ç»†ä¿¡æ¯", "ç¦ç”¨æ˜¾ç¤ºç™»å½•è¯¦ç»†ä¿¡æ¯", "ç™»å½•æ—¶æ˜¾ç¤ºæç¤º", "å–æ¶ˆç™»å½•æ—¶æ˜¾ç¤ºæç¤º"};
+	string reg[12] = {"NULL", "·µ»Ø", "Ò»¼ü½ûÓÃ(Ôİ²»¿ÉÓÃ)", "Ò»¼üÆôÓÃ(Ôİ²»¿ÉÓÃ)", "½ûÓÃÈÎÎñÀ¸²Ëµ¥", "ÆôÓÃÈÎÎñÀ¸²Ëµ¥", "½ûÓÃ¿ì½İ¼ü", "ÆôÓÃ¿ì½İ¼ü", "ÆôÓÃÏÔÊ¾µÇÂ¼ÏêÏ¸ĞÅÏ¢", "½ûÓÃÏÔÊ¾µÇÂ¼ÏêÏ¸ĞÅÏ¢", "µÇÂ¼Ê±ÏÔÊ¾ÌáÊ¾", "È¡ÏûµÇÂ¼Ê±ÏÔÊ¾ÌáÊ¾"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
-void SetColorAndBackground(int ForgC, int BackC) {//å•ä¸ªå­—çš„é¢œè‰²
-//1æ·±è“ï¼Œ2æ·±ç»¿ï¼Œ3æ·±é’ï¼Œ4æ·±çº¢ï¼Œ5æ·±ç´«ï¼Œ6æ·±é»„ï¼Œ7ç°ç™½ï¼ˆé»˜è®¤ï¼‰ï¼Œ8æ·±ç°
-//9æµ…è“ï¼Œ10æµ…ç»¿ï¼Œ11æµ…é’ï¼Œ12æµ…çº¢ï¼Œ13æµ…ç´«ï¼Œ14æµ…é»„ï¼Œ15ç™½è‰²ï¼Œ0é»‘è‰²
+void SetColorAndBackground(int ForgC, int BackC) {//µ¥¸ö×ÖµÄÑÕÉ«
+//1ÉîÀ¶£¬2ÉîÂÌ£¬3ÉîÇà£¬4Éîºì£¬5Éî×Ï£¬6Éî»Æ£¬7»Ò°×£¨Ä¬ÈÏ£©£¬8Éî»Ò
+//9Ç³À¶£¬10Ç³ÂÌ£¬11Ç³Çà£¬12Ç³ºì£¬13Ç³×Ï£¬14Ç³»Æ£¬15°×É«£¬0ºÚÉ«
 	WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
 }
@@ -62,27 +64,33 @@ void gotoxy(long long x, long long y) {
 	pos.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
-void setfont(int size) {//å­—ä½“ã€å¤§å°ã€ç²—ç»†
+void setfont(int size) {//×ÖÌå¡¢´óĞ¡¡¢´ÖÏ¸
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof cfi;
 	cfi.nFont = 0;
 	cfi.dwFontSize.X = 0;
-	cfi.dwFontSize.Y = size;//è®¾ç½®å­—ä½“å¤§å°
+	cfi.dwFontSize.Y = size;//ÉèÖÃ×ÖÌå´óĞ¡
 	cfi.FontFamily = FF_DONTCARE;
-	cfi.FontWeight = FW_BOLD;//å­—ä½“ç²—ç»† FW_BOLD,åŸå§‹ä¸ºFW_NORMAL
-	wcscpy_s(cfi.FaceName, L"System");//è®¾ç½®å­—ä½“ï¼Œå¿…é¡»æ˜¯æ§åˆ¶å°å·²æœ‰çš„
+	cfi.FontWeight = FW_BOLD;//×ÖÌå´ÖÏ¸ FW_BOLD,Ô­Ê¼ÎªFW_NORMAL
+	wcscpy_s(cfi.FaceName, L"System");//ÉèÖÃ×ÖÌå£¬±ØĞëÊÇ¿ØÖÆÌ¨ÒÑÓĞµÄ
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_FONT_INFO consoleCurrentFont;
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
 
-/*æ³¨å†Œè¡¨*/
+//¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+bool fileExist(const string& filename) {
+	ifstream file(filename);
+	return file.good();
+}
+
+/*×¢²á±í*/
 #define CHECK_ERROR(func) \
-	if (ERROR_SUCCESS != (func)) { \
-		std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
-		return false; \
-	}
+if (ERROR_SUCCESS != (func)) { \
+std::cerr << "Error in " << __FUNCTION__ << " at line " << __LINE__ << " with error code " << GetLastError() << std::endl; \
+return false; \
+}
 bool regedit(string root, string regpath, const char* valueName, string form, const char* Value) {
 	HKEY hKey = NULL;
 	LONG result;
@@ -128,17 +136,17 @@ bool regedit(string root, string regpath, const char* valueName, string form, co
 	RegCloseKey(hKey);
 	return true;
 }
-/*é‡å¯explorer.exe*/
+/*ÖØÆôexplorer.exe*/
 void restartexp() {
 	system("TASKKILL /F /IM explorer.exe");
-	cout << "æ€è¿›ç¨‹æˆåŠŸï¼Œ5ç§’åå°è¯•é‡å¯\n";
+	cout << "É±½ø³Ì³É¹¦£¬5Ãëºó³¢ÊÔÖØÆô\n";
 	Sleep(5000);
 	system("start C:\\Windows\\explorer.exe");
-	cout << "æ¢å¤ä¸­\n";
+	cout << "»Ö¸´ÖĞ\n";
 	Sleep(2000);
 	system("start C:\\Windows\\explorer.exe");
 }
-/*å±è”½å…³é—­æŒ‰é’®*/
+/*ÆÁ±Î¹Ø±Õ°´Å¥*/
 void connot_close_button() {
 	HMENU hmenu = GetSystemMenu(hwnd, false);
 	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
@@ -146,7 +154,7 @@ void connot_close_button() {
 	style &= ~(WS_MINIMIZEBOX);
 	SetWindowLong(hwnd, GWL_STYLE, style);
 	SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-	ShowWindow(hwnd, SW_MAXIMIZE);//æœ€å¤§åŒ–
+	ShowWindow(hwnd, SW_MAXIMIZE);//×î´ó»¯
 	DestroyMenu(hmenu);
 	ReleaseDC(hwnd, NULL);
 }
@@ -181,16 +189,64 @@ void loop(int x, int y) {//19,16
 	SetColorAndBackground(7, 0);
 	S(200);
 }
+void quickstart() {
+	int step = 1;
+	cls
+	while (step <= 4) {
+		cls
+		gotoxy(0, 6);
+		cout << "\n\n\nÕâÊÇ³õÑ§ÕßÒıµ¼³ÌĞò¡£°´a·µ»Ø£¬°´d¼ÌĞø£¬°´sÌø¹ıËùÓĞ\n\n";
+		cout << "µÚ" << step << "²½£¬¹²4²½\n\n";
+		switch (step) {
+			case 1: {
+				cout << "°´wasd¿ØÖÆÉÏÏÂ×óÓÒ";
+				break;
+			}
+			case 2: {
+				cout << "°´¿Õ¸ñ¼üÈ·¶¨";
+				break;
+			}
+			case 3: {
+				cout << "´øÓĞ\">>>\"µÄÑ¡Ïî°üº¬×ÓÏîÄ¿£¬¿ÉÒÔ°´¿Õ¸ñ¼ü´ò¿ª";
+				break;
+			}
+			case 4: {
+				cout << "ÄãÒÑ¾­Íê³ÉÁË³õÑ§ÕßÒıµ¼³ÌĞò¡£»¶Ó­Ê¹ÓÃÏ£ÎÖ¿ËĞÇ£¡\n±¾Òıµ¼³ÌĞò½«»á±£ÁôÔÚ¡°ÉèÖÃ¡±°å¿éÖĞ";
+				break;
+			}
+			default:
+				return;
+		}
+		char ch = getch();
+		for (;; ch = getch()) {
+			if (ch == 'a') {
+				if (step > 1) {
+					step--;
+					break;
+				}
+			} else if (ch == 'd') {
+				step++;
+				break;
+			} else if (ch == 's') {
+				if (MessageBox(NULL, _T("ÄãÈ·ÊµÒªÌø¹ıÂğ£¿\n±¾Òıµ¼³ÌĞò½«»á±£ÁôÔÚÉèÖÃ°å¿éÖĞ"), _T("¼¦½Ğ"), MB_YESNO) == IDYES) {
+					cls
+					return;
+				}
+			}
+		}
+	}
+	cls
+}
 void poweron(bool SkipCheckWinVer) {
-	//1æ·±è“ï¼Œ2æ·±ç»¿ï¼Œ3æ·±é’ï¼Œ4æ·±çº¢ï¼Œ5æ·±ç´«ï¼Œ6æ·±é»„ï¼Œ7ç°ç™½ï¼ˆé»˜è®¤ï¼‰ï¼Œ8æ·±ç°
-	//9æµ…è“ï¼Œ10æµ…ç»¿ï¼Œ11æµ…é’ï¼Œ12æµ…çº¢ï¼Œ13æµ…ç´«ï¼Œ14æµ…é»„ï¼Œ15ç™½è‰²ï¼Œ0é»‘è‰²
+	//1ÉîÀ¶£¬2ÉîÂÌ£¬3ÉîÇà£¬4Éîºì£¬5Éî×Ï£¬6Éî»Æ£¬7»Ò°×£¨Ä¬ÈÏ£©£¬8Éî»Ò
+	//9Ç³À¶£¬10Ç³ÂÌ£¬11Ç³Çà£¬12Ç³ºì£¬13Ç³×Ï£¬14Ç³»Æ£¬15°×É«£¬0ºÚÉ«
 	connot_close_button();
 	setfont(30);
 	S(500);
 	cout << "\n\n\n\n";
 	S(10);
 	cout << "\n";
-//ç¬¬2è¡Œ
+//µÚ2ĞĞ
 	for (int i = 0; i < 3; i++) {//W-1
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -224,7 +280,7 @@ void poweron(bool SkipCheckWinVer) {
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//ç¬¬3,4è¡Œ
+//µÚ3,4ĞĞ
 	for (int a = 0; a < 2; a++) {
 		for (int i = 0; i < 3; i++) {//W-2
 			SetColorAndBackground(0, 0);
@@ -260,7 +316,7 @@ void poweron(bool SkipCheckWinVer) {
 		S(10);
 		cout << "\n";
 	}
-//ç¬¬5è¡Œ
+//µÚ5ĞĞ
 	for (int i = 0; i < 3; i++) {//W-4
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -290,7 +346,7 @@ void poweron(bool SkipCheckWinVer) {
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//ç¬¬1è¡Œ
+//µÚ1ĞĞ
 	for (int i = 0; i < 3; i++) {//W-5
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -324,7 +380,7 @@ void poweron(bool SkipCheckWinVer) {
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//ç¬¬2è¡Œ
+//µÚ2ĞĞ
 	for (int i = 0; i < 3; i++) {//W-6
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -358,7 +414,7 @@ void poweron(bool SkipCheckWinVer) {
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//ç¬¬3è¡Œ
+//µÚ3ĞĞ
 	SetColorAndBackground(0, 0);
 	cout << "     ";
 	SetColorAndBackground(0, 13);
@@ -400,35 +456,35 @@ void poweron(bool SkipCheckWinVer) {
 	gotoxy(0, 0);
 	S(1000);
 	gotoxy(16, 14);
-	cout << "æ­£åœ¨éªŒè¯ç³»ç»Ÿç‰ˆæœ¬";
+	cout << "ÕıÔÚÑéÖ¤ÏµÍ³°æ±¾";
 	loop(19, 16);
-	//æ£€æµ‹Windowsç‰ˆæœ¬
+	//¼ì²âWindows°æ±¾
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
-	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//åŠ è½½DLL
-	NTPROC GetNtVersionNumbers = (NTPROC)GetProcAddress(hinst, "RtlGetNtVersionNumbers");//è·å–å‡½æ•°åœ°å€
+	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//¼ÓÔØDLL
+	NTPROC GetNtVersionNumbers = (NTPROC)GetProcAddress(hinst, "RtlGetNtVersionNumbers");//»ñÈ¡º¯ÊıµØÖ·
 	DWORD dwMajor, dwMinor, dwBuildNumber;
 	GetNtVersionNumbers(&dwMajor, &dwMinor, &dwBuildNumber);
 	gotoxy(15, 14);
-	printf("Windowsç‰ˆæœ¬: %d.%d", dwMajor, dwMinor);
+	printf("Windows°æ±¾: %d.%d", dwMajor, dwMinor);
 	cout << "      ";
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
 	if (SkipCheckWinVer == false) {
 		if (version >= 6.1) {
-			if (MessageBox(NULL, _T("æ£€æµ‹åˆ°ä½ çš„ç³»ç»Ÿä¸ºWindows 7+ï¼Œ\næ˜¯å¦ä½¿ç”¨å…¨æ–°UIï¼Ÿ"), _T("æç¤º"), MB_OKCANCEL) == 1) {
+			if (MessageBox(NULL, _T("¼ì²âµ½ÄãµÄÏµÍ³ÎªWindows 7+£¬\nÊÇ·ñÊ¹ÓÃÈ«ĞÂUI£¿"), _T("ÌáÊ¾"), MB_OKCANCEL) == 1) {
 				string guipath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
+				LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//ÓĞÈ¨ÏŞµÄ¶¼¿ÉÒÔ´ò¿ª
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//²ÎÊıÒâÒå
 				DWORD dwExitCode;
 				loop(19, 16);
 				if (fSuccess) {
 					closeapp = true;
 					return;
 				}
-			}//è¿”å›1ç¡®å®šï¼Œ2å–æ¶ˆ
+			}//·µ»Ø1È·¶¨£¬2È¡Ïû
 		}
 	}
 	/*Windows 10-10.0
@@ -436,20 +492,56 @@ void poweron(bool SkipCheckWinVer) {
 	Windows 8-6.2
 	Windows 7-6.1
 	Windows Vista-6.0
-	Windows XP 64ä½-5.2
+	Windows XP 64Î»-5.2
 	Windows XP-5.1
 	Windows 2000-5.0
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
 	gotoxy(15, 14);
-	cout << "                        ";
+	cout << "ÕıÔÚÔØÈëÅäÖÃÎÄ¼ş                        ";
 	loop(19, 16);
+	CreateDirectory("./settings", NULL);
+	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
+		cls
+		loop(19, 16);
+		cls
+		gotoxy(15, 14);
+		cout << "ÄãºÃ";
+		S(2000);
+		gotoxy(15, 14);
+		cout << "»¶Ó­Ê¹ÓÃÏ£ÎÖ¿ËĞÇ";
+		S(3000);
+		quickstart();
+		ofstream file(".\\settings\\already-quick-started.seewokiller");
+		file.close();
+	}
+	if(fileExist(".\\settings\\write-log-when-killapp.seewokiller")==false){
+		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+		file<<"false";
+		file.close();
+		write_log_when_killapp=false;
+	}else{
+		ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
+		string value;
+		getline(file,value);
+		file.close();
+		if(value=="true"){
+			write_log_when_killapp=true;
+		}else if(value=="false"){
+			write_log_when_killapp=false;
+		}else{
+			ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+			file<<"false";
+			file.close();
+			write_log_when_killapp=false;
+		}
+	}
 	setfont(30);
 	return;
 }
 
 void about() {
-	//åˆå§‹åŒ–
+	//³õÊ¼»¯
 	gotoxy(0, 3);
 	SetColorAndBackground(7, 0);
 	for (int i = 0; i < 15; i++) {
@@ -476,18 +568,18 @@ void about() {
 	SetColorAndBackground(7, 0);
 	S(500);
 	cout << "\n";
-	//å†™å…¥ç‰ˆæœ¬å·
+	//Ğ´Èë°æ±¾ºÅ
 	/*CreateDirectory("./info", NULL );
 	ofstream info("./info/info.txt");
 	info << "Seewo Killer 0.3.0.2" << endl;
-	info << "ç‰ˆæœ¬ä»£å·000300002" << endl;
-	info << "æ³¨æ„ï¼šè¯·ä¸è¦åœ¨æ­¤å¤„ç•™ä¸‹é‡è¦ä¿¡æ¯ï¼Œå› ä¸ºæ­¤æ–‡ä»¶ä¼šè¢«SlytherinOSè¦†ç›–ï¼";
+	info << "°æ±¾´úºÅ000300002" << endl;
+	info << "×¢Òâ£ºÇë²»ÒªÔÚ´Ë´¦ÁôÏÂÖØÒªĞÅÏ¢£¬ÒòÎª´ËÎÄ¼ş»á±»SlytherinOS¸²¸Ç£¡";
 	info.close();*/
 	cout << "\nSeewo Killer 2.0 Beta\n";
-	cout << "\nç‰ˆæœ¬ä»£å·  éƒ‘å­è°¦\n";
-	cout << "\nå¸Œæ²ƒå…‹æ˜Ÿ\n";
-	cout << "\nå“ç„¶ç¬¬ä¸‰å¸å›½https://whstu.us.kg/æä¾›æŠ€æœ¯æ”¯æŒ\n";
-	cout << "æŒ‰b+å›è½¦è¿”å›\n";
+	cout << "\n°æ±¾´úºÅ  Ö£×ÓÇ«\n";
+	cout << "\nÏ£ÎÖ¿ËĞÇ\n";
+	cout << "\n×¿È»µÚÈıµÛ¹úhttps://whstu.us.kg/Ìá¹©¼¼ÊõÖ§³Ö\n";
+	cout << "°´b+»Ø³µ·µ»Ø\n";
 	string ans;
 	while (true) {
 		cin >> ans;
@@ -525,50 +617,57 @@ BOOL IsUserAnAdmin() {
 	if (AllocateAndInitializeSid(&sia, 2,
 	                             SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
 	                             0, 0, 0, 0, 0, 0, &pSid)) {
-		// æ£€æŸ¥å½“å‰çº¿ç¨‹æˆ–è¿›ç¨‹çš„è®¿é—®ä»¤ç‰Œæ˜¯å¦åŒ…å«è¯¥SID
+		// ¼ì²éµ±Ç°Ïß³Ì»ò½ø³ÌµÄ·ÃÎÊÁîÅÆÊÇ·ñ°üº¬¸ÃSID
 		if (!CheckTokenMembership(NULL, pSid, &bResult)) {
-			// å¦‚æœCheckTokenMembershipå¤±è´¥ï¼Œåˆ™å¯èƒ½ä¸æ˜¯ç®¡ç†å‘˜ï¼Œä½†ä¹Ÿå¯èƒ½å› ä¸ºå…¶ä»–åŸå› 
+			// Èç¹ûCheckTokenMembershipÊ§°Ü£¬Ôò¿ÉÄÜ²»ÊÇ¹ÜÀíÔ±£¬µ«Ò²¿ÉÄÜÒòÎªÆäËûÔ­Òò
 			bResult = FALSE;
 		}
-		// é‡Šæ”¾SID
+		// ÊÍ·ÅSID
 		FreeSid(pSid);
 	} else {
-		// å¦‚æœSIDåˆ†é…å¤±è´¥ï¼Œåˆ™é»˜è®¤ä¸æ˜¯ç®¡ç†å‘˜
+		// Èç¹ûSID·ÖÅäÊ§°Ü£¬ÔòÄ¬ÈÏ²»ÊÇ¹ÜÀíÔ±
 		bResult = FALSE;
 	}
 	return bResult;
 }
 bool getadmin() {
-	// è·å–å½“å‰ç¨‹åºçš„å®Œæ•´è·¯å¾„
+	// »ñÈ¡µ±Ç°³ÌĞòµÄÍêÕûÂ·¾¶
 	TCHAR szPath[MAX_PATH];
 	GetModuleFileName(NULL, szPath, MAX_PATH);
 
-	// æ£€æŸ¥å½“å‰ç”¨æˆ·æ˜¯å¦æ˜¯ç®¡ç†å‘˜
+	// ¼ì²éµ±Ç°ÓÃ»§ÊÇ·ñÊÇ¹ÜÀíÔ±
 	if (!IsUserAnAdmin()) {
-		// å¦‚æœä¸æ˜¯ç®¡ç†å‘˜ï¼Œåˆ™ä»¥ç®¡ç†å‘˜æƒé™è¿è¡Œå½“å‰ç¨‹åº
+		// Èç¹û²»ÊÇ¹ÜÀíÔ±£¬ÔòÒÔ¹ÜÀíÔ±È¨ÏŞÔËĞĞµ±Ç°³ÌĞò
 		SHELLEXECUTEINFO sei = {0};
 		sei.cbSize = sizeof(SHELLEXECUTEINFO);
 		sei.lpFile = szPath;
 		sei.nShow = SW_SHOWNORMAL;
-		sei.lpVerb = _T("runas"); // æŒ‡å®šæ“ä½œä¸ºä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œ
+		sei.lpVerb = _T("runas"); // Ö¸¶¨²Ù×÷ÎªÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ
 
 		ShellExecuteEx(&sei);
 		return false;
 	} else {
-		// å¦‚æœå·²ç»æ˜¯ç®¡ç†å‘˜ï¼Œåˆ™æ­£å¸¸ç»§ç»­
-		cout << "å·²è·å¾—ç®¡ç†å‘˜æƒé™\n";
+		// Èç¹ûÒÑ¾­ÊÇ¹ÜÀíÔ±£¬ÔòÕı³£¼ÌĞø
+		cout << "ÒÑ»ñµÃ¹ÜÀíÔ±È¨ÏŞ\n";
 		return true;
 	}
 }
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
 	while (true) {
+		if(write_log_when_killapp==true){
+			ofstream file(".\\log.log",ios::app);
+			time_t now=time(nullptr);
+			tm* localTime=localtime(&now);
+			file<<localTime->tm_hour<<":"+localTime->tm_min<<":"<<localTime->tm_sec<<endl;
+			file.close();
+		}
 		system("taskkill /f /t /im taskmgr.exe");
-		cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šè½»å½•æ’­\n";
+		cout << "ÕıÔÚ½áÊø½ø³Ì£ºÇáÂ¼²¥\n";
 		cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 		system("TASKKILL /F /IM EasiRecorder.exe");
 		if (KillSeewoService == true) {
-			cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šå¸Œæ²ƒç®¡å®¶\n";
+			cout << "ÕıÔÚ½áÊø½ø³Ì£ºÏ£ÎÖ¹Ü¼Ò\n";
 			cout << "TASKKILL /F /IM SeewoServiceAssistant.exe\n";
 			system("TASKKILL /F /IM SeewoServiceAssistant.exe");
 			cout << "TASKKILL /F /IM SeewoAbility.exe\n";
@@ -577,17 +676,17 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			system("TASKKILL /F /IM SeewoCore.exe");
 		}
 		if (Wanzixi == true) {
-			cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šè®¾ç½®\n";
+			cout << "ÕıÔÚ½áÊø½ø³Ì£ºÉèÖÃ\n";
 			cout << "TASKKILL /F /IM SystemSettings.exe\n";
 			system("TASKKILL /F /IM SystemSettings.exe");
-			cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šæ§åˆ¶é¢æ¿\n";
-			cout << "TASKKILL /F /FI \"WINDOWTITLE eq ç½‘ç»œè¿æ¥\"\n";
-			system("taskkill /f /fi \"WINDOWTITLE eq ç½‘ç»œè¿æ¥\"");
-			system("taskkill /f /fi \"WINDOWTITLE eq æ§åˆ¶é¢æ¿\\ç½‘ç»œå’Œ Internet\\ç½‘ç»œè¿æ¥\"");
-			cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šEdge\n";
+			cout << "ÕıÔÚ½áÊø½ø³Ì£º¿ØÖÆÃæ°å\n";
+			cout << "TASKKILL /F /FI \"WINDOWTITLE eq ÍøÂçÁ¬½Ó\"\n";
+			system("taskkill /f /fi \"WINDOWTITLE eq ÍøÂçÁ¬½Ó\"");
+			system("taskkill /f /fi \"WINDOWTITLE eq ¿ØÖÆÃæ°å\\ÍøÂçºÍ Internet\\ÍøÂçÁ¬½Ó\"");
+			cout << "ÕıÔÚ½áÊø½ø³Ì£ºEdge\n";
 			cout << "TASKKILL /F /IM msedge.exe\n";
 			system("TASKKILL /F /IM msedge.exe");
-			cout << "æ­£åœ¨ç»“æŸè¿›ç¨‹ï¼šIE\n";
+			cout << "ÕıÔÚ½áÊø½ø³Ì£ºIE\n";
 			cout << "TASKKILL /F /IM iexplore.exe\n";
 			system("TASKKILL /F /IM iexplore.exe");
 		}
@@ -596,22 +695,22 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 
 void uninstall() {
 	cls
-	cout << "æ­£åœ¨å¸è½½è½»å½•æ’­\n";
+	cout << "ÕıÔÚĞ¶ÔØÇáÂ¼²¥\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
-	cout << "æ­£åœ¨å¸è½½Easicare\n";
+	cout << "ÕıÔÚĞ¶ÔØEasicare\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"");
-	cout << "æ­£åœ¨å¸è½½EasiAgent\n";
+	cout << "ÕıÔÚĞ¶ÔØEasiAgent\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
-	cout << "æ­£åœ¨å¸è½½å¸Œæ²ƒæ™ºèƒ½ç¬”åŠ©æ‰‹\n";
+	cout << "ÕıÔÚĞ¶ÔØÏ£ÎÖÖÇÄÜ±ÊÖúÊÖ\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"");
 	return;
 }
 
 void pingbaoservice() {
 	SetColorAndBackground(4, 6);
-	cout << "è­¦å‘Šï¼šè¯·å‹¿ç”¨äºæ­£å¸¸ä¸Šè¯¾ï¼\n";
+	cout << "¾¯¸æ£ºÇëÎğÓÃÓÚÕı³£ÉÏ¿Î£¡\n";
 	SetColorAndBackground(0, 7);
-	cout << "æ¯100ç§’ç‚¹å‡»å±å¹•ä¸€æ¬¡ï¼Œè¯·å°†é¼ æ ‡ç§»åŠ¨è‡³åˆé€‚ä½ç½®\n";
+	cout << "Ã¿100Ãëµã»÷ÆÁÄ»Ò»´Î£¬Çë½«Êó±êÒÆ¶¯ÖÁºÏÊÊÎ»ÖÃ\n";
 	system("pause");
 	long long i = 1;
 	while (true) {
@@ -637,11 +736,11 @@ struct GAME {
 	void numberdamn() {
 		cls
 		setfont(300);
-		cout << "æ•°";
+		cout << "Êı";
 		S(100);
-		cout << "å­—";
+		cout << "×Ö";
 		S(100);
-		cout << "ç‚¸";
+		cout << "Õ¨";
 		S(150);
 		gotoxy(0, 0);
 		cls
@@ -653,43 +752,43 @@ struct GAME {
 		S(700);
 		cls
 		setfont(30);
-		system("title æ•°å­—ç‚¸damn");
+		system("title Êı×ÖÕ¨damn");
 		long long min = 0, max = 100, ans = 0, input = 0;
-		cout << "è¯·è¾“å…¥èŒƒå›´\n";
+		cout << "ÇëÊäÈë·¶Î§\n";
 		while (true) {
-			cout << "æœ€å¤§:";
+			cout << "×î´ó:";
 			cin >> max;
 			if (max < 2 or cin.fail()) {
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "æœ€å¤§å€¼å¿…é¡»å¤§äºæˆ–ç­‰äº2,æˆ–è¾“å…¥é”™è¯¯\n";
+				cout << "×î´óÖµ±ØĞë´óÓÚ»òµÈÓÚ2,»òÊäÈë´íÎó\n";
 			} else {
 				break;
 			}
 		}
 		while (true) {
-			cout << "æœ€å°:";
+			cout << "×îĞ¡:";
 			cin >> min;
 			if (min < 0 or min >= max - 1 or cin.fail()) {
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "æœ€å°å€¼å¿…é¡»å¤§äºæˆ–ç­‰äº0,ä¸”æœ€å°å€¼å¿…é¡»å°äºæœ€å¤§å€¼-1,æˆ–è¾“å…¥é”™è¯¯\n";
+				cout << "×îĞ¡Öµ±ØĞë´óÓÚ»òµÈÓÚ0,ÇÒ×îĞ¡Öµ±ØĞëĞ¡ÓÚ×î´óÖµ-1,»òÊäÈë´íÎó\n";
 			} else {
 				break;
 			}
 		}
-		cout << "è¾“å…¥å®Œæˆï¼Œæ­£åœ¨å–æ•°...\n";
+		cout << "ÊäÈëÍê³É£¬ÕıÔÚÈ¡Êı...\n";
 		while (ans == 0) {
 			ans = rand() % (max - min);
 		}
 		ans = ans + min;
 		S(500);
-		cout << "å–æ•°å®Œæˆï¼Œå¼€å§‹æ¸¸æˆï¼\n";
+		cout << "È¡ÊıÍê³É£¬¿ªÊ¼ÓÎÏ·£¡\n";
 		S(500);
 		cls
 		while (true) {
 			if (max - min == 1) {
-				cout << "ç¨‹åºé”™è¯¯ï¼Œè¯·é‡è¯•\n";
+				cout << "³ÌĞò´íÎó£¬ÇëÖØÊÔ\n";
 				cout << min << "~" << max << "\n";
 				break;
 			}
@@ -697,20 +796,20 @@ struct GAME {
 				SetColorAndBackground(6, 4);
 				cout << "DAMN!!!!!";
 				SetColorAndBackground(0, 7);
-				cout << "\nä¸‹ä¸€ä¸ªäººè¾“äº†ï¼\nç‚¸å¼¹æ˜¯:" << ans << "\n";
+				cout << "\nÏÂÒ»¸öÈËÊäÁË£¡\nÕ¨µ¯ÊÇ:" << ans << "\n";
 				break;
 			}
 			cout << min << "~" << max << "\n";
 			if (max - min == 3) {
 				SetColorAndBackground(6, 4);
-				cout << "äºŒé€‰ä¸€!!!!!";
+				cout << "¶şÑ¡Ò»!!!!!";
 				SetColorAndBackground(7, 0);
 			}
 			cin >> input;
-			while (input <= min or input >= max or cin.fail()/*cinæ•°å­—é”™è¯¯*/) {
-				cout << "è¾“å…¥é”™è¯¯\n";
-				cin.clear();//æ¸…é™¤é”™è¯¯æ•°æ®
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');//ä¸¢å¼ƒé”™è¯¯è¾“å…¥
+			while (input <= min or input >= max or cin.fail()/*cinÊı×Ö´íÎó*/) {
+				cout << "ÊäÈë´íÎó\n";
+				cin.clear();//Çå³ı´íÎóÊı¾İ
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');//¶ªÆú´íÎóÊäÈë
 				cout << min << "~" << max << "\n";
 				cin >> input;
 			}
@@ -718,9 +817,9 @@ struct GAME {
 				SetColorAndBackground(6, 4);
 				cout << "DAMN!!!!!";
 				SetColorAndBackground(0, 7);
-				cout << "\nä½ è¾“äº†ï¼\nç‚¸å¼¹æ˜¯:" << ans << "\n";
+				cout << "\nÄãÊäÁË£¡\nÕ¨µ¯ÊÇ:" << ans << "\n";
 				if (max - ans == ans - min) {
-					cout << "ä¸­ä½æ•°å°ä¸‘ï¼";
+					cout << "ÖĞÎ»ÊıĞ¡³ó£¡";
 				}
 				break;
 			} else {
@@ -745,7 +844,7 @@ struct GAME {
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), a);
 			}
 			LL fx[4][2] = {{1, 1}, {1, 0}, {0, 1}, {1, -1}};
-			string C[20] = {"â—", "â—‹", "+", "=", "|", "|", "|", "|", "|", "?"};
+			string C[20] = {"¡ñ", "¡ğ", "+", "=", "|", "|", "|", "|", "|", "?"};
 			LL m[50][50], nx, ny;
 			void reset() {
 				system("cls");
@@ -896,7 +995,7 @@ struct GAME {
 			if (GG == 0) printf("White wins!");
 			if (GG == 1) printf("Black wins!");
 			gotoxy(5, N + 4);
-			printf("æŒ‰ä»»æ„é”®ç»§ç»­");
+			printf("°´ÈÎÒâ¼ü¼ÌĞø");
 			getch();
 			return;
 		}
@@ -915,7 +1014,7 @@ struct GAME {
 			if (GG == 0) printf("White wins!");
 			if (GG == 1) printf("Black wins!");
 			gotoxy(5, N + 4);
-			printf("æŒ‰ä»»æ„é”®ç»§ç»­");
+			printf("°´ÈÎÒâ¼ü¼ÌĞø");
 			getch();
 			return;
 		}
@@ -938,32 +1037,32 @@ struct GAME {
 			if (GG == 0) printf("White wins!");
 			if (GG == 1) printf("Black wins!");
 			gotoxy(5, N + 4);
-			printf("æŒ‰ä»»æ„é”®ç»§ç»­");
+			printf("°´ÈÎÒâ¼ü¼ÌĞø");
 			getch();
 			return;
 		}
 		void wzqmain() {
-			cout << "æŒ‰1ä¸AIå¯¹æˆ˜  æŒ‰2åŒäººå¯¹æˆ˜  æŒ‰3è§‚çœ‹AIå¯¹æˆ˜\n";
+			cout << "°´1ÓëAI¶ÔÕ½  °´2Ë«ÈË¶ÔÕ½  °´3¹Û¿´AI¶ÔÕ½\n";
 			char ch = getch();
 			for (;; ch = getch()) {
 				if (ch == '1') {
-					cout << "ä½ é€‰æ‹©äº†ä¸AIå†³æ–—ï¼ï¼ï¼\n";
+					cout << "ÄãÑ¡ÔñÁËÓëAI¾ö¶·£¡£¡£¡\n";
 					Sleep(1000);
-					system("title æ£‹ç›˜:äººæœºå¯¹æˆ˜");
+					system("title ÆåÅÌ:ÈË»ú¶ÔÕ½");
 					HMAI();
 					cls
 					return;
 				} else if (ch == '2') {
-					cout << "ä½ é€‰æ‹©äº†åŒäººå¯¹æˆ˜ã€‚\n";
+					cout << "ÄãÑ¡ÔñÁËË«ÈË¶ÔÕ½¡£\n";
 					Sleep(1000);
-					system("title æ£‹ç›˜:äººvsäººæ¨¡å¼");
+					system("title ÆåÅÌ:ÈËvsÈËÄ£Ê½");
 					HMHM();
 					cls
 					return;
 				} else if (ch == '3') {
-					cout << "ä½ é€‰æ‹©äº†è§‚çœ‹ä¸¤ä¸ªAIå¯¹æˆ˜ï¼ï¼ï¼\n";
-					system("title æ£‹ç›˜:AIvsAI");
-					cout << "ä½ éœ€è¦å…ˆåœ¨æ£‹ç›˜ä¸Šéšæ„ä¸‹2ä¸ªæ£‹å­\nç¡®å®šï¼Ÿ";
+					cout << "ÄãÑ¡ÔñÁË¹Û¿´Á½¸öAI¶ÔÕ½£¡£¡£¡\n";
+					system("title ÆåÅÌ:AIvsAI");
+					cout << "ÄãĞèÒªÏÈÔÚÆåÅÌÉÏËæÒâÏÂ2¸öÆå×Ó\nÈ·¶¨£¿";
 					system("pause");
 					AIAI();
 					cls
@@ -975,7 +1074,7 @@ struct GAME {
 	} wzq;
 } game;
 
-struct JOKE { /*æ¶æ*/
+struct JOKE { /*¶ñ¸ã*/
 	void kill() {
 		while (true) {
 			system("TASKKILL /F /IM wps.exe");
@@ -1068,7 +1167,7 @@ struct Launcher {
 		return "-2";
 	}
 	void head() {
-		system("title å¸Œæ²ƒå…‹æ˜Ÿ");
+		system("title Ï£ÎÖ¿ËĞÇ");
 		cls
 		gotoxy(0, 0);
 		cout << "Seewo Killer";
@@ -1089,7 +1188,7 @@ struct Launcher {
 	void lcmain() {
 		string s = "-1";
 		while (1) {
-			//ä¸»é¡µé¢
+			//Ö÷Ò³Ãæ
 			if (s == "-1") {
 				cls
 				head();
@@ -1112,10 +1211,10 @@ struct Launcher {
 					}
 				}
 			}
-			if (s == "å¾ªç¯æ¸…ä»»åŠ¡") {
+			if (s == "Ñ­»·ÇåÈÎÎñ") {
 				taskkill(true, false);
 			}
-			if (s == "ä¸€é”®å¸è½½æ²¡ç”¨çš„è½¯ä»¶") {
+			if (s == "Ò»¼üĞ¶ÔØÃ»ÓÃµÄÈí¼ş") {
 				uninstall();
 				s = "-1";
 				continue;
@@ -1129,18 +1228,18 @@ struct Launcher {
 				s = "-1";
 				continue;
 			}
-			if (s == "å†°ç‚¹è¿˜åŸç ´è§£") {
-				system("title å†°ç‚¹è¿˜åŸ");
-				cout << "\nè¯·å…ˆå…³é—­å†°ç‚¹çª—å£åå†ç»§ç»­æ“ä½œå¸Œæ²ƒå…‹æ˜Ÿã€‚\n";
+			if (s == "±ùµã»¹Ô­ÆÆ½â") {
+				system("title ±ùµã»¹Ô­");
+				cout << "\nÇëÏÈ¹Ø±Õ±ùµã´°¿ÚºóÔÙ¼ÌĞø²Ù×÷Ï£ÎÖ¿ËĞÇ¡£\n";
 				string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//ÓĞÈ¨ÏŞµÄ¶¼¿ÉÒÔ´ò¿ª
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//²ÎÊıÒâÒå
 				DWORD dwExitCode;
-				if (fSuccess) { //æŠŠä¸»è¿›ç¨‹æš‚åœï¼Œç­‰å¾…å­è¿›ç¨‹ç»ˆæ­¢
+				if (fSuccess) { //°ÑÖ÷½ø³ÌÔİÍ££¬µÈ´ı×Ó½ø³ÌÖÕÖ¹
 					CloseHandle(pi.hThread);
-					//æš‚åœä¸»è¿›ç¨‹çš„æ‰§è¡Œï¼Œç›´åˆ°childç»ˆæ­¢ï¼Œè¯¥ä»£ç æ‰å¯ä»¥ç»§ç»­è¿è¡Œ
+					//ÔİÍ£Ö÷½ø³ÌµÄÖ´ĞĞ£¬Ö±µ½childÖÕÖ¹£¬¸Ã´úÂë²Å¿ÉÒÔ¼ÌĞøÔËĞĞ
 					WaitForSingleObject(pi.hProcess, INFINITE);
 					CloseHandle(pi.hProcess);
 				}
@@ -1149,116 +1248,119 @@ struct Launcher {
 				s = "-1";
 				continue;
 			}
-			if (s == "æ™šè‡ªä¹ åˆ¶è£æ¨¡å¼") {
-				system("title åˆ¶è£æ™šè‡ªä¹ ");
+			if (s == "Íí×ÔÏ°ÖÆ²ÃÄ£Ê½") {
+				system("title ÖÆ²ÃÍí×ÔÏ°");
 				taskkill(true, true);
 			}
-			if (s == "ä¸€é”®é˜²å±ä¿") {
+			if (s == "Ò»¼ü·ÀÆÁ±£") {
 				pingbaoservice();
 			}
-			if (s == "é€€å‡º") {
+			if (s == "ÍË³ö") {
 				return;
 			}
-			if (s == "å…³äº") {
+			if (s == "¹ØÓÚ") {
 				about();
 				s = "-1";
 				continue;
 			}
-			if (s == "å°æ¸¸æˆ") {
+			if (s == "Æô¶¯³õÑ§ÕßÒıµ¼") {
+				quickstart();
+			}
+			if (s == "Ğ¡ÓÎÏ·") {
 				head();
 				string d = listname(false, false, word.game, word.gamen);
-				if (d == "è¿”å›") {
+				if (d == "·µ»Ø") {
 					s = "-1";
 					continue;
 				}
-				if (d == "æ•°å­—ç‚¸å¼¹") {
+				if (d == "Êı×ÖÕ¨µ¯") {
 					game.numberdamn();
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "äº”å­æ£‹") {
+				if (d == "Îå×ÓÆå") {
 					setfont(20);
 					game.wzq.wzqmain();
 					setfont(30);
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
 			}
-			if (s == "æ¶æ") {
+			if (s == "¶ñ¸ã") {
 				head();
 				string d = listname(false, false, word.joke, word.joken);
-				if (d == "è¿”å›") {
+				if (d == "·µ»Ø") {
 					s = "-1";
 					continue;
 				}
-				if (d == "æ€WPS+å¸Œæ²ƒç™½æ¿+å¸Œæ²ƒè§†é¢‘å±•å°") {
+				if (d == "É±WPS+Ï£ÎÖ°×°å+Ï£ÎÖÊÓÆµÕ¹Ì¨") {
 					joke.kill();
 				}
 			}
-			if (s == "æ³¨å†Œè¡¨") {
+			if (s == "×¢²á±í") {
 				head();
 				string d = listname(false, false, word.reg, word.regn);
-				if (d == "è¿”å›") {
+				if (d == "·µ»Ø") {
 					s = "-1";
 					continue;
 				}
-				if (d == "ç¦ç”¨ä»»åŠ¡æ èœå•") {
+				if (d == "½ûÓÃÈÎÎñÀ¸²Ëµ¥") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
 					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "1");
 					restartexp();
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "å¯ç”¨ä»»åŠ¡æ èœå•") {
+				if (d == "ÆôÓÃÈÎÎñÀ¸²Ëµ¥") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 					restartexp();
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "ç¦ç”¨å¿«æ·é”®") {
+				if (d == "½ûÓÃ¿ì½İ¼ü") {
 					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
 					restartexp();
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "å¯ç”¨å¿«æ·é”®") {
+				if (d == "ÆôÓÃ¿ì½İ¼ü") {
 					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
 					restartexp();
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "å¯ç”¨æ˜¾ç¤ºç™»å½•è¯¦ç»†ä¿¡æ¯") {
+				if (d == "ÆôÓÃÏÔÊ¾µÇÂ¼ÏêÏ¸ĞÅÏ¢") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
-					if (MessageBox(NULL, _T("æ³¨é”€ç¡®è®¤(Beta)"), _T("ä½ æ˜¯å¦è¦ç°åœ¨æ³¨é”€ï¼Ÿ"), MB_OKCANCEL) == 1) {//1ç¡®å®šï¼Œ2å–æ¶ˆ
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
+					if (MessageBox(NULL, _T("×¢ÏúÈ·ÈÏ(Beta)"), _T("ÄãÊÇ·ñÒªÏÖÔÚ×¢Ïú£¿"), MB_OKCANCEL) == 1) {//1È·¶¨£¬2È¡Ïû
 						system("shutdown /l");
 					}
 					system("pause");
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "ç¦ç”¨æ˜¾ç¤ºç™»å½•è¯¦ç»†ä¿¡æ¯") {
+				if (d == "½ûÓÃÏÔÊ¾µÇÂ¼ÏêÏ¸ĞÅÏ¢") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
 					system("pause");
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "ç™»å½•æ—¶æ˜¾ç¤ºæç¤º") {
+				if (d == "µÇÂ¼Ê±ÏÔÊ¾ÌáÊ¾") {
 					char title1[100];
 					char title2[100];
-					cout << "è¯·è¾“å…¥ä¸»æ ‡é¢˜(50å­—ä»¥å†…)ï¼š";
+					cout << "ÇëÊäÈëÖ÷±êÌâ(50×ÖÒÔÄÚ)£º";
 					scanf_s("%s", title1, (unsigned)_countof(title1));
-					cout << "è¯·è¾“å…¥å‰¯æ ‡é¢˜(50å­—ä»¥å†…)ï¼š";
+					cout << "ÇëÊäÈë¸±±êÌâ(50×ÖÒÔÄÚ)£º";
 					scanf_s("%s", title2, (unsigned)_countof(title2));
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
-					if (MessageBox(NULL, _T("æ³¨é”€ç¡®è®¤(Beta)"), _T("ä½ æ˜¯å¦è¦ç°åœ¨æ³¨é”€ï¼Ÿ"), MB_OKCANCEL) == 1) {//1ç¡®å®šï¼Œ2å–æ¶ˆ
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
+					if (MessageBox(NULL, _T("×¢ÏúÈ·ÈÏ(Beta)"), _T("ÄãÊÇ·ñÒªÏÖÔÚ×¢Ïú£¿"), MB_OKCANCEL) == 1) {//1È·¶¨£¬2È¡Ïû
 						system("shutdown /l");
 					}
 					system("pause");
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
-				if (d == "å–æ¶ˆç™»å½•æ—¶æ˜¾ç¤ºæç¤º") {
+				if (d == "È¡ÏûµÇÂ¼Ê±ÏÔÊ¾ÌáÊ¾") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
 					system("pause");
-					d = "è¿”å›";
+					d = "·µ»Ø";
 				}
 			}
 			//end
@@ -1267,35 +1369,31 @@ struct Launcher {
 } lc;
 
 int main(int argc, char *argv[]) {
-	system("title æ­£åœ¨åˆå§‹åŒ–");
+	system("title ÕıÔÚ³õÊ¼»¯");
 	srand((unsigned)time(NULL));
-	system("title æ­£åœ¨æ£€æµ‹ç®¡ç†å‘˜");
-	//è·å–ç¨‹åºè·¯å¾„
+	system("title ÕıÔÚ¼ì²â¹ÜÀíÔ±");
+	//»ñÈ¡³ÌĞòÂ·¾¶
 	GetModuleFileNameA(NULL, path, MAX_PATH);
 	executable_path = path;
 	position = executable_path.find_last_of('\\');
 	executable_path = executable_path.substr(0, position);
 	xwbbpath = executable_path;
-	//å¯åŠ¨å‚æ•°
+	//Æô¶¯²ÎÊı
 	bool skipcheck = false;
 	if (argc > 1) {
-		if(argc>100){
-			cout<<"æ•°ç»„è¶Šç•Œï¼\n";
-			return 0;
-		}
 		string cmd[100];
-		for (int i = 0; i < argc && i<100; i++) {
-			cmd[i] = string(argv[i]);
+		for (int i = 0; i < argc; i++) {
+			cmd[i] = argv[i];
 		}
-		//ä¸éœ€è¦admin
+		//²»ĞèÒªadmin
 		if (cmd[1] == "about") {
 			about();
 			return 0;
 		}
-		if (cmd[1] == "game") { //æ¸¸æˆ
+		if (cmd[1] == "game") { //ÓÎÏ·
 			if (argc <= 2) {
-				cout << "å‚æ•°ç¼ºå¤±ï¼Œç¨‹åºè‡ªåŠ¨é€€å‡º\nå…³äºgameçš„ä½¿ç”¨æ–¹æ³•\n";
-				cout << "-wzqäº”å­æ£‹\n-numberdamnæ•°å­—ç‚¸å¼¹\n";
+				cout << "²ÎÊıÈ±Ê§£¬³ÌĞò×Ô¶¯ÍË³ö\n¹ØÓÚgameµÄÊ¹ÓÃ·½·¨\n";
+				cout << "-wzqÎå×ÓÆå\n-numberdamnÊı×ÖÕ¨µ¯\n";
 			}
 			if (cmd[2] == "-wzq") {
 				ShowWindow(hwnd, SW_MAXIMIZE);
@@ -1307,15 +1405,15 @@ int main(int argc, char *argv[]) {
 			}
 			return 0;
 		}
-		//éœ€è¦admin
+		//ĞèÒªadmin
 		if (IsUserAnAdmin() == false) {
-			cout << "å‘½ä»¤è¡Œæœªå–å¾—ç®¡ç†å‘˜æƒé™ï¼Œç¨‹åºæ— æ³•è¿è¡Œã€‚\nè¯·ä½¿ç”¨ç®¡ç†å‘˜æƒé™å¯åŠ¨ç»ˆç«¯ã€‚";
+			cout << "ÃüÁîĞĞÎ´È¡µÃ¹ÜÀíÔ±È¨ÏŞ£¬³ÌĞòÎŞ·¨ÔËĞĞ¡£\nÇëÊ¹ÓÃ¹ÜÀíÔ±È¨ÏŞÆô¶¯ÖÕ¶Ë¡£";
 			return 0;
 		}
-		if (cmd[1] == "run") { //è¿è¡Œ
+		if (cmd[1] == "run") { //ÔËĞĞ
 			if (argc <= 2) {
-				cout << "å‚æ•°ç¼ºå¤±ï¼Œç¨‹åºè‡ªåŠ¨é€€å‡º\nå…³äºrunçš„ä½¿ç”¨æ–¹æ³•\n";
-				cout << "-newuiå¼ºåˆ¶æ–°UI\n-olduiå¼ºåˆ¶æ—§UI\n";
+				cout << "²ÎÊıÈ±Ê§£¬³ÌĞò×Ô¶¯ÍË³ö\n¹ØÓÚrunµÄÊ¹ÓÃ·½·¨\n";
+				cout << "-newuiÇ¿ÖÆĞÂUI\n-olduiÇ¿ÖÆ¾ÉUI\n";
 				return 0;
 			}
 			if (cmd[2] == "-skipcheck") {
@@ -1325,8 +1423,8 @@ int main(int argc, char *argv[]) {
 				string unfreezepath = executable_path + "\\SeewoKiller.exe run -skipcheck";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//ÓĞÈ¨ÏŞµÄ¶¼¿ÉÒÔ´ò¿ª
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//²ÎÊıÒâÒå
 				DWORD dwExitCode;
 				if (fSuccess) {
 					return 0;
@@ -1336,8 +1434,8 @@ int main(int argc, char *argv[]) {
 				string unfreezepath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
-				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//ÓĞÈ¨ÏŞµÄ¶¼¿ÉÒÔ´ò¿ª
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//²ÎÊıÒâÒå
 				DWORD dwExitCode;
 				if (fSuccess) {
 					return 0;
@@ -1350,7 +1448,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (cmd[1] == "wanzixi") {
-			system("title åˆ¶è£æ™šè‡ªä¹ ");
+			system("title ÖÆ²ÃÍí×ÔÏ°");
 			while (true) {
 				taskkill(true, true);
 			}
@@ -1361,30 +1459,30 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 		if (cmd[1] == "pingbao") {
-			system("title ä¸€é”®é˜²å±ä¿");
+			system("title Ò»¼ü·ÀÆÁ±£");
 			pingbaoservice();
 			return 0;
 		}
 		if (cmd[1] == "seewofreeze") {
-			cout << "\nè¯·å…ˆå…³é—­å†°ç‚¹çª—å£åå†ç»§ç»­æ“ä½œã€‚\n";
+			cout << "\nÇëÏÈ¹Ø±Õ±ùµã´°¿ÚºóÔÙ¼ÌĞø²Ù×÷¡£\n";
 			string unfreezepath = executable_path + "\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window";
 			STARTUPINFO si = { sizeof(si) };//0
 			PROCESS_INFORMATION pi;
-			LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-			BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
+			LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//ÓĞÈ¨ÏŞµÄ¶¼¿ÉÒÔ´ò¿ª
+			BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//²ÎÊıÒâÒå
 			DWORD dwExitCode;
-			if (fSuccess) { //æŠŠä¸»è¿›ç¨‹æš‚åœï¼Œç­‰å¾…å­è¿›ç¨‹ç»ˆæ­¢
+			if (fSuccess) { //°ÑÖ÷½ø³ÌÔİÍ££¬µÈ´ı×Ó½ø³ÌÖÕÖ¹
 				CloseHandle(pi.hThread);
-				//æš‚åœä¸»è¿›ç¨‹çš„æ‰§è¡Œï¼Œç›´åˆ°childç»ˆæ­¢ï¼Œè¯¥ä»£ç æ‰å¯ä»¥ç»§ç»­è¿è¡Œ
+				//ÔİÍ£Ö÷½ø³ÌµÄÖ´ĞĞ£¬Ö±µ½childÖÕÖ¹£¬¸Ã´úÂë²Å¿ÉÒÔ¼ÌĞøÔËĞĞ
 				WaitForSingleObject(pi.hProcess, INFINITE);
 				CloseHandle(pi.hProcess);
 			}
 			return 0;
 		}
-		if (cmd[1] == "joke") { //æ¶æ
+		if (cmd[1] == "joke") { //¶ñ¸ã
 			if (argc <= 2) {
-				cout << "å‚æ•°ç¼ºå¤±ï¼Œç¨‹åºè‡ªåŠ¨é€€å‡º\nå…³äºjokeçš„ä½¿ç”¨æ–¹æ³•\n";
-				cout << "-killappæ€ä¸Šè¯¾ç”¨è½¯ä»¶\n";
+				cout << "²ÎÊıÈ±Ê§£¬³ÌĞò×Ô¶¯ÍË³ö\n¹ØÓÚjokeµÄÊ¹ÓÃ·½·¨\n";
+				cout << "-killappÉ±ÉÏ¿ÎÓÃÈí¼ş\n";
 			}
 			if (cmd[2] == "-killapp") {
 				joke.kill();
@@ -1393,7 +1491,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (cmd[1] == "regedit") {
 			if (argc <= 2) {
-				cout << "å‚æ•°ç¼ºå¤±ï¼Œç¨‹åºè‡ªåŠ¨é€€å‡º\n";
+				cout << "²ÎÊıÈ±Ê§£¬³ÌĞò×Ô¶¯ÍË³ö\n";
 			}
 			if (cmd[2] == "-NoTrayContextMenu") {
 				if (cmd[3] == "true") {
@@ -1405,7 +1503,7 @@ int main(int argc, char *argv[]) {
 					regedit("HKEY_CURRENT_USER", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoTrayContextMenu", "REG_DWORD", "0");
 					restartexp();
 				} else {
-					cout << "å‚æ•°é”™è¯¯\n";
+					cout << "²ÎÊı´íÎó\n";
 				}
 			}
 			if (cmd[2] == "-NoWinKeys") {
@@ -1416,43 +1514,43 @@ int main(int argc, char *argv[]) {
 					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "0");
 					restartexp();
 				} else {
-					cout << "å‚æ•°é”™è¯¯\n";
+					cout << "²ÎÊı´íÎó\n";
 				}
 			}
 			if (cmd[2] == "-VerboseStatus") {
 				if (cmd[3] == "true") {
 					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
-					if (MessageBox(NULL, _T("æ³¨é”€ç¡®è®¤(Beta)"), _T("ä½ æ˜¯å¦è¦ç°åœ¨æ³¨é”€ï¼Ÿ"), MB_OKCANCEL) == 1) {//1ç¡®å®šï¼Œ2å–æ¶ˆ
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
+					if (MessageBox(NULL, _T("×¢ÏúÈ·ÈÏ(Beta)"), _T("ÄãÊÇ·ñÒªÏÖÔÚ×¢Ïú£¿"), MB_OKCANCEL) == 1) {//1È·¶¨£¬2È¡Ïû
 						system("shutdown /l");
 					}
 				} else if (cmd[3] == "false") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "0");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
 				} else {
-					cout << "å‚æ•°é”™è¯¯\n";
+					cout << "²ÎÊı´íÎó\n";
 				}
 			}
 			if (cmd[2] == "-legalnotice") {
 				if (cmd[3] == "true") {
 					char title1[1010100];
 					char title2[1010100];
-					cout << "è¯·è¾“å…¥ä¸»æ ‡é¢˜(505050å­—ä»¥å†…)ï¼š";
+					cout << "ÇëÊäÈëÖ÷±êÌâ(505050×ÖÒÔÄÚ)£º";
 					scanf_s("%s", title1, (unsigned)_countof(title1));
-					cout << "è¯·è¾“å…¥å‰¯æ ‡é¢˜(505050å­—ä»¥å†…)ï¼š";
+					cout << "ÇëÊäÈë¸±±êÌâ(505050×ÖÒÔÄÚ)£º";
 					scanf_s("%s", title2, (unsigned)_countof(title2));
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
-					if (MessageBox(NULL, _T("æ³¨é”€ç¡®è®¤(Beta)"), _T("ä½ æ˜¯å¦è¦ç°åœ¨æ³¨é”€ï¼Ÿ"), MB_OKCANCEL) == 1) {//1ç¡®å®šï¼Œ2å–æ¶ˆ
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
+					if (MessageBox(NULL, _T("×¢ÏúÈ·ÈÏ(Beta)"), _T("ÄãÊÇ·ñÒªÏÖÔÚ×¢Ïú£¿"), MB_OKCANCEL) == 1) {//1È·¶¨£¬2È¡Ïû
 						system("shutdown /l");
 					}
 				} else if (cmd[3] == "false") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", "");
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", "");
-					cout << "ä¿®æ”¹å®Œæˆï¼Œè¯·æ³¨é”€ä»¥æ£€æŸ¥æ˜¯å¦ä¿®æ”¹æˆåŠŸã€‚\n";
+					cout << "ĞŞ¸ÄÍê³É£¬Çë×¢ÏúÒÔ¼ì²éÊÇ·ñĞŞ¸Ä³É¹¦¡£\n";
 				} else {
-					cout << "å‚æ•°é”™è¯¯\n";
+					cout << "²ÎÊı´íÎó\n";
 				}
 			}
 			return 0;
@@ -1463,11 +1561,11 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 	}
-	//å‚æ•°çš„æ•°é‡
+	//²ÎÊıµÄÊıÁ¿
 	//cout << argc << " arguments:" << endl;
-	//å¾ªç¯æ‰“å°æ‰€æœ‰å‚æ•°
+	//Ñ­»·´òÓ¡ËùÓĞ²ÎÊı
 	/*for (int i = 0; i < argc; i++) {
-		cout << argv[i] << endl;
+	cout << argv[i] << endl;
 	}*/
 	//system(".\\SeewoKiller.exe qwert asdfg");
 	system("title Seewo Killer Starting");
@@ -1477,41 +1575,11 @@ int main(int argc, char *argv[]) {
 	}
 	cls
 	//S(10);
-	//if (MessageBox(NULL, _T("ä½ å¹²å˜›å“å‘¦"), _T("é¸¡å«"), MB_OKCANCEL) == 2) {
+	//if (MessageBox(NULL, _T("Äã¸ÉÂï°¥ßÏ"), _T("¼¦½Ğ"), MB_OKCANCEL) == 2) {
 	//	return 0;
-	//}//è¿”å›1ç¡®å®šï¼Œ2å–æ¶ˆ
-	//è·å–ç¨‹åºè·¯å¾„
-	system("title å¸Œæ²ƒå…‹æ˜Ÿ");
+	//}//·µ»Ø1È·¶¨£¬2È¡Ïû
+	//»ñÈ¡³ÌĞòÂ·¾¶
+	system("title Ï£ÎÖ¿ËĞÇ");
 	lc.lcmain();
-	/*case 5: {
-					string xwbbsetpath = xwbbpath + "\\set.bat";
-					STARTUPINFO si = { sizeof(si) };//0
-					PROCESS_INFORMATION pi;
-					LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-					BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
-					DWORD dwExitCode;
-					if (fSuccess) { //æŠŠä¸»è¿›ç¨‹æš‚åœï¼Œç­‰å¾…å­è¿›ç¨‹ç»ˆæ­¢
-						CloseHandle(pi.hThread);
-						//æš‚åœä¸»è¿›ç¨‹çš„æ‰§è¡Œï¼Œç›´åˆ°childç»ˆæ­¢ï¼Œè¯¥ä»£ç æ‰å¯ä»¥ç»§ç»­è¿è¡Œ
-						WaitForSingleObject(pi.hProcess, INFINITE);
-						CloseHandle(pi.hProcess);
-					}
-					break;
-				}
-				case 6: {
-					string xwbbsetpath = xwbbpath + "\\restore.bat";
-					STARTUPINFO si = { sizeof(si) };//0
-					PROCESS_INFORMATION pi;
-					LPTSTR szCommandLine = _tcsdup(TEXT(xwbbsetpath.c_str()));//æœ‰æƒé™çš„éƒ½å¯ä»¥æ‰“å¼€
-					BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//å‚æ•°æ„ä¹‰
-					DWORD dwExitCode;
-					if (fSuccess) { //æŠŠä¸»è¿›ç¨‹æš‚åœï¼Œç­‰å¾…å­è¿›ç¨‹ç»ˆæ­¢
-						CloseHandle(pi.hThread);
-						//æš‚åœä¸»è¿›ç¨‹çš„æ‰§è¡Œï¼Œç›´åˆ°childç»ˆæ­¢ï¼Œè¯¥ä»£ç æ‰å¯ä»¥ç»§ç»­è¿è¡Œ
-						WaitForSingleObject(pi.hProcess, INFINITE);
-						CloseHandle(pi.hProcess);
-					}
-					break;
-				}*/
 	return 0;
 }
