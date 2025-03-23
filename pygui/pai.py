@@ -31,3 +31,6 @@ sys.stdout.flush()
 for _ in range(int(num)):
     sys.stdout.write(str(next(digits)))
     sys.stdout.flush()
+from os import system
+print("\n")
+system("pause")

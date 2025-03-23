@@ -30,7 +30,6 @@ string xwbbpath;
 int dwMajorInt;
 int dwMinorInt;
 bool closeapp = false;
-bool write_log_when_killapp=false;
 
 int box = 1/*板块*/, boxn = 4/*板块总数*/;
 struct Word {
@@ -39,10 +38,10 @@ struct Word {
 	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏>>>"};
 	int alln = 7;
 	string all[8] = {"NULL", "循环清任务", "一键卸载", "晚自习制裁模式", "一键防屏保", "小游戏>>>", "恶搞>>>", "注册表>>>"};
-	int moren = 2;
-	string more[3] = {"NULL", "冰点还原破解", "AI"};
-	int settingn = 4;
-	string setting[5] = {"NULL", "退出", "使用新版界面", "启动初学者引导", "关于"};
+	int moren = 3;
+	string more[4] = {"NULL", "冰点还原破解", "AI","计算π"};
+	int settingn = 5;
+	string setting[6] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "使用新版界面", "启动初学者引导", "关于"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
 	int joken = 2;
@@ -158,37 +157,7 @@ void connot_close_button() {
 	DestroyMenu(hmenu);
 	ReleaseDC(hwnd, NULL);
 }
-void loop(int x, int y) {//19,16
-	gotoxy(x, y + 1);
-	SetColorAndBackground(0, 0);
-	cout << "  ";
-	gotoxy(x, y);
-	SetColorAndBackground(7, 7);
-	cout << "  ";
-	S(200);
-	gotoxy(x, y);
-	SetColorAndBackground(0, 0);
-	cout << "  ";
-	gotoxy(x + 1, y);
-	SetColorAndBackground(7, 7);
-	cout << "  ";
-	S(200);
-	gotoxy(x + 1, y);
-	SetColorAndBackground(0, 0);
-	cout << "  ";
-	gotoxy(x + 1, y + 1);
-	SetColorAndBackground(7, 7);
-	cout << "  ";
-	S(200);
-	gotoxy(x + 1, y + 1);
-	SetColorAndBackground(0, 0);
-	cout << "  ";
-	gotoxy(x, y + 1);
-	SetColorAndBackground(7, 7);
-	cout << "  ";
-	SetColorAndBackground(7, 0);
-	S(200);
-}
+
 void quickstart() {
 	int step = 1;
 	cls
@@ -455,9 +424,41 @@ void poweron(bool SkipCheckWinVer) {
 	SetColorAndBackground(7, 0);
 	gotoxy(0, 0);
 	S(1000);
+	//校验文件
 	gotoxy(16, 14);
-	cout << "正在验证系统版本";
-	loop(19, 16);
+	cout << "正在校验配置文件(1/4)";
+	gotoxy(10, 16);
+	cout << "[=                   ]";
+	S(500);
+	//将会改变的值再次初始化
+	word.setting[2] = "在晚自习制裁/循环清任务时启用日志";
+	//---
+	if (fileExist(".\\settings\\write-log-when-killapp.seewokiller") == false) {
+		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+		file << "false";
+		file.close();
+	} else {
+		ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
+		string value;
+		getline(file, value);
+		file.close();
+		if (value == "true") {
+			word.setting[2] = word.setting[2] + "-当前:true";
+		} else if (value == "false") {
+			word.setting[2] = word.setting[2] + "-当前:false";
+		} else {
+			ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+			file << "false";
+			file.close();
+			word.setting[2] = word.setting[2] + "-当前:false";
+		}
+	}
+	//-----
+	gotoxy(16, 14);
+	cout << "正在验证系统版本(2/4) ";
+	gotoxy(10, 16);
+	cout << "[=====               ]";
+	S(200);
 	//检测Windows版本
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
 	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//加载DLL
@@ -466,7 +467,10 @@ void poweron(bool SkipCheckWinVer) {
 	GetNtVersionNumbers(&dwMajor, &dwMinor, &dwBuildNumber);
 	gotoxy(15, 14);
 	printf("Windows版本: %d.%d", dwMajor, dwMinor);
-	cout << "      ";
+	cout << "(3/4)      ";
+	gotoxy(10, 16);
+	cout << "[=======             ]";
+	S(400);
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
@@ -479,9 +483,14 @@ void poweron(bool SkipCheckWinVer) {
 				LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//有权限的都可以打开
 				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
 				DWORD dwExitCode;
-				loop(19, 16);
 				if (fSuccess) {
+					gotoxy(10, 16);
+					cout << "[=============       ]";
 					closeapp = true;
+					S(10);
+					gotoxy(10, 16);
+					cout << "[====================]";
+					S(200);
 					return;
 				}
 			}//返回1确定，2取消
@@ -498,12 +507,12 @@ void poweron(bool SkipCheckWinVer) {
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
 	gotoxy(15, 14);
-	cout << "正在载入配置文件                        ";
-	loop(19, 16);
+	cout << "正在进行最后的准备(4/4)  ";
+	gotoxy(10, 16);
+	cout << "[===========         ]";
+	S(400);
 	CreateDirectory("./settings", NULL);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
-		cls
-		loop(19, 16);
 		cls
 		gotoxy(15, 14);
 		cout << "你好";
@@ -515,27 +524,12 @@ void poweron(bool SkipCheckWinVer) {
 		ofstream file(".\\settings\\already-quick-started.seewokiller");
 		file.close();
 	}
-	if(fileExist(".\\settings\\write-log-when-killapp.seewokiller")==false){
-		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-		file<<"false";
-		file.close();
-		write_log_when_killapp=false;
-	}else{
-		ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-		string value;
-		getline(file,value);
-		file.close();
-		if(value=="true"){
-			write_log_when_killapp=true;
-		}else if(value=="false"){
-			write_log_when_killapp=false;
-		}else{
-			ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-			file<<"false";
-			file.close();
-			write_log_when_killapp=false;
-		}
-	}
+	gotoxy(10, 16);
+	cout << "[===============     ]";
+	S(10);
+	gotoxy(10, 16);
+	cout << "[====================]";
+	S(100);
 	setfont(30);
 	return;
 }
@@ -575,10 +569,11 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 2.0 Beta\n";
-	cout << "\n版本代号  郑子谦\n";
+	cout << "\nSeewo Killer 2.0 (Engorgio)\n";
 	cout << "\n希沃克星\n";
-	cout << "\n卓然第三帝国https://whstu.us.kg/提供技术支持\n";
+	cout << "\n卓然第三帝国https://whstu.us.kg/提供技术支持";
+	cout << "\n经典界面UI基于SlytherinOS框架";
+	cout << "\n新版界面基于PyQt5\n";
 	cout << "按b+回车返回\n";
 	string ans;
 	while (true) {
@@ -654,13 +649,28 @@ bool getadmin() {
 }
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
+	ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
+	string value;
+	getline(file, value);
+	bool log = false;
+	if (value == "true") {
+		log = true;
+	}
+	long long n = 1;
 	while (true) {
-		if(write_log_when_killapp==true){
-			ofstream file(".\\log.log",ios::app);
-			time_t now=time(nullptr);
-			tm* localTime=localtime(&now);
-			file<<localTime->tm_hour<<":"+localTime->tm_min<<":"<<localTime->tm_sec<<endl;
+		if (log == true) {
+			time_t now = time(nullptr);
+			tm* localTime = localtime(&now);
+			string filename = ".\\log\\log-" + to_string(localTime->tm_year + 1900) + "-" + to_string(localTime->tm_mon + 1) + "-" + to_string(localTime->tm_mday) + ".log";
+			ofstream file(filename.c_str(), ios::app);
+			now = time(nullptr);
+			localTime = localtime(&now);
+			file << localTime->tm_hour << ":"
+			     << (localTime->tm_sec < 10 ? "0" : "") << localTime->tm_min << ":"
+			     << (localTime->tm_sec < 10 ? "0" : "") << localTime->tm_sec
+			     << "第" << n << "次杀进程" << endl;
 			file.close();
+			n++;
 		}
 		system("taskkill /f /t /im taskmgr.exe");
 		cout << "正在结束进程：轻录播\n";
@@ -1228,6 +1238,14 @@ struct Launcher {
 				s = "-1";
 				continue;
 			}
+			if(s=="计算π"){
+				setfont(20);
+				string aipath = executable_path + "\\pai.exe";
+				system(aipath.c_str());
+				setfont(30);
+				s = "-1";
+				continue;
+			}
 			if (s == "冰点还原破解") {
 				system("title 冰点还原");
 				cout << "\n请先关闭冰点窗口后再继续操作希沃克星。\n";
@@ -1265,6 +1283,39 @@ struct Launcher {
 			}
 			if (s == "启动初学者引导") {
 				quickstart();
+				s = "-1";
+				continue;
+			}
+			if (s == "在晚自习制裁/循环清任务时启用日志-当前:false" or s == "在晚自习制裁/循环清任务时启用日志-当前:true") {
+				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
+				string value;
+				getline(file, value);
+				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				int ans = MessageBox(NULL, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
+				switch (ans) {
+					case IDYES: {
+						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+						file << "true";
+						file.close();
+						if (MessageBox(NULL, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
+							cls
+							poweron(true);
+						}
+						break;
+					}
+					case IDNO: {
+						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+						file << "false";
+						file.close();
+						if (MessageBox(NULL, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
+							cls
+							poweron(true);
+						}
+						break;
+					}
+				}
+				s = "-1";
+				continue;
 			}
 			if (s == "小游戏") {
 				head();
@@ -1476,6 +1527,36 @@ int main(int argc, char *argv[]) {
 				//暂停主进程的执行，直到child终止，该代码才可以继续运行
 				WaitForSingleObject(pi.hProcess, INFINITE);
 				CloseHandle(pi.hProcess);
+			}
+			return 0;
+		}
+		if (cmd[1] == "setvalue") { //修改配置
+			if (argc <= 2) {
+				cout << "参数缺失，程序自动退出\n关于setvalue的使用方法\n";
+				cout << "-log更改日志设置\n";
+			}
+			if (cmd[2] == "-log") {
+				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
+				string value;
+				getline(file, value);
+				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				int ans = MessageBox(NULL, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
+				switch (ans) {
+					case IDYES: {
+						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+						file << "true";
+						file.close();
+						MessageBox(NULL, _T("设置完成"), _T("修改变量"), MB_OK);
+						break;
+					}
+					case IDNO: {
+						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
+						file << "false";
+						file.close();
+						MessageBox(NULL, _T("设置完成"), _T("修改变量"), MB_OK);
+						break;
+					}
+				}
 			}
 			return 0;
 		}

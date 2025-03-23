@@ -14,7 +14,7 @@ from PyQt5.QtGui import QFont, QPixmap,QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
-localversion1,localversion2,localversion3,localversion4=2,-10,-8,-6
+localversion1,localversion2,localversion3,localversion4=2,-10,-7,-5
 #QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 #QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -58,6 +58,9 @@ class SeewoKiller_run():
     class AI(threading.Thread):
         def run(self):
             system(".\\ai.exe")
+    class pai(threading.Thread):
+        def run(self):
+            system(".\\pai.exe")
     class Taskkill(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe taskkill")
@@ -70,6 +73,10 @@ class SeewoKiller_run():
     class OldUI(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe run -oldui")
+    class setvalue():
+        class Log(threading.Thread):
+            def run(self):
+                system(".\\Seewokiller.exe setvalue -log")
     class Regedit():
         class NoTrayContextMenu_True(threading.Thread):
             def run(self):
@@ -106,15 +113,6 @@ class SeewoKiller_run():
         class NumberDamn(threading.Thread):
             def run(self):
                 system(".\\SeewoKiller.exe game -numberdamn")
-
-def uninstall():
-    system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"")
-    print("正在卸载 Easicare\n")
-    system("\"C:\\Program Files (x86)\\Seewo\\Easicare\\Uninstall.exe\"")
-    print("正在卸载 EasiAgent\n")
-    system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"")
-    print("正在卸载希沃智能笔助手\n")
-    system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"")
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -134,8 +132,8 @@ class MainWindow(QMainWindow):
 
         # 列表项名称数组（所有和设置选项卡共用）
         self.list_items_all = ["循环清任务", "一键卸载","晚自习制裁模式", "一键防屏保", "小游戏", "恶搞","注册表"]
-        self.list_items_more = ["冰点还原破解","AI"]
-        self.list_items_settings = ["退出","检查更新","关于", "使用经典界面"]
+        self.list_items_more = ["冰点还原破解","AI","计算π"]
+        self.list_items_settings = ["退出","在晚自习制裁/循环清任务时启用日志","检查更新","关于", "使用经典界面"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
@@ -245,9 +243,9 @@ class MainWindow(QMainWindow):
         if item.text() == "循环清任务":
             self.taskkill=SeewoKiller_run.Taskkill()
             self.taskkill.start()
-            #system(".\\SeewoKiller.exe taskkill")
         if item.text() == "一键卸载":
-            uninstall()
+            self.uninstall=SeewoKiller_run.Uninstall()
+            self.uninstall.start()
         if item.text() == "冰点还原破解":
             self.seewofreeze=SeewoKiller_run.SeewoFreeze()
             self.seewofreeze.start()
@@ -255,6 +253,9 @@ class MainWindow(QMainWindow):
         if item.text()=="AI":
             self.ai=SeewoKiller_run.AI()
             self.ai.start()
+        if item.text()=="计算π":
+            self.pai=SeewoKiller_run.pai()
+            self.pai.start()
         if item.text() == "晚自习制裁模式":
             self.wanzixi=SeewoKiller_run.Wanzixi()
             self.wanzixi.start()
@@ -267,6 +268,9 @@ class MainWindow(QMainWindow):
             # 打印项文本（去掉前面的“项”字和编号后的空格）
         if item.text()=="退出":
             sys.exit(app.exec_())
+        if item.text()=="在晚自习制裁/循环清任务时启用日志":
+            self.setvalue_log=SeewoKiller_run.setvalue.Log()
+            self.setvalue_log.start()
         if item.text()=="检查更新":
             self.new_window_checkupdate=NewWindow_Update()
             self.new_window_checkupdate.show()
