@@ -420,7 +420,7 @@ class NewWindow_About(QWidget):
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
         self.label2.setFont(QFont("微软雅黑",10))
-        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：郑子谦\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
+        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
         self.setLayout(layout)

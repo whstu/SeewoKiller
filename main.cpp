@@ -1297,7 +1297,7 @@ struct Launcher {
 						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
 						file << "true";
 						file.close();
-						if (MessageBox(NULL, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
+						if (MessageBox(NULL, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
 							cls
 							poweron(true);
 						}
@@ -1546,7 +1546,7 @@ int main(int argc, char *argv[]) {
 						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
 						file << "true";
 						file.close();
-						MessageBox(NULL, _T("设置完成"), _T("修改变量"), MB_OK);
+						MessageBox(NULL, _T("设置完成\n日志文件保存在log文件夹下"), _T("修改变量"), MB_OK);
 						break;
 					}
 					case IDNO: {
