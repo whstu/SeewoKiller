@@ -39,7 +39,7 @@ struct Word {
 	int alln = 7;
 	string all[8] = {"NULL", "循环清任务", "一键卸载", "晚自习制裁模式", "一键防屏保", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
-	string more[4] = {"NULL", "冰点还原破解", "AI","计算π"};
+	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
 	int settingn = 5;
 	string setting[6] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "使用新版界面", "启动初学者引导", "关于"};
 	int gamen = 3;
@@ -430,27 +430,27 @@ void poweron(bool SkipCheckWinVer) {
 	gotoxy(10, 16);
 	cout << "[=                   ]";
 	S(500);
-	//将会改变的值再次初始化
-	word.setting[2] = "在晚自习制裁/循环清任务时启用日志";
 	//---
+	CreateDirectory("./settings", NULL);
 	if (fileExist(".\\settings\\write-log-when-killapp.seewokiller") == false) {
 		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
 		file << "false";
 		file.close();
+		word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
 	} else {
 		ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
 		string value;
 		getline(file, value);
 		file.close();
 		if (value == "true") {
-			word.setting[2] = word.setting[2] + "-当前:true";
+			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:true";
 		} else if (value == "false") {
-			word.setting[2] = word.setting[2] + "-当前:false";
+			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
 		} else {
 			ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
 			file << "false";
 			file.close();
-			word.setting[2] = word.setting[2] + "-当前:false";
+			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
 		}
 	}
 	//-----
@@ -511,7 +511,6 @@ void poweron(bool SkipCheckWinVer) {
 	gotoxy(10, 16);
 	cout << "[===========         ]";
 	S(400);
-	CreateDirectory("./settings", NULL);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
 		cls
 		gotoxy(15, 14);
@@ -654,6 +653,7 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 	getline(file, value);
 	bool log = false;
 	if (value == "true") {
+		CreateDirectory("./log", NULL);
 		log = true;
 	}
 	long long n = 1;
@@ -1238,7 +1238,7 @@ struct Launcher {
 				s = "-1";
 				continue;
 			}
-			if(s=="计算π"){
+			if (s == "计算π") {
 				setfont(20);
 				string aipath = executable_path + "\\pai.exe";
 				system(aipath.c_str());

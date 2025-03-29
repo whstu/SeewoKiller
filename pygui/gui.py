@@ -14,7 +14,7 @@ from PyQt5.QtGui import QFont, QPixmap,QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
-localversion1,localversion2,localversion3,localversion4=2,-10,-7,-5
+localversion1,localversion2,localversion3,localversion4=2,-10,-7,-4
 #QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 #QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
