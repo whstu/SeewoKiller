@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星简易版"
-#define MyAppVersion "2.-10.-7.-4"
+#define MyAppVersion "2.0.0.0"
 #define MyAppProductVersion "2.0.0.0"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.us.kg/"

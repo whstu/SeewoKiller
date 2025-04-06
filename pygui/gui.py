@@ -14,7 +14,7 @@ from PyQt5.QtGui import QFont, QPixmap,QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox
 
-localversion1,localversion2,localversion3,localversion4=2,-10,-7,-4
+localversion1,localversion2,localversion3,localversion4=2,0,0,0
 #QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 #QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -420,7 +420,7 @@ class NewWindow_About(QWidget):
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
         self.label2.setFont(QFont("微软雅黑",10))
-        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.us.kg/提供技术支持\nSeewoKiller QQ 群：664929698")
+        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.dpdns.org/提供技术支持\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
         self.setLayout(layout)
@@ -445,13 +445,13 @@ class NewWindow_Update(QWidget):
         print(self.reply)
         if self.reply == QMessageBox.Yes:
             import webbrowser
-            webbrowser.open("https://whstu.us.kg/download/seewokiller/")
+            webbrowser.open("https://whstu.dpdns.org/download/seewokiller/")
     def message_false(self):
         print("暂无更新")
         self.msg_box = QMessageBox(QMessageBox.Information, "提示", "暂无可用更新。")
         self.msg_box.exec_()
     def check_update(self):
-        response = urllib.request.urlopen("https://seewokiller.whstu.us.kg/installer/index.html")
+        response = urllib.request.urlopen("https://seewokiller.whstu.dpdns.org/installer/index.html")
         html = response.read()
         soup = BeautifulSoup(html, 'html.parser')
         p_tags = soup.find_all('p')

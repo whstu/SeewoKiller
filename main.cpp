@@ -161,25 +161,30 @@ void connot_close_button() {
 void quickstart() {
 	int step = 1;
 	cls
-	while (step <= 4) {
+	while (step <= 5) {
 		cls
 		gotoxy(0, 6);
 		cout << "\n\n\n这是初学者引导程序。按a返回，按d继续，按s跳过所有\n\n";
-		cout << "第" << step << "步，共4步\n\n";
+		cout << "第" << step << "步，共5步\n\n";
 		switch (step) {
 			case 1: {
-				cout << "按wasd控制上下左右";
+				cout << "首先，请讲你的实体/软键盘切换为英文输入法，并关闭大写锁定。\n";
+				cout << "希沃克星（经典界面）运行时，请不要点击界面，否则界面将会被选中，希沃克星的进程将会停止。\n";
 				break;
 			}
 			case 2: {
-				cout << "按空格键确定";
+				cout << "按wasd控制上下左右";
 				break;
 			}
 			case 3: {
-				cout << "带有\">>>\"的选项包含子项目，可以按空格键打开";
+				cout << "按空格键确定";
 				break;
 			}
 			case 4: {
+				cout << "带有\">>>\"的选项包含子项目，可以按空格键打开";
+				break;
+			}
+			case 5: {
 				cout << "你已经完成了初学者引导程序。欢迎使用希沃克星！\n本引导程序将会保留在“设置”板块中";
 				break;
 			}
@@ -427,7 +432,7 @@ void poweron(bool SkipCheckWinVer) {
 	//校验文件
 	gotoxy(16, 14);
 	cout << "正在校验配置文件(1/4)";
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[=                   ]";
 	S(500);
 	//---
@@ -456,7 +461,7 @@ void poweron(bool SkipCheckWinVer) {
 	//-----
 	gotoxy(16, 14);
 	cout << "正在验证系统版本(2/4) ";
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[=====               ]";
 	S(200);
 	//检测Windows版本
@@ -468,7 +473,7 @@ void poweron(bool SkipCheckWinVer) {
 	gotoxy(15, 14);
 	printf("Windows版本: %d.%d", dwMajor, dwMinor);
 	cout << "(3/4)      ";
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[=======             ]";
 	S(400);
 	dwMajorInt = static_cast<int>(dwMajor);
@@ -484,11 +489,11 @@ void poweron(bool SkipCheckWinVer) {
 				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
 				DWORD dwExitCode;
 				if (fSuccess) {
-					gotoxy(10, 16);
+					gotoxy(15, 16);
 					cout << "[=============       ]";
 					closeapp = true;
 					S(10);
-					gotoxy(10, 16);
+					gotoxy(15, 16);
 					cout << "[====================]";
 					S(200);
 					return;
@@ -508,7 +513,7 @@ void poweron(bool SkipCheckWinVer) {
 	*/
 	gotoxy(15, 14);
 	cout << "正在进行最后的准备(4/4)  ";
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[===========         ]";
 	S(400);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
@@ -523,10 +528,10 @@ void poweron(bool SkipCheckWinVer) {
 		ofstream file(".\\settings\\already-quick-started.seewokiller");
 		file.close();
 	}
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[===============     ]";
 	S(10);
-	gotoxy(10, 16);
+	gotoxy(15, 16);
 	cout << "[====================]";
 	S(100);
 	setfont(30);
@@ -570,8 +575,14 @@ void about() {
 	info.close();*/
 	cout << "\nSeewo Killer 2.0 (Engorgio)\n";
 	cout << "\n希沃克星\n";
-	cout << "\n卓然第三帝国https://whstu.us.kg/提供技术支持";
-	cout << "\n经典界面UI基于SlytherinOS框架";
+	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
+	cout << "\n经典界面UI基于SlytherinOS框架\n";
+	SetColorAndBackground(10, 0);
+	cout << "      Slytherin ";
+	SetColorAndBackground(0, 2);
+	cout << "O";
+	SetColorAndBackground(7, 0);
+	cout << "S";
 	cout << "\n新版界面基于PyQt5\n";
 	cout << "按b+回车返回\n";
 	string ans;
@@ -1378,7 +1389,7 @@ struct Launcher {
 				if (d == "启用显示登录详细信息") {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "VerboseStatus", "REG_DWORD", "1");
 					cout << "修改完成，请注销以检查是否修改成功。\n";
-					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+					if (MessageBox(NULL, _T("你是否要现在注销？"), _T("注销确认"), MB_OKCANCEL) == 1) {//1确定，2取消
 						system("shutdown /l");
 					}
 					system("pause");
@@ -1400,7 +1411,7 @@ struct Launcher {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
 					cout << "修改完成，请注销以检查是否修改成功。\n";
-					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+					if (MessageBox(NULL, _T("你是否要现在注销？"), _T("注销确认"), MB_OKCANCEL) == 1) {//1确定，2取消
 						system("shutdown /l");
 					}
 					system("pause");
@@ -1602,7 +1613,7 @@ int main(int argc, char *argv[]) {
 				if (cmd[3] == "true") {
 					regedit("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\", "NoWinKeys", "REG_DWORD", "1");
 					cout << "修改完成，请注销以检查是否修改成功。\n";
-					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+					if (MessageBox(NULL, _T("你是否要现在注销？"), _T("注销确认"), MB_OKCANCEL) == 1) {//1确定，2取消
 						system("shutdown /l");
 					}
 				} else if (cmd[3] == "false") {
@@ -1623,7 +1634,7 @@ int main(int argc, char *argv[]) {
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticecaption", "REG_SZ", title1);
 					regedit("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\", "legalnoticetext", "REG_SZ", title2);
 					cout << "修改完成，请注销以检查是否修改成功。\n";
-					if (MessageBox(NULL, _T("注销确认(Beta)"), _T("你是否要现在注销？"), MB_OKCANCEL) == 1) {//1确定，2取消
+					if (MessageBox(NULL, _T("你是否要现在注销？"), _T("注销确认"), MB_OKCANCEL) == 1) {//1确定，2取消
 						system("shutdown /l");
 					}
 				} else if (cmd[3] == "false") {
