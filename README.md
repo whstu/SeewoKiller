@@ -1,10 +1,10 @@
 <!--markdownlint-disable MD001 MD033 MD041 MD051-->
-![Banner](https://image.whstu.us.kg/seewokiller2.png)
+![Banner](https://image-whstu.pages.dev/seewokiller2.png)
 <div align="center">
 
 # <image src="https://seewokiller.whstu.us.kg/SeewoKiller.ico" height="35"/> SeewoKiller
 
-![软件截图 - 主界面](https://image.whstu.us.kg/seewokillershortcut.png)
+![软件截图 - 主界面](https://image-whstu.pages.dev/seewokillershortcut.png)
 
 
 [![Stars](https://img.shields.io/github/stars/whstu/SeewoKiller?label=Stars)](https://github.com/whstu/SeewoKiller)
@@ -17,7 +17,7 @@
 
 #### 💬[SeewoKiller QQ 群组](https://qm.qq.com/q/6ZAbcZSK5y)
 
-#### [🌐 官方网站](https://whstu.us.kg/)｜[📚 项目文档](https://github.com/whstu/SeewoKiller/wiki)
+#### [🌐 官方网站](https://whstu.pages.dev/)｜[📚 项目文档](https://github.com/whstu/SeewoKiller/wiki)
 
 </div>
 
@@ -38,7 +38,7 @@
 |   下载渠道    | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=)](https://github.com/whstu/SeewoKiller/releases/latest) |             🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=)](https://github.com/whstu/SeewoKiller/releases/)              |
 |:-:|:-:|:-:|
 |GitHub|[**下载**](https://github.com/whstu/SeewoKiller/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
-|卓然第三帝国官网|[**下载**](https://whstu.us.kg/download/seewokiller/)|[下载](https://whstu.us.kg/download/seewokiller/)|
+|卓然第三帝国官网|[**下载**](https://whstu.dpdns.org/download/seewokiller/)|[下载](https://whstu.dpdns.org/download/seewokiller/)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
