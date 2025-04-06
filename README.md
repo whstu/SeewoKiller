@@ -2,7 +2,7 @@
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
 <div align="center">
 
-# <image src="https://seewokiller.whstu.us.kg/SeewoKiller.ico" height="35"/> SeewoKiller
+# <image src="https://image-whstu.pages.dev/app.ico" height="35"/> SeewoKiller
 
 ![软件截图 - 主界面](https://image-whstu.pages.dev/seewokillershortcut.png)
 
