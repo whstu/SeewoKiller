@@ -44,8 +44,8 @@ struct Word {
 	string setting[6] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "使用新版界面", "启动初学者引导", "关于"};
 	int gamen = 3;
 	string game[4] = {"NULL", "返回", "数字炸弹", "五子棋"};
-	int joken = 2;
-	string joke[3] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台"};
+	int joken = 3;
+	string joke[4] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台","提取U盘文件"};
 	int regn = 11;
 	string reg[12] = {"NULL", "返回", "一键禁用(暂不可用)", "一键启用(暂不可用)", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
 } word;
@@ -683,7 +683,6 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			file.close();
 			n++;
 		}
-		system("taskkill /f /t /im taskmgr.exe");
 		cout << "正在结束进程：轻录播\n";
 		cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 		system("TASKKILL /F /IM EasiRecorder.exe");
@@ -697,6 +696,7 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			system("TASKKILL /F /IM SeewoCore.exe");
 		}
 		if (Wanzixi == true) {
+			system("taskkill /f /t /im taskmgr.exe");
 			cout << "正在结束进程：设置\n";
 			cout << "TASKKILL /F /IM SystemSettings.exe\n";
 			system("TASKKILL /F /IM SystemSettings.exe");
@@ -1109,6 +1109,52 @@ struct JOKE { /*恶搞*/
 			system("TASKKILL /F /IM WeChat.exe");
 		}
 	}
+	void copy_file(){
+		MessageBox(NULL, _T("此功能可以提取任意文件夹的所有内容，且支持U盘。\n你现在需要设置这些文件的位置和拷贝后存储的位置。"), _T("提示"), MB_OK);
+		if(MessageBox(NULL, _T("本软件不对你使用此功能造成的任何损失(包括但不限于驱逐电教、被叫去和老师喝茶等)负责，请慎重考虑！"), _T("警告"), MB_YESNO|MB_ICONWARNING)==IDNO){
+			return;
+		}
+		MessageBox(NULL, _T("你需要在接下来的控制台中输入文件来源和拷贝后的文件去向。"), _T("提示"), MB_OK);
+		SetColorAndBackground(7,0);
+		cout<<"请输入文件来源。\n";
+		SetColorAndBackground(4,7);
+		cout<<"注意：输入反斜杠\"\\\"时必须输入\"\\\\\"!\n文件夹名称最后也要输入\\\\。本程序不支持复制单个文件。\n示例：E:\\\\，F:\\\\马说课间2025\\\\\n";
+		SetColorAndBackground(7,0);
+		cout<<"请输入(输入0跳过，默认为Z:\\):";
+		string infile;
+		cin>>infile;
+		if(infile=="0"){
+			infile="Z:\\";
+		}
+		SetColorAndBackground(7,0);
+		cout<<"请输入文件去向。\n";
+		SetColorAndBackground(4,7);
+		cout<<"注意：输入反斜杠\"\\\"时必须输入\"\\\\\"!\n\n文件夹名称最后也要输入\\\\。\n";
+		SetColorAndBackground(7,0);
+		cout<<"请输入(输入0跳过，默认为D:\\file\\):";
+		string outfile;
+		cin>>outfile;
+		if(outfile=="0"){
+			outfile="D:\\file\\";
+		}
+		cout<<"设置完成。按任意键后开始搜索。当U盘插入后（目录存在），希沃克星会自动复制其中的文件。\n";
+		getch();
+		cout<<"开始！！\n------------------";
+		string existpath=infile+"temp.dat";
+		while(fileExist(existpath.c_str())==false){
+			ofstream file(existpath.c_str());
+			file<<"";
+			file.close();
+		}
+		string command="del \""+existpath+"\"";
+		system(command.c_str());
+		cout<<"\n已找到文件夹，开始复制\n";
+		command="xcopy \""+infile+"\" \""+outfile+"\" /E /I /H /C /Y";
+		system(command.c_str());
+		cout<<"\n";
+		system("pause");
+		return;
+	}
 } joke;
 
 struct Launcher {
@@ -1355,6 +1401,10 @@ struct Launcher {
 				}
 				if (d == "杀WPS+希沃白板+希沃视频展台") {
 					joke.kill();
+				}
+				if(d=="提取U盘文件"){
+					joke.copy_file();
+					d="返回";
 				}
 			}
 			if (s == "注册表") {
