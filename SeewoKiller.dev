@@ -74,8 +74,8 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-FileEncoding = SYSTEM
-RealEncoding = gbk
+FileEncoding = UTF-8
+RealEncoding = UTF-8
 
 
 [Unit4]
