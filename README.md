@@ -13,13 +13,19 @@
 [![下载量](https://img.shields.io/github/downloads/whstu/SeewoKiller/total?style=social&label=下载量&logo=github)](https://github.com/whstu/SeewoKiller/releases/latest)
 
 希沃克星：冰点解冻、游戏和晚自习制裁！<br/>
-使用善良的 GUI 而不是进 Windows PE
+使用善良的 GUI 而不是进 Windows PE<br/>
 
 #### 💬[SeewoKiller QQ 群组](https://qm.qq.com/q/6ZAbcZSK5y)
 
 #### [🌐 官方网站](https://whstu.pages.dev/)｜[📚 项目文档](https://github.com/whstu/SeewoKiller/wiki)
 
 </div>
+
+## 功能
+### 核心功能
+晚自习制裁模式（附带日志功能）；一键卸载不必要的软件；去除希沃管家快捷启动栏；一键防屏保；小游戏、恶搞和更多注册表功能
+### 附加功能（免费，但可能需要另外下载）
+<b>冰点还原破解</b>，计算π，AI（支持<i>Deepseek R1</i>和<i>Llama 3</i>）
 
 ## 开始使用
 
@@ -43,18 +49,25 @@
 
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!IMPORTANT]
-> setup，setup-ai 与 setup-small 的区别
-> |       文件名       |破解冰点还原|基础功能（注册表, 晚自习制裁等）|DeepSeek R1|
-> | :---------------: | :------------: | :------------------------------------: | :-------------: |
-> |     setup.exe     |        🟢        |                          🟢                          |        🔴        |
-> |setup-small.exe|        🔴        |                          🟢                          |        🔴        |
-> |   setup-ai.exe   |        🟢        |                          🟢                          |        🟢        |
+> setup，setup-ai，setup-custom 与 setup-small 的区别
+> |       文件名       |破解冰点还原 | 基础功能（注册表，晚自习制裁等）|DeepSeek R1|计算π|
+> | :---------------: | :-: | :-: | :-: | :-: |
+> |     setup.exe     |🟢|🟢|🔴|🔴|
+> |setup-small.exe    |🔴|🟢|🔴|🔴|
+> |   setup-ai.exe    |🟢|🟢|🟢|🔴|
+> |setup-custom.exe   |可选|🟢|可选 | 可选|
+> 
+> 除 setup-custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
+> 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai.exe)
 
 ## 获取帮助
 
 您可以访问以下页面来**获取帮助**：
 
 - [帮助文档](https://github.com/whstu/SeewoKiller/wiki)
+
+> [WARNING]
+> SeewoKiller Wiki 中的内容将不再更新。需要更多关于软件操作的帮助，请打开希沃克星软件的新手引导程序。
 
 您也可以加入这些社区**寻求帮助**：
 

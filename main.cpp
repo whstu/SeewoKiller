@@ -161,14 +161,14 @@ void connot_close_button() {
 void quickstart() {
 	int step = 1;
 	cls
-	while (step <= 5) {
+	while (step <= 6) {
 		cls
 		gotoxy(0, 6);
 		cout << "\n\n\n这是初学者引导程序。按a返回，按d继续，按s跳过所有\n\n";
-		cout << "第" << step << "步，共5步\n\n";
+		cout << "第" << step << "步，共6步\n\n";
 		switch (step) {
 			case 1: {
-				cout << "首先，请讲你的实体/软键盘切换为英文输入法，并关闭大写锁定。\n";
+				cout << "首先，请将你的实体/软键盘切换为英文输入法，并关闭大写锁定。\n";
 				cout << "希沃克星（经典界面）运行时，请不要点击界面，否则界面将会被选中，希沃克星的进程将会停止。\n";
 				break;
 			}
@@ -185,6 +185,11 @@ void quickstart() {
 				break;
 			}
 			case 5: {
+				cout << "技巧：通过Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n";
+				cout << "瓦特工具箱Watt Toolkit可以加速对Steam、Github的访问，网址https://steampp.net/";
+				break;
+			}
+			case 6: {
 				cout << "你已经完成了初学者引导程序。欢迎使用希沃克星！\n本引导程序将会保留在“设置”板块中";
 				break;
 			}
@@ -576,6 +581,8 @@ void about() {
 	cout << "\nSeewo Killer 2.0 (Engorgio)\n";
 	cout << "\n希沃克星\n";
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
+	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
+	cout << "\nSeewoKiller QQ 群：664929698";
 	cout << "\n经典界面UI基于SlytherinOS框架\n";
 	SetColorAndBackground(10, 0);
 	cout << "      Slytherin ";
@@ -1623,6 +1630,9 @@ int main(int argc, char *argv[]) {
 			}
 			if (cmd[2] == "-killapp") {
 				joke.kill();
+			}
+			if (cmd[2] == "-copyfile") {
+				joke.copy_file();
 			}
 			return 0;
 		}

@@ -105,7 +105,10 @@ class SeewoKiller_run():
     class Joke():
         class Killapp(threading.Thread):
             def run(self):
-                system(".\\SeewoKIller.exe joke -killapp")
+                system(".\\SeewoKiller.exe joke -killapp")
+        class Copyfile(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe joke -copyfile")
     class Game():
         class Wzq(threading.Thread):
             def run(self):
@@ -389,7 +392,7 @@ class NewWindow_joke(QWidget):
         layout = QVBoxLayout()
 
         # 新窗口的列表项名称数组
-        self.new_list_items = ["杀死所有有用的进程"]
+        self.new_list_items = ["杀死所有有用的进程","自动复制 U 盘文件"]
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
@@ -407,6 +410,9 @@ class NewWindow_joke(QWidget):
         if item.text() == "杀死所有有用的进程":
             self.killapp=SeewoKiller_run.Joke.Killapp()
             self.killapp.start()
+        if item.text()=="自动复制 U 盘文件":
+            self.copyfile=SeewoKiller_run.Joke.Copyfile()
+            self.copyfile.start()
             #system(".\\SeewoKiller.exe joke -killapp")
 class NewWindow_About(QWidget):
     def __init__(self):
@@ -420,7 +426,7 @@ class NewWindow_About(QWidget):
         self.label2=QtWidgets.QLabel()
         self.label2.setWordWrap(True)
         self.label2.setFont(QFont("微软雅黑",10))
-        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.dpdns.org/提供技术支持\nSeewoKiller QQ 群：664929698")
+        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.dpdns.org/提供技术支持\nhttps://github.com/whstu/SeewoKiller/\nSeewoKiller QQ 群：664929698")
         layout.addWidget(self.label)
         layout.addWidget(self.label2)
         self.setLayout(layout)

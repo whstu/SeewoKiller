@@ -5,7 +5,7 @@
 #define MyAppVersion "2.0.0.0"
 #define MyAppProductVersion "2.0.0.0"
 #define MyAppPublisher "WHSTU Studio"
-#define MyAppURL "https://whstu.us.kg/"
+#define MyAppURL "https://whstu.dpdns.org/"
 #define MyAppExeName "SeewoKiller.exe"
 #define MyAppCopyright "Copyright 2020-2025 WHSTU Studio"
 
