@@ -3,6 +3,15 @@
 #include <ctime>
 #include <conio.h>
 #include <string>
+//任务栏进度条
+#define INITGUID
+#include <shobjidl.h>
+#pragma comment(lib, "Shell32.lib")
+#pragma comment(lib, "Ole32.lib")
+const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
+	0xea1afb91, 0x9e28, 0x4b86,
+	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
+};
 //重启explorer.exe
 #include <tlhelp32.h>
 //注册表修改
@@ -76,6 +85,38 @@ void setfont(int size) {//字体、大小、粗细
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_FONT_INFO consoleCurrentFont;
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
+}
+//任务栏进度条
+//全局或类成员变量
+ITaskbarList3* g_pTaskbar = nullptr;
+void InitTaskbarInterface() {
+	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+	CoCreateInstance(
+	    CLSID_TaskbarList, nullptr, CLSCTX_ALL,
+	    IID_ITaskbarList3, reinterpret_cast<void**>(&g_pTaskbar)
+	);
+	if (g_pTaskbar) g_pTaskbar->HrInit();
+	return;
+}
+void ReleaseTaskbarInterface() {
+	if (g_pTaskbar) g_pTaskbar->Release();
+	CoUninitialize();
+	return;
+}
+// 线程函数
+void taskbarprocess(TBPFLAG state, int percent = -1) {
+	/*
+	TBPF_NOPROGRESS无进度条（默认状态）
+	TBPF_INDETERMINATE不确定进度（持续动画）
+	TBPF_NORMAL正常进度（绿色）
+	TBPF_ERROR错误（红色）
+	TBPF_PAUSED暂停（黄色）
+	*/
+	g_pTaskbar->SetProgressState(hwnd, state);
+	if (state != TBPF_NOPROGRESS && state != TBPF_INDETERMINATE && (percent >= 0 || percent <= 100)) {
+		g_pTaskbar->SetProgressValue(hwnd, percent, 100);
+	}
+	return;
 }
 
 //检查文件是否存在
@@ -439,6 +480,7 @@ void poweron(bool SkipCheckWinVer) {
 	cout << "正在校验配置文件(1/4)";
 	gotoxy(15, 16);
 	cout << "[=                   ]";
+	taskbarprocess(TBPF_NORMAL, 5);
 	S(500);
 	//---
 	CreateDirectory("./settings", NULL);
@@ -468,6 +510,7 @@ void poweron(bool SkipCheckWinVer) {
 	cout << "正在验证系统版本(2/4) ";
 	gotoxy(15, 16);
 	cout << "[=====               ]";
+	taskbarprocess(TBPF_NORMAL, 25);
 	S(200);
 	//检测Windows版本
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
@@ -480,12 +523,14 @@ void poweron(bool SkipCheckWinVer) {
 	cout << "(3/4)      ";
 	gotoxy(15, 16);
 	cout << "[=======             ]";
+	taskbarprocess(TBPF_NORMAL, 35);
 	S(400);
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
 	if (SkipCheckWinVer == false) {
 		if (version >= 6.1) {
+			taskbarprocess(TBPF_PAUSED, 35);
 			if (MessageBox(NULL, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
 				string guipath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
@@ -495,10 +540,12 @@ void poweron(bool SkipCheckWinVer) {
 				if (fSuccess) {
 					gotoxy(15, 16);
 					cout << "[=============       ]";
+					taskbarprocess(TBPF_NORMAL, 65);
 					closeapp = true;
 					S(10);
 					gotoxy(15, 16);
 					cout << "[====================]";
+					taskbarprocess(TBPF_NORMAL, 100);
 					S(200);
 					return;
 				}
@@ -519,6 +566,7 @@ void poweron(bool SkipCheckWinVer) {
 	cout << "正在进行最后的准备(4/4)  ";
 	gotoxy(15, 16);
 	cout << "[===========         ]";
+	taskbarprocess(TBPF_NORMAL, 55);
 	S(400);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
 		cls
@@ -534,11 +582,14 @@ void poweron(bool SkipCheckWinVer) {
 	}
 	gotoxy(15, 16);
 	cout << "[===============     ]";
+	taskbarprocess(TBPF_NORMAL, 75);
 	S(10);
 	gotoxy(15, 16);
 	cout << "[====================]";
+	taskbarprocess(TBPF_NORMAL, 100);
 	S(100);
 	setfont(30);
+	taskbarprocess(TBPF_NOPROGRESS);
 	return;
 }
 
@@ -598,27 +649,6 @@ void about() {
 		cin >> ans;
 		if (ans == "b") {
 			return;
-		}
-		if (ans == "zhuoran") {
-			cout << "   =====       =====       =====\n";
-			S(10);
-			cout << " //     \\\\    ||    \\\\   //     \\\\\n";
-			S(10);
-			cout << " ||     ||    ||    ||   ||     ||\n";
-			S(10);
-			cout << " ||     ||    ||    //   ||     ||\n";
-			S(10);
-			cout << " ||     ||    ||====     ||     ||\n";
-			S(10);
-			cout << " ||     ||    ||         ||     ||\n";
-			S(10);
-			cout << " ||     ||    ||         ||     ||\n";
-			S(10);
-			cout << " \\\\     //    ||         \\\\     //\n";
-			S(10);
-			cout << "   =====      ||           =====\n";
-			S(10);
-			system("pause");
 		}
 	}
 }
@@ -1343,6 +1373,15 @@ struct Launcher {
 				quickstart();
 				s = "-1";
 				continue;
+			} else if (s == "使用新版界面") {
+				string unfreezepath = executable_path + "\\gui.exe";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(unfreezepath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				if (fSuccess) {
+					return;
+				}
 			} else if (s == "在晚自习制裁/循环清任务时启用日志-当前:false" or s == "在晚自习制裁/循环清任务时启用日志-当前:true") {
 				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
 				string value;
@@ -1484,6 +1523,8 @@ struct Launcher {
 
 int main(int argc, char *argv[]) {
 	system("title 正在初始化");
+	InitTaskbarInterface();
+	taskbarprocess(TBPF_INDETERMINATE);
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
 	//获取程序路径
@@ -1721,9 +1762,13 @@ int main(int argc, char *argv[]) {
 	//S(10);
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
 	//	return 0;
-	//}//返回1确定，2取消
-	//获取程序路径
+	//}//返回IDOK,IDCANCEL
+	//thread用法
+	//thread t(taskbarprocess,TBPF_INDETERMINATE,0);
+	//t.detach();不阻塞主进程
+	//t.join();阻塞主进程
 	system("title 希沃克星");
 	lc.lcmain();
+	ReleaseTaskbarInterface();
 	return 0;
 }
