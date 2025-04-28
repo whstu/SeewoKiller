@@ -29,17 +29,19 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=E:\devc++\DEV\SeewoKiller\!Licence.txt
-InfoBeforeFile=E:\devc++\DEV\SeewoKiller\!install.txt
 OutputDir=E:\devc++\DEV\SeewoKiller\installer
 OutputBaseFilename=setup-small
 SetupIconFile=E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico
 Compression=lzma
 SolidCompression=yes
+WizardStyle=classic
+WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\installer\label_friends_diligentsnake.bmp"
 
 [Languages]
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
+Name: "programicon"; Description: "创建“开始”菜单快捷方式"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 
 [Files]

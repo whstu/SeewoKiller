@@ -13,7 +13,7 @@
 ; 注: AppId的值为单独标识该应用程序。
 ; 不要为其他安装程序使用相同的AppId值。
 ; (生成新的GUID，点击 工具|在IDE中生成GUID。)
-AppId={{0C71E999-0DC4-43E0-AB2E-6D9B4C1A32E5}
+AppId={{13340AD7-C6F1-46D7-8B03-4C5C78F1AD9F}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 VersionInfoVersion={#MyAppProductVersion}
@@ -28,17 +28,19 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=E:\devc++\DEV\SeewoKiller\!Licence.txt
-InfoBeforeFile=E:\devc++\DEV\SeewoKiller\!install.txt
 OutputDir=E:\devc++\DEV\SeewoKiller\installer
 OutputBaseFilename=setup-custom
 SetupIconFile=E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico
 Compression=lzma
 SolidCompression=yes
+WizardStyle=classic
+WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\installer\label_friends_diligentsnake.bmp"
 
 [Languages]
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
+Name: "programicon"; Description: "创建“开始”菜单快捷方式"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 
 [Components]
@@ -59,7 +61,7 @@ Source: "E:\devc++\DEV\SeewoKiller\pai.exe"; DestDir: "{app}"; Flags: ignorevers
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Icons]
-Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: programicon
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]

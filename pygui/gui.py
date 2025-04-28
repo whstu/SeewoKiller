@@ -116,6 +116,9 @@ class SeewoKiller_run():
         class NumberDamn(threading.Thread):
             def run(self):
                 system(".\\SeewoKiller.exe game -numberdamn")
+        class Fjdz(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game -fjdz")
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -304,7 +307,7 @@ class NewWindow_game(QWidget):
         layout = QVBoxLayout()
 
         # 新窗口的列表项名称数组
-        self.new_list_items = ["数字炸弹", "五子棋"]
+        self.new_list_items = ["数字炸弹", "五子棋","飞机大战"]
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
@@ -326,6 +329,9 @@ class NewWindow_game(QWidget):
             self.numberdamn=SeewoKiller_run.Game.NumberDamn()
             self.numberdamn.start()
             #system(".\\SeewoKiller.exe game -numberdamn")
+        if item.text()=="飞机大战":
+            self.fjdz=SeewoKiller_run.Game.Fjdz()
+            self.fjdz.start()
 class NewWindow_regedit(QWidget):
     def __init__(self):
         super().__init__()
