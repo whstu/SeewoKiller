@@ -629,7 +629,6 @@ void about() {
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
 	cout << "\nSeewo Killer 2.0 (Engorgio)\n";
-	cout << "\n希沃克星\n";
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
@@ -643,6 +642,9 @@ void about() {
 	cout << "\n新版界面基于PyQt5\n";
 	cout << "\n技巧：通过Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n";
 	cout << "瓦特工具箱Watt Toolkit可以加速对Steam、Github的访问，网址https://steampp.net/\n";
+	cout<<"\n";
+	cout<<"应用图标“勤奋蛇”来自广东小天才(R)科技有限公司\n";
+	cout<<"“Slytherin(TM)”是J.K.Rowling的注册商标，版权归WizardingWorld(R)所有\n";
 	cout << "\n按b+回车返回\n";
 	string ans;
 	while (true) {
