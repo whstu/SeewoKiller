@@ -54,7 +54,7 @@ class SeewoKiller_run():
             system(".\\SeewoKiller.exe wanzixi")
     class Pingbao(threading.Thread):
         def run(self):
-            system(".\\SeewoKiller.exe pingbao")
+            system(".\\SeewoKiller.exe liandianqi")
     class AI(threading.Thread):
         def run(self):
             system(".\\ai.exe")
@@ -70,6 +70,9 @@ class SeewoKiller_run():
     class SeewoFreeze(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe seewofreeze")
+    class SeewoLock(threading.Thread):
+        def run(self):
+            system(".\\SeewoKIller.exe seewolock")
     class OldUI(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe run -oldui")
@@ -130,14 +133,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.tab_widget)
 
         # 按钮名称数组
-        self.common_buttons = ["晚自习制裁模式", "一键防屏保", "小游戏"]
+        self.common_buttons = ["一键解希沃锁屏 (Beta)","晚自习制裁模式", "一键防屏保", "小游戏"]
         # 创建“常用”选项卡
         self.tab_common = QWidget()
         self.tab_widget.addTab(self.tab_common, "常用")
         self.setup_common_tab()
 
         # 列表项名称数组（所有和设置选项卡共用）
-        self.list_items_all = ["循环清任务", "一键卸载","晚自习制裁模式", "一键防屏保", "小游戏", "恶搞","注册表"]
+        self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏 (Beta)", "小游戏", "恶搞","注册表"]
         self.list_items_more = ["冰点还原破解","AI","计算π"]
         self.list_items_settings = ["退出","在晚自习制裁/循环清任务时启用日志","检查更新","关于", "使用经典界面"]
 
@@ -227,14 +230,17 @@ class MainWindow(QMainWindow):
 
     def on_common_button_clicked(self, button_number):
         if button_number==1:
+            self.seewolock=SeewoKiller_run.SeewoLock()
+            self.seewolock.start()
+        if button_number==2:
             self.wanzixi=SeewoKiller_run.Wanzixi()
             self.wanzixi.start()
             #system(".\\SeewoKiller.exe wanzixi")
-        if button_number==2:
+        if button_number==3:
             self.pingbao=SeewoKiller_run.Pingbao()
             self.pingbao.start()
             #system(".\\SeewoKiller.exe pingbao")
-        if button_number==3:
+        if button_number==4:
             self.open_new_window_game()
         '''print("123", button_number)'''
 
@@ -246,7 +252,7 @@ class MainWindow(QMainWindow):
             self.open_new_window_joke()
         if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
             self.open_new_window_regedit()
-        if item.text() == "循环清任务":
+        if item.text() == "循环清任务 (可解屏保)":
             self.taskkill=SeewoKiller_run.Taskkill()
             self.taskkill.start()
         if item.text() == "一键卸载":
@@ -256,6 +262,9 @@ class MainWindow(QMainWindow):
             self.seewofreeze=SeewoKiller_run.SeewoFreeze()
             self.seewofreeze.start()
             #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
+        if item.text()=="一键解希沃锁屏 (Beta)":
+            self.seewolock=SeewoKiller_run.SeewoLock()
+            self.seewolock.start()
         if item.text()=="AI":
             self.ai=SeewoKiller_run.AI()
             self.ai.start()
@@ -266,7 +275,7 @@ class MainWindow(QMainWindow):
             self.wanzixi=SeewoKiller_run.Wanzixi()
             self.wanzixi.start()
             #system(".\\SeewoKiller.exe wanzixi")
-        if item.text() == "一键防屏保":
+        if item.text() == "连点器 (自习课防屏保)":
             self.pingbao=SeewoKiller_run.Pingbao()
             self.pingbao.start()
             #system(".\\SeewoKiller.exe pingbao")

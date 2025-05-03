@@ -1,5 +1,5 @@
 @echo off
-pyinstaller -F --onefile -i E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico .\pygui\pai.py
+pyinstaller -F --onefile -i E:\devc++\DEV\SeewoKiller\app.ico .\pygui\pai.py
 copy ".\dist\pai.exe" ".\pai.exe"
 timeout /t 1
 rd /s /q .\build

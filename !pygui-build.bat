@@ -1,5 +1,5 @@
 @echo off
-pyinstaller -F -w -i E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico .\pygui\gui.py
+pyinstaller -F -w -i E:\devc++\DEV\SeewoKiller\app.ico .\pygui\gui.py
 copy ".\dist\gui.exe" ".\gui.exe"
 timeout /t 2
 rd /s /q .\build

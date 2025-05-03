@@ -43,16 +43,16 @@ bool closeapp = false;
 int box = 1/*板块*/, boxn = 4/*板块总数*/;
 struct Word {
 	string box[5] {"NULL", "常用", "核心功能", "附加功能", "设置"};
-	int recentn = 3;
-	string recent[4] = {"NULL", "晚自习制裁模式", "一键防屏保", "小游戏>>>"};
-	int alln = 7;
-	string all[8] = {"NULL", "循环清任务", "一键卸载", "晚自习制裁模式", "一键防屏保", "小游戏>>>", "恶搞>>>", "注册表>>>"};
+	int recentn = 4;
+	string recent[5] = {"NULL", "一键解希沃锁屏(Beta)", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
+	int alln = 8;
+	string all[9] = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏(Beta)", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
 	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
 	int settingn = 5;
 	string setting[6] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "使用新版界面", "启动初学者引导", "关于"};
 	int gamen = 4;
-	string game[5] = {"NULL", "返回", "数字炸弹", "五子棋","飞机大战"};
+	string game[5] = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战"};
 	int joken = 3;
 	string joke[4] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台", "提取U盘文件"};
 	int regn = 9;
@@ -642,9 +642,9 @@ void about() {
 	cout << "\n新版界面基于PyQt5\n";
 	cout << "\n技巧：通过Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n";
 	cout << "瓦特工具箱Watt Toolkit可以加速对Steam、Github的访问，网址https://steampp.net/\n";
-	cout<<"\n";
-	cout<<"应用图标“勤奋蛇”来自广东小天才(R)科技有限公司\n";
-	cout<<"“Slytherin(TM)”是J.K.Rowling的注册商标，版权归WizardingWorld(R)所有\n";
+	cout << "\n";
+	cout << "应用图标“勤奋蛇”来自广东小天才(R)科技有限公司\n";
+	cout << "“Slytherin(TM)”是J.K.Rowling的注册商标，版权归WizardingWorld(R)所有\n";
 	cout << "\n按b+回车返回\n";
 	string ans;
 	while (true) {
@@ -723,16 +723,16 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			file.close();
 			n++;
 		}
-		thread a1(system,"TASKKILL /F /IM EasiRecorder.exe");
+		thread a1(system, "TASKKILL /F /IM EasiRecorder.exe");
 		a1.detach();
 		//cout << "正在结束进程：轻录播\n";
 		//cout << "TASKKILL /F /IM EasiRecorder.exe\n";
 		system("TASKKILL /F /IM EasiRecorder.exe");
 		if (KillSeewoService == true) {
 			cout << "正在结束进程：希沃管家\n";
-			thread b1(system,"TASKKILL /F /IM SeewoServiceAssistant.exe");
-			thread b2(system,"TASKKILL /F /IM SeewoAbility.exe");
-			thread b3(system,"TASKKILL /F /IM SeewoCore.exe");
+			thread b1(system, "TASKKILL /F /IM SeewoServiceAssistant.exe");
+			thread b2(system, "TASKKILL /F /IM SeewoAbility.exe");
+			thread b3(system, "TASKKILL /F /IM SeewoCore.exe");
 			b1.detach();
 			b2.detach();
 			b3.join();
@@ -744,12 +744,12 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 			//system("TASKKILL /F /IM SeewoCore.exe");
 		}
 		if (Wanzixi == true) {
-			thread c1(system,"taskkill /f /t /im taskmgr.exe");
-			thread c2(system,"TASKKILL /F /IM SystemSettings.exe");
-			thread c3(system,"taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
-			thread c4(system,"taskkill /f /fi \"WINDOWTITLE eq 控制面板\\网络和 Internet\\网络连接\"");
-			thread c5(system,"TASKKILL /F /IM msedge.exe");
-			thread c6(system,"TASKKILL /F /IM iexplore.exe");
+			thread c1(system, "taskkill /f /t /im taskmgr.exe");
+			thread c2(system, "TASKKILL /F /IM SystemSettings.exe");
+			thread c3(system, "taskkill /f /fi \"WINDOWTITLE eq 网络连接\"");
+			thread c4(system, "taskkill /f /fi \"WINDOWTITLE eq 控制面板\\网络和 Internet\\网络连接\"");
+			thread c5(system, "TASKKILL /F /IM msedge.exe");
+			thread c6(system, "TASKKILL /F /IM iexplore.exe");
 			c1.detach();
 			c2.detach();
 			c3.join();
@@ -784,36 +784,87 @@ void uninstall() {
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
 	cout << "正在卸载希沃智能笔助手\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"");
-	cout<<"正在卸载YOKO高效课堂\n";
+	cout << "正在卸载YOKO高效课堂\n";
 	system("\"D:\\YOKO高效课堂\\Uninstall YOKO高效课堂.exe\"");
 	return;
 }
 
-void pingbaoservice() {
+void liandianqi() {
+	cls
+	int gap;
+	int x, y;
 	SetColorAndBackground(4, 6);
-	cout << "警告：请勿用于正常上课！\n";
+	cout << "警告：请勿用于正常上课！";
 	SetColorAndBackground(0, 7);
-	cout << "每100秒点击屏幕一次，请将鼠标移动至合适位置\n";
+	cout << "\n\n点击间隔：单位为毫秒，不支持小数，可输入0";
+	cout << "\n请输入点击间隔:";
+	cin >> gap;
+	while (cin.fail() or gap < 0) {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "输入错误，请重试:";
+		cin >> gap;
+	}
+	cout << "\n\n点击坐标：点击屏幕的坐标，输入114514为默认（跟随鼠标位置移动）\n";
+	cout << "请输入坐标x(横):";
+	cin >> x;
+	while (cin.fail() or x < 0) {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "输入错误，请重试:";
+		cin >> x;
+	}
+	cout << "\n请输入坐标y(纵):";
+	cin >> y;
+	while (cin.fail() or y < 0) {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "输入错误，请重试：";
+		cin >> y;
+	}
+	cout << "每" << gap << "秒点击屏幕一次，请将鼠标移动至合适位置\n";
 	system("pause");
 	long long i = 1;
 	while (true) {
-		if ( _kbhit() ) {
-			char x = _getch();
-			switch (x) {
-				case ' ': {
-					return;
-				}
-			}
-		}
-		S(100000);
 		cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << i;
 		POINT cur_pos;
 		GetCursorPos(&cur_pos);
+		if (x != 114514) {
+			cur_pos.x = x;
+		}
+		if (y != 114514) {
+			cur_pos.y = y;
+		}
 		mouse_event(MOUSEEVENTF_LEFTDOWN, cur_pos.x, cur_pos.y, 0, 0);
 		mouse_event(MOUSEEVENTF_LEFTUP, cur_pos.x, cur_pos.y, 0, 0);
 		i++;
+		S(gap);
 	}
 }
+
+int seewolock() {
+	cout << "SeewoLock Cracker已启动。\n";
+	MessageBox(NULL, _T("你可能需要点击一下锁屏界面才能产生效果。"), _T("鸡叫"), MB_OK);
+	RECT rswls;//定义结构
+	HWND cmd = FindWindow("ConsoleWindowClass", NULL); //找cmd窗口
+	ShowWindow(hwnd, SW_MINIMIZE);
+	//SetWindowPos(cmd, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW | SWP_NOOWNERZORDER); //隐藏窗口
+	while (true) {
+		int cx = GetSystemMetrics(SM_CXSCREEN);//获取屏幕长
+		int cy = GetSystemMetrics(SM_CYSCREEN);//获取屏幕宽
+		HWND sw = FindWindow(NULL, "希沃管家"); //找同名窗口
+		HWND swf = GetForegroundWindow(); //找顶置
+		if (sw != 0 && sw == swf) { //顶置窗口等于找的窗口（有时需点击锁屏窗口）
+			GetClientRect(sw, &rswls); //查窗口大小
+			if (rswls.right == cx && rswls.bottom == cy) { //如果大小等于屏幕大小（锁屏覆盖整块屏幕）
+				SetWindowPos(sw, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW | SWP_NOOWNERZORDER); //隐藏窗口
+			}
+		}
+		Sleep(500);//休息0.5s（防止CPU占用过高）
+	}
+	return 0;
+}
+
 typedef long long LL;
 namespace GAME {
 	void numberdamn() {
@@ -1155,7 +1206,7 @@ namespace GAME {
 			return;
 		}
 	} wzq;
-	namespace feijidazhan{
+	namespace feijidazhan {
 		typedef struct Frame {
 			COORD position[2];
 			int flag;
@@ -1165,20 +1216,20 @@ namespace GAME {
 			SetConsoleCursorPosition(out, a);
 		}
 		void SetPos(int i, int j) {
-			COORD pos = {i, j};
+			COORD pos = {static_cast<SHORT>(i), static_cast<SHORT>(j)};
 			SetPos(pos);
 		}
 		void HideCursor() {
 			CONSOLE_CURSOR_INFO cursor_info = {1, 0};
 			SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 		}
-		
+
 		void drawRow(int y, int x1, int x2, char ch) {
 			SetPos(x1, y);
 			for (int i = 0; i <= (x2 - x1); i++)
 				cout << ch;
 		}
-		
+
 		void drawRow(COORD a, COORD b, char ch) {
 			if (a.Y == b.Y)
 				drawRow(a.Y, a.X, b.X, ch);
@@ -1188,7 +1239,7 @@ namespace GAME {
 				system("pause");
 			}
 		}
-		
+
 		void drawCol(int x, int y1, int y2, char ch) {
 			int y = y1;
 			while (y != y2 + 1) {
@@ -1197,7 +1248,7 @@ namespace GAME {
 				y++;
 			}
 		}
-		
+
 		void drawCol(COORD a, COORD b, char ch) {
 			if (a.X == b.X)
 				drawCol(a.X, a.Y, b.Y, ch);
@@ -1207,7 +1258,7 @@ namespace GAME {
 				system("pause");
 			}
 		}
-		
+
 		void drawFrame(COORD a, COORD b, char row, char col) {
 			drawRow(a.Y, a.X + 1, b.X - 1, row);
 			drawRow(b.Y, a.X + 1, b.X - 1, row);
@@ -1215,8 +1266,8 @@ namespace GAME {
 			drawCol(b.X, a.Y + 1, b.Y - 1, col);
 		}
 		void drawFrame(int x1, int y1, int x2, int y2, char row, char col) {
-			COORD a = {x1, y1};
-			COORD b = {x2, y2};
+			COORD a = {static_cast<SHORT>(x1), static_cast<SHORT>(y1)};
+			COORD b = {static_cast<SHORT>(x2), static_cast<SHORT>(y2)};
 			drawFrame(a, b, row, col);
 		}
 		void drawFrame(Frame frame, char row, char col) {
@@ -1245,16 +1296,16 @@ namespace GAME {
 			SetPos(52, 18);
 			cout << " 空格 发射子弹。";
 		}
-		
+
 		int random(int a, int b) {
 			int c = (rand() % (a - b)) + a;
 			return c;
 		}
-		
+
 		COORD random(COORD a, COORD b) {
 			int x = random(a.X, b.X);
 			int y = random(a.Y, b.Y);
-			COORD c = {x, y};
+			COORD c = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
 			return c;
 		}
 		bool judgeCoordInFrame(Frame frame, COORD spot) {
@@ -1339,7 +1390,7 @@ namespace GAME {
 				}
 			}
 		}
-		bool end=false;
+		bool end = false;
 		class Game {
 		public:
 			COORD position[10];
@@ -1351,22 +1402,22 @@ namespace GAME {
 			string title;
 			int flag_rank;
 			Game ();
-			
+
 			void initPlane();
 			void initBullet();
 			void initEnemy();
-			
+
 			void planeMove(char);
 			void bulletMove();
 			void enemyMove();
-			
+
 			void drawPlane();
 			void drawPlaneToNull();
 			void drawBullet();
 			void drawBulletToNull();
 			void drawEnemy();
 			void drawEnemyToNull();
-			
+
 			void drawThisBulletToNull( COORD );
 			void drawThisEnemyToNull( Frame );
 			void Pause();
@@ -1430,7 +1481,7 @@ namespace GAME {
 		void Game::drawBulletToNull() {
 			for (int i = 0; i < 10; i++)
 				if ( bullet[i].Y != 30 ) {
-					COORD pos = {bullet[i].X, bullet[i].Y + 1};
+					COORD pos = {static_cast<SHORT>(bullet[i].X), static_cast<SHORT>(bullet[i].Y + 1)};
 					SetPos(pos);
 					cout << " ";
 				}
@@ -1487,7 +1538,7 @@ namespace GAME {
 				if ( bullet[i].Y != 30) {
 					bullet[i].Y -= 1;
 					if ( bullet[i].Y == 1 ) {
-						COORD pos = {bullet[i].X, bullet[i].Y + 1};
+						COORD pos = {static_cast<SHORT>(bullet[i].X), static_cast<SHORT>(bullet[i].Y + 1)};
 						drawThisBulletToNull( pos );
 						bullet[i].Y = 30;
 					}
@@ -1516,7 +1567,7 @@ namespace GAME {
 						drawFrame(enemy[i], '+', '+');
 						Sleep(1000);
 						GameOver();
-						end=true;
+						end = true;
 						return;
 					}
 		}
@@ -1594,8 +1645,8 @@ namespace GAME {
 						planeMove(x);
 						drawPlane();
 						judgePlane();
-						if(end==true){
-							x='e';
+						if (end == true) {
+							x = 'e';
 						}
 					}
 					if ('p' == x)
@@ -1607,7 +1658,7 @@ namespace GAME {
 						break;
 					}
 				}
-				
+
 				if ( 0 == flag_bullet ) {
 					bulletMove();
 					drawBulletToNull();
@@ -1617,13 +1668,13 @@ namespace GAME {
 				flag_bullet++;
 				if ( 5 == flag_bullet )
 					flag_bullet = 0;
-				
+
 				if ( 0 == flag_enemy ) {
 					drawEnemyToNull();
 					enemyMove();
 					drawEnemy();
 					judgePlane();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 				}
@@ -1656,7 +1707,7 @@ namespace GAME {
 			SetPos(30, 16);
 			Sleep(1000);
 			cout << "继续？ 是（y）| 否（n）";
-			as:
+as:
 			char x = _getch();
 			if (x == 'n')
 				return;
@@ -1680,7 +1731,7 @@ namespace GAME {
 			system("cls");
 			drawPlaying();
 			game.Playing();
-			end=false;
+			end = false;
 			return;
 		}
 	}
@@ -1873,7 +1924,7 @@ struct Launcher {
 						break;
 					}
 				}
-			} else if (s == "循环清任务") {
+			} else if (s == "循环清任务(上课防屏保)") {
 				taskkill(true, false);
 			} else if (s == "一键卸载") {
 				uninstall();
@@ -1915,8 +1966,10 @@ struct Launcher {
 			} else if (s == "晚自习制裁模式") {
 				system("title 制裁晚自习");
 				taskkill(true, true);
-			} else if (s == "一键防屏保") {
-				pingbaoservice();
+			} else if (s == "连点器(可防屏保)") {
+				liandianqi();
+			} else if (s == "一键解希沃锁屏(Beta)") {
+				seewolock();
 			} else if (s == "退出") {
 				return;
 			} else if (s == "关于") {
@@ -1983,12 +2036,12 @@ struct Launcher {
 					setfont(30);
 					d = "返回";
 				}
-				if(d=="飞机大战"){
+				if (d == "飞机大战") {
 					cls
 					setfont(20);
 					feijidazhan::main();
 					setfont(30);
-					d="返回";
+					d = "返回";
 				}
 			} else if (s == "恶搞>>>") {
 				head();
@@ -2123,8 +2176,8 @@ int main(int argc, char *argv[]) {
 				ShowWindow(hwnd, SW_MAXIMIZE);
 				numberdamn();
 			}
-			if(cmd[2]=="-fjdz"){
-				ShowWindow(hwnd,SW_MAXIMIZE);
+			if (cmd[2] == "-fjdz") {
+				ShowWindow(hwnd, SW_MAXIMIZE);
 				feijidazhan::main();
 			}
 			return 0;
@@ -2180,9 +2233,14 @@ int main(int argc, char *argv[]) {
 			uninstall();
 			return 0;
 		}
-		if (cmd[1] == "pingbao") {
-			system("title 一键防屏保");
-			pingbaoservice();
+		if (cmd[1] == "liandianqi") {
+			system("title 连点器");
+			liandianqi();
+			return 0;
+		}
+		if (cmd[1] == "seewolock") {
+			system("title 破解希沃锁屏");
+			seewolock();
 			return 0;
 		}
 		if (cmd[1] == "seewofreeze") {

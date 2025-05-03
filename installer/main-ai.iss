@@ -30,11 +30,11 @@ DisableProgramGroupPage=yes
 LicenseFile=E:\devc++\DEV\SeewoKiller\!Licence.txt
 OutputDir=E:\devc++\DEV\SeewoKiller\installer
 OutputBaseFilename=setup-ai
-SetupIconFile=E:\devc++\DEV\SeewoKiller\label_friends_diligentsnake.ico
+SetupIconFile=E:\devc++\DEV\SeewoKiller\app.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=classic
-WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\installer\label_friends_diligentsnake.bmp"
+WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\installer\seewokiller-icon-beta.bmp"
 
 [Languages]
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
