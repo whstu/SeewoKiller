@@ -35,7 +35,7 @@ SetupIconFile=E:\devc++\DEV\SeewoKiller\app.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=classic
-WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\installer\seewokiller-icon-beta.bmp"
+WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\icon\seewokiller-icon-beta-55x58.bmp"
 
 [Languages]
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"

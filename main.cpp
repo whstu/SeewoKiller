@@ -850,6 +850,8 @@ int seewolock() {
 	ShowWindow(hwnd, SW_MINIMIZE);
 	//SetWindowPos(cmd, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW | SWP_NOOWNERZORDER); //隐藏窗口
 	while (true) {
+		thread t(taskkill,true,false);
+		t.detach();
 		int cx = GetSystemMetrics(SM_CXSCREEN);//获取屏幕长
 		int cy = GetSystemMetrics(SM_CYSCREEN);//获取屏幕宽
 		HWND sw = FindWindow(NULL, "希沃管家"); //找同名窗口
