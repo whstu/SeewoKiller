@@ -71,7 +71,7 @@
 
 - [帮助文档](https://github.com/whstu/SeewoKiller/wiki)
 
-> [WARNING]
+> [!WARNING]
 > SeewoKiller Wiki 中的内容将不再更新。需要更多关于软件操作的帮助，请打开希沃克星软件的新手引导程序。
 
 您也可以加入这些社区**寻求帮助**：
