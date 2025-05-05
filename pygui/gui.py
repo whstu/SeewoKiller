@@ -75,7 +75,11 @@ class SeewoKiller_run():
             system(".\\SeewoKIller.exe seewolock")
     class OldUI(threading.Thread):
         def run(self):
-            system(".\\SeewoKiller.exe run -oldui")
+            system(".\\SeewoKiller.exe ui -oldui")
+    class Run():
+        class Fastboot(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe run fastboot")
     class setvalue():
         class Log(threading.Thread):
             def run(self):
@@ -122,6 +126,9 @@ class SeewoKiller_run():
         class Fjdz(threading.Thread):
             def run(self):
                 system(".\\SeewoKiller.exe game -fjdz")
+        class Emlpd(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game")
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -142,7 +149,7 @@ class MainWindow(QMainWindow):
         # 列表项名称数组（所有和设置选项卡共用）
         self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏 (Beta)", "小游戏", "恶搞","注册表"]
         self.list_items_more = ["冰点还原破解","AI","计算π"]
-        self.list_items_settings = ["退出","在晚自习制裁/循环清任务时启用日志","检查更新","关于", "使用经典界面"]
+        self.list_items_settings = ["退出","在晚自习制裁/循环清任务时启用日志","检查更新", "使用经典界面","重启到 fastboot","关于"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
@@ -286,6 +293,10 @@ class MainWindow(QMainWindow):
         if item.text()=="在晚自习制裁/循环清任务时启用日志":
             self.setvalue_log=SeewoKiller_run.setvalue.Log()
             self.setvalue_log.start()
+        if item.text()=="重启到 fastboot":
+            self.fastboot=SeewoKiller_run.Run.Fastboot()
+            self.fastboot.start()
+            system("TASKKILL /F /IM gui.exe")
         if item.text()=="检查更新":
             self.new_window_checkupdate=NewWindow_Update()
             self.new_window_checkupdate.show()
@@ -316,7 +327,7 @@ class NewWindow_game(QWidget):
         layout = QVBoxLayout()
 
         # 新窗口的列表项名称数组
-        self.new_list_items = ["数字炸弹", "五子棋","飞机大战"]
+        self.new_list_items = ["数字炸弹", "五子棋","飞机大战","恶魔轮盘赌"]
 
         # 创建列表并添加项（使用数组中的项名称）
         self.new_list_widget = QListWidget()
@@ -341,6 +352,8 @@ class NewWindow_game(QWidget):
         if item.text()=="飞机大战":
             self.fjdz=SeewoKiller_run.Game.Fjdz()
             self.fjdz.start()
+        if item.text()=="恶魔轮盘赌":
+            pass
 class NewWindow_regedit(QWidget):
     def __init__(self):
         super().__init__()
