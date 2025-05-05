@@ -4,6 +4,11 @@
 
 # <image src="https://image-whstu.pages.dev/app.ico" height="35"/> SeewoKiller
 
+![GitHub last commit](https://img.shields.io/github/last-commit/whstu/SeewoKiller)
+![Visitors](https://api.visitorbadge.io/api/combined?path=https://github.com/whstu/SeewoKiller&label=Visitors&countColor=%23263759&style=flat)
+
+![Repobeats](https://repobeats.axiom.co/api/embed/eeffd57d50ce49cd2b10796d017d51afa897e372.svg "Repobeats analytics image")
+
 ![软件截图 - 主界面](https://image-whstu.pages.dev/seewokillershortcut.png)
 
 
