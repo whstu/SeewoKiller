@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
         # 列表项名称数组（所有和设置选项卡共用）
         self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏 (Beta)", "小游戏", "恶搞","注册表"]
         self.list_items_more = ["冰点还原破解","AI","计算π"]
-        self.list_items_settings = ["退出","在晚自习制裁/循环清任务时启用日志","检查更新", "使用经典界面","重启到 fastboot","关于"]
+        self.list_items_settings = ["在晚自习制裁/循环清任务时启用日志","检查更新", "使用经典界面","重启到 fastboot","关于"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
@@ -288,8 +288,6 @@ class MainWindow(QMainWindow):
             #system(".\\SeewoKiller.exe pingbao")
             #print("456", item.text().split(' ')[1])
             # 打印项文本（去掉前面的“项”字和编号后的空格）
-        if item.text()=="退出":
-            sys.exit(app.exec_())
         if item.text()=="在晚自习制裁/循环清任务时启用日志":
             self.setvalue_log=SeewoKiller_run.setvalue.Log()
             self.setvalue_log.start()

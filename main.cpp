@@ -38,7 +38,7 @@ size_t position;
 string xwbbpath;
 int dwMajorInt;
 int dwMinorInt;
-bool closeapp = false, fastboot = false;
+bool fastboot = false;
 
 int box = 1/*板块*/, boxn = 4/*板块总数*/;
 struct Word {
@@ -548,13 +548,12 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 					gotoxy(15, 16);
 					cout << "[=============       ]";
 					taskbarprocess(TBPF_NORMAL, 65);
-					closeapp = true;
 					S(10);
 					gotoxy(15, 16);
 					cout << "[====================]";
 					taskbarprocess(TBPF_NORMAL, 100);
 					S(200);
-					return;
+					exit(0);
 				}
 			}//返回1确定，2取消
 		}
@@ -650,7 +649,6 @@ void about() {
 	cout << "\n技巧：通过Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n";
 	cout << "瓦特工具箱Watt Toolkit可以加速对Steam、Github的访问，网址https://steampp.net/\n";
 	cout << "\n";
-	cout << "应用图标“勤奋蛇”来自广东小天才(R)科技有限公司\n";
 	cout << "“Slytherin(TM)”是J.K.Rowling的注册商标，版权归WizardingWorld(R)所有\n";
 	cout << "\n按b+回车返回\n";
 	string ans;
@@ -3516,9 +3514,6 @@ int main(int argc, char *argv[]) {
 	//system(".\\SeewoKiller.exe qwert asdfg");
 	system("title Seewo Killer Starting");
 	poweron(skipcheck, fastboot);
-	if (closeapp == true) {
-		return 0;
-	}
 	cls
 	//S(10);
 	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
