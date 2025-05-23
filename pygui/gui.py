@@ -5,6 +5,8 @@ import threading
 # 获取更新
 import urllib.request
 import warnings
+from threading import Thread
+
 from bs4 import BeautifulSoup
 
 from os import system
@@ -70,9 +72,12 @@ class SeewoKiller_run():
     class SeewoFreeze(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe seewofreeze")
-    class SeewoLock(threading.Thread):
+    class SeewoLock1(threading.Thread):
         def run(self):
-            system(".\\SeewoKIller.exe seewolock")
+            system(".\\SeewoKiller.exe seewolock 1")
+    class SeewoLock2(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe seewolock 2")
     class OldUI(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe ui -oldui")
@@ -140,7 +145,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.tab_widget)
 
         # 按钮名称数组
-        self.common_buttons = ["一键解希沃锁屏 (Beta)","晚自习制裁模式", "一键防屏保", "小游戏"]
+        self.common_buttons = ["一键解希沃锁屏 (Beta) 方案 1","一键解希沃锁屏 (Beta) 方案 2","晚自习制裁模式", "一键防屏保", "小游戏"]
         # 创建“常用”选项卡
         self.tab_common = QWidget()
         self.tab_widget.addTab(self.tab_common, "常用")
@@ -269,8 +274,11 @@ class MainWindow(QMainWindow):
             self.seewofreeze=SeewoKiller_run.SeewoFreeze()
             self.seewofreeze.start()
             #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
-        if item.text()=="一键解希沃锁屏 (Beta)":
-            self.seewolock=SeewoKiller_run.SeewoLock()
+        if item.text()=="一键解希沃锁屏 (Beta) 方案 1":
+            self.seewolock=SeewoKiller_run.SeewoLock1()
+            self.seewolock.start()
+        if item.text()=="一键解希沃锁屏 (Beta) 方案 2":
+            self.seewolock=SeewoKiller_run.SeewoLock2()
             self.seewolock.start()
         if item.text()=="AI":
             self.ai=SeewoKiller_run.AI()

@@ -2,8 +2,8 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星AI版"
-#define MyAppVersion "2.0.0.0"
-#define MyAppProductVersion "2.0.0.0"
+#define MyAppVersion "2.0.1.13"
+#define MyAppProductVersion "2.0.1.0"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.dpdns.org/"
 #define MyAppExeName "SeewoKiller.exe"
@@ -58,7 +58,7 @@ Source: "E:\devc++\DEV\SeewoKiller\SeewoFreeze\*"; DestDir: "{app}\SeewoFreeze";
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: programicon
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\RunAsFastboot.exe"; Tasks: fbicon
+Name: "{commondesktop}\{#MyAppName}-fastboot模式"; Filename: "{app}\RunAsFastboot.exe"; Tasks: fbicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
