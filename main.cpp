@@ -2829,27 +2829,6 @@ as:
 		}
 		int main() {
 			end = false;
-			/*Your = 0;
-			Other = 0;
-			daojuname = {};
-			Yourmoney = 0.0;
-			huihe = 0;
-			emoqbq = 0;
-			ndqbq = 0;
-			shi = 0;
-			kong = 0;
-			q = {};
-			qlen = 0;
-			T = 0;
-			daojulen = 0;
-			daoju = {};
-			daojulen1 = 0;
-			daoju1 = {};
-			Hurt = 0;
-			shoukao_you = 0;
-			Know = 0;
-			shoukaoemo = 0;
-			asdasd = 0;*/
 			srand(time(0));
 			int x;
 			while (1) {
@@ -3355,7 +3334,6 @@ int main(int argc, char *argv[]) {
 				wzq.wzqmain();
 			}
 			if (cmd[2] == "-numberdamn") {
-				ShowWindow(hwnd, SW_MAXIMIZE);
 				numberdamn();
 			}
 			if (cmd[2] == "-fjdz") {
@@ -3363,7 +3341,6 @@ int main(int argc, char *argv[]) {
 				feijidazhan::main();
 			}
 			if (cmd[2] == "-emlpd") {
-				ShowWindow(hwnd, SW_MINIMIZE);
 				emlpd::main();
 			}
 			return 0;
