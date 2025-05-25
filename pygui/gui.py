@@ -72,12 +72,9 @@ class SeewoKiller_run():
     class SeewoFreeze(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe seewofreeze")
-    class SeewoLock1(threading.Thread):
+    class SeewoLock(threading.Thread):
         def run(self):
-            system(".\\SeewoKiller.exe seewolock 1")
-    class SeewoLock2(threading.Thread):
-        def run(self):
-            system(".\\SeewoKiller.exe seewolock 2")
+            system(".\\SeewoKiller.exe wanzixi")
     class OldUI(threading.Thread):
         def run(self):
             system(".\\SeewoKiller.exe ui -oldui")
@@ -133,7 +130,7 @@ class SeewoKiller_run():
                 system(".\\SeewoKiller.exe game -fjdz")
         class Emlpd(threading.Thread):
             def run(self):
-                system(".\\SeewoKiller.exe game")
+                system(".\\SeewoKiller.exe game -emlpd")
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -145,14 +142,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.tab_widget)
 
         # 按钮名称数组
-        self.common_buttons = ["一键解希沃锁屏 (Beta) 方案 1","一键解希沃锁屏 (Beta) 方案 2","晚自习制裁模式", "一键防屏保", "小游戏"]
+        self.common_buttons = ["一键解希沃锁屏","晚自习制裁模式", "一键防屏保", "小游戏"]
         # 创建“常用”选项卡
         self.tab_common = QWidget()
         self.tab_widget.addTab(self.tab_common, "常用")
         self.setup_common_tab()
 
         # 列表项名称数组（所有和设置选项卡共用）
-        self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏 (Beta)", "小游戏", "恶搞","注册表"]
+        self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏", "小游戏", "恶搞","注册表"]
         self.list_items_more = ["冰点还原破解","AI","计算π"]
         self.list_items_settings = ["在晚自习制裁/循环清任务时启用日志","检查更新", "使用经典界面","重启到 fastboot","关于"]
 
@@ -274,11 +271,8 @@ class MainWindow(QMainWindow):
             self.seewofreeze=SeewoKiller_run.SeewoFreeze()
             self.seewofreeze.start()
             #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
-        if item.text()=="一键解希沃锁屏 (Beta) 方案 1":
-            self.seewolock=SeewoKiller_run.SeewoLock1()
-            self.seewolock.start()
-        if item.text()=="一键解希沃锁屏 (Beta) 方案 2":
-            self.seewolock=SeewoKiller_run.SeewoLock2()
+        if item.text()=="一键解希沃锁屏":
+            self.seewolock=SeewoKiller_run.SeewoLock()
             self.seewolock.start()
         if item.text()=="AI":
             self.ai=SeewoKiller_run.AI()
@@ -359,7 +353,8 @@ class NewWindow_game(QWidget):
             self.fjdz=SeewoKiller_run.Game.Fjdz()
             self.fjdz.start()
         if item.text()=="恶魔轮盘赌":
-            pass
+            self.emlpd=SeewoKiller_run.Game.Emlpd()
+            self.emlpd.start()
 class NewWindow_regedit(QWidget):
     def __init__(self):
         super().__init__()

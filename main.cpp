@@ -44,21 +44,21 @@ int box = 1/*板块*/, boxn = 4/*板块总数*/;
 struct Word {
 	string box[5] {"NULL", "常用", "核心功能", "附加功能", "设置"};
 	int recentn = 4;
-	string recent[5] = {"NULL","一键解希沃锁屏","晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
+	string recent[5] = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
 	int alln = 8;
 	string all[9] = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
 	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
 	int settingn = 7;
-	string setting[9] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹","启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于","开发者选项>>>"};
+	string setting[9] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
 	int gamen = 5;
 	string game[6] = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
 	int joken = 3;
 	string joke[4] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台", "提取U盘文件"};
 	int regn = 9;
 	string reg[10] = {"NULL", "返回", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
-	int devn=3;
-	string dev[4]={"NULL","返回","释放进度条COM接口","关闭开发者模式"};
+	int devn = 3;
+	string dev[4] = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
 } word;
 
 HWND hwnd = GetConsoleWindow();
@@ -88,6 +88,7 @@ void setfont(int size) {//字体、大小、粗细
 	CONSOLE_FONT_INFO consoleCurrentFont;
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
+
 //任务栏进度条
 //全局或类成员变量
 ITaskbarList3* g_pTaskbar = nullptr;
@@ -192,12 +193,11 @@ void restartexp() {
 void connot_close_button() {
 	HMENU hmenu = GetSystemMenu(hwnd, false);
 	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
-	LONG style = GetWindowLong(hwnd, GWL_STYLE);
-	style &= ~(WS_MINIMIZEBOX);
-	SetWindowLong(hwnd, GWL_STYLE, style);
-	SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	SetWindowLong(hwnd, GWL_STYLE,
+	              GetWindowLong(hwnd, GWL_STYLE) & ~(WS_MINIMIZEBOX | WS_THICKFRAME));
 	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
-	DestroyMenu(hmenu);
+	SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
+	DrawMenuBar(hwnd);
 	ReleaseDC(hwnd, NULL);
 }
 
@@ -269,8 +269,8 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		word.joken = 1;
 		return;
 	}
-	connot_close_button();
 	setfont(30);
+	connot_close_button();
 	S(500);
 	cout << "\n\n\n\n";
 	S(10);
@@ -659,9 +659,9 @@ void about() {
 		if (ans == "b") {
 			return;
 		}
-		if(ans=="dev"){
-			word.settingn=8;
-			cout<<"开发者模式 已开启。\n按b后回车即可返回。\n";
+		if (ans == "dev") {
+			word.settingn = 8;
+			cout << "开发者模式 已开启。\n按b后回车即可返回。\n";
 		}
 	}
 }
@@ -795,8 +795,6 @@ void uninstall() {
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiAgent\\Uninstall.exe\"");
 	cout << "正在卸载希沃智能笔助手\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\SmartpenService\\Uninstall.exe\"");
-	cout << "正在卸载YOKO高效课堂\n";
-	system("\"D:\\YOKO高效课堂\\Uninstall YOKO高效课堂.exe\"");
 	return;
 }
 
@@ -1195,6 +1193,7 @@ namespace GAME {
 		}
 	} wzq;
 	namespace feijidazhan {
+		bool end = false;
 		typedef struct Frame {
 			COORD position[2];
 			int flag;
@@ -1378,17 +1377,16 @@ namespace GAME {
 				}
 			}
 		}
-		bool end = false;
 		class Game {
 		public:
-			COORD position[10]={};
-			COORD bullet[10]={};
-			Frame enemy[8]={};
-			int score=0;
-			int rank=0;
-			int rankf=0;
-			string title="";
-			int flag_rank=0;
+			COORD position[10] = {};
+			COORD bullet[10] = {};
+			Frame enemy[8] = {};
+			int score = 0;
+			int rank = 0;
+			int rankf = 0;
+			string title = "";
+			int flag_rank = 0;
 			Game ();
 
 			void initPlane();
@@ -1501,7 +1499,7 @@ namespace GAME {
 			while (c != 'p')
 				c = _getch();
 			SetPos(61, 2);
-			cout << "      ";
+			cout << "         ";
 		}
 		void Game::planeMove(char x) {
 			if (x == 'a')
@@ -1696,11 +1694,11 @@ namespace GAME {
 			cout << "重来？ 是（y）| 否（n）";
 as:
 			char x = _getch();
-			if (x == 'n'){
-				end=true;
+			if (x == 'n') {
+				end = true;
 				return;
-			}else if (x == 'y') {
-				end=false;
+			} else if (x == 'y') {
+				end = false;
 				system("cls");
 				Game game;
 				int a = drawMenu();
@@ -1712,6 +1710,7 @@ as:
 			} else goto as;
 		}
 		void main() {
+			end = false;
 			srand((int)time(0));
 			Game game;
 			int a = drawMenu();
@@ -1724,25 +1723,25 @@ as:
 		}
 	}
 	namespace emlpd {
-		bool end=false;
-		int Your=0, Other=0;
+		bool end = false;
+		int Your = 0, Other = 0;
 		string daojuname[] = {"放大镜", "手铐", "小刀", "烟", "饮料"};
-		double Yourmoney=0;
-		int huihe=0;
+		double Yourmoney = 0;
+		int huihe = 0;
 		bool emoqbq = 1;
 		bool ndqbq = 1;
 
-		int shi=0, kong=0;
-		int q[10]={}, qlen=0;
+		int shi = 0, kong = 0;
+		int q[10] = {}, qlen = 0;
 		int Rand(int x, int y) {
 			int A = rand(), B = rand();
 			return A * 1ll * B % (y - x + 1) + x;
 		}
-		int T=0;
-		int daojulen=0;
-		int daoju[10]={};
-		int daojulen1=0;
-		int daoju1[10]={};
+		int T = 0;
+		int daojulen = 0;
+		int daoju[10] = {};
+		int daojulen1 = 0;
+		int daoju1[10] = {};
 		void build_gun() {
 			kong = Rand(1, 4);
 			shi = Rand(1, 4);
@@ -1792,7 +1791,7 @@ as:
 			if (Your <= 0) {
 				printf("你输了\n");
 				system("pause");
-				end=true;
+				end = true;
 				return;
 			}
 			if (Other <= 0) {
@@ -1800,7 +1799,7 @@ as:
 					Yourmoney /= 3;
 					printf("你赢了\n你获得了奖金$%.2lf\n", Yourmoney);
 					system("pause");
-					end=true;
+					end = true;
 					return;
 				} else if (huihe == 2) {
 					printf("进入第三回合\n");
@@ -1829,7 +1828,7 @@ as:
 			Sleep(500);
 		}
 		int Hurt = 1;
-		int shoukao_you=0;
+		int shoukao_you = 0;
 		void Timeyou() {
 			int x;
 			while (1) {
@@ -1909,7 +1908,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (huihe == 3 && Other <= 2) {
@@ -1945,7 +1944,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (huihe == 3 && Your <= 2) {
@@ -2057,8 +2056,8 @@ as:
 			Sleep(1000);
 			system("cls");
 		}
-		int Know=0;
-		int shoukaoemo=0;
+		int Know = 0;
+		int shoukaoemo = 0;
 		void fightyou() {
 			printf("恶魔决定向你开枪");
 			T++;
@@ -2087,7 +2086,7 @@ as:
 				Know = 0;
 				Sleep(500);
 				IsOver();
-				if(end==true){
+				if (end == true) {
 					return;
 				}
 				if (huihe == 3 && Your <= 2) {
@@ -2124,7 +2123,7 @@ as:
 				Know = 0;
 				Sleep(500);
 				IsOver();
-				if(end==true){
+				if (end == true) {
 					return;
 				}
 				if (huihe == 3 && Other <= 2) {
@@ -2264,7 +2263,7 @@ as:
 		}
 		void Play() {
 			while (1) {
-				if(end==true){
+				if (end == true) {
 					return;
 				}
 				if (shi == 0) {
@@ -2346,12 +2345,12 @@ as:
 			if (Your <= 0) {
 				printf("玩家B赢了\n玩家B获得了奖金$%.2lf\n", Yourmoney);
 				system("pause");
-				end=true;
+				end = true;
 				return;
 			} else if (Other <= 0) {
 				printf("玩家A赢了\n玩家A获得了奖金$%.2lf\n", Yourmoney);
 				system("pause");
-				end=true;
+				end = true;
 				return;
 			}
 
@@ -2466,7 +2465,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver_duo();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (shoukao_you == 1) {
@@ -2497,7 +2496,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver_duo();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (shoukao_you == 1) {
@@ -2670,7 +2669,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver_duo();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (shoukaoemo == 1) {
@@ -2701,7 +2700,7 @@ as:
 					Hurt = 1;
 					Sleep(500);
 					IsOver_duo();
-					if(end==true){
+					if (end == true) {
 						return;
 					}
 					if (shoukao_you == 1) {
@@ -2809,10 +2808,10 @@ as:
 			Sleep(1000);
 			system("cls");
 		}
-		int asdasd=0;
+		int asdasd = 0;
 		void duorenplay() {
 			while (1) {
-				if(end==true){
+				if (end == true) {
 					return;
 				}
 				if (shi == 0) {
@@ -2829,6 +2828,28 @@ as:
 			}
 		}
 		int main() {
+			end = false;
+			/*Your = 0;
+			Other = 0;
+			daojuname = {};
+			Yourmoney = 0.0;
+			huihe = 0;
+			emoqbq = 0;
+			ndqbq = 0;
+			shi = 0;
+			kong = 0;
+			q = {};
+			qlen = 0;
+			T = 0;
+			daojulen = 0;
+			daoju = {};
+			daojulen1 = 0;
+			daoju1 = {};
+			Hurt = 0;
+			shoukao_you = 0;
+			Know = 0;
+			shoukaoemo = 0;
+			asdasd = 0;*/
 			srand(time(0));
 			int x;
 			while (1) {
@@ -3098,10 +3119,10 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s == "一键解希沃锁屏") {
-				taskkill(true,true);
+				taskkill(true, true);
 				s = "-1";
 				continue;
-			}else if (s == "退出") {
+			} else if (s == "退出") {
 				return;
 			} else if (s == "关于") {
 				about();
@@ -3159,12 +3180,12 @@ struct Launcher {
 				}
 				s = "-1";
 				continue;
-			} else if(s=="打开日志文件夹"){
-				string command="explorer.exe \""+executable_path+"\\log\\\"";
+			} else if (s == "打开日志文件夹") {
+				string command = "explorer.exe \"" + executable_path + "\\log\\\"";
 				system(command.c_str());
-				s="-1";
+				s = "-1";
 				continue;
-			}else if (s == "小游戏>>>") {
+			} else if (s == "小游戏>>>") {
 				head();
 				string d = listname(false, false, word.game, word.gamen);
 				if (d == "返回") {
@@ -3274,13 +3295,13 @@ struct Launcher {
 					ReleaseTaskbarInterface();
 					system("pause");
 				}
-				if(d=="关闭开发者模式"){
-					word.settingn=7;
-					cout<<"操作已完成。\n";
+				if (d == "关闭开发者模式") {
+					word.settingn = 7;
+					cout << "操作已完成。\n";
 					system("pause");
-					d="返回";
+					d = "返回";
 				}
-			}else {
+			} else {
 				cout << "\nError\n";
 				system("pause");
 				s = "-1";
