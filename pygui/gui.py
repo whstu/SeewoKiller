@@ -82,10 +82,16 @@ class SeewoKiller_run():
         class Fastboot(threading.Thread):
             def run(self):
                 system(".\\SeewoKiller.exe run fastboot")
-    class setvalue():
+    class Setvalue():
         class Log(threading.Thread):
             def run(self):
                 system(".\\Seewokiller.exe setvalue -log")
+        class Button(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe setvalue -button")
+        class Start(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe setvalue -start")
     class Regedit():
         class NoTrayContextMenu_True(threading.Thread):
             def run(self):
@@ -151,7 +157,7 @@ class MainWindow(QMainWindow):
         # 列表项名称数组（所有和设置选项卡共用）
         self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏", "小游戏", "恶搞","注册表"]
         self.list_items_more = ["冰点还原破解","AI","计算π"]
-        self.list_items_settings = ["在晚自习制裁/循环清任务时启用日志","检查更新", "使用经典界面","重启到 fastboot","关于"]
+        self.list_items_settings = ["在晚自习制裁/循环清任务时启用日志","允许使用“关闭”按钮 (仅适用旧 UI)","启动设置","检查更新", "使用经典界面","重启到 fastboot","关于"]
 
         # 创建“所有”选项卡
         self.tab_all = QWidget()
@@ -291,8 +297,14 @@ class MainWindow(QMainWindow):
             #print("456", item.text().split(' ')[1])
             # 打印项文本（去掉前面的“项”字和编号后的空格）
         if item.text()=="在晚自习制裁/循环清任务时启用日志":
-            self.setvalue_log=SeewoKiller_run.setvalue.Log()
+            self.setvalue_log=SeewoKiller_run.Setvalue.Log()
             self.setvalue_log.start()
+        if item.text()=="允许使用“关闭”按钮 (仅适用旧 UI)":
+            self.setvale_button=SeewoKiller_run.Setvalue.Button()
+            self.setvale_button.start()
+        if item.text()=="启动设置":
+            self.setvale_start=SeewoKiller_run.Setvalue.Start()
+            self.setvale_start.start()
         if item.text()=="重启到 fastboot":
             self.fastboot=SeewoKiller_run.Run.Fastboot()
             self.fastboot.start()

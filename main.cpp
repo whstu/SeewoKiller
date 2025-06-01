@@ -49,8 +49,8 @@ struct Word {
 	string all[9] = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
 	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
-	int settingn = 7;
-	string setting[9] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
+	int settingn = 9;
+	string setting[11] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
 	int gamen = 5;
 	string game[6] = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
 	int joken = 3;
@@ -189,17 +189,6 @@ void restartexp() {
 	Sleep(2000);
 	system("start C:\\Windows\\explorer.exe");
 }
-/*屏蔽关闭按钮*/
-void connot_close_button() {
-	HMENU hmenu = GetSystemMenu(hwnd, false);
-	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
-	SetWindowLong(hwnd, GWL_STYLE,
-	              GetWindowLong(hwnd, GWL_STYLE) & ~(WS_MINIMIZEBOX | WS_THICKFRAME));
-	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
-	SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
-	DrawMenuBar(hwnd);
-	ReleaseDC(hwnd, NULL);
-}
 
 void quickstart() {
 	int step = 1;
@@ -269,8 +258,23 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		word.joken = 1;
 		return;
 	}
+	ifstream file(".\\settings\\enable-close-window-button.seewokiller");
+	string value;
+	getline(file, value);
+	if (value != "true") {
+		HMENU hmenu = GetSystemMenu(hwnd, false);
+		RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+		SetWindowLong(hwnd, GWL_STYLE,
+		              GetWindowLong(hwnd, GWL_STYLE) & ~(WS_MINIMIZEBOX | WS_THICKFRAME));
+	} else {
+		SetWindowLong(hwnd, GWL_STYLE,
+		              GetWindowLong(hwnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_THICKFRAME);
+	}
+	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
+	SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
+	DrawMenuBar(hwnd);
+	ReleaseDC(hwnd, NULL);
 	setfont(30);
-	connot_close_button();
 	S(500);
 	cout << "\n\n\n\n";
 	S(10);
@@ -514,6 +518,50 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
 		}
 	}
+	if (fileExist(".\\settings\\enable-close-window-button.seewokiller") == false) {
+		ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+		file << "false";
+		file.close();
+		word.setting[4] = "允许使用“关闭”按钮-当前:false";
+	} else {
+		ifstream file(".\\settings\\enable-close-window-button.seewokiller");
+		string value;
+		getline(file, value);
+		file.close();
+		if (value == "true") {
+			word.setting[4] = "允许使用“关闭”按钮-当前:true";
+		} else if (value == "false") {
+			word.setting[4] = "允许使用“关闭”按钮-当前:false";
+		} else {
+			ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+			file << "false";
+			file.close();
+			word.setting[4] = "允许使用“关闭”按钮-当前:false";
+		}
+	}
+	if (fileExist(".\\settings\\start.seewokiller") == false) {
+		ofstream file(".\\settings\\start.seewokiller");
+		file << "0";
+		file.close();
+		word.setting[5] = "启动设置-当前:总是询问";
+	} else {
+		ifstream file(".\\settings\\start.seewokiller");
+		string value;
+		getline(file, value);
+		file.close();
+		if (value == "n") {
+			word.setting[5] = "启动设置-当前:总是使用新UI";
+		} else if (value == "o") {
+			word.setting[5] = "启动设置-当前:总是使用旧UI";
+		} else if (value == "0") {
+			word.setting[5] = "启动设置-当前:总是询问";
+		} else {
+			ofstream file(".\\settings\\start.seewokiller");
+			file << "0";
+			file.close();
+			word.setting[5] = "启动设置-当前:总是询问";
+		}
+	}
 	//-----
 	gotoxy(16, 14);
 	cout << "正在验证系统版本(2/4) ";
@@ -534,11 +582,36 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	cout << "[=======             ]";
 	taskbarprocess(TBPF_NORMAL, 35);
 	S(400);
+	//总是新UI
+	ifstream start(".\\settings\\start.seewokiller");
+	string startv;
+	getline(start, startv);
+	start.close();
+	if (startv == "n") {
+		string guipath = executable_path + "\\gui.exe";
+		STARTUPINFO si = { sizeof(si) };//0
+		PROCESS_INFORMATION pi;
+		LPTSTR szCommandLine = _tcsdup(TEXT(guipath.c_str()));//有权限的都可以打开
+		BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+		if (fSuccess) {
+			gotoxy(15, 16);
+			cout << "[=============       ]";
+			taskbarprocess(TBPF_NORMAL, 65);
+			S(10);
+			gotoxy(15, 16);
+			cout << "[====================]";
+			taskbarprocess(TBPF_NORMAL, 100);
+			S(200);
+			ReleaseTaskbarInterface();
+			exit(0);
+		}
+	}
+	//-------
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
-	if (SkipCheckWinVer == false) {
-		if (version >= 6.1) {
+	if (SkipCheckWinVer == false and startv == "0") {
+		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
 			if (MessageBox(hwnd, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
 				string guipath = executable_path + "\\gui.exe";
@@ -555,6 +628,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 					cout << "[====================]";
 					taskbarprocess(TBPF_NORMAL, 100);
 					S(200);
+					ReleaseTaskbarInterface();
 					exit(0);
 				}
 			}//返回1确定，2取消
@@ -3133,6 +3207,7 @@ struct Launcher {
 				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
 				string value;
 				getline(file, value);
+				file.close();
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
@@ -3162,6 +3237,88 @@ struct Launcher {
 			} else if (s == "打开日志文件夹") {
 				string command = "explorer.exe \"" + executable_path + "\\log\\\"";
 				system(command.c_str());
+				s = "-1";
+				continue;
+			} else if (s == "允许使用“关闭”按钮-当前:true" or s == "允许使用“关闭”按钮-当前:false") {
+				ifstream file(".\\settings\\enable-close-window-button.seewokiller");
+				string value;
+				getline(file, value);
+				file.close();
+				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
+				switch (ans) {
+					case IDYES: {
+						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+						file << "true";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						cls
+						poweron(true);
+						break;
+					}
+					case IDNO: {
+						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+						file << "false";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
+						cls
+						poweron(true);
+						break;
+					}
+				}
+				s = "-1";
+				continue;
+			} else if (s == "启动设置-当前:总是询问" or s == "启动设置-当前:总是使用旧UI" or s == "启动设置-当前:总是使用新UI") {
+				ifstream file(".\\settings\\start.seewokiller");
+				string value;
+				getline(file, value);
+				file.close();
+				cout << "当前:" << s ;
+				cout << "\n你要将此设置更改为什么？\n";
+				cout << "输入\"0\"设置为“总是询问”，\n";
+				cout << "输入\"1\"设置为“总是新UI”，\n";
+				cout << "输入\"2\"设置为“总是旧UI”，\n";
+				cout << "输入\"-1\"忽略修改\n";
+				cout << "请输入：";
+				int ans;
+				cin >> ans;
+				while (ans > 2 or ans < -1 or cin.fail()) {
+					cout << "输入错误，请重试：";
+					cin.clear();//清除错误数据
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
+					cin >> ans;
+				}
+				switch (ans) {
+					case 0: {
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "0";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						cls
+						poweron(true);
+						break;
+					}
+					case 1: {
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "n";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						cls
+						poweron(true);
+						break;
+					}
+					case 2:{
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "o";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						cls
+						poweron(true);
+						break;
+					}
+					default:
+						break;
+				}
 				s = "-1";
 				continue;
 			} else if (s == "小游戏>>>") {
@@ -3439,6 +3596,84 @@ int main(int argc, char *argv[]) {
 						MessageBox(hwnd, _T("设置完成"), _T("修改变量"), MB_OK);
 						break;
 					}
+				}
+			}
+			if(cmd[2]=="-button"){
+				ifstream file(".\\settings\\enable-close-window-button.seewokiller");
+				string value;
+				getline(file, value);
+				file.close();
+				value = "此设置仅用于旧UI\n当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
+				switch (ans) {
+					case IDYES: {
+						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+						file << "true";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						break;
+					}
+					case IDNO: {
+						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
+						file << "false";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
+						break;
+					}
+				}
+			}
+			if(cmd[2]=="-start"){
+				ifstream file(".\\settings\\start.seewokiller");
+				string value;
+				getline(file, value);
+				file.close();
+				string s;
+				if(value=="0"){
+					s="总是询问";
+				}else if(value=="n"){
+					s="总是新UI";
+				}else if(value=="o"){
+					s="总是旧UI";
+				}
+				cout << "当前:" << s ;
+				cout << "\n你要将此设置更改为什么？\n";
+				cout << "输入\"0\"设置为“总是询问”，\n";
+				cout << "输入\"1\"设置为“总是新UI”，\n";
+				cout << "输入\"2\"设置为“总是旧UI”，\n";
+				cout << "输入\"-1\"忽略修改\n";
+				cout << "请输入：";
+				int ans;
+				cin >> ans;
+				while (ans > 2 or ans < -1 or cin.fail()) {
+					cout << "输入错误，请重试：";
+					cin.clear();//清除错误数据
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
+					cin >> ans;
+				}
+				switch (ans) {
+					case 0: {
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "0";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						break;
+					}
+					case 1: {
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "n";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						break;
+					}
+					case 2:{
+						ofstream file(".\\settings\\start.seewokiller");
+						file << "o";
+						file.close();
+						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						break;
+					}
+				default:
+					break;
 				}
 			}
 			return 0;
