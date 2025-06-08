@@ -88,6 +88,25 @@ void setfont(int size) {//字体、大小、粗细
 	CONSOLE_FONT_INFO consoleCurrentFont;
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
+/*屏蔽关闭按钮*/
+void connot_close_button() {
+	HMENU hmenu = GetSystemMenu(hwnd, false);
+	ifstream file(".\\settings\\enable-close-window-button.seewokiller");
+	string value;
+	getline(file, value);
+	if (value != "true") {
+		RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+		SetWindowLong(hwnd, GWL_STYLE,
+			GetWindowLong(hwnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_THICKFRAME);
+	}else{
+		SetWindowLong(hwnd, GWL_STYLE,
+			GetWindowLong(hwnd, GWL_STYLE) & ~(WS_MINIMIZEBOX | WS_THICKFRAME));
+	}
+	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
+	SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
+	DrawMenuBar(hwnd);
+	ReleaseDC(hwnd, NULL);
+}
 
 //任务栏进度条
 //全局或类成员变量
@@ -258,23 +277,8 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		word.joken = 1;
 		return;
 	}
-	ifstream file(".\\settings\\enable-close-window-button.seewokiller");
-	string value;
-	getline(file, value);
-	if (value != "true") {
-		HMENU hmenu = GetSystemMenu(hwnd, false);
-		RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
-		SetWindowLong(hwnd, GWL_STYLE,
-		              GetWindowLong(hwnd, GWL_STYLE) & ~(WS_MINIMIZEBOX | WS_THICKFRAME));
-	} else {
-		SetWindowLong(hwnd, GWL_STYLE,
-		              GetWindowLong(hwnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_THICKFRAME);
-	}
-	ShowWindow(hwnd, SW_MAXIMIZE);//最大化
-	SetWindowPos(hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
-	DrawMenuBar(hwnd);
-	ReleaseDC(hwnd, NULL);
 	setfont(30);
+	connot_close_button();
 	S(500);
 	cout << "\n\n\n\n";
 	S(10);
@@ -734,7 +738,7 @@ void about() {
 			return;
 		}
 		if (ans == "dev") {
-			word.settingn = 8;
+			word.settingn = 10;
 			cout << "开发者模式 已开启。\n按b后回车即可返回。\n";
 		}
 	}
@@ -3432,7 +3436,7 @@ struct Launcher {
 					system("pause");
 				}
 				if (d == "关闭开发者模式") {
-					word.settingn = 7;
+					word.settingn = 9;
 					cout << "操作已完成。\n";
 					system("pause");
 					d = "返回";
