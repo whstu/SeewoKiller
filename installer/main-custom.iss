@@ -2,8 +2,8 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星"
-#define MyAppVersion "2.0.1.55"
-#define MyAppProductVersion "2.0.1.0"
+#define MyAppVersion "2.0.1.56"
+#define MyAppProductVersion "2.1.0.0"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.dpdns.org/"
 #define MyAppExeName "SeewoKiller.exe"
@@ -43,16 +43,18 @@ Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 Name: "programicon"; Description: "创建“开始”菜单快捷方式"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce;
 Name: "fbicon"; Description: "创建“启动到Fastboot”快捷方式"; GroupDescription: "用于破解希沃锁屏的快速软件启动方案:"; Flags: unchecked;
+Name: "fluenticon"; Description: "(Beta)新版界面快捷方式"; GroupDescription: "2.1.0.0新版界面，测试中"; Flags: unchecked;
 
 [Components]
 Name: "main"; Description:"主程序（核心功能）"; Types: full compact custom; Flags:fixed
 Name: "AI"; Description:"AI（附加功能）"; Types: full custom
 Name: "SeewoFreeze"; Description:"冰点还原破解（附加功能）"; Types: full custom
 Name: "pai"; Description:"计算π（附加功能）"; Types: full custom
+Name: "fluent"; Description:"(Beta)新版界面及其快捷方式"; Types:custom
 
 [Files]
 Source: "E:\devc++\DEV\SeewoKiller\SeewoKiller.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
-Source: "E:\devc++\DEV\SeewoKiller\gui.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
+; Source: "E:\devc++\DEV\SeewoKiller\gui.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\app.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\seewokiller2.png"; DestDir: "{app}"; Flags: ignoreversion; Components: main
@@ -60,12 +62,14 @@ Source: "E:\devc++\DEV\SeewoKiller\RunAsFastboot.exe"; DestDir: "{app}"; Flags: 
 Source: "E:\devc++\DEV\SeewoKiller\ai.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: AI
 Source: "E:\devc++\DEV\SeewoKiller\SeewoFreeze\*"; DestDir: "{app}\SeewoFreeze"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: SeewoFreeze
 Source: "E:\devc++\DEV\SeewoKiller\pai.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: pai
+Source: "E:\devc++\DEV\SeewoKiller\gui-fluent.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: fluent
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: programicon
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName}-fastboot模式"; Filename: "{app}\RunAsFastboot.exe"; Tasks: fbicon
+Name: "{commondesktop}\{#MyAppName}-devUI"; Filename: "{app}\gui-fluent.exe"; Tasks: fluenticon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
