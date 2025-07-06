@@ -15,12 +15,12 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox, QFrame, QHBoxLayout, QLabel, QStackedWidget
 
-localversion1, localversion2, localversion3, localversion4 = 2, 0, 1, 40
+localversion1, localversion2, localversion3, localversion4 = 2, 1, 0, 0
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MSFluentWindow, CardWidget, \
     IconWidget, BodyLabel, CaptionLabel, PushButton, InfoBar, InfoBarPosition, ImageLabel, ElevatedCardWidget, \
-    FlowLayout, BreadcrumbBar, PrimaryToolButton, LineEdit, ScrollArea
+    FlowLayout, BreadcrumbBar, PrimaryToolButton, LineEdit, ScrollArea, InfoBarIcon, PrimaryPushButton
 from qfluentwidgets import FluentIcon as FIF
 
 #管理员
@@ -152,6 +152,80 @@ class Widget(QFrame):
         self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
         self.setObjectName(text.replace(' ', '-'))
 
+class show_update_dialog(QWidget):
+    # 简化的更新检查，实际使用时需要完整的更新检查逻辑
+    def __init__(self):
+        super().__init__()
+        self.layout = QVBoxLayout()
+        self.layout.setSpacing(20)
+        self.setWindowTitle("检查更新")
+        self.setGeometry(200, 200, 350, 30)
+        self.button = PrimaryPushButton("点此检查更新")
+        self.button.setMinimumHeight(50)
+        self.button.setFont(QFont("微软雅黑", 10))
+        self.button.clicked.connect(self.check_update)
+        self.layout.addWidget(self.button)  # 正确添加按钮到布局
+        self.setLayout(self.layout)  # 布局设置给窗口而非按钮
+
+    def message_true(self):
+        print("有可用更新")
+        self.reply = QMessageBox.question(self, "提示",
+                                          f"有可用更新{self.version1}.{self.version2}.{self.version3}.{self.version4}\n是否前往网页下载？",
+                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        print(self.reply)
+        if self.reply == QMessageBox.Yes:
+            import webbrowser
+            webbrowser.open("https://whstu.dpdns.org/download/seewokiller/")
+
+    def message_false(self):
+        print("暂无更新")
+        self.msg_box = QMessageBox(QMessageBox.Information, "提示", "暂无可用更新。")
+        self.msg_box.exec_()
+
+    def check_update(self):
+        response = urllib.request.urlopen("https://seewokiller.whstu.dpdns.org/installer/index.html")
+        html = response.read()
+        soup = BeautifulSoup(html, 'html.parser')
+        p_tags = soup.find_all('p')
+        self.version1, self.version2, self.version3, self.version4 = -1, -1, -1, -1
+        if len(p_tags) >= 4:
+            for i, p_tag in enumerate(p_tags[:4]):
+                text = p_tag.get_text().strip()
+                try:
+                    number = int(text)
+                    if i == 0:
+                        self.version1 = number
+                    elif i == 1:
+                        self.version2 = number
+                    elif i == 2:
+                        self.version3 = number
+                    elif i == 3:
+                        self.version4 = number
+                except ValueError:
+                    continue
+        else:
+            print("Error:<p>Not Found.")
+        print(f"Version Check Website: {self.version1}.{self.version2}.{self.version3}.{self.version4}")
+        print(f"Local Version: {localversion1}.{localversion2}.{localversion3}.{localversion4}")
+        if localversion1 < self.version1:
+            self.message_true()
+        elif localversion1 == self.version1:
+            if localversion2 < self.version2:
+                self.message_true()
+            elif localversion2 == self.version2:
+                if localversion3 < self.version3:
+                    self.message_true()
+                elif localversion3 == self.version3:
+                    if localversion4 < self.version4:
+                        self.message_true()
+                    else:
+                        self.message_false()
+                else:
+                    self.message_false()
+            else:
+                self.message_false()
+        else:
+            self.message_false()
 
 class Card(CardWidget):
     def __init__(self, icon, title, content, parent=None, is_navigation=False):
@@ -259,16 +333,6 @@ class Home(QFrame):
 
         self.layout.addLayout(self.cardLayout)
         self.layout.addStretch()
-
-        self.warn = InfoBar.warning(
-            title='注意',
-            content="本程序为内部开发版本，可能存在 bug 或缺少功能",
-            orient=Qt.Horizontal,
-            isClosable=True,
-            position=InfoBarPosition.TOP_RIGHT,
-            duration=-1,
-            parent=self
-        )
 
     def handle_bigcard_click(self, name):
         if name == "一键解希沃锁屏":
@@ -608,6 +672,15 @@ class MoreInterface(QFrame):
         self.layout.addWidget(self.card1)
         self.layout.addWidget(self.card2)
         self.layout.addWidget(self.card3)
+        InfoBar.warning(
+            title='提示',
+            content="新 UI 对冰点破解界面适配不佳。请使用旧版界面启动。",
+            orient=Qt.Horizontal,
+            isClosable=True,
+            position=InfoBarPosition.BOTTOM,
+            duration=-1,  # 永不消失
+            parent=self
+        )
         self.layout.addStretch()
 
     def handle_card_click(self, title):
@@ -647,6 +720,15 @@ class SettingInterface(QFrame):
             self.layout.addWidget(card)
 
         self.layout.addStretch()
+        InfoBar.warning(
+            title='提示',
+            content="希沃克星可能已经暂停更新。\n如果 2026 年 9 月后仍找不到更新，\n那么希沃克星可能已经停止开发。",
+            orient=Qt.Horizontal,
+            isClosable=True,
+            position=InfoBarPosition.BOTTOM,
+            duration=10000,  # 永不消失
+            parent=self
+        )
 
     def handle_setting_click(self, title):
         if title == "在晚自习制裁/循环清任务时启用日志":
@@ -663,29 +745,36 @@ class SettingInterface(QFrame):
             self.fastboot.start()
             system("TASKKILL /F /IM gui.exe")
         elif title == "检查更新":
-            self.show_update_dialog()
+            self.window=show_update_dialog()
+            self.window.show()
         elif title == "关于":
-            self.show_about_dialog()
+            InfoBar.info(
+                title='提示',
+                content="请使用旧 UI 开启。",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP_RIGHT,
+                duration=5000,  # 永不消失
+                parent=self
+            )
         elif title == "使用经典界面":
             self.oldui = SeewoKiller_run.OldUI()
             self.oldui.start()
-
-    def show_update_dialog(self):
-        # 简化的更新检查，实际使用时需要完整的更新检查逻辑
-        pass
-
-    def show_about_dialog(self):
-        # 简化的关于对话框，实际使用时需要完整的关于信息
-        pass
 
 
 if __name__ == '__main__':
     QhXSwidth, QhXSheight, QhWLwidth, QhWLheight = QhGetScreenResolution()
     if QhWLwidth > 1920:
+        os.environ["QT_SCALE_FACTOR"] = "1"
         QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)  # 适应高 DPI 设备
         QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    else:
+        os.environ["QT_SCALE_FACTOR"] = "0.75"
+        QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+        QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+        pass
     app = QApplication(sys.argv)
     w = Window()
-    w.setGeometry(100, 50, 800, 500)
+    w.setGeometry(100, 30, 800, 500)
     w.show()
     app.exec()

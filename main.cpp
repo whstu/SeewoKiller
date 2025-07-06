@@ -725,7 +725,7 @@ void about() {
 	cout << "O";
 	SetColorAndBackground(7, 0);
 	cout << "S";
-	cout << "\n新版界面基于PyQt5\n";
+	cout << "\n新版界面基于PyQt5和qfluentwidgets，网址https://qfluentwidgets.com/\n";
 	cout << "\n技巧：通过Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n";
 	cout << "瓦特工具箱Watt Toolkit可以加速对Steam、Github的访问，网址https://steampp.net/\n";
 	cout << "\n";
