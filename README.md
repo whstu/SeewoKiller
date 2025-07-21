@@ -1,7 +1,6 @@
 <!--markdownlint-disable MD001 MD033 MD041 MD051-->
 > [!CAUTION]
-> 希沃克星将于2025年7月20日暂停更新。预计一年后重启项目。如果两年后仍没有重启项目，那么希沃克星可能已经停止开发。
-> 依照计划，希沃克星的最后一个版本2.1.0.0将继续支持检查更新。WHSTU可能会继续发布一些bug修复。
+> 希沃克星已于 2025 年 7 月 20 日放缓新功能更新。WHSTU 可能会继续发布一些 bug 修复。
 
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
 <div align="center">

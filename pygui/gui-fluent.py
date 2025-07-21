@@ -720,15 +720,6 @@ class SettingInterface(QFrame):
             self.layout.addWidget(card)
 
         self.layout.addStretch()
-        InfoBar.warning(
-            title='提示',
-            content="希沃克星可能已经暂停更新。\n如果 2026 年 9 月后仍找不到更新，\n那么希沃克星可能已经停止开发。",
-            orient=Qt.Horizontal,
-            isClosable=True,
-            position=InfoBarPosition.BOTTOM,
-            duration=10000,  # 永不消失
-            parent=self
-        )
 
     def handle_setting_click(self, title):
         if title == "在晚自习制裁/循环清任务时启用日志":
