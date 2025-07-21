@@ -714,7 +714,7 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 2.0 (Engorgio)\n";
+	cout << "\nSeewo Killer 2.1 (Expelliarmus)\n";
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";

@@ -745,7 +745,7 @@ class SettingInterface(QFrame):
                 orient=Qt.Horizontal,
                 isClosable=True,
                 position=InfoBarPosition.TOP_RIGHT,
-                duration=5000,  # 永不消失
+                duration=5000,
                 parent=self
             )
         elif title == "使用经典界面":
