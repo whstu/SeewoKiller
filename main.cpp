@@ -49,8 +49,8 @@ struct Word {
 	string all[9] = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
 	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
-	int settingn = 9;
-	string setting[11] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
+	int settingn = 10;
+	string setting[12] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "冰点还原疑难解答","启动初学者引导", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
 	int gamen = 5;
 	string game[6] = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
 	int joken = 3;
@@ -927,6 +927,44 @@ void liandianqi() {
 		i++;
 		S(gap);
 	}
+}
+
+void help(){
+	cls
+	cout<<"欢迎使用冰点还原帮助程序。\n";
+	cout<<"正在检测...\n";
+	S(500);
+	if(fileExist(".\\SeewoFreeze\\SeewoFreezeUI.exe")==false){
+		cls
+		cout<<"检测到冰点还原软件不存在。\n";
+		cout<<"请检查是否安装了冰点还原模块。\n";
+		cout<<"\n如果您确认已经安装过冰点还原模块但仍无法使用，那么可能是杀毒软件问题。\n";
+		cout<<"请关闭杀毒软件后重试。\n";
+		cout<<"\n对于Windows安全中心，请进行以下操作：";
+		cout<<"打开Windows安全中心\n";
+		cout<<"选择“病毒和威胁防护”\n";
+		cout<<"找到所有“篡改”“扫描”选项，全部关闭\n";
+		cout<<"重新安装希沃克星。";
+		system("pause");
+		cls
+		return;
+	}
+	cls
+	cout<<"请尝试执行以下操作。\n";
+	cout<<"选择希沃克星安装目录下的SeewoFreeze文件夹，打开属性\n";
+	cout<<"选择“安全”选项卡\n";
+	cout<<"选择“高级”\n";
+	cout<<"点击“禁用继承”\n";
+	cout<<"选择“从此对象中删除所有已继承的权限”\n";
+	cout<<"\n回到“高级”界面，点击“添加”\n";
+	cout<<"点击“选择主体”，在“对象名称”文本框中输入以下内容：\n";
+	system("whoami");
+	cout<<"勾选“完全控制”\n";
+	cout<<"确定（如果窗口太大，可以用键盘回车）\n";
+	cout<<"确定，关闭属性\n应用时一定要应用于子文件和子文件夹！！！！\n";
+	cout<<"再次尝试冰点还原。\n";
+	system("pause");
+	return;
 }
 
 typedef long long LL;
@@ -3163,6 +3201,7 @@ struct Launcher {
 					CloseHandle(pi.hProcess);
 				}
 				//system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window");
+				cout<<"界面没有显示？试试设置中的冰点还原疑难解答！\n";
 				system("pause");
 				s = "-1";
 				continue;
@@ -3189,7 +3228,11 @@ struct Launcher {
 				quickstart();
 				s = "-1";
 				continue;
-			} else if (s == "使用新版界面") {
+			} else if(s=="冰点还原疑难解答"){
+				help();
+				s="-1";
+				continue;
+			}else if (s == "使用新版界面") {
 				string guipath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
