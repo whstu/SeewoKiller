@@ -13,10 +13,10 @@ CXXFLAGS = $(CXXINCS) "-O2" "-pipe"
 CFLAGS   = $(INCS) "-O2" "-pipe"
 WINDRESFLAGS = 
 RES      = SeewoKiller_private.res
-OBJ      = main.o $(RES)
+OBJ      = main.o cmdCtrl.o game.o $(RES)
 BIN      = SeewoKiller.exe
-LINKOBJ  = "main.o" "SeewoKiller_private.res"
-CLEANOBJ = "main.o" "SeewoKiller_private.res" "SeewoKiller.exe"
+LINKOBJ  = "main.o" "cmdCtrl.o" "game.o" "SeewoKiller_private.res"
+CLEANOBJ = "main.o" "cmdCtrl.o" "game.o" "SeewoKiller_private.res" "SeewoKiller.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -29,8 +29,14 @@ SeewoKiller.exe: $(OBJ)
 
 	$(CXX) $(LINKOBJ) -o "SeewoKiller.exe" $(LIBS)
 
-main.o: main.cpp
+main.o: main.cpp game.h cmdCtrl.h
 	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS) 
+
+cmdCtrl.o: cmdCtrl.cpp
+	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS) 
+
+game.o: game.cpp game.h cmdCtrl.h
+	$(CXX) -c "game.cpp" -o "game.o" $(CXXFLAGS) 
 
 SeewoKiller_private.res: SeewoKiller_private.rc 
 	$(WINDRES) -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff $(WINDRESFLAGS) 

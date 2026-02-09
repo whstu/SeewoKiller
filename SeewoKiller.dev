@@ -31,7 +31,7 @@ IncludeVersionInfo = 1
 SupportXPThemes = 0
 CompilerSet = 0
 UseUTF8 = 0
-UnitCount = 1
+UnitCount = 5
 Bins = 
 ResourceCommand = 
 StaticLink = 1
@@ -48,23 +48,51 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 0
-Build = 5
+Build = 12
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.0.5
+FileVersion = 2.1.0.12
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = 
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.0.5
+ProductVersion = 2.1.0.12
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
+FileName = game.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+UseUTF8 = 1
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
+
+[Unit4]
+FileName = cmdCtrl.cpp
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+UseUTF8 = 1
+CompileCpp = 1
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit2]
 FileName = main.cpp
 CompileCpp = 1
 Folder = 
@@ -73,20 +101,34 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-UseUTF8 = 1
 FileEncoding = SYSTEM
 RealEncoding = gbk
 
 
-[Unit4]
-FileName = SlytherinOS_private.res
-Folder = Resources
-Compile = 1
+[Unit3]
+FileName = cmdCtrl.h
+CompileCpp = 0
+Folder = 
+Compile = 0
 Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-UseUTF8 = 1
+FileEncoding = PROJECT
+RealEncoding = 
+
+
+[Unit5]
+FileName = game.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
 
 
 [CompilerSettings]

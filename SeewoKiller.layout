@@ -1,12 +1,42 @@
 [
     {
-        "caretX": 16,
-        "caretY": 934,
+        "caretX": 18,
+        "caretY": 5,
+        "filename": "E:/devc++/DEV/SeewoKiller/game.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 2,
+        "top": 0
+    },
+    {
+        "caretX": 14,
+        "caretY": 1583,
         "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
-        "focused": true,
+        "focused": false,
         "isOpen": true,
         "left": 0,
         "order": 0,
-        "top": 35036
+        "top": 59736
+    },
+    {
+        "caretX": 1,
+        "caretY": 1,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
+        "order": 3,
+        "top": 0
+    },
+    {
+        "caretX": 13,
+        "caretY": 8,
+        "filename": "E:/devc++/DEV/SeewoKiller/game.cpp",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 1,
+        "top": 0
     }
 ]
