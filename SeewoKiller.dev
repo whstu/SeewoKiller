@@ -48,25 +48,38 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 0
-Build = 12
+Build = 29
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.0.12
+FileVersion = 2.1.0.29
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = 
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.0.12
+ProductVersion = 2.1.0.29
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
+FileName = cmdCtrl.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+UseUTF8 = 1
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit4]
 FileName = game.h
-CompileCpp = 0
 Folder = 
 Compile = 0
 Link = 0
@@ -74,38 +87,12 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
+CompileCpp = 0
 FileEncoding = PROJECT
 RealEncoding = ASCII
 
 
-[Unit4]
-FileName = cmdCtrl.cpp
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-UseUTF8 = 1
-CompileCpp = 1
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
 [Unit2]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = SYSTEM
-RealEncoding = gbk
-
-
-[Unit3]
 FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
@@ -115,10 +102,10 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = PROJECT
-RealEncoding = 
+RealEncoding = gbk
 
 
-[Unit5]
+[Unit3]
 FileName = game.cpp
 CompileCpp = 1
 Folder = 
@@ -128,6 +115,19 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit5]
+FileName = main.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = SYSTEM
 RealEncoding = gbk
 
 

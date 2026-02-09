@@ -37,13 +37,29 @@
 
 ## 开始使用
 
-**首先，请确保您的设备满足以下推荐需求：**
+**首先，请确保您的设备满足以下需求：**
 
-- Windows 7 及以上版本的系统
+推荐配置：
+- 处理器：Intel Core i3/i5 第4代或更高，或同等级AMD处理器
+- 内存：8GB RAM 或更高
+- 硬盘：固态硬盘(SSD)，至少100MB可用空间
+- 显卡：支持DirectX 9或更高，集成显卡即可
+- 显示器：1366×768分辨率或更高
+- 输入设备：标准键盘和鼠标
+- Windows 10/11 1903或更高版本（64位）
+
+> 最低配置（能运行，但不保证能用）：
+> - 处理器：Intel Pentium 4 2.0GHz 或同等级（支持SSE2指令集）
+> - 内存：2GB RAM（运行PyQt GUI需要）
+> - 硬盘：20MB可用空间（机械硬盘亦可）
+> - 显卡：支持基本图形显示
+> - 显示器：800×600分辨率
+> - 输入设备：键盘（支持WASD导航）
+> - Windows 7 SP1（32位或64位）
 
 > [!WARNING]
 >
-> 不确定 SeewoKiller 能否在 Windows 7 以下（不含）的 Windows 系统中运行，但有实验证明 SeewoKiller 可以在 Windows XP 上正常运行。如果您要在 Windows 7(不含) 以下的电脑上运行 SeewoKiller，请直接下载 Source Code 而非 setup.exe。
+> 不确定 SeewoKiller 能否在 Windows 7 以下（不含）的 Windows 系统中运行，但有实验证明 SeewoKiller 可以在 Windows XP 上正常运行。如果您要在 Windows 7(不含) 以下的电脑上运行 SeewoKiller，请运行fastboot模式。
 
 对于普通用户，可以在以下渠道下载到本软件，请根据自身网络环境选择合适的渠道。
 
