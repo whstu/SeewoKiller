@@ -1,20 +1,4 @@
-#include <bits/stdc++.h>
-#include <windows.h>
-#include <ctime>
-#include <conio.h>
-#include <string>
-#define N 25
-#define Forij(x) for(int i=1;i<=x;i++)for(int j=1;j<=x;j++)
-#include <limits>
-#include <fstream>
-#define S(i) Sleep(i)
-#define cls system("cls");
-#define ei else if
-typedef long long LL;
-using namespace std;
 #include "./game.h"
-#include "./cmdCtrl.h"
-
 
 namespace GAME {
 	void numberdamn() {

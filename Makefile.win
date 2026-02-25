@@ -1,5 +1,5 @@
 # Project: SeewoKiller
-# Makefile created by Red Panda C++ 3.3.3147
+# Makefile created by Red Panda C++ 3.4.3279
 
 CXX      = "g++.exe"
 CC       = "gcc.exe"
@@ -11,12 +11,13 @@ INCS     =
 CXXINCS  = 
 CXXFLAGS = $(CXXINCS) "-O2" "-pipe"
 CFLAGS   = $(INCS) "-O2" "-pipe"
+NASM_FLAGS   =  "-f" "elf64"
 WINDRESFLAGS = 
 RES      = SeewoKiller_private.res
-OBJ      = main.o cmdCtrl.o game.o $(RES)
+OBJ      = main.o game.o cmdCtrl.o files.o $(RES)
 BIN      = SeewoKiller.exe
-LINKOBJ  = "main.o" "cmdCtrl.o" "game.o" "SeewoKiller_private.res"
-CLEANOBJ = "main.o" "cmdCtrl.o" "game.o" "SeewoKiller_private.res" "SeewoKiller.exe"
+LINKOBJ  = "main.o" "game.o" "cmdCtrl.o" "files.o" "SeewoKiller_private.res"
+CLEANOBJ = "main.o" "game.o" "cmdCtrl.o" "files.o" "SeewoKiller_private.res" "SeewoKiller.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -29,14 +30,17 @@ SeewoKiller.exe: $(OBJ)
 
 	$(CXX) $(LINKOBJ) -o "SeewoKiller.exe" $(LIBS)
 
-main.o: main.cpp game.h cmdCtrl.h
+main.o: main.cpp files.h game.h main.h cmdCtrl.h
 	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS) 
 
-cmdCtrl.o: cmdCtrl.cpp
+game.o: game.cpp game.h main.h cmdCtrl.h
+	$(CXX) -c "game.cpp" -o "game.o" $(CXXFLAGS) 
+
+cmdCtrl.o: cmdCtrl.cpp cmdCtrl.h
 	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS) 
 
-game.o: game.cpp game.h cmdCtrl.h
-	$(CXX) -c "game.cpp" -o "game.o" $(CXXFLAGS) 
+files.o: files.cpp files.h main.h
+	$(CXX) -c "files.cpp" -o "files.o" $(CXXFLAGS) 
 
 SeewoKiller_private.res: SeewoKiller_private.rc 
 	$(WINDRES) -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff $(WINDRESFLAGS) 

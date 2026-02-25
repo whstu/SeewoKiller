@@ -1,7 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <bits/stdc++.h>
+#include "./main.h"
+#include "./cmdCtrl.h"
+
 using namespace std;
 namespace GAME {
 	void game(string name);

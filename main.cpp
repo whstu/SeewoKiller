@@ -1,39 +1,10 @@
-#include <bits/stdc++.h>
-#include <windows.h>
-#include <ctime>
-#include <conio.h>
-#include <string>
+#include "./main.h"
 #include "./cmdCtrl.h"
-//任务栏进度条
-#define INITGUID
-#include <shobjidl.h>
-#pragma comment(lib, "Shell32.lib")
-#pragma comment(lib, "Ole32.lib")
-const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
-	0xea1afb91, 0x9e28, 0x4b86,
-	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
-};
-//重启explorer.exe
-#include <tlhelp32.h>
-//注册表修改
-#include <tchar.h>
-//游戏
-#define N 25
-#define Forij(x) for(int i=1;i<=x;i++)for(int j=1;j<=x;j++)
+#include "./files.h"
+
 #include "./game.h"
 using namespace GAME;
-//获取管理员权限所需
-#include <tchar.h>
-#include <shellapi.h>
-//cin错误去除
-#include <limits>
-//文件控制
-#include <fstream>
 
-#define S(i) Sleep(i)
-#define cls system("cls");
-#define ei else if
-typedef long long LL;
 using namespace std;
 
 char path[MAX_PATH];
@@ -43,27 +14,6 @@ string xwbbpath;
 int dwMajorInt;
 int dwMinorInt;
 bool fastboot = false;
-
-int box = 1/*板块*/, boxn = 4/*板块总数*/;
-struct Word {
-	string box[5] {"NULL", "常用", "核心功能", "附加功能", "设置"};
-	int recentn = 4;
-	string recent[5] = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
-	int alln = 8;
-	string all[9] = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "小游戏>>>", "恶搞>>>", "注册表>>>"};
-	int moren = 3;
-	string more[4] = {"NULL", "冰点还原破解", "AI", "计算π"};
-	int settingn = 11;
-	string setting[13] = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "冰点还原疑难解答", "启动初学者引导", "命令行帮助", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
-	int gamen = 5;
-	string game[6] = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
-	int joken = 3;
-	string joke[4] = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台", "提取U盘文件"};
-	int regn = 9;
-	string reg[10] = {"NULL", "返回", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
-	int devn = 3;
-	string dev[4] = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
-} word;
 
 /*HWND hwnd = GetConsoleWindow();
 void SetColorAndBackground(int ForgC, int BackC) {//单个字的颜色
@@ -143,12 +93,6 @@ void taskbarprocess(TBPFLAG state, int percent = -1) {
 		g_pTaskbar->SetProgressValue(hwnd, percent, 100);
 	}
 	return;
-}
-
-//检查文件是否存在
-bool fileExist(const string& filename) {
-	ifstream file(filename);
-	return file.good();
 }
 
 /*注册表*/
@@ -505,6 +449,11 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	S(500);
 	//---
 	CreateDirectory("./settings", NULL);
+	string tmp[100]=TF;
+	string dir=".\\settings\\write-log-when-killapp.seewokiller";
+	check_config_avaliable(dir,tmp,2,"false");
+	change_word("设置",SearchForAddress(word.setting,"在晚自习制裁/循环清任务时启用日志"),true,dir);
+	/*
 	if (fileExist(".\\settings\\write-log-when-killapp.seewokiller") == false) {
 		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
 		file << "false";
@@ -525,7 +474,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 			file.close();
 			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
 		}
-	}
+	}*/
 	if (fileExist(".\\settings\\enable-close-window-button.seewokiller") == false) {
 		ofstream file(".\\settings\\enable-close-window-button.seewokiller");
 		file << "false";
@@ -1282,18 +1231,13 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if (s == "在晚自习制裁/循环清任务时启用日志-当前:false" or s == "在晚自习制裁/循环清任务时启用日志-当前:true") {
-				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-				string value;
-				getline(file, value);
-				file.close();
+			} else if (s.find("在晚自习制裁/循环清任务时启用日志")!=string::npos) {
+				string value=read_config(".\\settings\\write-log-when-killapp.seewokiller");
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << "true";
-						file.close();
+						write_config(".\\settings\\write-log-when-killapp.seewokiller","true");
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
 							cls
 							poweron(true);
@@ -1301,9 +1245,7 @@ struct Launcher {
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << "false";
-						file.close();
+						write_config(".\\settings\\write-log-when-killapp.seewokiller","false");
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
 							cls
 							poweron(true);

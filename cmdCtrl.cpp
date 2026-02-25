@@ -1,5 +1,4 @@
-#include <windows.h>
-
+#include "./cmdCtrl.h"
 
 HWND hwnd = GetConsoleWindow();
 void SetColorAndBackground(int ForgC, int BackC) {//单个字的颜色

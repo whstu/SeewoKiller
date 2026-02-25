@@ -31,7 +31,7 @@ IncludeVersionInfo = 1
 SupportXPThemes = 0
 CompilerSet = 0
 UseUTF8 = 0
-UnitCount = 5
+UnitCount = 8
 Bins = 
 ResourceCommand = 
 StaticLink = 1
@@ -48,25 +48,38 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 0
-Build = 29
+Build = 45
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.0.29
+FileVersion = 2.1.0.45
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = 
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.0.29
+ProductVersion = 2.1.0.45
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
+FileName = files.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+UseUTF8 = 1
+FileEncoding = PROJECT
+RealEncoding = 
+
+
+[Unit4]
+FileName = main.cpp
 Folder = 
 Compile = 1
 Link = 1
@@ -74,26 +87,26 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-FileEncoding = PROJECT
+CompileCpp = 1
+FileEncoding = SYSTEM
 RealEncoding = gbk
 
 
-[Unit4]
+[Unit2]
 FileName = game.h
+CompileCpp = 0
 Folder = 
 Compile = 0
 Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-UseUTF8 = 1
-CompileCpp = 0
 FileEncoding = PROJECT
 RealEncoding = ASCII
 
 
-[Unit2]
-FileName = cmdCtrl.h
+[Unit3]
+FileName = main.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -105,7 +118,7 @@ FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit3]
+[Unit5]
 FileName = game.cpp
 CompileCpp = 1
 Folder = 
@@ -118,8 +131,21 @@ FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit5]
-FileName = main.cpp
+[Unit6]
+FileName = cmdCtrl.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit7]
+FileName = cmdCtrl.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -127,7 +153,20 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = SYSTEM
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit8]
+FileName = files.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
 RealEncoding = gbk
 
 
