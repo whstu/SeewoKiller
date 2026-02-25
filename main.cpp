@@ -449,53 +449,15 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	S(500);
 	//---
 	CreateDirectory("./settings", NULL);
-	string tmp[100]=TF;
+	string tf[5]={"true","false"};
 	string dir=".\\settings\\write-log-when-killapp.seewokiller";
-	check_config_avaliable(dir,tmp,2,"false");
+	check_config_avaliable(dir,tf,2,"false");
 	change_word("设置",SearchForAddress(word.setting,"在晚自习制裁/循环清任务时启用日志"),true,dir);
-	/*
-	if (fileExist(".\\settings\\write-log-when-killapp.seewokiller") == false) {
-		ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-		file << "false";
-		file.close();
-		word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
-	} else {
-		ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-		string value;
-		getline(file, value);
-		file.close();
-		if (value == "true") {
-			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:true";
-		} else if (value == "false") {
-			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
-		} else {
-			ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-			file << "false";
-			file.close();
-			word.setting[2] = "在晚自习制裁/循环清任务时启用日志-当前:false";
-		}
-	}*/
-	if (fileExist(".\\settings\\enable-close-window-button.seewokiller") == false) {
-		ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-		file << "false";
-		file.close();
-		word.setting[4] = "允许使用“关闭”按钮-当前:false";
-	} else {
-		ifstream file(".\\settings\\enable-close-window-button.seewokiller");
-		string value;
-		getline(file, value);
-		file.close();
-		if (value == "true") {
-			word.setting[4] = "允许使用“关闭”按钮-当前:true";
-		} else if (value == "false") {
-			word.setting[4] = "允许使用“关闭”按钮-当前:false";
-		} else {
-			ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-			file << "false";
-			file.close();
-			word.setting[4] = "允许使用“关闭”按钮-当前:false";
-		}
-	}
+
+	dir=".\\settings\\enable-close-window-button.seewokiller";
+	check_config_avaliable(dir,tf,2,"false");
+	change_word("设置",SearchForAddress(word.setting,"允许使用“关闭”按钮"),true,dir);
+
 	if (fileExist(".\\settings\\start.seewokiller") == false) {
 		ofstream file(".\\settings\\start.seewokiller");
 		file << "0";
@@ -1264,27 +1226,20 @@ struct Launcher {
 				system(command.c_str());
 				s = "-1";
 				continue;
-			} else if (s == "允许使用“关闭”按钮-当前:true" or s == "允许使用“关闭”按钮-当前:false") {
-				ifstream file(".\\settings\\enable-close-window-button.seewokiller");
-				string value;
-				getline(file, value);
-				file.close();
+			} else if (s.find("允许使用“关闭”按钮")!=string::npos) {
+				string value=read_config(".\\settings\\enable-close-window-button.seewokiller");
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << "true";
-						file.close();
+						write_config(".\\settings\\enable-close-window-button.seewokiller","true");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << "false";
-						file.close();
+						write_config(".\\settings\\enable-close-window-button.seewokiller","false");
 						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);

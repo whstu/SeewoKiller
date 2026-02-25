@@ -48,38 +48,25 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 0
-Build = 45
+Build = 46
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.0.45
+FileVersion = 2.1.0.46
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = 
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.0.45
+ProductVersion = 2.1.0.46
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
-FileName = files.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-UseUTF8 = 1
-FileEncoding = PROJECT
-RealEncoding = 
-
-
-[Unit4]
-FileName = main.cpp
+FileName = game.cpp
+CompileCpp = 1
 Folder = 
 Compile = 1
 Link = 1
@@ -87,26 +74,39 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-CompileCpp = 1
-FileEncoding = SYSTEM
+FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit2]
-FileName = game.h
-CompileCpp = 0
+[Unit4]
+FileName = main.h
 Folder = 
 Compile = 0
 Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
+UseUTF8 = 1
+CompileCpp = 0
 FileEncoding = PROJECT
-RealEncoding = ASCII
+RealEncoding = gbk
+
+
+[Unit2]
+FileName = cmdCtrl.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
 
 
 [Unit3]
-FileName = main.h
+FileName = game.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -119,7 +119,7 @@ RealEncoding = gbk
 
 
 [Unit5]
-FileName = game.cpp
+FileName = files.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -145,11 +145,11 @@ RealEncoding = gbk
 
 
 [Unit7]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
+FileName = files.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -158,7 +158,7 @@ RealEncoding = gbk
 
 
 [Unit8]
-FileName = files.cpp
+FileName = main.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -166,7 +166,7 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = PROJECT
+FileEncoding = SYSTEM
 RealEncoding = gbk
 
 
