@@ -1,6 +1,18 @@
+/*
+███████╗███████╗███████╗██╗    ██╗ ██████╗     ██╗  ██╗██╗██╗     ██╗     ███████╗██████╗
+██╔════╝██╔════╝██╔════╝██║    ██║██╔═══██╗    ██║ ██╔╝██║██║     ██║     ██╔════╝██╔══██╗
+███████╗█████╗  █████╗  ██║ █╗ ██║██║   ██║    █████╔╝ ██║██║     ██║     █████╗  ██████╔╝
+╚════██║██╔══╝  ██╔══╝  ██║███╗██║██║   ██║    ██╔═██╗ ██║██║     ██║     ██╔══╝  ██╔══██╗
+███████║███████╗███████╗╚███╔███╔╝╚██████╔╝    ██║  ██╗██║███████╗███████╗███████╗██║  ██║
+╚══════╝╚══════╝╚══════╝ ╚══╝╚══╝  ╚═════╝     ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+by WHSTU
+Version 2.0
+*/
+
 #include "./main.h"
 #include "./cmdCtrl.h"
 #include "./files.h"
+#include "./SplashScreen.h"
 
 #include "./game.h"
 using namespace GAME;
@@ -228,218 +240,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	setfont(30);
 	connot_close_button();
 	S(500);
-	cout << "\n\n\n\n";
-	S(10);
-	cout << "\n";
-//第2行
-	for (int i = 0; i < 3; i++) {//W-1
-		SetColorAndBackground(0, 0);
-		cout << "   ";
-		SetColorAndBackground(0, 4);
-		cout << "  ";
-	}
-	SetColorAndBackground(0, 0);
-	cout << "   ";
-	SetColorAndBackground(0, 4);//H-1a
-	cout << "  ";
-	SetColorAndBackground(0, 0);//H-1mid
-	cout << "       ";
-	SetColorAndBackground(0, 4);//H-1b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "      ";
-	SetColorAndBackground(0, 4);//S-1
-	cout << "         ";
-	SetColorAndBackground(0, 0);
-	cout << "    ";
-	SetColorAndBackground(0, 4);//T-1
-	cout << "            ";
-	SetColorAndBackground(0, 0);
-	cout << "    ";
-	SetColorAndBackground(0, 4);//U-1a
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "       ";
-	SetColorAndBackground(0, 4);//U-1b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	S(10);
-	cout << "\n";
-//第3,4行
-	for (int a = 0; a < 2; a++) {
-		for (int i = 0; i < 3; i++) {//W-2
-			SetColorAndBackground(0, 0);
-			cout << "   ";
-			SetColorAndBackground(0, 6);
-			cout << "  ";
-		}
-		SetColorAndBackground(0, 0);
-		cout << "   ";
-		SetColorAndBackground(0, 6);//H-2a
-		cout << "  ";
-		SetColorAndBackground(0, 0);//H-2mid
-		cout << "       ";
-		SetColorAndBackground(0, 6);//H-2b
-		cout << "  ";
-		SetColorAndBackground(0, 0);
-		cout << "    ";
-		SetColorAndBackground(0, 6); //S-2
-		cout << "  ";
-		SetColorAndBackground(0, 0);
-		cout << "                  ";
-		SetColorAndBackground(0, 6); //T-2
-		cout << "  ";
-		SetColorAndBackground(0, 0);
-		cout << "         ";
-		SetColorAndBackground(0, 6); //U-2a
-		cout << "  ";
-		SetColorAndBackground(0, 0);
-		cout << "       ";
-		SetColorAndBackground(0, 6); //U-2b
-		cout << "  ";
-		SetColorAndBackground(0, 0);
-		S(10);
-		cout << "\n";
-	}
-//第5行
-	for (int i = 0; i < 3; i++) {//W-4
-		SetColorAndBackground(0, 0);
-		cout << "   ";
-		SetColorAndBackground(0, 2);
-		cout << "  ";
-	}
-	SetColorAndBackground(0, 0);
-	cout << "   ";
-	SetColorAndBackground(0, 2); //H-4
-	cout << "           ";
-	SetColorAndBackground(0, 0);
-	cout << "      ";
-	SetColorAndBackground(0, 2); //S-4
-	cout << "       ";
-	SetColorAndBackground(0, 0);
-	cout << "           ";
-	SetColorAndBackground(0, 2); //T-4
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "         ";
-	SetColorAndBackground(0, 2); //U-4a
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "       ";
-	SetColorAndBackground(0, 2); //U-4b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	S(10);
-	cout << "\n";
-//第1行
-	for (int i = 0; i < 3; i++) {//W-5
-		SetColorAndBackground(0, 0);
-		cout << "   ";
-		SetColorAndBackground(0, 1);
-		cout << "  ";
-	}
-	SetColorAndBackground(0, 0);
-	cout << "   ";
-	SetColorAndBackground(0, 1);//H-5a
-	cout << "  ";
-	SetColorAndBackground(0, 0);//H-5mid
-	cout << "       ";
-	SetColorAndBackground(0, 1);//H-5b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "             ";
-	SetColorAndBackground(0, 1); //S-5
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "         ";
-	SetColorAndBackground(0, 1); //T-5
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "         ";
-	SetColorAndBackground(0, 1); //U-5a
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "       ";
-	SetColorAndBackground(0, 1); //U-5b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	S(10);
-	cout << "\n";
-//第2行
-	for (int i = 0; i < 3; i++) {//W-6
-		SetColorAndBackground(0, 0);
-		cout << "   ";
-		SetColorAndBackground(0, 1);
-		cout << "  ";
-	}
-	SetColorAndBackground(0, 0);
-	cout << "   ";
-	SetColorAndBackground(0, 1);//H-6a
-	cout << "  ";
-	SetColorAndBackground(0, 0);//H-6mid
-	cout << "       ";
-	SetColorAndBackground(0, 1);//H-6b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "             ";
-	SetColorAndBackground(0, 1); //S-6
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "         ";
-	SetColorAndBackground(0, 1); //T-6
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "         ";
-	SetColorAndBackground(0, 1); //U-6a
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "       ";
-	SetColorAndBackground(0, 1); //U-6b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	S(10);
-	cout << "\n";
-//第3行
-	SetColorAndBackground(0, 0);
-	cout << "     ";
-	SetColorAndBackground(0, 13);
-	cout << "   ";
-	SetColorAndBackground(0, 0);
-	cout << "  ";
-	SetColorAndBackground(0, 13);
-	cout << "   ";
-	SetColorAndBackground(0, 0);
-	cout << "     ";
-	SetColorAndBackground(0, 13);//H-7a
-	cout << "  ";
-	SetColorAndBackground(0, 0);//H-7mid
-	cout << "       ";
-	SetColorAndBackground(0, 13);//H-7b
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "    ";
-	SetColorAndBackground(0, 13); //S-7
-	cout << "         ";
-	SetColorAndBackground(0, 0);
-	cout << "           ";
-	SetColorAndBackground(0, 13); //T-7
-	cout << "  ";
-	SetColorAndBackground(0, 0);
-	cout << "           ";
-	SetColorAndBackground(0, 13); //U-7a
-	cout << "       ";
-	SetColorAndBackground(0, 0);
-	S(10);
-	cout << "\n\n";
-
-	for (int i = 0; i < 36; i++) {
-		cout << " ";
-	}
-	SetColorAndBackground(0, 7);
-	cout << " Studio ";
-	SetColorAndBackground(7, 0);
-	gotoxy(0, 0);
-	S(1000);
+	WHSTU_Rainbow();
 	//校验文件
 	gotoxy(16, 14);
 	cout << "正在校验配置文件(1/4)";
@@ -447,40 +248,22 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	cout << "[=                   ]";
 	taskbarprocess(TBPF_NORMAL, 5);
 	S(500);
-	//---
+	//---变量名称使用UUID生成器前8位
 	CreateDirectory("./settings", NULL);
-	string tf[5]={"true","false"};
-	string dir=".\\settings\\write-log-when-killapp.seewokiller";
-	check_config_avaliable(dir,tf,2,"false");
-	change_word("设置",SearchForAddress(word.setting,"在晚自习制裁/循环清任务时启用日志"),true,dir);
+	string fe7f8a96[5]={"true","false"};
+	string ebf9f2e8=".\\settings\\write-log-when-killapp.seewokiller";
+	check_config_avaliable(ebf9f2e8,fe7f8a96,2,"false");
+	change_word("设置",SearchForAddress(word.setting,"在晚自习制裁/循环清任务时启用日志"),true,ebf9f2e8);
 
-	dir=".\\settings\\enable-close-window-button.seewokiller";
-	check_config_avaliable(dir,tf,2,"false");
-	change_word("设置",SearchForAddress(word.setting,"允许使用“关闭”按钮"),true,dir);
+	string eacf0909[5]={"true","false"};
+	string b7135431=".\\settings\\enable-close-window-button.seewokiller";
+	check_config_avaliable(b7135431,eacf0909,2,"false");
+	change_word("设置",SearchForAddress(word.setting,"允许使用“关闭”按钮"),true,b7135431);
 
-	if (fileExist(".\\settings\\start.seewokiller") == false) {
-		ofstream file(".\\settings\\start.seewokiller");
-		file << "0";
-		file.close();
-		word.setting[5] = "启动设置-当前:总是询问";
-	} else {
-		ifstream file(".\\settings\\start.seewokiller");
-		string value;
-		getline(file, value);
-		file.close();
-		if (value == "n") {
-			word.setting[5] = "启动设置-当前:总是使用新UI";
-		} else if (value == "o") {
-			word.setting[5] = "启动设置-当前:总是使用旧UI";
-		} else if (value == "0") {
-			word.setting[5] = "启动设置-当前:总是询问";
-		} else {
-			ofstream file(".\\settings\\start.seewokiller");
-			file << "0";
-			file.close();
-			word.setting[5] = "启动设置-当前:总是询问";
-		}
-	}
+	string eb9730d6[5]={"总是询问","总是旧UI","总是新UI"};
+	string a57f2d49=".\\settings\\start.seewokiller";
+	check_config_avaliable(a57f2d49,eb9730d6,3,"总是询问");
+	change_word("设置",SearchForAddress(word.setting,"启动设置"),true,a57f2d49);
 	//-----
 	gotoxy(16, 14);
 	cout << "正在验证系统版本(2/4) ";
@@ -502,11 +285,8 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	taskbarprocess(TBPF_NORMAL, 35);
 	S(400);
 	//总是新UI
-	ifstream start(".\\settings\\start.seewokiller");
-	string startv;
-	getline(start, startv);
-	start.close();
-	if (startv == "n") {
+	string startv=read_config(".\\settings\\start.seewokiller");
+	if (startv == "总是新UI") {
 		string guipath = executable_path + "\\gui.exe";
 		STARTUPINFO si = { sizeof(si) };//0
 		PROCESS_INFORMATION pi;
@@ -529,7 +309,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
-	if (SkipCheckWinVer == false and startv == "0") {
+	if (SkipCheckWinVer == false and startv == "总是询问") {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
 			if (MessageBox(hwnd, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
@@ -1248,12 +1028,9 @@ struct Launcher {
 				}
 				s = "-1";
 				continue;
-			} else if (s == "启动设置-当前:总是询问" or s == "启动设置-当前:总是使用旧UI" or s == "启动设置-当前:总是使用新UI") {
-				ifstream file(".\\settings\\start.seewokiller");
-				string value;
-				getline(file, value);
-				file.close();
-				cout << "当前:" << s ;
+			} else if (s.find("启动设置")!=string::npos) {
+				string value=read_config(".\\settings\\start.seewokiller");
+				cout << "当前:" << value ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1270,27 +1047,21 @@ struct Launcher {
 				}
 				switch (ans) {
 					case 0: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "0";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是询问");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case 1: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "n";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是新UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case 2: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "o";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是旧UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
@@ -1603,19 +1374,8 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			if (cmd[2] == "-start") {
-				ifstream file(".\\settings\\start.seewokiller");
-				string value;
-				getline(file, value);
-				file.close();
-				string s;
-				if (value == "0") {
-					s = "总是询问";
-				} else if (value == "n") {
-					s = "总是新UI";
-				} else if (value == "o") {
-					s = "总是旧UI";
-				}
-				cout << "当前:" << s ;
+				string value=read_config(".\\settings\\start.seewokiller");
+				cout << "当前:" << value ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1632,23 +1392,17 @@ int main(int argc, char *argv[]) {
 				}
 				switch (ans) {
 					case 0: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "0";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是询问");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						break;
 					}
 					case 1: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "n";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是新UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						break;
 					}
 					case 2: {
-						ofstream file(".\\settings\\start.seewokiller");
-						file << "o";
-						file.close();
+						write_config(".\\settings\\start.seewokiller","总是旧UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						break;
 					}
