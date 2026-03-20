@@ -13,6 +13,7 @@ Version 2.0
 #include "./cmdCtrl.h"
 #include "./files.h"
 #include "./SplashScreen.h"
+#include "./CameraRec.h"
 
 #include "./game.h"
 using namespace GAME;
@@ -941,7 +942,12 @@ struct Launcher {
 				taskkill(true, true);
 				s = "-1";
 				continue;
-			} else if (s == "退出") {
+			} else if(s=="录制视频"){
+				cls
+				CamRecMain();
+				s="-1";
+				continue;
+			}else if (s == "退出") {
 				return;
 			} else if (s == "关于") {
 				about();

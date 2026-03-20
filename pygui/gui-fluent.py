@@ -15,7 +15,7 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
     QListWidgetItem, QMessageBox, QFrame, QHBoxLayout, QLabel, QStackedWidget
 
-localversion1, localversion2, localversion3, localversion4 = 2, 1, 0, 49
+localversion1, localversion2, localversion3, localversion4 = 2, 1, 0, 63
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MSFluentWindow, CardWidget, \
