@@ -65,7 +65,7 @@ SyncProduct = 1
 
 
 [Unit1]
-FileName = main.h
+FileName = files.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -79,7 +79,7 @@ RealEncoding = gbk
 
 
 [Unit4]
-FileName = files.h
+FileName = main.h
 Folder = 
 Compile = 0
 Link = 0
@@ -93,110 +93,6 @@ RealEncoding = gbk
 
 
 [Unit2]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit3]
-FileName = .spl_WHSTU_Rainbow.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit5]
-FileName = CameraRec.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = ASCII
-
-
-[Unit6]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = SYSTEM
-RealEncoding = gbk
-
-
-[Unit7]
-FileName = game.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit8]
-FileName = cmdCtrl.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit9]
-FileName = SplashScreen.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit10]
-FileName = game.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = gbk
-
-
-[Unit11]
 FileName = CameraRec.cpp
 CompileCpp = 1
 Folder = 
@@ -209,7 +105,7 @@ FileEncoding = gb18030
 RealEncoding = gb18030
 
 
-[Unit12]
+[Unit3]
 FileName = files.cpp
 CompileCpp = 1
 Folder = 
@@ -219,6 +115,110 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit5]
+FileName = cmdCtrl.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit6]
+FileName = game.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit7]
+FileName = cmdCtrl.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit8]
+FileName = .spl_WHSTU_Rainbow.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit9]
+FileName = game.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit10]
+FileName = CameraRec.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
+
+[Unit11]
+FileName = SplashScreen.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = gbk
+
+
+[Unit12]
+FileName = main.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = SYSTEM
 RealEncoding = gbk
 
 
