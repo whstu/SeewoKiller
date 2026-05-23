@@ -115,6 +115,10 @@
 
 如果您确定您遇到的问题是一个 **Bug**，或者您要提出一项**新的功能**，请[提交 Issue](https://github.com/whstu/SeewoKiller/issues/new/choose)。
 
+## Build by Yourself
+
+本程序使用 Red Panda Dev-C++编译。Python 3.11。
+
 ## Stars 历史
 
 [![Star 历史](https://starchart.cc/whstu/SeewoKiller.svg?variant=adaptive)](https://starchart.cc/whstu/SeewoKiller)
