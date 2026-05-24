@@ -87,15 +87,16 @@
 
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!TIP]
-> setup，setup-ai，setup-custom 与 setup-small 的区别
-> |       文件名       |破解冰点还原 | 基础功能（注册表，晚自习制裁等）|DeepSeek R1|计算π|
-> | :---------------: | :-: | :-: | :-: | :-: |
-> |     setup.exe     |🟢|🟢|🔴|🔴|
-> |setup-small.exe    |🔴|🟢|🔴|🔴|
-> |   setup-ai.exe    |🟢|🟢|🟢|🔴|
-> |setup-custom.exe   |可选|🟢|可选 | 可选|
+> 安装包的区别
+> |       文件名               |破解冰点还原 | 基础功能（注册表，晚自习制裁等）| 新版 GUI|  AI  |计算π|文件估计大小|
+> | :-----------------------: | :------: | :---------------------: | :------: | :-: | :-: | :-------:|
+> |SeewoKiller_custom.exe     |可选       |🟢                        |🟢       |可选   |可选 |70MB|
+> |SeewoKiller_with_gui.exe   |🔴        |🟢                         |🟢      |🔴    |🔴  |45MB|
+> |SeewoKiller_with_gui_and_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |50MB|
+> |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |55MB|
+> |SeewoKiller_with_nothing.exe|🔴       |🟢                         |🔴      |🔴    |🔴  |3MB|
 > 
-> 除 setup-custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
+> 除 SeewoKiller_custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
 > 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai.exe)
 
 ## 获取帮助

@@ -2,26 +2,25 @@ import ctypes
 import os
 import sys
 import threading
+import time
 import urllib.request
 import warnings
-from threading import Thread
-from uuid import uuid1
-
-from bs4 import BeautifulSoup
 from os import system
-import time
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import Qt, QProcess, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
-    QListWidgetItem, QMessageBox, QFrame, QHBoxLayout, QLabel, QStackedWidget
 
-localversion1, localversion2, localversion3, localversion4 = 2, 1, 0, 63
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QMessageBox, QFrame, QHBoxLayout, QStackedWidget
+from bs4 import BeautifulSoup
+
+localversion1, localversion2, localversion3, localversion4 = 2, 1, 1, 0
+VersionName="Frodo Baggins"
+AppName_en,AppName_cn="SeewoKiller","希沃克星"
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MSFluentWindow, CardWidget, \
+from qfluentwidgets import NavigationItemPosition, SubtitleLabel, setFont, MSFluentWindow, CardWidget, \
     IconWidget, BodyLabel, CaptionLabel, PushButton, InfoBar, InfoBarPosition, ImageLabel, ElevatedCardWidget, \
-    FlowLayout, BreadcrumbBar, PrimaryToolButton, LineEdit, ScrollArea, InfoBarIcon, PrimaryPushButton, \
+    BreadcrumbBar, PrimaryToolButton, ScrollArea, PrimaryPushButton, \
     ComboBox, SwitchButton, SmoothScrollArea, MessageBox, TitleLabel, SplashScreen
 from qfluentwidgets import FluentIcon as FIF
 from pathlib import Path
@@ -32,14 +31,14 @@ def is_admin():
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-if not is_admin():
+'''if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
-    sys.exit()
+    sys.exit()'''
 
 def QhGetScreenResolution():
     # 获取屏幕分辨率（显示&物理）
     import tkinter as tk
-    import pyautogui
+    #import pyautogui
     # 创建一个隐藏的 Tkinter 根窗口
     QhRoot = tk.Tk()
     QhRoot.withdraw()  # 隐藏根窗口
@@ -50,15 +49,26 @@ def QhGetScreenResolution():
     QhRoot.destroy()
     print(f"屏幕显示分辨率 QH: {QhXSwidth}x{QhXSheight}")
     # 获取屏幕物理分辨率
-    size = pyautogui.size()
-    QhWLwidth = size.width
-    QhWLheight = size.height
-    print(f"屏幕物理分辨率 QH: {QhWLwidth}x{QhWLheight}")
-    return QhXSwidth, QhXSheight, QhWLwidth, QhWLheight
+    #size = pyautogui.size()
+    #QhWLwidth = size.width
+    #QhWLheight = size.height
+    #print(f"屏幕物理分辨率 QH: {QhWLwidth}x{QhWLheight}")
+    return QhXSwidth, QhXSheight#, QhWLwidth, QhWLheight
 
 # ============================================================
 # 配置文件管理
 # ============================================================
+# 获取资源文件路径
+def resource_path(relative_path):
+    """获取打包后资源的绝对路径"""
+    try:
+        # PyInstaller 创建临时文件夹，将路径存储在_MEIPASS 中
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 SETTINGS_DIR = Path(".") / "settings"
 
 class ConfigManager:
@@ -94,7 +104,6 @@ class ConfigManager:
         value = ConfigManager.read_config(path)
         if value not in valid_values:
             ConfigManager.write_config(path, default)
-
 
 class SeewoKiller_run():
     class Wanzixi(threading.Thread):
@@ -337,10 +346,10 @@ class Window(MSFluentWindow):
         super().__init__()
         #self.resize(800, 300)
         self.setGeometry(100, 30, 800, 500)
-        self.setWindowIcon(QIcon('./app.ico'))
-        self.setWindowTitle('SeewoKiller')
+        self.setWindowIcon(QIcon(resource_path('./app.ico') ) )
+        self.setWindowTitle(AppName_en)
         #self.splash=SplashScreen(self.windowIcon(),self)
-        self.splash=SplashScreen(QIcon('./tengwar.png'),self)
+        self.splash=SplashScreen(QIcon(resource_path('./tengwar.png')),self)
         self.splash.setIconSize(QSize(700,700))
         self.show()
 
@@ -365,10 +374,10 @@ class Home(QFrame):
 
         self.layout = QVBoxLayout(self)
 
-        self.SeewoLock = bigCard("./app.ico", "一键解希沃锁屏", self)
-        self.Wanzixi = bigCard("./app.ico", "晚自习制裁模式", self)
-        self.Ldq = bigCard("./app.ico", "一键防屏保", self)
-        self.Game = bigCard("./app.ico", "小游戏", self)
+        self.SeewoLock = bigCard(resource_path("./app.ico"), "一键解希沃锁屏", self)
+        self.Wanzixi = bigCard(resource_path("./app.ico"), "晚自习制裁模式", self)
+        self.Ldq = bigCard(resource_path("./app.ico"), "一键防屏保", self)
+        self.Game = bigCard(resource_path("./app.ico"), "小游戏", self)
 
         # 创建水平布局来放置卡片
         self.cardLayout = QHBoxLayout()
@@ -377,6 +386,16 @@ class Home(QFrame):
         self.cardLayout.addWidget(self.Ldq)
         self.cardLayout.addWidget(self.Game)
         self.cardLayout.addStretch()
+        if not is_admin():
+            InfoBar.error(
+                title='提示',
+                content="没有使用管理员身份启动，大多数功能将不可用。",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.BOTTOM_RIGHT,
+                duration=-1,  # 永不消失
+                parent=self
+            )
 
         self.layout.addLayout(self.cardLayout)
         self.layout.addStretch()
@@ -592,7 +611,6 @@ class CoreInterface(QFrame):
 
         if regedit_widget is None:
             # 创建新的注册表界面
-            from PyQt5.QtWidgets import QScrollArea
             regedit_widget = QFrame()
 
             # 创建滚动区域
@@ -898,12 +916,13 @@ class SettingInterface(SmoothScrollArea):
         about_layout = QVBoxLayout(about_card)
         about_layout.setContentsMargins(20, 16, 20, 16)
         about_layout.setSpacing(4)
-        about_layout.addWidget(BodyLabel("SeewoKiller"))
-        about_layout.addWidget(CaptionLabel(f"Version {localversion1}.{localversion2}.{localversion3}.{localversion4}  ·  by WHSTU"))
+        about_layout.addWidget(BodyLabel(f"{AppName_en} - {AppName_cn}"))
+        about_layout.addWidget(CaptionLabel(f"Version {localversion1}.{localversion2}.{localversion3}.{localversion4} ({VersionName})  ·  by WHSTU"))
         about_layout.addWidget(CaptionLabel("卓然第三帝国  https://whstu.dpdns.org/"))
         about_layout.addWidget(CaptionLabel("代码仓库：https://github.com/whstu/SeewoKiller/"))
-        about_layout.addWidget(CaptionLabel("SeewoKiller QQ 群：664929698"))
+        about_layout.addWidget(CaptionLabel(f"{AppName_en} QQ 群：664929698"))
         about_layout.addWidget(CaptionLabel("新版界面基于 PyQt5 和 qfluentwidgets"))
+        about_layout.addWidget(CaptionLabel("字体：Microsoft Yahei，Tengwar Annatar"))
         self.vLayout.addWidget(about_card)
 
         self.vLayout.addStretch()
@@ -1103,8 +1122,9 @@ class SwitchSettingCardCustom(CardWidget):
 
 
 if __name__ == '__main__':
-    QhXSwidth, QhXSheight, QhWLwidth, QhWLheight = QhGetScreenResolution()
-    if QhWLwidth > 1920:
+    #QhXSwidth, QhXSheight, QhWLwidth, QhWLheight = QhGetScreenResolution()
+    QhXSwidth, QhXSheight= QhGetScreenResolution()
+    if QhXSwidth > 1920:
         os.environ["QT_SCALE_FACTOR"] = "1"
         QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)  # 适应高 DPI 设备
         QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)

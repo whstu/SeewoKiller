@@ -1,15 +1,18 @@
 @echo off
-echo 签名：setup.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup.exe"
-echo 签名：setup-small.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup-small.exe"
-echo 签名：setup-ai.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup-ai.exe"
-echo 签名：setup-custom.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup-custom.exe"
-echo 签名：setup-console.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup-console.exe"
-echo 签名：setup-clear.exe
-.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\setup-clear.exe"
+
+echo 签名：SeewoKiller_custom.exe
+.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_custom.exe"
+
+echo 签名：SeewoKiller_with_gui.exe
+.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_with_gui.exe"
+
+echo 签名：SeewoKiller_with_gui_and_ai.exe
+.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_with_gui_and_ai.exe"
+
+echo 签名：SeewoKiller_with_gui_and_freeze.exe
+.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_with_gui_and_freeze.exe"
+
+echo 签名：SeewoKiller_with_nothing.exe
+.\signtool.exe sign /f "E:\devc++\DEV\SeewoKiller\signtool\sign-password114514.pfx" /p 114514 /t http://timestamp.digicert.com /fd SHA512 /v "E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_with_nothing.exe"
 
 pause

@@ -2,8 +2,8 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星"
-#define MyAppVersion "2.1.0.63"
-#define MyAppProductVersion "2.1.0.63"
+#define MyAppVersion "2.1.1.0"
+#define MyAppProductVersion "2.1.1.0"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.dpdns.org/"
 #define MyAppExeName "SeewoKiller.exe"
@@ -29,7 +29,7 @@ DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=E:\devc++\DEV\SeewoKiller\!Licence.txt
 OutputDir=E:\devc++\DEV\SeewoKiller\installer
-OutputBaseFilename=setup-custom
+OutputBaseFilename=SeewoKiller_custom
 SetupIconFile=E:\devc++\DEV\SeewoKiller\app.ico
 Compression=lzma
 SolidCompression=yes
