@@ -1,6 +1,8 @@
 <!--markdownlint-disable MD001 MD033 MD041 MD051-->
-> [!CAUTION]
-> 希沃克星已于 2025 年 7 月 20 日停止新功能更新。WHSTU 可能会继续发布一些 bug 修复。很抱歉没有完成新 UI 的制作。。。
+> [!NOTE]
+> 希沃克星即将于 2026 年 6 月 22 日恢复新功能更新！
+> WHSTU中考即将结束。如果考得好，本项目会继续更新；如果考炸了，这个项目就要到此为止了。
+> 中考成绩将在 6 月 30 日晚公布。在此之前的几天，我会尽量把当前版本维护到最佳状态，以便料理后事（
 
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
 <div align="center">
