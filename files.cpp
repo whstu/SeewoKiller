@@ -67,3 +67,84 @@ void change_word(const string& string_class, int address, bool config, const str
 		return;
 	}
 }
+
+void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFolders) {
+	// 清空目标容器
+	outFolders.clear();
+	
+	std::string searchPath = rootPath + "\\*";
+	WIN32_FIND_DATAA findData;
+	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		std::cerr << "无法打开目录: " << rootPath << " (错误码: " << GetLastError() << ")" << std::endl;
+		return;
+	}
+	do {
+		if (strcmp(findData.cFileName, ".") == 0 || 
+			strcmp(findData.cFileName, "..") == 0) {
+			continue;
+		}
+		// 只存储目录
+		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			outFolders.push_back(findData.cFileName);
+		}
+	} while (FindNextFileA(hFind, &findData));
+	FindClose(hFind);
+}
+void GetFileName(const std::wstring& rootPath, std::vector<std::wstring>& outFiles) {
+	outFiles.clear();
+	
+	std::wstring searchPath = rootPath + L"\\*";
+	WIN32_FIND_DATAW findData;
+	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		std::wcerr << "无法打开目录: " << rootPath.c_str() << " (错误码: " << GetLastError() << L")" << std::endl;
+		return;
+	}
+	do {
+		if (wcscmp(findData.cFileName, L".") == 0 || 
+			wcscmp(findData.cFileName, L"..") == 0) {
+			continue;
+		}
+		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+			outFiles.push_back(findData.cFileName);
+		}
+	} while (FindNextFileW(hFind, &findData));
+	FindClose(hFind);
+}
+
+
+namespace PLUGIN{
+	void ReadPluginList(){
+		GetSubFolders("./plugin",plugin.plugin);
+		for(const auto& ID:plugin.plugin){
+			string PATH=".\\plugin\\"+ID+"\\name.config";
+			//cout<<PATH<<endl;
+			if(!fileExist(PATH)){
+				auto del=find(plugin.plugin.begin(),plugin.plugin.end(),ID);
+				if (del!=plugin.plugin.end()){
+					plugin.plugin.erase(del);
+				}
+			}
+		}
+		plugin.pluginn=plugin.plugin.size();
+	}
+	void ReadPluginName(){
+		for(const auto& ID:plugin.plugin){
+			string PATH=".\\plugin\\"+ID+"\\name.config";
+			plugin.pluginName.push_back(read_config(PATH));
+		}
+	}
+	void PluginMain(){
+		ReadPluginList();
+		cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";
+		for(const auto& ID:plugin.plugin){
+			cout<<"   "<<ID<<"\n";
+		}
+		ReadPluginName();
+		cout<<"\n\nFind "<<plugin.pluginn<<" plugins:\n";
+		for(const auto& name:plugin.pluginName){
+			cout<<"   "<<name<<"\n";
+		}
+	}
+}

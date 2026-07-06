@@ -13,7 +13,7 @@
 #pragma comment(lib, "Ole32.lib")
 inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 	0xea1afb91, 0x9e28, 0x4b86,
-{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
+	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
 };
 //重启explorer.exe
 #include <tlhelp32.h>
@@ -34,6 +34,8 @@ inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 #define cls system("cls");
 #define ei else if
 typedef long long LL;
+//std::string EXECPATH;
+inline std::string executable_path;
 
 inline int box = 1/*板块*/, boxn = 4/*板块总数*/;
 inline struct Word {
@@ -41,7 +43,7 @@ inline struct Word {
 	int recentn = 4;
 	std::vector<std::string> recent = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
 	int alln = 9;
-	std::vector<std::string> all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频","小游戏>>>", "恶搞>>>", "注册表>>>"};
+	std::vector<std::string> all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频", "小游戏>>>", "恶搞>>>", "注册表>>>"};
 	int moren = 3;
 	std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
 	int settingn = 11;
@@ -62,5 +64,14 @@ inline struct DefaultWord {
 	const int devn = 3;
 	const std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
 } def_word;
+
+inline struct Plugin {
+	int pluginn = 0;
+	std::vector<std::string> pluginName;
+	std::vector<std::string> plugin;//ID
+	std::vector<std::string> pluginType;
+	std::vector<std::string> pluginExec;//type=exec
+	std::vector<std::string> pluginList;//type=list
+} plugin;
 
 #endif

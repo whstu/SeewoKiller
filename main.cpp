@@ -21,7 +21,6 @@ using namespace GAME;
 using namespace std;
 
 char path[MAX_PATH];
-string executable_path;
 size_t position;
 string xwbbpath;
 int dwMajorInt;
@@ -244,11 +243,11 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	WHSTU_Rainbow();
 	//校验文件
 	gotoxy(16, 14);
-	cout << "正在校验配置文件(1/4)";
+	cout << "正在校验配置文件(1/5)";
 	gotoxy(15, 16);
 	cout << "[=                   ]";
 	taskbarprocess(TBPF_NORMAL, 5);
-	S(500);
+	S(100);
 	//---变量名称使用UUID生成器前8位
 	CreateDirectory("./settings", NULL);
 	string fe7f8a96[5]={"true","false"};
@@ -267,11 +266,11 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	change_word("设置",SearchForAddress(word.setting,"启动设置"),true,a57f2d49);
 	//-----
 	gotoxy(16, 14);
-	cout << "正在验证系统版本(2/4) ";
+	cout << "正在验证系统版本(2/5) ";
 	gotoxy(15, 16);
 	cout << "[=====               ]";
 	taskbarprocess(TBPF_NORMAL, 25);
-	S(200);
+	S(100);
 	//检测Windows版本
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
 	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//加载DLL
@@ -280,11 +279,11 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	GetNtVersionNumbers(&dwMajor, &dwMinor, &dwBuildNumber);
 	gotoxy(15, 14);
 	printf("Windows版本: %d.%d", (int)dwMajor, (int)dwMinor);
-	cout << "(3/4)      ";
+	cout << "(3/5)      ";
 	gotoxy(15, 16);
 	cout << "[=======             ]";
 	taskbarprocess(TBPF_NORMAL, 35);
-	S(400);
+	S(100);
 	//总是新UI
 	string startv=read_config(".\\settings\\start.seewokiller");
 	if (startv == "总是新UI") {
@@ -344,8 +343,17 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	Windows 2000-5.0
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
+	gotoxy(15,14);
+	cout<<"正在加载插件(4/5)             ";
+	gotoxy(15,16);
+	cout<<"[==============      ]";
+	CreateDirectory("./plugin", NULL);
+	PLUGIN::PluginMain();
+	system("pause");
+
+
 	gotoxy(15, 14);
-	cout << "正在进行最后的准备(4/4)  ";
+	cout << "正在进行最后的准备(5/5)  ";
 	gotoxy(15, 16);
 	cout << "[===========         ]";
 	taskbarprocess(TBPF_NORMAL, 55);
@@ -363,7 +371,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		file.close();
 	}
 	gotoxy(15, 16);
-	cout << "[===============     ]";
+	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 75);
 	S(10);
 	gotoxy(15, 16);
