@@ -14,10 +14,10 @@ CFLAGS   = $(INCS) "-O2" "-pipe"
 NASM_FLAGS   =  "-f" "elf64"
 WINDRESFLAGS = 
 RES      = SeewoKiller_private.res
-OBJ      = CameraRec.o cmdCtrl.o .spl_WHSTU_Rainbow.o game.o files.o main.o $(RES)
+OBJ      = CameraRec.o main.o .spl_WHSTU_Rainbow.o cmdCtrl.o game.o files.o $(RES)
 BIN      = SeewoKiller.exe
-LINKOBJ  = "CameraRec.o" "cmdCtrl.o" ".spl_WHSTU_Rainbow.o" "game.o" "files.o" "main.o" "SeewoKiller_private.res"
-CLEANOBJ = "CameraRec.o" "cmdCtrl.o" ".spl_WHSTU_Rainbow.o" "game.o" "files.o" "main.o" "SeewoKiller_private.res" "SeewoKiller.exe"
+LINKOBJ  = "CameraRec.o" "main.o" ".spl_WHSTU_Rainbow.o" "cmdCtrl.o" "game.o" "files.o" "SeewoKiller_private.res"
+CLEANOBJ = "CameraRec.o" "main.o" ".spl_WHSTU_Rainbow.o" "cmdCtrl.o" "game.o" "files.o" "SeewoKiller_private.res" "SeewoKiller.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -30,23 +30,23 @@ SeewoKiller.exe: $(OBJ)
 
 	$(CXX) $(LINKOBJ) -o "SeewoKiller.exe" $(LIBS)
 
-CameraRec.o: CameraRec.cpp cmdCtrl.h main.h CameraRec.h
+CameraRec.o: CameraRec.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
 	$(CXX) -c "CameraRec.cpp" -o "CameraRec.o" $(CXXFLAGS)  -finput-charset=gb18030 -fexec-charset=gbk
 
-cmdCtrl.o: cmdCtrl.cpp cmdCtrl.h
-	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS) 
+main.o: main.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
+	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS) 
 
-.spl_WHSTU_Rainbow.o: .spl_WHSTU_Rainbow.cpp cmdCtrl.h SplashScreen.h main.h
+.spl_WHSTU_Rainbow.o: .spl_WHSTU_Rainbow.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
 	$(CXX) -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" $(CXXFLAGS) 
 
-game.o: game.cpp cmdCtrl.h main.h game.h
+cmdCtrl.o: cmdCtrl.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
+	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS) 
+
+game.o: game.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
 	$(CXX) -c "game.cpp" -o "game.o" $(CXXFLAGS) 
 
-files.o: files.cpp files.h main.h
+files.o: files.cpp main.h SplashScreen.h game.h cmdCtrl.h CameraRec.h files.h
 	$(CXX) -c "files.cpp" -o "files.o" $(CXXFLAGS) 
-
-main.o: main.cpp files.h cmdCtrl.h SplashScreen.h main.h CameraRec.h game.h
-	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS) 
 
 SeewoKiller_private.res: SeewoKiller_private.rc 
 	$(WINDRES) -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff $(WINDRESFLAGS) 

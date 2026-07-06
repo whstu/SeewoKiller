@@ -761,7 +761,7 @@ struct JOKE { /*¶ñ¸ã*/
 } joke;
 
 struct Launcher {
-	string listname(bool allowA, bool allowD, string liststring[], int n) {
+	string listname(bool allowA, bool allowD, const vector<string>& liststring, int n) {
 		gotoxy(0, 3);
 		int channel = 1;
 		SetColorAndBackground(7, 0);

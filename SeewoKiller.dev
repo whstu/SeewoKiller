@@ -48,24 +48,24 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 1
-Build = 0
+Build = 7
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.0.63
+FileVersion = 2.1.1.7
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = 
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.0.63
+ProductVersion = 2.1.1.7
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
-FileName = files.h
+FileName = CameraRec.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -75,29 +75,29 @@ OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
 FileEncoding = PROJECT
-RealEncoding = gbk
+RealEncoding = ASCII
 
 
 [Unit4]
-FileName = SplashScreen.h
+FileName = main.cpp
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-CompileCpp = 0
-FileEncoding = PROJECT
+CompileCpp = 1
+FileEncoding = SYSTEM
 RealEncoding = gbk
 
 
 [Unit2]
-FileName = cmdCtrl.h
-CompileCpp = 0
+FileName = game.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -106,24 +106,24 @@ RealEncoding = gbk
 
 
 [Unit3]
-FileName = CameraRec.cpp
-CompileCpp = 1
+FileName = files.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = gb18030
-RealEncoding = gb18030
+FileEncoding = PROJECT
+RealEncoding = gbk
 
 
 [Unit5]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
+FileName = cmdCtrl.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -158,20 +158,7 @@ RealEncoding = gbk
 
 
 [Unit8]
-FileName = CameraRec.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = ASCII
-
-
-[Unit9]
-FileName = game.h
+FileName = SplashScreen.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -183,8 +170,8 @@ FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit10]
-FileName = game.cpp
+[Unit9]
+FileName = cmdCtrl.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -196,7 +183,7 @@ FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit11]
+[Unit10]
 FileName = files.cpp
 CompileCpp = 1
 Folder = 
@@ -209,8 +196,8 @@ FileEncoding = PROJECT
 RealEncoding = gbk
 
 
-[Unit12]
-FileName = main.cpp
+[Unit11]
+FileName = CameraRec.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -218,7 +205,20 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = SYSTEM
+FileEncoding = gb18030
+RealEncoding = gb18030
+
+
+[Unit12]
+FileName = game.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
 RealEncoding = gbk
 
 

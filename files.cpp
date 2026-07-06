@@ -6,14 +6,11 @@ bool fileExist(const string& filename) {
 	return file.good();
 }
 
-int SearchForAddress(string value[], string goal) {
-	int i = 0;
-	// 假设数组以空字符串 "" 作为结束标志
-	while (!value[i].empty()) {
+int SearchForAddress(const vector<string>& value, const string& goal) {
+	for (size_t i = 0; i < value.size(); ++i) {
 		if (value[i].find(goal) != string::npos) {
-			return i;   // 返回第一个匹配的位置
+			return static_cast<int>(i);
 		}
-		i++;
 	}
 	return -1;
 }
@@ -47,23 +44,23 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	return;
 }
 
-void change_word(string string_class, int address, bool config, string PATH, string name) {
+void change_word(const string& string_class, int address, bool config, const string& PATH, const string& name) {
 	string tmp;
 	if (string_class == "设置") {
 		tmp = def_word.setting[address];
 	}
 //如果是config，则不会考虑name
-
+	
 	if (config == true) {
 		tmp = tmp + "-当前: " + read_config(PATH);
-
+		
 		if (string_class == "设置") {
 			word.setting[address] = tmp;
 		}
 		return;
 	} else {
 		tmp = name;
-
+		
 		if (string_class == "设置") {
 			word.setting[address] = tmp;
 		}
