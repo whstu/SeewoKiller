@@ -1,3 +1,4 @@
+bool testmode = true;
 /*
 ███████╗███████╗███████╗██╗    ██╗ ██████╗     ██╗  ██╗██╗██╗     ██╗     ███████╗██████╗
 ██╔════╝██╔════╝██╔════╝██║    ██║██╔═══██╗    ██║ ██╔╝██║██║     ██║     ██╔════╝██╔══██╗
@@ -60,7 +61,7 @@ void connot_close_button() {
 	ifstream file(".\\settings\\enable-close-window-button.seewokiller");
 	string value;
 	getline(file, value);
-	if (value != "true") {
+	if (value != "true" and testmode != true) {
 		RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
 		SetWindowLong(hwnd, GWL_STYLE,
 		              GetWindowLong(hwnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_THICKFRAME);
@@ -231,11 +232,19 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	//1深蓝，2深绿，3深青，4深红，5深紫，6深黄，7灰白（默认），8深灰
 	//9浅蓝，10浅绿，11浅青，12浅红，13浅紫，14浅黄，15白色，0黑色
 	if (fb == true) {
-		word.moren = 0;
-		word.settingn = 1;
-		word.gamen = 1;
-		word.joken = 1;
+		word.recent.clear();
+		word.all.clear();
+		word.more.clear();
+		word.setting.clear();
+		word.recent = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)"};
+		word.all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频"};
+		word.more = {"NULL", "冰点还原破解", "AI", "计算π"};
+		word.setting = {"NULL", "退出", "冰点还原疑难解答", "命令行帮助"};
 		return;
+	}
+	auto del = find(word.recent.begin(), word.recent.end(), "[*]有插件加载失败>>>");
+	if (del != word.recent.end()) {
+		word.recent.erase(del);
 	}
 	setfont(30);
 	connot_close_button();
@@ -250,20 +259,20 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	S(100);
 	//---变量名称使用UUID生成器前8位
 	CreateDirectory("./settings", NULL);
-	string fe7f8a96[5]={"true","false"};
-	string ebf9f2e8=".\\settings\\write-log-when-killapp.seewokiller";
-	check_config_avaliable(ebf9f2e8,fe7f8a96,2,"false");
-	change_word("设置",SearchForAddress(word.setting,"在晚自习制裁/循环清任务时启用日志"),true,ebf9f2e8);
+	string fe7f8a96[5] = {"true", "false"};
+	string ebf9f2e8 = ".\\settings\\write-log-when-killapp.seewokiller";
+	check_config_avaliable(ebf9f2e8, fe7f8a96, 2, "false");
+	change_word("设置", SearchForAddress(word.setting, "在晚自习制裁/循环清任务时启用日志"), true, ebf9f2e8);
 
-	string eacf0909[5]={"true","false"};
-	string b7135431=".\\settings\\enable-close-window-button.seewokiller";
-	check_config_avaliable(b7135431,eacf0909,2,"false");
-	change_word("设置",SearchForAddress(word.setting,"允许使用“关闭”按钮"),true,b7135431);
+	string eacf0909[5] = {"true", "false"};
+	string b7135431 = ".\\settings\\enable-close-window-button.seewokiller";
+	check_config_avaliable(b7135431, eacf0909, 2, "false");
+	change_word("设置", SearchForAddress(word.setting, "允许使用“关闭”按钮"), true, b7135431);
 
-	string eb9730d6[5]={"总是询问","总是旧UI","总是新UI"};
-	string a57f2d49=".\\settings\\start.seewokiller";
-	check_config_avaliable(a57f2d49,eb9730d6,3,"总是询问");
-	change_word("设置",SearchForAddress(word.setting,"启动设置"),true,a57f2d49);
+	string eb9730d6[5] = {"总是询问", "总是旧UI", "总是新UI"};
+	string a57f2d49 = ".\\settings\\start.seewokiller";
+	check_config_avaliable(a57f2d49, eb9730d6, 3, "总是询问");
+	change_word("设置", SearchForAddress(word.setting, "启动设置"), true, a57f2d49);
 	//-----
 	gotoxy(16, 14);
 	cout << "正在验证系统版本(2/5) ";
@@ -285,7 +294,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	taskbarprocess(TBPF_NORMAL, 35);
 	S(100);
 	//总是新UI
-	string startv=read_config(".\\settings\\start.seewokiller");
+	string startv = read_config(".\\settings\\start.seewokiller");
 	if (startv == "总是新UI") {
 		string guipath = executable_path + "\\gui.exe";
 		STARTUPINFO si = { sizeof(si) };//0
@@ -343,13 +352,13 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	Windows 2000-5.0
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
-	gotoxy(15,14);
-	cout<<"正在加载插件(4/5)             ";
-	gotoxy(15,16);
-	cout<<"[==============      ]";
+	gotoxy(15, 14);
+	cout << "正在加载插件(4/5)             ";
+	gotoxy(15, 16);
+	cout << "[==============      ]";
 	CreateDirectory("./plugin", NULL);
 	PLUGIN::PluginMain();
-	system("pause");
+	//system("pause");
 
 
 	gotoxy(15, 14);
@@ -435,15 +444,20 @@ void about() {
 	cout << "\n";
 	cout << "“Slytherin(TM)”是J.K.Rowling的注册商标，版权归WizardingWorld(R)所有\n";
 	cout << "\n按b回车即可返回\n";
-	string ans;
 	while (true) {
+		string ans;
 		cin >> ans;
 		if (ans == "b") {
 			return;
 		}
 		if (ans == "dev") {
-			word.settingn = 12;
-			cout << "开发者模式 已开启。\n按b后回车即可返回。\n";
+			auto add = std::find(word.setting.begin(), word.setting.end(), "开发者选项>>>");
+			if (add == word.setting.end()) {
+				word.setting.push_back("开发者选项>>>");
+				cout << "开发者模式 已开启。不需要重复操作。\n";
+			} else {
+				cout << "开发者模式 已开启。\n按b后回车即可返回。\n";
+			}
 		}
 	}
 }
@@ -700,6 +714,22 @@ void help(string name = "seewofreeze") {
 			}
 		}
 	}
+	if (name == "plugin") {
+		cls
+		cout << "错误的插件: \n";
+		for (size_t i = 0; i < plugin.errorpath.size(); ++i) {
+			cout << "  - " << plugin.errorpath[i] << endl;
+		}
+		cout << "\n";
+		cout << "按r重试，按其它键返回\n";
+		while (true) {
+			if (getch() == 'r') {
+				cls
+				poweron(true);
+			}
+			return;
+		}
+	}
 }
 
 struct JOKE { /*恶搞*/
@@ -769,7 +799,8 @@ struct JOKE { /*恶搞*/
 } joke;
 
 struct Launcher {
-	string listname(bool allowA, bool allowD, const vector<string>& liststring, int n) {
+	string listname(bool allowA, bool allowD, const vector<string>& liststring) {
+		const int n = liststring.size() - 1;
 		gotoxy(0, 3);
 		int channel = 1;
 		SetColorAndBackground(7, 0);
@@ -786,60 +817,60 @@ struct Launcher {
 			if ( _kbhit() ) {
 				char x = _getch();
 				switch (x) {
-				case 's': {
+					case 's': {
 						if (channel < n) {
-						channel++;
+							channel++;
+						}
+						gotoxy(0, 3);
+						SetColorAndBackground(7, 0);
+						for (int i = 1; i < channel; i++) {
+							cout << liststring[i] << "\n";
+						}
+						SetColorAndBackground(0, 7);
+						cout << liststring[channel] << "\n";
+						SetColorAndBackground(7, 0);
+						for (int i = channel + 1; i <= n; i++) {
+							cout << liststring[i] << "\n";
+						}
+						break;
 					}
-				gotoxy(0, 3);
-				SetColorAndBackground(7, 0);
-				for (int i = 1; i < channel; i++) {
-					cout << liststring[i] << "\n";
-					}
-					SetColorAndBackground(0, 7);
-					cout << liststring[channel] << "\n";
-					     SetColorAndBackground(7, 0);
-					for (int i = channel + 1; i <= n; i++) {
-					cout << liststring[i] << "\n";
-					}
-					break;
-				}
-				case 'w': {
+					case 'w': {
 						if (channel > 1) {
-						channel--;
+							channel--;
+						}
+						gotoxy(0, 3);
+						SetColorAndBackground(7, 0);
+						for (int i = 1; i < channel; i++) {
+							cout << liststring[i] << "\n";
+						}
+						SetColorAndBackground(0, 7);
+						cout << liststring[channel] << "\n";
+						SetColorAndBackground(7, 0);
+						for (int i = channel + 1; i <= n; i++) {
+							cout << liststring[i] << "\n";
+						}
+						break;
 					}
-				gotoxy(0, 3);
-				SetColorAndBackground(7, 0);
-				for (int i = 1; i < channel; i++) {
-					cout << liststring[i] << "\n";
-					}
-					SetColorAndBackground(0, 7);
-					cout << liststring[channel] << "\n";
-					     SetColorAndBackground(7, 0);
-					for (int i = channel + 1; i <= n; i++) {
-					cout << liststring[i] << "\n";
-					}
-					break;
-				}
-				case 'a': {
+					case 'a': {
 						if (allowA == true) {
-						if (box > 1) {
+							if (box > 1) {
 								box--;
 							}
 						}
-					return "-1";
-				}
-				case 'd': {
+						return "-1";
+					}
+					case 'd': {
 						if (allowD == true) {
-						if (box < boxn) {
+							if (box < boxn) {
 								box++;
 							}
 						}
-					return "-1";
+						return "-1";
+					}
+					case ' ': {
+						return liststring[channel];
+					}
 				}
-				case ' ': {
-						    return liststring[channel];
-						}
-						}
 			}
 		}
 		return "-2";
@@ -881,24 +912,28 @@ struct Launcher {
 				}
 				switch (box) {
 					case 1: {
-						s = listname(false, true, word.recent, word.recentn);
+						s = listname(false, true, word.recent);
 						break;
 					}
 					case 2: {
-						s = listname(true, true, word.all, word.alln);
+						s = listname(true, true, word.all);
 						break;
 					}
 					case 3: {
-						s = listname(true, true, word.more, word.moren);
+						s = listname(true, true, word.more);
 						break;
 					}
 					case 4: {
-						s = listname(true, false, word.setting, word.settingn);
+						s = listname(true, false, word.setting);
 						break;
 					}
 				}
 			} else if (s == "循环清任务(上课防屏保)") {
 				taskkill(true, false);
+			} else if (s == "[*]有插件加载失败>>>") {
+				help("plugin");
+				s = "-1";
+				continue;
 			} else if (s == "一键卸载") {
 				uninstall();
 				s = "-1";
@@ -950,12 +985,12 @@ struct Launcher {
 				taskkill(true, true);
 				s = "-1";
 				continue;
-			} else if(s=="录制视频"){
+			} else if (s == "录制视频") {
 				cls
 				CamRecMain();
-				s="-1";
+				s = "-1";
 				continue;
-			}else if (s == "退出") {
+			} else if (s == "退出") {
 				return;
 			} else if (s == "关于") {
 				about();
@@ -987,13 +1022,13 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if (s.find("在晚自习制裁/循环清任务时启用日志")!=string::npos) {
-				string value=read_config(".\\settings\\write-log-when-killapp.seewokiller");
+			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {
+				string value = read_config(".\\settings\\write-log-when-killapp.seewokiller");
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller","true");
+						write_config(".\\settings\\write-log-when-killapp.seewokiller", "true");
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
 							cls
 							poweron(true);
@@ -1001,7 +1036,7 @@ struct Launcher {
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller","false");
+						write_config(".\\settings\\write-log-when-killapp.seewokiller", "false");
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
 							cls
 							poweron(true);
@@ -1020,20 +1055,20 @@ struct Launcher {
 				system(command.c_str());
 				s = "-1";
 				continue;
-			} else if (s.find("允许使用“关闭”按钮")!=string::npos) {
-				string value=read_config(".\\settings\\enable-close-window-button.seewokiller");
+			} else if (s.find("允许使用“关闭”按钮") != string::npos) {
+				string value = read_config(".\\settings\\enable-close-window-button.seewokiller");
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller","true");
+						write_config(".\\settings\\enable-close-window-button.seewokiller", "true");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller","false");
+						write_config(".\\settings\\enable-close-window-button.seewokiller", "false");
 						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
@@ -1042,8 +1077,8 @@ struct Launcher {
 				}
 				s = "-1";
 				continue;
-			} else if (s.find("启动设置")!=string::npos) {
-				string value=read_config(".\\settings\\start.seewokiller");
+			} else if (s.find("启动设置") != string::npos) {
+				string value = read_config(".\\settings\\start.seewokiller");
 				cout << "当前:" << value ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
@@ -1061,21 +1096,21 @@ struct Launcher {
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller","总是询问");
+						write_config(".\\settings\\start.seewokiller", "总是询问");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller","总是新UI");
+						write_config(".\\settings\\start.seewokiller", "总是新UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller","总是旧UI");
+						write_config(".\\settings\\start.seewokiller", "总是旧UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls
 						poweron(true);
@@ -1088,7 +1123,7 @@ struct Launcher {
 				continue;
 			} else if (s == "小游戏>>>") {
 				head();
-				string d = listname(false, false, word.game, word.gamen);
+				string d = listname(false, false, word.game);
 				if (d == "返回") {
 					s = "-1";
 					continue;
@@ -1115,7 +1150,7 @@ struct Launcher {
 				}
 			} else if (s == "恶搞>>>") {
 				head();
-				string d = listname(false, false, word.joke, word.joken);
+				string d = listname(false, false, word.joke);
 				if (d == "返回") {
 					s = "-1";
 					continue;
@@ -1128,7 +1163,7 @@ struct Launcher {
 				}
 			} else if (s == "注册表>>>") {
 				head();
-				string d = listname(false, false, word.reg, word.regn);
+				string d = listname(false, false, word.reg);
 				if (d == "返回") {
 					s = "-1";
 					continue;
@@ -1187,7 +1222,7 @@ struct Launcher {
 				}
 			} else if (s == "开发者选项>>>") {
 				head();
-				string d = listname(false, false, word.dev, word.devn);
+				string d = listname(false, false, word.dev);
 				if (d == "返回") {
 					s = "-1";
 					continue;
@@ -1197,7 +1232,10 @@ struct Launcher {
 					system("pause");
 				}
 				if (d == "关闭开发者模式") {
-					word.settingn = 11;
+					auto del = std::find(word.setting.begin(), word.setting.end(), "开发者选项>>>");
+					if (del != word.setting.end()) {
+						word.setting.erase(del);
+					}
 					cout << "操作已完成。\n";
 					system("pause");
 					d = "返回";
@@ -1388,7 +1426,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			if (cmd[2] == "-start") {
-				string value=read_config(".\\settings\\start.seewokiller");
+				string value = read_config(".\\settings\\start.seewokiller");
 				cout << "当前:" << value ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
@@ -1406,17 +1444,17 @@ int main(int argc, char *argv[]) {
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller","总是询问");
+						write_config(".\\settings\\start.seewokiller", "总是询问");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller","总是新UI");
+						write_config(".\\settings\\start.seewokiller", "总是新UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller","总是旧UI");
+						write_config(".\\settings\\start.seewokiller", "总是旧UI");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						break;
 					}
@@ -1506,7 +1544,7 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 	}
-	if (IsUserAnAdmin() == false) {
+	if (IsUserAnAdmin() == false and testmode == false) {
 		if (getadmin() == false) {
 			return 0;
 		}

@@ -1,4 +1,5 @@
 #include "./files.h"
+#include "./cmdCtrl.h"
 
 //检查文件是否存在
 bool fileExist(const string& filename) {
@@ -50,17 +51,17 @@ void change_word(const string& string_class, int address, bool config, const str
 		tmp = def_word.setting[address];
 	}
 //如果是config，则不会考虑name
-	
+
 	if (config == true) {
 		tmp = tmp + "-当前: " + read_config(PATH);
-		
+
 		if (string_class == "设置") {
 			word.setting[address] = tmp;
 		}
 		return;
 	} else {
 		tmp = name;
-		
+
 		if (string_class == "设置") {
 			word.setting[address] = tmp;
 		}
@@ -71,7 +72,7 @@ void change_word(const string& string_class, int address, bool config, const str
 void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFolders) {
 	// 清空目标容器
 	outFolders.clear();
-	
+
 	std::string searchPath = rootPath + "\\*";
 	WIN32_FIND_DATAA findData;
 	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
@@ -80,8 +81,8 @@ void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFol
 		return;
 	}
 	do {
-		if (strcmp(findData.cFileName, ".") == 0 || 
-			strcmp(findData.cFileName, "..") == 0) {
+		if (strcmp(findData.cFileName, ".") == 0 ||
+		    strcmp(findData.cFileName, "..") == 0) {
 			continue;
 		}
 		// 只存储目录
@@ -93,7 +94,7 @@ void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFol
 }
 void GetFileName(const std::wstring& rootPath, std::vector<std::wstring>& outFiles) {
 	outFiles.clear();
-	
+
 	std::wstring searchPath = rootPath + L"\\*";
 	WIN32_FIND_DATAW findData;
 	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
@@ -102,8 +103,8 @@ void GetFileName(const std::wstring& rootPath, std::vector<std::wstring>& outFil
 		return;
 	}
 	do {
-		if (wcscmp(findData.cFileName, L".") == 0 || 
-			wcscmp(findData.cFileName, L"..") == 0) {
+		if (wcscmp(findData.cFileName, L".") == 0 ||
+		    wcscmp(findData.cFileName, L"..") == 0) {
 			continue;
 		}
 		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -113,38 +114,97 @@ void GetFileName(const std::wstring& rootPath, std::vector<std::wstring>& outFil
 	FindClose(hFind);
 }
 
-
-namespace PLUGIN{
-	void ReadPluginList(){
-		GetSubFolders("./plugin",plugin.plugin);
-		for(const auto& ID:plugin.plugin){
-			string PATH=".\\plugin\\"+ID+"\\name.config";
+namespace PLUGIN {
+	bool ReadPluginList() {
+		plugin.errorpath.clear();
+		plugin.plugin.clear();
+		plugin.pluginName.clear();
+		plugin.pluginExec.clear();
+		//plugin.pluginList.clear();
+		plugin.pluginType.clear();
+		bool success = true;
+		GetSubFolders("./plugin", plugin.plugin);
+		for (const auto& ID : plugin.plugin) {
+			vector<string> checkPATH = {
+				".\\plugin\\" + ID + "\\name.config",
+				".\\plugin\\" + ID + "\\type.config",
+				".\\plugin\\" + ID + "\\exec.config"
+			};
+			//string PATH=".\\plugin\\"+ID+"\\name.config";
 			//cout<<PATH<<endl;
-			if(!fileExist(PATH)){
-				auto del=find(plugin.plugin.begin(),plugin.plugin.end(),ID);
-				if (del!=plugin.plugin.end()){
-					plugin.plugin.erase(del);
+			gotoxy(15, 18);
+			cout << "正在扫描文件夹: .\\plugin\\" << ID << "\\                 ";
+			S(10);
+			for (const auto& PATH : checkPATH) {
+				gotoxy(15, 19);
+				cout << "正在扫描文件: " << PATH << "                          ";
+				if (!fileExist(PATH)) {//检验存在
+					auto del = find(plugin.plugin.begin(), plugin.plugin.end(), ID);
+					if (del != plugin.plugin.end()) {
+						plugin.plugin.erase(del);
+						plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+						success = false;
+					}
+				} else { //检验内容
+					if (PATH.find("name.config") != string::npos) {
+						string content = read_config(PATH);
+						if (content != "") {
+							plugin.pluginName.push_back(content);
+						} else {
+							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							success = false;
+							plugin.pluginName.push_back("[插件名称未找到]");
+						}
+					}
+					if (PATH.find("type.config") != string::npos) {
+						string content = read_config(PATH);
+						if (content =="list" or content=="exec") {
+							plugin.pluginType.push_back(content);
+						} else {
+							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							success = false;
+							plugin.pluginType.push_back("NULL");
+						}
+					}
+					if (PATH.find("exec.config") != string::npos) {
+						string content = read_config(PATH);
+						if (content != "") {
+							plugin.pluginExec.push_back(content);
+						} else {
+							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							success = false;
+							plugin.pluginExec.push_back("NULL");
+						}
+					}
 				}
+				S(10);
 			}
 		}
-		plugin.pluginn=plugin.plugin.size();
+
+		//清除重复
+		std::sort(plugin.errorpath.begin(), plugin.errorpath.end());
+		auto last = std::unique(plugin.errorpath.begin(), plugin.errorpath.end());
+		plugin.errorpath.erase(last, plugin.errorpath.end());
+		return success;
 	}
-	void ReadPluginName(){
-		for(const auto& ID:plugin.plugin){
-			string PATH=".\\plugin\\"+ID+"\\name.config";
+	/*void ReadPluginCfg() {
+		for (const auto& ID : plugin.plugin) {
+			string PATH = ".\\plugin\\" + ID + "\\name.config";
 			plugin.pluginName.push_back(read_config(PATH));
 		}
-	}
-	void PluginMain(){
-		ReadPluginList();
-		cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";
+	}*/
+	void PluginMain() {
+		if (ReadPluginList() == false) {
+			word.recent.push_back("[*]有插件加载失败>>>");
+		}
+		/*cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";
 		for(const auto& ID:plugin.plugin){
 			cout<<"   "<<ID<<"\n";
-		}
-		ReadPluginName();
-		cout<<"\n\nFind "<<plugin.pluginn<<" plugins:\n";
+		}*/
+		//ReadPluginCfg();
+		/*cout<<"\n\nFind "<<plugin.pluginn<<" plugins:\n";
 		for(const auto& name:plugin.pluginName){
 			cout<<"   "<<name<<"\n";
-		}
+		}*/
 	}
 }

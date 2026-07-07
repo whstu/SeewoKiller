@@ -40,38 +40,28 @@ inline std::string executable_path;
 inline int box = 1/*板块*/, boxn = 4/*板块总数*/;
 inline struct Word {
 	std::vector<std::string> box = {"NULL", "常用", "核心功能", "附加功能", "设置"};
-	int recentn = 4;
 	std::vector<std::string> recent = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
-	int alln = 9;
 	std::vector<std::string> all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频", "小游戏>>>", "恶搞>>>", "注册表>>>"};
-	int moren = 3;
 	std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
-	int settingn = 11;
-	std::vector<std::string> setting = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "冰点还原疑难解答", "启动初学者引导", "命令行帮助", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
-	int gamen = 5;
+	std::vector<std::string> setting = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "冰点还原疑难解答", "启动初学者引导", "命令行帮助", "使用新版界面", "重启到fastboot(真的fast!)", "关于"};
 	std::vector<std::string> game = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
-	int joken = 3;
 	std::vector<std::string> joke = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台", "提取U盘文件"};
-	int regn = 9;
 	std::vector<std::string> reg = {"NULL", "返回", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
-	int devn = 3;
 	std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
 } word;
 
 inline struct DefaultWord {
-	const int settingn = 11;
 	const std::vector<std::string> setting = {"NULL", "退出", "在晚自习制裁/循环清任务时启用日志", "打开日志文件夹", "允许使用“关闭”按钮", "启动设置", "冰点还原疑难解答", "启动初学者引导", "命令行帮助", "使用新版界面", "重启到fastboot(真的fast!)", "关于", "开发者选项>>>"};
-	const int devn = 3;
 	const std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
 } def_word;
 
 inline struct Plugin {
-	int pluginn = 0;
 	std::vector<std::string> pluginName;
 	std::vector<std::string> plugin;//ID
 	std::vector<std::string> pluginType;
 	std::vector<std::string> pluginExec;//type=exec
-	std::vector<std::string> pluginList;//type=list
+	//std::vector<std::string> pluginList;//type=list
+	std::vector<std::string> errorpath;
 } plugin;
 
 #endif
