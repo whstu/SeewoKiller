@@ -6,6 +6,11 @@ bool fileExist(const string& filename) {
 	ifstream file(filename);
 	return file.good();
 }
+bool dirExist(const string& path) {
+	DWORD attrib = GetFileAttributes(path.c_str());
+	return (attrib != INVALID_FILE_ATTRIBUTES &&
+	        (attrib & FILE_ATTRIBUTE_DIRECTORY));
+}
 
 int SearchForAddress(const vector<string>& value, const string& goal) {
 	for (size_t i = 0; i < value.size(); ++i) {
@@ -24,6 +29,18 @@ string read_config(string PATH) {
 		file.close();
 	}
 	return value;
+}
+bool read_Lines(const string& PATH, vector<string>& lines) {
+	ifstream file(PATH);
+	if (!file.is_open()) {
+		return false;          // 打开失败
+	}
+	string line;
+	while (getline(file, line)) {
+		lines.push_back(line); // 保留空行（push_back 空字符串）
+	}
+	file.close();
+	return true;
 }
 
 void write_config(string PATH, string config) {
@@ -45,26 +62,21 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	return;
 }
 
-void change_word(const string& string_class, int address, bool config, const string& PATH, const string& name) {
+void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
 	string tmp;
-	if (string_class == "设置") {
+	if (IsConfig) {
 		tmp = def_word.setting[address];
+	} else {
+		tmp = StringClass[address];
 	}
 //如果是config，则不会考虑name
-
-	if (config == true) {
+	if (IsConfig == true) {
 		tmp = tmp + "-当前: " + read_config(PATH);
-
-		if (string_class == "设置") {
-			word.setting[address] = tmp;
-		}
+		StringClass[address] = tmp;
 		return;
 	} else {
 		tmp = name;
-
-		if (string_class == "设置") {
-			word.setting[address] = tmp;
-		}
+		StringClass[address] = tmp;
 		return;
 	}
 }
@@ -142,7 +154,7 @@ namespace PLUGIN {
 					auto del = find(plugin.plugin.begin(), plugin.plugin.end(), ID);
 					if (del != plugin.plugin.end()) {
 						plugin.plugin.erase(del);
-						plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+						plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
 						success = false;
 					}
 				} else { //检验内容
@@ -151,17 +163,17 @@ namespace PLUGIN {
 						if (content != "") {
 							plugin.pluginName.push_back(content);
 						} else {
-							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
 							success = false;
 							plugin.pluginName.push_back("[插件名称未找到]");
 						}
 					}
 					if (PATH.find("type.config") != string::npos) {
 						string content = read_config(PATH);
-						if (content =="list" or content=="exec") {
+						if (content == "list" or content == "exec") {
 							plugin.pluginType.push_back(content);
 						} else {
-							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
 							success = false;
 							plugin.pluginType.push_back("NULL");
 						}
@@ -171,7 +183,7 @@ namespace PLUGIN {
 						if (content != "") {
 							plugin.pluginExec.push_back(content);
 						} else {
-							plugin.errorpath.push_back(executable_path+"\\plugin\\"+ID+"\\");
+							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
 							success = false;
 							plugin.pluginExec.push_back("NULL");
 						}
@@ -197,6 +209,10 @@ namespace PLUGIN {
 		if (ReadPluginList() == false) {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
+		plugin.plugin.insert(plugin.plugin.begin(), "NULL");
+		plugin.pluginName.insert(plugin.pluginName.begin(), "NULL");
+		plugin.pluginExec.insert(plugin.pluginExec.begin(), "NULL");
+		plugin.pluginType.insert(plugin.pluginType.begin(), "NULL");
 		/*cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";
 		for(const auto& ID:plugin.plugin){
 			cout<<"   "<<ID<<"\n";

@@ -9,8 +9,15 @@ bool testmode = true;
 by WHSTU
 Version 2.0
 */
-
 #include "./main.h"
+struct About{
+	const std::string AppName="希沃克星";
+	const std::string AppNameEn="SeewoKiller";
+	const std::string Version="2.1.1.72";
+	const long long VersionCode=020101072;
+	const std::string VersionName="Stupefy";
+}info;
+
 #include "./cmdCtrl.h"
 #include "./files.h"
 #include "./SplashScreen.h"
@@ -262,17 +269,17 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	string fe7f8a96[5] = {"true", "false"};
 	string ebf9f2e8 = ".\\settings\\write-log-when-killapp.seewokiller";
 	check_config_avaliable(ebf9f2e8, fe7f8a96, 2, "false");
-	change_word("设置", SearchForAddress(word.setting, "在晚自习制裁/循环清任务时启用日志"), true, ebf9f2e8);
+	change_word(word.setting, SearchForAddress(word.setting, "在晚自习制裁/循环清任务时启用日志"), true, ebf9f2e8);
 
 	string eacf0909[5] = {"true", "false"};
 	string b7135431 = ".\\settings\\enable-close-window-button.seewokiller";
 	check_config_avaliable(b7135431, eacf0909, 2, "false");
-	change_word("设置", SearchForAddress(word.setting, "允许使用“关闭”按钮"), true, b7135431);
+	change_word(word.setting, SearchForAddress(word.setting, "允许使用“关闭”按钮"), true, b7135431);
 
 	string eb9730d6[5] = {"总是询问", "总是旧UI", "总是新UI"};
 	string a57f2d49 = ".\\settings\\start.seewokiller";
 	check_config_avaliable(a57f2d49, eb9730d6, 3, "总是询问");
-	change_word("设置", SearchForAddress(word.setting, "启动设置"), true, a57f2d49);
+	change_word(word.setting, SearchForAddress(word.setting, "启动设置"), true, a57f2d49);
 	//-----
 	gotoxy(16, 14);
 	cout << "正在验证系统版本(2/5) ";
@@ -364,7 +371,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	gotoxy(15, 14);
 	cout << "正在进行最后的准备(5/5)  ";
 	gotoxy(15, 16);
-	cout << "[===========         ]";
+	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 55);
 	S(400);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
@@ -380,10 +387,6 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		file.close();
 	}
 	gotoxy(15, 16);
-	cout << "[==================  ]";
-	taskbarprocess(TBPF_NORMAL, 75);
-	S(10);
-	gotoxy(15, 16);
 	cout << "[====================]";
 	taskbarprocess(TBPF_NORMAL, 100);
 	S(100);
@@ -397,7 +400,7 @@ void about() {
 	gotoxy(0, 3);
 	SetColorAndBackground(7, 0);
 	for (int i = 0; i < 15; i++) {
-		cout << "                              \n";
+		cout << "                                               \n";
 	}
 	gotoxy(0, 3);
 	//--------
@@ -427,7 +430,7 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\nSeewo Killer 2.1 (Expelliarmus)\n";
+	cout << "\n"<<info.AppNameEn<<" "<<info.Version<<" ("<<info.VersionName<<")\n";
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
@@ -452,10 +455,10 @@ void about() {
 		}
 		if (ans == "dev") {
 			auto add = std::find(word.setting.begin(), word.setting.end(), "开发者选项>>>");
-			if (add == word.setting.end()) {
-				word.setting.push_back("开发者选项>>>");
+			if (add != word.setting.end()) {//如果存在
 				cout << "开发者模式 已开启。不需要重复操作。\n";
 			} else {
+				word.setting.push_back("开发者选项>>>");
 				cout << "开发者模式 已开启。\n按b后回车即可返回。\n";
 			}
 		}
@@ -801,23 +804,34 @@ struct JOKE { /*恶搞*/
 struct Launcher {
 	string listname(bool allowA, bool allowD, const vector<string>& liststring) {
 		const int n = liststring.size() - 1;
-		gotoxy(0, 3);
 		int channel = 1;
-		SetColorAndBackground(7, 0);
-		for (int i = 1; i < channel; i++) {
-			cout << liststring[i] << "\n";
+		if (n > 0) {
+			gotoxy(0, 3);
+			SetColorAndBackground(7, 0);
+			for (int i = 1; i < channel; i++) {
+				cout << liststring[i] << "\n";
+			}
+			SetColorAndBackground(0, 7);
+			cout << liststring[channel] << "\n";
+			SetColorAndBackground(7, 0);
+			for (int i = channel + 1; i <= n; i++) {
+				cout << liststring[i] << "\n";
+			}
+		} else {
+			gotoxy(0, 3);
+			SetColorAndBackground(0, 7);
+			cout << "[暂无]\n";
+			SetColorAndBackground(7, 0);
 		}
-		SetColorAndBackground(0, 7);
-		cout << liststring[channel] << "\n";
-		SetColorAndBackground(7, 0);
-		for (int i = channel + 1; i <= n; i++) {
-			cout << liststring[i] << "\n";
-		}
+
 		while (1) {
 			if ( _kbhit() ) {
 				char x = _getch();
 				switch (x) {
 					case 's': {
+						if (n <= 1) {
+							break;
+						}
 						if (channel < n) {
 							channel++;
 						}
@@ -835,6 +849,9 @@ struct Launcher {
 						break;
 					}
 					case 'w': {
+						if (n <= 1) {
+							break;
+						}
 						if (channel > 1) {
 							channel--;
 						}
@@ -883,18 +900,18 @@ struct Launcher {
 		if (fastboot == true) {
 			cout << cmdTitle;
 		} else {
-			cout << cmdTitle << "       Windows Innerversion " << dwMajorInt << "." << dwMinorInt;
+			cout << cmdTitle << "  /   Windows Innerversion " << dwMajorInt << "." << dwMinorInt;
 		}
 		gotoxy(0, 1);
 		SetColorAndBackground(7, 0);
 		for (int i = 1; i < box; i++) {
-			cout << "|  " << word.box[i] << "  ";
+			cout << "| " << word.box[i] << " ";
 		}
 		SetColorAndBackground(0, 7);
-		cout << "|  " << word.box[box] << "  |";
+		cout << "| " << word.box[box] << " |";
 		SetColorAndBackground(7, 0);
 		for (int i = box + 1; i <= boxn; i++) {
-			cout << "  " << word.box[i] << "  |";
+			cout << " " << word.box[i] << " |";
 		}
 		gotoxy(0, 2);
 		cout << "----------------------";
@@ -924,6 +941,10 @@ struct Launcher {
 						break;
 					}
 					case 4: {
+						s = listname(true, true, plugin.pluginName);
+						break;
+					}
+					case 5 : {
 						s = listname(true, false, word.setting);
 						break;
 					}
@@ -1013,6 +1034,11 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
+			} else if (s == "重载插件与配置文件") {
+				cls
+				poweron(true);
+				s = "-1";
+				continue;
 			} else if (s == "重启到fastboot(真的fast!)") {
 				string fbpath = "./SeewoKiller.exe run fastboot";
 				STARTUPINFO si = { sizeof(si) };//0
@@ -1050,7 +1076,12 @@ struct Launcher {
 				help("command");
 				s = "-1";
 				continue;
-			} else if (s == "打开日志文件夹") {
+			} else if (s == "-打开制裁日志文件夹") {
+				if (!dirExist(executable_path + "\\log\\")) {
+					MessageBox(hwnd, "日志文件夹不存在。似乎没有产生过日志。", _T("错误"), MB_OK | MB_ICONERROR);
+					s = "-1";
+					continue;
+				}
 				string command = "explorer.exe \"" + executable_path + "\\log\\\"";
 				system(command.c_str());
 				s = "-1";
@@ -1240,6 +1271,15 @@ struct Launcher {
 					system("pause");
 					d = "返回";
 				}
+			} else if(box==4){
+				cout<<"plugin test\n";
+				system("pause");
+				s="-1";
+				continue;
+				//PLUGIN
+			}else if (s.find("---") != string::npos) {
+				s = "-1";
+				continue;
 			} else {
 				cout << "\nError\n";
 				system("pause");
