@@ -132,71 +132,86 @@ namespace PLUGIN {
 		plugin.plugin.clear();
 		plugin.pluginName.clear();
 		plugin.pluginExec.clear();
-		//plugin.pluginList.clear();
 		plugin.pluginType.clear();
+		plugin.pluginIsCls.clear();
+
 		bool success = true;
-		GetSubFolders("./plugin", plugin.plugin);
-		for (const auto& ID : plugin.plugin) {
-			vector<string> checkPATH = {
-				".\\plugin\\" + ID + "\\name.config",
-				".\\plugin\\" + ID + "\\type.config",
-				".\\plugin\\" + ID + "\\exec.config"
+		vector<string> allIDs;
+		GetSubFolders("./plugin", allIDs);
+
+		for (const auto& ID : allIDs) {
+			string basePath = ".\\plugin\\" + ID + "\\";
+			string pathName = basePath + "name.config";
+			string pathType = basePath + "type.config";
+			string pathExec = basePath + "exec.config";
+			string pathIsCls = basePath + "IsCls.config";
+			// 临时存储读取的内容
+			string nameContent, typeContent, execContent, isClsContent;
+			bool valid = true;
+
+			// 辅助 lambda：读取文件内容，若文件不存在或内容为空则返回 false
+			auto readIfValid = [&](const string& path, string& out, bool allowEmpty = false) -> bool {
+				if (!fileExist(path)) return false;
+				out = read_config(path);
+				if (!allowEmpty && out.empty()) return false;
+				return true;
 			};
-			//string PATH=".\\plugin\\"+ID+"\\name.config";
-			//cout<<PATH<<endl;
+
 			gotoxy(15, 18);
 			cout << "正在扫描文件夹: .\\plugin\\" << ID << "\\                 ";
 			S(10);
-			for (const auto& PATH : checkPATH) {
-				gotoxy(15, 19);
-				cout << "正在扫描文件: " << PATH << "                          ";
-				if (!fileExist(PATH)) {//检验存在
-					auto del = find(plugin.plugin.begin(), plugin.plugin.end(), ID);
-					if (del != plugin.plugin.end()) {
-						plugin.plugin.erase(del);
-						plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
-						success = false;
-					}
-				} else { //检验内容
-					if (PATH.find("name.config") != string::npos) {
-						string content = read_config(PATH);
-						if (content != "") {
-							plugin.pluginName.push_back(content);
-						} else {
-							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
-							success = false;
-							plugin.pluginName.push_back("[插件名称未找到]");
-						}
-					}
-					if (PATH.find("type.config") != string::npos) {
-						string content = read_config(PATH);
-						if (content == "list" or content == "exec") {
-							plugin.pluginType.push_back(content);
-						} else {
-							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
-							success = false;
-							plugin.pluginType.push_back("NULL");
-						}
-					}
-					if (PATH.find("exec.config") != string::npos) {
-						string content = read_config(PATH);
-						if (content != "") {
-							plugin.pluginExec.push_back(content);
-						} else {
-							plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\");
-							success = false;
-							plugin.pluginExec.push_back("NULL");
-						}
-					}
-				}
-				S(10);
+
+			// 检查 name.config
+			gotoxy(15, 19);
+			cout << "正在扫描文件: " << pathName << "                          ";
+			if (!readIfValid(pathName, nameContent)) {
+				valid = false;
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 缺少文件或内容为空: name.config");
+			}
+			S(10);
+
+			// 检查 type.config
+			gotoxy(15, 19);
+			cout << "正在扫描文件: " << pathType << "                          ";
+			if (!readIfValid(pathType, typeContent) || (typeContent != "list" && typeContent != "exec")) {
+				valid = false;
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 缺少文件或类型无效: type.config");
+			}
+			S(10);
+
+			// 检查 exec.config
+			gotoxy(15, 19);
+			cout << "正在扫描文件: " << pathExec << "                          ";
+			if (!readIfValid(pathExec, execContent)) {
+				valid = false;
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 缺少文件或内容为空: exec.config");
+			}
+			S(10);
+
+			// 检查 IsCls.config
+			gotoxy(15, 19);
+			cout << "正在扫描文件: " << pathIsCls << "                          ";
+			if (!readIfValid(pathIsCls, isClsContent, true)) {
+				isClsContent = "false";   // 默认值
+			}
+			S(10);
+
+			if (valid) {
+				plugin.plugin.push_back(ID);
+				plugin.pluginName.push_back(nameContent);
+				plugin.pluginType.push_back(typeContent);
+				plugin.pluginExec.push_back(execContent);
+				plugin.pluginIsCls.push_back(isClsContent == "true" ? true : false);
+			} else {
+				success = false;
 			}
 		}
-
-		//清除重复
+		
+		// 去重
 		std::sort(plugin.errorpath.begin(), plugin.errorpath.end());
 		auto last = std::unique(plugin.errorpath.begin(), plugin.errorpath.end());
 		plugin.errorpath.erase(last, plugin.errorpath.end());
+		
 		return success;
 	}
 	/*void ReadPluginCfg() {
@@ -209,18 +224,17 @@ namespace PLUGIN {
 		if (ReadPluginList() == false) {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
+		word.more.insert(word.more.end(), "---插件---");
+		word.more.insert(word.more.end(), plugin.pluginName.begin(), plugin.pluginName.end());
+
 		plugin.plugin.insert(plugin.plugin.begin(), "NULL");
 		plugin.pluginName.insert(plugin.pluginName.begin(), "NULL");
 		plugin.pluginExec.insert(plugin.pluginExec.begin(), "NULL");
 		plugin.pluginType.insert(plugin.pluginType.begin(), "NULL");
+		plugin.pluginIsCls.insert(plugin.pluginIsCls.begin(), false);
 		/*cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";
 		for(const auto& ID:plugin.plugin){
 			cout<<"   "<<ID<<"\n";
-		}*/
-		//ReadPluginCfg();
-		/*cout<<"\n\nFind "<<plugin.pluginn<<" plugins:\n";
-		for(const auto& name:plugin.pluginName){
-			cout<<"   "<<name<<"\n";
 		}*/
 	}
 }

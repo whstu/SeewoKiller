@@ -10,13 +10,13 @@ by WHSTU
 Version 2.0
 */
 #include "./main.h"
-struct About{
-	const std::string AppName="希沃克星";
-	const std::string AppNameEn="SeewoKiller";
-	const std::string Version="2.1.1.72";
-	const long long VersionCode=020101072;
-	const std::string VersionName="Stupefy";
-}info;
+struct About {
+	const std::string AppName = "希沃克星";
+	const std::string AppNameEn = "SeewoKiller";
+	const std::string Version = "2.1.1.72";
+	const long long VersionCode = 020101072;
+	const std::string VersionName = "Stupefy";
+} info;
 
 #include "./cmdCtrl.h"
 #include "./files.h"
@@ -430,7 +430,7 @@ void about() {
 	info << "版本代号000300002" << endl;
 	info << "注意：请不要在此处留下重要信息，因为此文件会被SlytherinOS覆盖！";
 	info.close();*/
-	cout << "\n"<<info.AppNameEn<<" "<<info.Version<<" ("<<info.VersionName<<")\n";
+	cout << "\n" << info.AppNameEn << " " << info.Version << " (" << info.VersionName << ")\n";
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
@@ -940,11 +940,7 @@ struct Launcher {
 						s = listname(true, true, word.more);
 						break;
 					}
-					case 4: {
-						s = listname(true, true, plugin.pluginName);
-						break;
-					}
-					case 5 : {
+					case 4 : {
 						s = listname(true, false, word.setting);
 						break;
 					}
@@ -1271,16 +1267,33 @@ struct Launcher {
 					system("pause");
 					d = "返回";
 				}
-			} else if(box==4){
-				cout<<"plugin test\n";
-				system("pause");
-				s="-1";
-				continue;
-				//PLUGIN
-			}else if (s.find("---") != string::npos) {
+			} else if (s.find("---") != string::npos) {
 				s = "-1";
 				continue;
-			} else {
+			} else if (box == 3 and plugin.plugin.size() >= 1) {
+				for (int i = 1; i <= plugin.plugin.size() - 1; i++) {
+					if (s == plugin.pluginName[i]) {
+						string exec = plugin.pluginExec[i];
+						string path = executable_path + "\\plugin\\" + plugin.plugin[i] + "\\";
+						//cout << exec << endl;
+						//cout<<plugin.pluginExec[i]<<endl;
+						string cmd = "cd /d \"" + path + "\" && \"" + exec + "\"";
+						//cout<<cmd<<endl;
+						if(plugin.pluginIsCls[i]==true){
+							cls
+						}
+						system(cmd.c_str());
+						cout << "\n";
+					}
+				}
+				string cmd = "cd /d \"" + executable_path + "\"";
+				system(cmd.c_str());
+				//cout << "plugin test\n";
+				system("pause");
+				s = "-1";
+				continue;
+				//PLUGIN
+			}  else {
 				cout << "\nError\n";
 				system("pause");
 				s = "-1";
