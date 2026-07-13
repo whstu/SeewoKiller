@@ -925,7 +925,7 @@ struct Launcher {
 				if (fastboot == true) {
 					head("希沃克星fastboot模式", "SeewoKiller Fastboot");
 				} else {
-					head();
+					head(info.AppName,info.AppNameEn);
 				}
 				switch (box) {
 					case 1: {
@@ -1149,7 +1149,7 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s == "小游戏>>>") {
-				head();
+				head(info.AppName,info.AppNameEn);
 				string d = listname(false, false, word.game);
 				if (d == "返回") {
 					s = "-1";
@@ -1176,7 +1176,7 @@ struct Launcher {
 					setfont(30);
 				}
 			} else if (s == "恶搞>>>") {
-				head();
+				head(info.AppName,info.AppNameEn);
 				string d = listname(false, false, word.joke);
 				if (d == "返回") {
 					s = "-1";
@@ -1189,7 +1189,7 @@ struct Launcher {
 					joke.copy_file();
 				}
 			} else if (s == "注册表>>>") {
-				head();
+				head(info.AppName,info.AppNameEn);
 				string d = listname(false, false, word.reg);
 				if (d == "返回") {
 					s = "-1";
@@ -1248,7 +1248,7 @@ struct Launcher {
 					system("pause");
 				}
 			} else if (s == "开发者选项>>>") {
-				head();
+				head(info.AppName+" - 开发者",info.AppNameEn+" - DevMode");
 				string d = listname(false, false, word.dev);
 				if (d == "返回") {
 					s = "-1";
@@ -1265,14 +1265,50 @@ struct Launcher {
 					}
 					cout << "操作已完成。\n";
 					system("pause");
-					d = "返回";
+					s="-1";
+					continue;
 				}
 			} else if (s.find("---") != string::npos) {
 				s = "-1";
 				continue;
 			} else if (box == 3 and plugin.plugin.size() >= 1) {
-				for (int i = 1; i <= plugin.plugin.size() - 1; i++) {
+				size_t pos = SearchForAddress(plugin.pluginName, s, true);
+				string cmd = "NULL";
+				if (plugin.pluginType[pos] == "exec") {
+					string exec = plugin.pluginExec[pos][1];
+					string execpath = executable_path + "\\plugin\\" + plugin.plugin[pos] + "\\";
+					cmd = "cd /d \"" + execpath + "\" && \"" + exec + "\"";
+				} else if (plugin.pluginType[pos] == "list") {
+					head(info.AppName,info.AppNameEn);
+					string d = listname(false, false, plugin.pluginList[pos]);
+					if(d=="返回"){
+						s="-1";
+						continue;
+					}
+					size_t pos2 = SearchForAddress(plugin.pluginList[pos], d, true);
+					string exec = plugin.pluginExec[pos][pos2];
+					string execpath = executable_path + "\\plugin\\" + plugin.plugin[pos] + "\\";
+					cmd = "cd /d \"" + execpath + "\" && \"" + exec + "\"";
+				}else{
+					cout<<"\n发生错误\n";
+					s="-1";
+					continue;
+				}
+				if(plugin.pluginIsCls[pos]){
+					cls
+				}
+				system(cmd.c_str());
+				system("pause");
+				if(plugin.pluginType[pos]=="exec"){
+					s="-1";
+					continue;
+				}
+				/*for (int i = 1; i <= plugin.plugin.size() - 1; i++) {
 					if (s == plugin.pluginName[i]) {
+						string cmd="NULL";
+						if(plugin.pluginType[i])
+
+
 						string exec = plugin.pluginExec[i];
 						string path = executable_path + "\\plugin\\" + plugin.plugin[i] + "\\";
 						//cout << exec << endl;
@@ -1292,7 +1328,7 @@ struct Launcher {
 				system("pause");
 				s = "-1";
 				continue;
-				//PLUGIN
+				//PLUGIN*/
 			}  else {
 				cout << "\nError\n";
 				system("pause");

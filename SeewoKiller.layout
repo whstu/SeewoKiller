@@ -1,18 +1,37 @@
 [
     {
-        "caretX": 26,
-        "caretY": 210,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "caretX": 20,
+        "caretY": 18,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 2,
-        "top": 7714
+        "order": 3,
+        "top": 114
     },
     {
         "caretX": 1,
-        "caretY": 6,
-        "filename": "E:/devc++/DEV/SeewoKiller/.spl_WHSTU_Rainbow.cpp",
+        "caretY": 1,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 1,
+        "caretY": 92,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 1,
+        "top": 3306
+    },
+    {
+        "caretX": 28,
+        "caretY": 14,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
@@ -28,53 +47,14 @@
         "top": 0
     },
     {
-        "caretX": 8,
-        "caretY": 4,
-        "filename": "E:/devc++/DEV/SeewoKiller/SplashScreen.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 4,
-        "top": 0
-    },
-    {
-        "caretX": 32,
-        "caretY": 13,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 3,
-        "top": 114
-    },
-    {
-        "caretX": 39,
-        "caretY": 17,
+        "caretX": 14,
+        "caretY": 1282,
         "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
-        "focused": true,
+        "focused": false,
         "isOpen": true,
         "left": 0,
         "order": 0,
-        "top": 0
-    },
-    {
-        "caretX": 12,
-        "caretY": 90,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 1,
-        "top": 0
-    },
-    {
-        "caretX": 1,
-        "caretY": 1,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
+        "top": 48222
     },
     {
         "caretX": 10,
@@ -104,12 +84,32 @@
         "top": 19722
     },
     {
-        "caretX": 28,
-        "caretY": 14,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
+        "caretX": 1,
+        "caretY": 6,
+        "filename": "E:/devc++/DEV/SeewoKiller/.spl_WHSTU_Rainbow.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 23,
+        "caretY": 138,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
+        "order": 2,
+        "top": 4788
+    },
+    {
+        "caretX": 8,
+        "caretY": 4,
+        "filename": "E:/devc++/DEV/SeewoKiller/SplashScreen.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 4,
         "top": 0
     }
 ]

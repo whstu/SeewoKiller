@@ -68,7 +68,8 @@ inline struct Word {
 } word;
 
 inline struct DefaultWord {
-	std::vector<std::string> setting = {
+	const std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
+	const std::vector<std::string> setting = {
 		"NULL", "退出",
 		"---配置文件---",
 		"在晚自习制裁/循环清任务时启用日志",
@@ -93,9 +94,9 @@ inline struct Plugin {
 	std::vector<std::string> pluginName;
 	std::vector<std::string> plugin;//ID
 	std::vector<std::string> pluginType;
-	//std::vector<std::vector<std::string>> pluginExec;
-	std::vector<std::string> pluginExec;//type=exec
-	//std::vector<std::string> pluginList;//type=list
+	std::vector<std::vector<std::string>> pluginExec;
+	//std::vector<std::string> pluginExec;//type=exec
+	std::vector<std::vector<std::string>> pluginList;//type=list
 	std::vector<bool> pluginIsCls;
 	std::vector<std::string> errorpath;
 } plugin;

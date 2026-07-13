@@ -12,9 +12,12 @@ bool dirExist(const string& path) {
 	        (attrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-int SearchForAddress(const vector<string>& value, const string& goal) {
+int SearchForAddress(const vector<string>& value, const string& goal, bool exactMatch) {
 	for (size_t i = 0; i < value.size(); ++i) {
-		if (value[i].find(goal) != string::npos) {
+		if (value[i] == goal) {
+			return static_cast<int>(i);
+		}
+		if (value[i].find(goal) != string::npos and exactMatch == false) {
 			return static_cast<int>(i);
 		}
 	}
@@ -81,15 +84,15 @@ void change_word(vector<string>& StringClass, int address, bool IsConfig, const 
 	}
 }
 
-void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFolders) {
+void GetSubFolders(const string& rootPath, vector<string>& outFolders) {
 	// 清空目标容器
 	outFolders.clear();
 
-	std::string searchPath = rootPath + "\\*";
+	string searchPath = rootPath + "\\*";
 	WIN32_FIND_DATAA findData;
 	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		std::cerr << "无法打开目录: " << rootPath << " (错误码: " << GetLastError() << ")" << std::endl;
+		cerr << "无法打开目录: " << rootPath << " (错误码: " << GetLastError() << ")" << endl;
 		return;
 	}
 	do {
@@ -104,14 +107,14 @@ void GetSubFolders(const std::string& rootPath, std::vector<std::string>& outFol
 	} while (FindNextFileA(hFind, &findData));
 	FindClose(hFind);
 }
-void GetFileName(const std::wstring& rootPath, std::vector<std::wstring>& outFiles) {
+void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 	outFiles.clear();
 
-	std::wstring searchPath = rootPath + L"\\*";
+	wstring searchPath = rootPath + L"\\*";
 	WIN32_FIND_DATAW findData;
 	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		std::wcerr << "无法打开目录: " << rootPath.c_str() << " (错误码: " << GetLastError() << L")" << std::endl;
+		wcerr << "无法打开目录: " << rootPath.c_str() << " (错误码: " << GetLastError() << L")" << endl;
 		return;
 	}
 	do {
@@ -132,6 +135,7 @@ namespace PLUGIN {
 		plugin.plugin.clear();
 		plugin.pluginName.clear();
 		plugin.pluginExec.clear();
+		plugin.pluginList.clear();
 		plugin.pluginType.clear();
 		plugin.pluginIsCls.clear();
 
@@ -144,15 +148,25 @@ namespace PLUGIN {
 			string pathName = basePath + "name.config";
 			string pathType = basePath + "type.config";
 			string pathExec = basePath + "exec.config";
+			string pathList = basePath + "list.config";
 			string pathIsCls = basePath + "IsCls.config";
 			// 临时存储读取的内容
-			string nameContent, typeContent, execContent, isClsContent;
+			string nameContent, typeContent, isClsContent;
+			vector<string> execContent, listContent;
+			execContent.clear();
+			listContent.clear();
 			bool valid = true;
 
 			// 辅助 lambda：读取文件内容，若文件不存在或内容为空则返回 false
-			auto readIfValid = [&](const string& path, string& out, bool allowEmpty = false) -> bool {
-				if (!fileExist(path)) return false;
+			auto readIfValid = [&](const string & path, string & out, bool allowEmpty = false, bool allowNonexist = false) -> bool {
+				if (!fileExist(path) && !allowNonexist) return false;
 				out = read_config(path);
+				if (!allowEmpty && out.empty()) return false;
+				return true;
+			};
+			auto readIfValidVector = [&](const string & path, vector<string>& out, bool allowEmpty = false, bool allowNonexist = false) -> bool {
+				if (!fileExist(path) && !allowNonexist) return false;
+				read_Lines(path, out);
 				if (!allowEmpty && out.empty()) return false;
 				return true;
 			};
@@ -179,39 +193,67 @@ namespace PLUGIN {
 			}
 			S(10);
 
-			// 检查 exec.config
+			// 检查 exec.config与list.config
 			gotoxy(15, 19);
 			cout << "正在扫描文件: " << pathExec << "                          ";
-			if (!readIfValid(pathExec, execContent)) {
+			if (!readIfValidVector(pathExec, execContent, true, false)) {
 				valid = false;
 				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 缺少文件或内容为空: exec.config");
 			}
 			S(10);
 
+			gotoxy(15, 19);
+			cout << "正在扫描文件: " << pathList << "                          ";
+			if (!readIfValidVector(pathList, listContent, true, true)) {
+				//虽然不可能有这种情况
+				valid = false;
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 缺少文件或内容为空: list.config");
+			}
+			S(10);
+
+			//检查list与exec
+			if (typeContent == "list" and execContent.size() != listContent.size()) {
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - 功能列表与运行列表没有对齐: exec.config, list.config");
+				valid = false;
+			}
+
+
+
 			// 检查 IsCls.config
 			gotoxy(15, 19);
 			cout << "正在扫描文件: " << pathIsCls << "                          ";
-			if (!readIfValid(pathIsCls, isClsContent, true)) {
+			if (!readIfValid(pathIsCls, isClsContent, true, true)) {
 				isClsContent = "false";   // 默认值
 			}
 			S(10);
 
 			if (valid) {
+				//size_t count=plugin.plugin.size()-1;
 				plugin.plugin.push_back(ID);
 				plugin.pluginName.push_back(nameContent);
 				plugin.pluginType.push_back(typeContent);
 				plugin.pluginExec.push_back(execContent);
+				plugin.pluginList.push_back(listContent);
 				plugin.pluginIsCls.push_back(isClsContent == "true" ? true : false);
 			} else {
 				success = false;
 			}
 		}
-		
+
+		//pluginName去重
+		unordered_set<string> seen;
+		seen.reserve(plugin.pluginName.size());
+		for (const auto& s : plugin.pluginName) {
+			if (!seen.insert(s).second) {
+				plugin.errorpath.push_back("重复的插件名称: " + s);
+				success = false;
+			}
+		}
 		// 去重
-		std::sort(plugin.errorpath.begin(), plugin.errorpath.end());
-		auto last = std::unique(plugin.errorpath.begin(), plugin.errorpath.end());
+		sort(plugin.errorpath.begin(), plugin.errorpath.end());
+		auto last = unique(plugin.errorpath.begin(), plugin.errorpath.end());
 		plugin.errorpath.erase(last, plugin.errorpath.end());
-		
+
 		return success;
 	}
 	/*void ReadPluginCfg() {
@@ -224,12 +266,24 @@ namespace PLUGIN {
 		if (ReadPluginList() == false) {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
+		word.more=def_word.more;
+		if(plugin.plugin.size()<=1){
+			return;
+		}
 		word.more.insert(word.more.end(), "---插件---");
 		word.more.insert(word.more.end(), plugin.pluginName.begin(), plugin.pluginName.end());
 
 		plugin.plugin.insert(plugin.plugin.begin(), "NULL");
 		plugin.pluginName.insert(plugin.pluginName.begin(), "NULL");
-		plugin.pluginExec.insert(plugin.pluginExec.begin(), "NULL");
+		for (size_t i = 0; i < plugin.pluginExec.size(); i++) {
+			plugin.pluginExec[i].insert(plugin.pluginExec[i].begin(), "NULL");
+		}
+		plugin.pluginExec.insert(plugin.pluginExec.begin(), {"NULL"});
+		for (size_t i = 0; i < plugin.pluginList.size(); i++) {
+			plugin.pluginList[i].insert(plugin.pluginList[i].begin(), "NULL");
+			plugin.pluginList[i].insert(plugin.pluginList[i].end(), "返回");
+		}
+		plugin.pluginList.insert(plugin.pluginList.begin(), {"NULL"});
 		plugin.pluginType.insert(plugin.pluginType.begin(), "NULL");
 		plugin.pluginIsCls.insert(plugin.pluginIsCls.begin(), false);
 		/*cout<<"\nFind "<<plugin.pluginn<<" plugin IDs:\n";

@@ -5,7 +5,7 @@
 using namespace std;
 extern bool fileExist(const string& filename);
 extern bool dirExist(const string& path);
-extern int SearchForAddress(const vector<string>& value, const string& goal);
+extern int SearchForAddress(const vector<string>& value, const string& goal, bool exactMatch = false);
 extern string read_config(string PATH);
 extern bool read_Lines(const string& PATH, vector<string>& lines);
 extern void write_config(string PATH, string config);
