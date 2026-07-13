@@ -7,7 +7,7 @@ void WHSTU_Rainbow(){
 		cout << "\n\n\n\n";
 	S(10);
 	cout << "\n";
-//µÚ2ÐÐ
+//ç¬¬2è¡Œ
 	for (int i = 0; i < 3; i++) {//W-1
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -41,7 +41,7 @@ void WHSTU_Rainbow(){
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//µÚ3,4ÐÐ
+//ç¬¬3,4è¡Œ
 	for (int a = 0; a < 2; a++) {
 		for (int i = 0; i < 3; i++) {//W-2
 			SetColorAndBackground(0, 0);
@@ -77,7 +77,7 @@ void WHSTU_Rainbow(){
 		S(10);
 		cout << "\n";
 	}
-//µÚ5ÐÐ
+//ç¬¬5è¡Œ
 	for (int i = 0; i < 3; i++) {//W-4
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -107,7 +107,7 @@ void WHSTU_Rainbow(){
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//µÚ1ÐÐ
+//ç¬¬1è¡Œ
 	for (int i = 0; i < 3; i++) {//W-5
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -141,7 +141,7 @@ void WHSTU_Rainbow(){
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//µÚ2ÐÐ
+//ç¬¬2è¡Œ
 	for (int i = 0; i < 3; i++) {//W-6
 		SetColorAndBackground(0, 0);
 		cout << "   ";
@@ -175,7 +175,7 @@ void WHSTU_Rainbow(){
 	SetColorAndBackground(0, 0);
 	S(10);
 	cout << "\n";
-//µÚ3ÐÐ
+//ç¬¬3è¡Œ
 	SetColorAndBackground(0, 0);
 	cout << "     ";
 	SetColorAndBackground(0, 13);

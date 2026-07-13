@@ -13,6 +13,8 @@ extern void check_config_avaliable(string PATH,string config[],int config_n,stri
 extern void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH="NULL", const string& name="NULL");
 extern void GetSubFolders(const string& rootPath, vector<string>& outFolders);
 extern void GetFileName(const wstring& rootPath, vector<wstring>& outFiles);
+extern string UTF8ToGBK(const string& utf8Str);
+extern string GBKToUTF8(const string& gbkStr);
 
 namespace PLUGIN{
 	void PluginMain();

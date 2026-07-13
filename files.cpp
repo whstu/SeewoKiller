@@ -1,7 +1,7 @@
 #include "./files.h"
 #include "./cmdCtrl.h"
 
-//¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+//æ£€æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 bool fileExist(const string& filename) {
 	ifstream file(filename);
 	return file.good();
@@ -29,6 +29,7 @@ string read_config(string PATH) {
 	if (fileExist(PATH)) {
 		ifstream file(PATH);
 		getline(file, value);
+		value=UTF8ToGBK(value);
 		file.close();
 	}
 	return value;
@@ -36,11 +37,12 @@ string read_config(string PATH) {
 bool read_Lines(const string& PATH, vector<string>& lines) {
 	ifstream file(PATH);
 	if (!file.is_open()) {
-		return false;          // ´ò¿ªÊ§°Ü
+		return false;          // æ‰“å¼€å¤±è´¥
 	}
 	string line;
 	while (getline(file, line)) {
-		lines.push_back(line); // ±£Áô¿ÕĞĞ£¨push_back ¿Õ×Ö·û´®£©
+		line=UTF8ToGBK(line);
+		lines.push_back(line); // ä¿ç•™ç©ºè¡Œï¼ˆpush_back ç©ºå­—ç¬¦ä¸²ï¼‰
 	}
 	file.close();
 	return true;
@@ -48,12 +50,13 @@ bool read_Lines(const string& PATH, vector<string>& lines) {
 
 void write_config(string PATH, string config) {
 	ofstream file(PATH);
+	config=GBKToUTF8(config);
 	file << config;
 	file.close();
 	return;
 }
 
-//¼ì²éÅäÖÃ
+//æ£€æŸ¥é…ç½®
 void check_config_avaliable(string PATH, string config[], int config_n, string default_config) {
 	string config_value = read_config(PATH);
 	for (int i = 0; i < config_n; i++) {
@@ -72,9 +75,9 @@ void change_word(vector<string>& StringClass, int address, bool IsConfig, const 
 	} else {
 		tmp = StringClass[address];
 	}
-//Èç¹ûÊÇconfig£¬Ôò²»»á¿¼ÂÇname
+//å¦‚æœæ˜¯configï¼Œåˆ™ä¸ä¼šè€ƒè™‘name
 	if (IsConfig == true) {
-		tmp = tmp + "-µ±Ç°: " + read_config(PATH);
+		tmp = tmp + "-å½“å‰: " + read_config(PATH);
 		StringClass[address] = tmp;
 		return;
 	} else {
@@ -85,14 +88,14 @@ void change_word(vector<string>& StringClass, int address, bool IsConfig, const 
 }
 
 void GetSubFolders(const string& rootPath, vector<string>& outFolders) {
-	// Çå¿ÕÄ¿±êÈİÆ÷
+	// æ¸…ç©ºç›®æ ‡å®¹å™¨
 	outFolders.clear();
 
 	string searchPath = rootPath + "\\*";
 	WIN32_FIND_DATAA findData;
 	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		cerr << "ÎŞ·¨´ò¿ªÄ¿Â¼: " << rootPath << " (´íÎóÂë: " << GetLastError() << ")" << endl;
+		cerr << "æ— æ³•æ‰“å¼€ç›®å½•: " << rootPath << " (é”™è¯¯ç : " << GetLastError() << ")" << endl;
 		return;
 	}
 	do {
@@ -100,7 +103,7 @@ void GetSubFolders(const string& rootPath, vector<string>& outFolders) {
 		    strcmp(findData.cFileName, "..") == 0) {
 			continue;
 		}
-		// Ö»´æ´¢Ä¿Â¼
+		// åªå­˜å‚¨ç›®å½•
 		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 			outFolders.push_back(findData.cFileName);
 		}
@@ -114,7 +117,7 @@ void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 	WIN32_FIND_DATAW findData;
 	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		wcerr << "ÎŞ·¨´ò¿ªÄ¿Â¼: " << rootPath.c_str() << " (´íÎóÂë: " << GetLastError() << L")" << endl;
+		wcerr << "æ— æ³•æ‰“å¼€ç›®å½•: " << rootPath.c_str() << " (é”™è¯¯ç : " << GetLastError() << L")" << endl;
 		return;
 	}
 	do {
@@ -127,6 +130,39 @@ void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 		}
 	} while (FindNextFileW(hFind, &findData));
 	FindClose(hFind);
+}
+
+string UTF8ToGBK(const string& utf8Str) {
+	// 1. UTF-8 -> UTF-16 (å®½å­—ç¬¦)
+	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
+	wchar_t* wbuf = new wchar_t[wlen];
+	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wbuf, wlen);
+	
+	// 2. UTF-16 -> GBK
+	int glen = WideCharToMultiByte(CP_ACP, 0, wbuf, -1, NULL, 0, NULL, NULL);
+	char* gbuf = new char[glen];
+	WideCharToMultiByte(CP_ACP, 0, wbuf, -1, gbuf, glen, NULL, NULL);
+	
+	std::string result(gbuf);
+	delete[] wbuf;
+	delete[] gbuf;
+	return result;
+}
+string GBKToUTF8(const string& gbkStr) {
+	// 1. GBK -> UTF-16 (å®½å­—ç¬¦)
+	int wlen = MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, NULL, 0);
+	wchar_t* wbuf = new wchar_t[wlen];
+	MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, wbuf, wlen);
+	
+	// 2. UTF-16 -> UTF-8
+	int ulen = WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, NULL, 0, NULL, NULL);
+	char* ubuf = new char[ulen];
+	WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, ubuf, ulen, NULL, NULL);
+	
+	std::string result(ubuf);
+	delete[] wbuf;
+	delete[] ubuf;
+	return result;
 }
 
 namespace PLUGIN {
@@ -150,14 +186,14 @@ namespace PLUGIN {
 			string pathExec = basePath + "exec.config";
 			string pathList = basePath + "list.config";
 			string pathIsCls = basePath + "IsCls.config";
-			// ÁÙÊ±´æ´¢¶ÁÈ¡µÄÄÚÈİ
+			// ä¸´æ—¶å­˜å‚¨è¯»å–çš„å†…å®¹
 			string nameContent, typeContent, isClsContent;
 			vector<string> execContent, listContent;
 			execContent.clear();
 			listContent.clear();
 			bool valid = true;
 
-			// ¸¨Öú lambda£º¶ÁÈ¡ÎÄ¼şÄÚÈİ£¬ÈôÎÄ¼ş²»´æÔÚ»òÄÚÈİÎª¿ÕÔò·µ»Ø false
+			// è¾…åŠ© lambdaï¼šè¯»å–æ–‡ä»¶å†…å®¹ï¼Œè‹¥æ–‡ä»¶ä¸å­˜åœ¨æˆ–å†…å®¹ä¸ºç©ºåˆ™è¿”å› false
 			auto readIfValid = [&](const string & path, string & out, bool allowEmpty = false, bool allowNonexist = false) -> bool {
 				if (!fileExist(path) && !allowNonexist) return false;
 				out = read_config(path);
@@ -172,58 +208,58 @@ namespace PLUGIN {
 			};
 
 			gotoxy(15, 18);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş¼Ğ: .\\plugin\\" << ID << "\\                 ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶å¤¹: .\\plugin\\" << ID << "\\                 ";
 			S(10);
 
-			// ¼ì²é name.config
+			// æ£€æŸ¥ name.config
 			gotoxy(15, 19);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş: " << pathName << "                          ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶: " << pathName << "                          ";
 			if (!readIfValid(pathName, nameContent)) {
 				valid = false;
-				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - È±ÉÙÎÄ¼ş»òÄÚÈİÎª¿Õ: name.config");
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - ç¼ºå°‘æ–‡ä»¶æˆ–å†…å®¹ä¸ºç©º: name.config");
 			}
 			S(10);
 
-			// ¼ì²é type.config
+			// æ£€æŸ¥ type.config
 			gotoxy(15, 19);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş: " << pathType << "                          ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶: " << pathType << "                          ";
 			if (!readIfValid(pathType, typeContent) || (typeContent != "list" && typeContent != "exec")) {
 				valid = false;
-				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - È±ÉÙÎÄ¼ş»òÀàĞÍÎŞĞ§: type.config");
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - ç¼ºå°‘æ–‡ä»¶æˆ–ç±»å‹æ— æ•ˆ: type.config");
 			}
 			S(10);
 
-			// ¼ì²é exec.configÓëlist.config
+			// æ£€æŸ¥ exec.configä¸list.config
 			gotoxy(15, 19);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş: " << pathExec << "                          ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶: " << pathExec << "                          ";
 			if (!readIfValidVector(pathExec, execContent, true, false)) {
 				valid = false;
-				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - È±ÉÙÎÄ¼ş»òÄÚÈİÎª¿Õ: exec.config");
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - ç¼ºå°‘æ–‡ä»¶æˆ–å†…å®¹ä¸ºç©º: exec.config");
 			}
 			S(10);
 
 			gotoxy(15, 19);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş: " << pathList << "                          ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶: " << pathList << "                          ";
 			if (!readIfValidVector(pathList, listContent, true, true)) {
-				//ËäÈ»²»¿ÉÄÜÓĞÕâÖÖÇé¿ö
+				//è™½ç„¶ä¸å¯èƒ½æœ‰è¿™ç§æƒ…å†µ
 				valid = false;
-				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - È±ÉÙÎÄ¼ş»òÄÚÈİÎª¿Õ: list.config");
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - ç¼ºå°‘æ–‡ä»¶æˆ–å†…å®¹ä¸ºç©º: list.config");
 			}
 			S(10);
 
-			//¼ì²élistÓëexec
+			//æ£€æŸ¥listä¸exec
 			if (typeContent == "list" and execContent.size() != listContent.size()) {
-				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - ¹¦ÄÜÁĞ±íÓëÔËĞĞÁĞ±íÃ»ÓĞ¶ÔÆë: exec.config, list.config");
+				plugin.errorpath.push_back(executable_path + "\\plugin\\" + ID + "\\  - åŠŸèƒ½åˆ—è¡¨ä¸è¿è¡Œåˆ—è¡¨æ²¡æœ‰å¯¹é½: exec.config, list.config");
 				valid = false;
 			}
 
 
 
-			// ¼ì²é IsCls.config
+			// æ£€æŸ¥ IsCls.config
 			gotoxy(15, 19);
-			cout << "ÕıÔÚÉ¨ÃèÎÄ¼ş: " << pathIsCls << "                          ";
+			cout << "æ­£åœ¨æ‰«ææ–‡ä»¶: " << pathIsCls << "                          ";
 			if (!readIfValid(pathIsCls, isClsContent, true, true)) {
-				isClsContent = "false";   // Ä¬ÈÏÖµ
+				isClsContent = "false";   // é»˜è®¤å€¼
 			}
 			S(10);
 
@@ -240,16 +276,16 @@ namespace PLUGIN {
 			}
 		}
 
-		//pluginNameÈ¥ÖØ
+		//pluginNameå»é‡
 		unordered_set<string> seen;
 		seen.reserve(plugin.pluginName.size());
 		for (const auto& s : plugin.pluginName) {
 			if (!seen.insert(s).second) {
-				plugin.errorpath.push_back("ÖØ¸´µÄ²å¼şÃû³Æ: " + s);
+				plugin.errorpath.push_back("é‡å¤çš„æ’ä»¶åç§°: " + s);
 				success = false;
 			}
 		}
-		// È¥ÖØ
+		// å»é‡
 		sort(plugin.errorpath.begin(), plugin.errorpath.end());
 		auto last = unique(plugin.errorpath.begin(), plugin.errorpath.end());
 		plugin.errorpath.erase(last, plugin.errorpath.end());
@@ -264,13 +300,13 @@ namespace PLUGIN {
 	}*/
 	void PluginMain() {
 		if (ReadPluginList() == false) {
-			word.recent.push_back("[*]ÓĞ²å¼ş¼ÓÔØÊ§°Ü>>>");
+			word.recent.push_back("[*]æœ‰æ’ä»¶åŠ è½½å¤±è´¥>>>");
 		}
 		word.more=def_word.more;
 		if(plugin.plugin.size()<=1){
 			return;
 		}
-		word.more.insert(word.more.end(), "---²å¼ş---");
+		word.more.insert(word.more.end(), "---æ’ä»¶---");
 		word.more.insert(word.more.end(), plugin.pluginName.begin(), plugin.pluginName.end());
 
 		plugin.plugin.insert(plugin.plugin.begin(), "NULL");
@@ -281,7 +317,7 @@ namespace PLUGIN {
 		plugin.pluginExec.insert(plugin.pluginExec.begin(), {"NULL"});
 		for (size_t i = 0; i < plugin.pluginList.size(); i++) {
 			plugin.pluginList[i].insert(plugin.pluginList[i].begin(), "NULL");
-			plugin.pluginList[i].insert(plugin.pluginList[i].end(), "·µ»Ø");
+			plugin.pluginList[i].insert(plugin.pluginList[i].end(), "è¿”å›");
 		}
 		plugin.pluginList.insert(plugin.pluginList.begin(), {"NULL"});
 		plugin.pluginType.insert(plugin.pluginType.begin(), "NULL");
