@@ -736,7 +736,7 @@ void help(string name = "seewofreeze") {
 
 void checkUpdate(){
 	vector<string> versionName;
-	ReadWebFileVector("seewokiller.whstu.dpdns.org/installer/version.txt",versionName);
+	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt",versionName);
 	if(versionName.size()>=1){
 		for(size_t i=0;i<versionName.size();i++){
 			cout<<versionName[i]<<endl;
