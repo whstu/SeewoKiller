@@ -6,6 +6,7 @@
 #include <ctime>
 #include <conio.h>
 #include <string>
+#include <curl/curl.h>
 //任务栏进度条
 #define INITGUID
 #include <shobjidl.h>

@@ -22,6 +22,7 @@ struct About {
 #include "./files.h"
 #include "./SplashScreen.h"
 #include "./CameraRec.h"
+#include "./web.h"
 
 #include "./game.h"
 using namespace GAME;
@@ -733,6 +734,19 @@ void help(string name = "seewofreeze") {
 	}
 }
 
+void checkUpdate(){
+	vector<string> versionName;
+	ReadWebFileVector("seewokiller.whstu.dpdns.org/installer/version.txt",versionName);
+	if(versionName.size()>=1){
+		for(size_t i=0;i<versionName.size();i++){
+			cout<<versionName[i]<<endl;
+		}
+	}
+	system("pause");
+	return;
+}
+
+
 struct JOKE { /*恶搞*/
 	void kill() {
 		while (true) {
@@ -1341,6 +1355,9 @@ struct Launcher {
 int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	InitTaskbarInterface();
+	curl_global_init(CURL_GLOBAL_DEFAULT);
+	checkUpdate();
+	
 	taskbarprocess(TBPF_INDETERMINATE);
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");

@@ -327,4 +327,6 @@ namespace PLUGIN {
 			cout<<"   "<<ID<<"\n";
 		}*/
 	}
+	void PluginSystem(unsigned int OperationType){
+	}
 }

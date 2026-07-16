@@ -16,8 +16,10 @@ extern void GetFileName(const wstring& rootPath, vector<wstring>& outFiles);
 extern string UTF8ToGBK(const string& utf8Str);
 extern string GBKToUTF8(const string& gbkStr);
 
+#define PLUGIN_INSTALL 1
 namespace PLUGIN{
 	void PluginMain();
+	void PluginSystem();
 }
 
 #endif
