@@ -19,7 +19,7 @@ struct About {
 
 	std::vector<std::string> versionNameWeb;//版本代号
 	std::vector<std::string> versionWeb;//版本
-	std::vector<std::string> versionCodeWeb={"0"};//版本数字代码
+	std::vector<std::string> versionCodeWeb = {"0"}; //版本数字代码
 } info;
 
 #include "./cmdCtrl.h"
@@ -882,9 +882,51 @@ struct Launcher {
 			SetColorAndBackground(7, 0);
 		}
 
+		// 获取控制台输入句柄
+		HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+		DWORD eventsRead;
+		INPUT_RECORD ir;
+		DWORD numEvents;
 		while (1) {
-			if ( _kbhit() ) {
-				char x = _getch();
+			// 等待并读取一个输入事件（阻塞直到有事件）
+			ReadConsoleInput(hInput, &ir, 1, &eventsRead);
+			if (eventsRead == 0) continue;
+
+			// 只处理键盘事件
+			if (ir.EventType != KEY_EVENT) continue;
+			KEY_EVENT_RECORD& ker = ir.Event.KeyEvent;
+
+			// 忽略按键弹起事件
+			if (!ker.bKeyDown) continue;
+
+			// 获取虚拟键码
+			WORD vk = ker.wVirtualKeyCode;
+			char mapped = 0;
+
+			// 检测方向键
+			if (vk == VK_UP)    mapped = 'w';
+			else if (vk == VK_DOWN)  mapped = 's';
+			else if (vk == VK_LEFT)  mapped = 'a';
+			else if (vk == VK_RIGHT) mapped = 'd';
+			// 检测回车键（VK_RETURN）
+			else if (vk == VK_RETURN) mapped = ' ';
+			// 检测字母键（wasd / WASD）
+			else {
+				// 获取实际字符（包括大小写）
+				char ch = ker.uChar.AsciiChar;
+				if (ch == 'w' || ch == 'W' || ch == 's' || ch == 'S' ||
+				    ch == 'a' || ch == 'A' || ch == 'd' || ch == 'D') {
+					mapped = tolower(ch);
+				}
+				// 检测空格键
+				else if (ch == ' ') {
+					mapped = ' ';
+				}
+			}
+
+			// 如果映射到有效字符，则进入原有的 switch 处理
+			if (mapped != 0) {
+				char x = mapped;  // 使用映射后的字符，后续 switch 不变
 				switch (x) {
 					case 's': {
 						if (n <= 1) {
