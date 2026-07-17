@@ -60,6 +60,7 @@ Source: "E:\devc++\DEV\SeewoKiller\RunAsFastboot.exe"; DestDir: "{app}"; Flags: 
 Source: "E:\devc++\DEV\SeewoKiller\ai.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: AI
 Source: "E:\devc++\DEV\SeewoKiller\SeewoFreeze\*"; DestDir: "{app}\SeewoFreeze"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: SeewoFreeze
 Source: "E:\devc++\DEV\SeewoKiller\pai.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: pai
+Source: "E:\devc++\DEV\SeewoKiller\7za.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Icons]

@@ -1,55 +1,28 @@
 [
     {
-        "caretX": 1,
-        "caretY": 4,
-        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 4,
-        "caretY": 303,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "caretX": 24,
+        "caretY": 23,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 2,
-        "top": 11248
+        "order": 3,
+        "top": 532
     },
     {
-        "caretX": 10,
-        "caretY": 9,
-        "filename": "E:/devc++/DEV/SeewoKiller/game.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 14,
-        "caretY": 1,
-        "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
+        "caretX": 20,
+        "caretY": 12,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 4,
-        "top": 0
+        "order": 0,
+        "top": 228
     },
     {
         "caretX": 1,
         "caretY": 6,
         "filename": "E:/devc++/DEV/SeewoKiller/.spl_WHSTU_Rainbow.cpp",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 28,
-        "caretY": 14,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
@@ -65,24 +38,60 @@
         "top": 0
     },
     {
-        "caretX": 24,
-        "caretY": 184,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
-        "focused": true,
-        "isOpen": true,
+        "caretX": 20,
+        "caretY": 601,
+        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.cpp",
+        "focused": false,
+        "isOpen": false,
         "left": 0,
-        "order": 0,
-        "top": 6954
+        "top": 22268
     },
     {
-        "caretX": 18,
-        "caretY": 20,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
+        "caretX": 1,
+        "caretY": 4,
+        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 3,
+        "caretY": 39,
+        "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 3,
+        "order": 4,
+        "top": 760
+    },
+    {
+        "caretX": 10,
+        "caretY": 9,
+        "filename": "E:/devc++/DEV/SeewoKiller/game.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
         "top": 0
+    },
+    {
+        "caretX": 28,
+        "caretY": 14,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 38,
+        "caretY": 339,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
+        "order": 2,
+        "top": 12616
     },
     {
         "caretX": 10,
@@ -92,6 +101,16 @@
         "isOpen": true,
         "left": 0,
         "order": 1,
+        "top": 0
+    },
+    {
+        "caretX": 20,
+        "caretY": 5,
+        "filename": "E:/devc++/DEV/SeewoKiller/web.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 5,
         "top": 0
     },
     {
@@ -111,24 +130,5 @@
         "isOpen": false,
         "left": 0,
         "top": 0
-    },
-    {
-        "caretX": 8,
-        "caretY": 6,
-        "filename": "E:/devc++/DEV/SeewoKiller/web.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 5,
-        "top": 0
-    },
-    {
-        "caretX": 20,
-        "caretY": 601,
-        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.cpp",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 22268
     }
 ]

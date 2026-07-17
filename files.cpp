@@ -29,7 +29,7 @@ string read_config(string PATH) {
 	if (fileExist(PATH)) {
 		ifstream file(PATH);
 		getline(file, value);
-		value=UTF8ToGBK(value);
+		value = UTF8ToGBK(value);
 		file.close();
 	}
 	return value;
@@ -41,7 +41,7 @@ bool read_Lines(const string& PATH, vector<string>& lines) {
 	}
 	string line;
 	while (getline(file, line)) {
-		line=UTF8ToGBK(line);
+		line = UTF8ToGBK(line);
 		lines.push_back(line); // 保留空行（push_back 空字符串）
 	}
 	file.close();
@@ -50,7 +50,7 @@ bool read_Lines(const string& PATH, vector<string>& lines) {
 
 void write_config(string PATH, string config) {
 	ofstream file(PATH);
-	config=GBKToUTF8(config);
+	config = GBKToUTF8(config);
 	file << config;
 	file.close();
 	return;
@@ -132,17 +132,22 @@ void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 	FindClose(hFind);
 }
 
+void unzip(const string& input, const string& output) {
+	string command = ".\\7za.exe x \"" + input + "\" -o\"" + output + "\" -y";
+	system(command.c_str());
+}
+
 string UTF8ToGBK(const string& utf8Str) {
 	// 1. UTF-8 -> UTF-16 (宽字符)
 	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
 	wchar_t* wbuf = new wchar_t[wlen];
 	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wbuf, wlen);
-	
+
 	// 2. UTF-16 -> GBK
 	int glen = WideCharToMultiByte(CP_ACP, 0, wbuf, -1, NULL, 0, NULL, NULL);
 	char* gbuf = new char[glen];
 	WideCharToMultiByte(CP_ACP, 0, wbuf, -1, gbuf, glen, NULL, NULL);
-	
+
 	std::string result(gbuf);
 	delete[] wbuf;
 	delete[] gbuf;
@@ -153,12 +158,12 @@ string GBKToUTF8(const string& gbkStr) {
 	int wlen = MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, NULL, 0);
 	wchar_t* wbuf = new wchar_t[wlen];
 	MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, wbuf, wlen);
-	
+
 	// 2. UTF-16 -> UTF-8
 	int ulen = WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, NULL, 0, NULL, NULL);
 	char* ubuf = new char[ulen];
 	WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, ubuf, ulen, NULL, NULL);
-	
+
 	std::string result(ubuf);
 	delete[] wbuf;
 	delete[] ubuf;
@@ -302,8 +307,8 @@ namespace PLUGIN {
 		if (ReadPluginList() == false) {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
-		word.more=def_word.more;
-		if(plugin.plugin.size()<=1){
+		word.more = def_word.more;
+		if (plugin.plugin.size() <= 1) {
 			return;
 		}
 		word.more.insert(word.more.end(), "---插件---");
@@ -327,6 +332,23 @@ namespace PLUGIN {
 			cout<<"   "<<ID<<"\n";
 		}*/
 	}
-	void PluginSystem(unsigned int OperationType){
+	void PluginSystem(unsigned int OperationType, string str = "NULL") {
+		switch (OperationType) {
+			case PLUGIN_INSTALL: {
+				if (!fileExist(str)) {
+					cout << "\n错误: 找不到指定的文件。" << str << "\n";
+				}
+				break;
+			}
+			case PLUGIN_UNINSTALL: {
+				break;
+			}
+			case PLUGIN_DISABLE: {
+				break;
+			}
+			case PLUGIN_ENABLE: {
+				break;
+			}
+		}
 	}
 }

@@ -13,8 +13,8 @@ Version 2.0
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.1.1.147";
-	const long long VersionCode = 020101147;
+	const std::string Version = "2.1.1.174";
+	const long long VersionCode = 020101174;
 	const std::string VersionName = "Stupefy";
 
 	std::vector<std::string> versionNameWeb;//版本代号
