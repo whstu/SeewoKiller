@@ -48,18 +48,18 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 1
 Release = 1
-Build = 130
+Build = 171
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.1.130
+FileVersion = 2.1.1.171
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = Copyright (c) WHSTU Studio 2020-2026
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.1.130
+ProductVersion = 2.1.1.171
 AutoIncBuildNr = 1
 SyncProduct = 1
 
@@ -89,7 +89,7 @@ BuildCmd =
 UseUTF8 = 1
 CompileCpp = 1
 FileEncoding = PROJECT
-RealEncoding = 
+RealEncoding = UTF-8
 
 
 [Unit2]
@@ -232,7 +232,7 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = PROJECT
-RealEncoding = UTF-8
+RealEncoding = ASCII
 
 
 [Unit14]

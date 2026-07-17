@@ -7,7 +7,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	return totalSize;
 }
 
-void ReadWebFileVector(string url, vector<string>& lines) {
+void ReadWebFileVector(string url, vector<string>& lines, long long TimeLimit) {
 	lines.clear();  // 清空输出容器
 	
 	CURL *curl = curl_easy_init();
@@ -17,6 +17,11 @@ void ReadWebFileVector(string url, vector<string>& lines) {
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+	
+	// 设置超时时间（毫秒）
+	if (TimeLimit > 0) {
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, TimeLimit);
+	}
 	
 	// 若为 HTTPS 且证书验证不便，可忽略
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
@@ -31,6 +36,7 @@ void ReadWebFileVector(string url, vector<string>& lines) {
 	istringstream iss(response);
 	string line;
 	while (getline(iss, line)) {
+		line=UTF8ToGBK(line);
 		lines.push_back(line);
 	}
 }

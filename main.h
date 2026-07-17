@@ -61,6 +61,7 @@ inline struct Word {
 		"重载插件与配置文件",
 		"重启到fastboot(真的fast!)",
 		"---其它---",
+		"软件更新",
 		"关于"
 	};
 	std::vector<std::string> game = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
@@ -87,6 +88,7 @@ inline struct DefaultWord {
 		"重载插件与配置文件",
 		"重启到fastboot(真的fast!)",
 		"---其它---",
+		"软件更新",
 		"关于"
 	};
 	const std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};

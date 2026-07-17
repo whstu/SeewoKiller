@@ -9,14 +9,14 @@
         "top": 0
     },
     {
-        "caretX": 48,
-        "caretY": 330,
+        "caretX": 4,
+        "caretY": 303,
         "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
         "focused": false,
         "isOpen": true,
         "left": 0,
         "order": 2,
-        "top": 12046
+        "top": 11248
     },
     {
         "caretX": 10,
@@ -25,6 +25,16 @@
         "focused": false,
         "isOpen": false,
         "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 14,
+        "caretY": 1,
+        "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 4,
         "top": 0
     },
     {
@@ -55,14 +65,14 @@
         "top": 0
     },
     {
-        "caretX": 20,
-        "caretY": 12,
+        "caretX": 24,
+        "caretY": 184,
         "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
-        "focused": false,
+        "focused": true,
         "isOpen": true,
         "left": 0,
         "order": 0,
-        "top": 114
+        "top": 6954
     },
     {
         "caretX": 18,
@@ -72,11 +82,11 @@
         "isOpen": true,
         "left": 0,
         "order": 3,
-        "top": 228
+        "top": 0
     },
     {
-        "caretX": 23,
-        "caretY": 9,
+        "caretX": 10,
+        "caretY": 91,
         "filename": "E:/devc++/DEV/SeewoKiller/main.h",
         "focused": false,
         "isOpen": true,
@@ -103,13 +113,13 @@
         "top": 0
     },
     {
-        "caretX": 1,
-        "caretY": 1,
+        "caretX": 8,
+        "caretY": 6,
         "filename": "E:/devc++/DEV/SeewoKiller/web.h",
-        "focused": true,
+        "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 4,
+        "order": 5,
         "top": 0
     },
     {

@@ -13,9 +13,13 @@ Version 2.0
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.1.1.72";
-	const long long VersionCode = 020101072;
+	const std::string Version = "2.1.1.147";
+	const long long VersionCode = 020101147;
 	const std::string VersionName = "Stupefy";
+
+	std::vector<std::string> versionNameWeb;//版本代号
+	std::vector<std::string> versionWeb;//版本
+	std::vector<std::string> versionCodeWeb={"0"};//版本数字代码
 } info;
 
 #include "./cmdCtrl.h"
@@ -179,6 +183,56 @@ void restartexp() {
 	system("start C:\\Windows\\explorer.exe");
 }
 
+void checkUpdate(bool IsPoweron = false) {
+	if (IsPoweron == false) {
+		//初始化
+		gotoxy(0, 3);
+		SetColorAndBackground(7, 0);
+		for (int i = 0; i < 15; i++) {
+			cout << "                                               \n";
+		}
+		gotoxy(0, 3);
+		//--------
+		cout << "\n正在获取版本信息...";
+	}
+	//fetch
+	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 1000);
+	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 1000);
+	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 2500);
+	if (IsPoweron == false && info.versionCodeWeb.empty()) {
+		cout << "错误：未获取到版本信息。请检查网络。\n\n";
+		return;
+	}
+	long long versionCodeNumber = stoll(info.versionCodeWeb[0]);
+	if (versionCodeNumber > info.VersionCode) {
+		word.recent.push_back("[*]有软件更新");
+		switch (IsPoweron) {
+			case false: {
+				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 2500);
+				cout << "\n发现软件更新: " << info.versionWeb[0] << " (" << info.versionNameWeb[0] << "),";
+				cout << "\n当前: " << info.Version << "\n\n";
+				cout << "是否前往网站下载? (Y/y-是, 其它按键-否\n";
+				while (true) {
+					char ch = getch();
+					if (ch == 'Y' or ch == 'y') {
+						system("start \"https://whstu.dpdns.org/download/seewokiller/\"");
+						break;
+					}
+				}
+				break;
+			}
+		}
+	} else {
+		switch (IsPoweron) {
+			case false: {
+				cout << "\nVersion " << info.Version << ", 已是最新版本\n";
+				break;
+			}
+		}
+	}
+	return;
+}
+
 void quickstart() {
 	int step = 1;
 	cls
@@ -252,6 +306,10 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 		return;
 	}
 	auto del = find(word.recent.begin(), word.recent.end(), "[*]有插件加载失败>>>");
+	if (del != word.recent.end()) {
+		word.recent.erase(del);
+	}
+	del = find(word.recent.begin(), word.recent.end(), "[*]有软件更新");
 	if (del != word.recent.end()) {
 		word.recent.erase(del);
 	}
@@ -375,7 +433,8 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	gotoxy(15, 16);
 	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 55);
-	S(400);
+	checkUpdate(true);
+	S(200);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
 		cls
 		gotoxy(15, 14);
@@ -734,19 +793,6 @@ void help(string name = "seewofreeze") {
 	}
 }
 
-void checkUpdate(){
-	vector<string> versionName;
-	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt",versionName);
-	if(versionName.size()>=1){
-		for(size_t i=0;i<versionName.size();i++){
-			cout<<versionName[i]<<endl;
-		}
-	}
-	system("pause");
-	return;
-}
-
-
 struct JOKE { /*恶搞*/
 	void kill() {
 		while (true) {
@@ -1021,6 +1067,11 @@ struct Launcher {
 				continue;
 			} else if (s == "退出") {
 				return;
+			} else if (s.find("软件更新") != string::npos) {
+				checkUpdate();
+				system("pause");
+				s = "-1";
+				continue;
 			} else if (s == "关于") {
 				about();
 				s = "-1";
@@ -1356,9 +1407,10 @@ int main(int argc, char *argv[]) {
 	system("title 正在初始化");
 	InitTaskbarInterface();
 	curl_global_init(CURL_GLOBAL_DEFAULT);
-	checkUpdate();
-	
 	taskbarprocess(TBPF_INDETERMINATE);
+	info.versionWeb.clear();
+	info.versionNameWeb.clear();
+	info.versionCodeWeb.clear();
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
 	//获取程序路径
@@ -1655,6 +1707,9 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 	}
+	//检查更新
+	thread UpD(checkUpdate, true);
+	UpD.detach();
 	//参数的数量
 	//cout << argc << " arguments:" << endl;
 	//循环打印所有参数
