@@ -13,8 +13,8 @@ Version 2.0
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.1.1.174";
-	const long long VersionCode = 020101174;
+	const std::string Version = "2.1.1.179";
+	const long long VersionCode = 20101179;
 	const std::string VersionName = "Stupefy";
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -188,7 +188,7 @@ void checkUpdate(bool IsPoweron = false) {
 		//初始化
 		gotoxy(0, 3);
 		SetColorAndBackground(7, 0);
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 18; i++) {
 			cout << "                                               \n";
 		}
 		gotoxy(0, 3);
@@ -248,15 +248,15 @@ void quickstart() {
 				break;
 			}
 			case 2: {
-				cout << "按wasd控制上下左右";
+				cout << "按 wasd 或 WASD 或 上下左右方向键 控制上下左右";
 				break;
 			}
 			case 3: {
-				cout << "按空格键确定";
+				cout << "按 空格键 或 回车键 确定";
 				break;
 			}
 			case 4: {
-				cout << "带有\">>>\"的选项包含子项目，可以按空格键打开";
+				cout << "带有\">>>\"的选项包含子项目，可以按 空格键 或 回车键 打开";
 				break;
 			}
 			case 5: {
@@ -460,7 +460,7 @@ void about() {
 	//初始化
 	gotoxy(0, 3);
 	SetColorAndBackground(7, 0);
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 18; i++) {
 		cout << "                                               \n";
 	}
 	gotoxy(0, 3);

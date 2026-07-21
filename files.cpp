@@ -308,7 +308,7 @@ namespace PLUGIN {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
 		word.more = def_word.more;
-		if (plugin.plugin.size() <= 1) {
+		if (plugin.plugin.size() < 1) {
 			return;
 		}
 		word.more.insert(word.more.end(), "---插件---");
@@ -337,10 +337,65 @@ namespace PLUGIN {
 			case PLUGIN_INSTALL: {
 				if (!fileExist(str)) {
 					cout << "\n错误: 找不到指定的文件。" << str << "\n";
+					return;
+				}
+				cout << "Copying zip file to temp...\n";
+				unzip(str, executable_path + "\\temp\\plugin\\");
+				string pluginID = read_config(executable_path + "\\temp\\plugin\\id.config");
+				if (SearchForAddress(plugin.plugin, pluginID, true) != -1) { //更新
+					cout << "\n正在更新: " << plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)] << endl;
+					if (fileExist(executable_path + "\\temp\\plugin\\version.config") or fileExist(executable_path + "\\plugin\\" + pluginID + "\\version.config")) {
+						cout << "From Version " << read_config(executable_path + "\\plugin\\" + pluginID + "\\version.config");
+						cout << " to Version " << read_config(executable_path + "\\temp\\plugin\\version.config");
+						cout << "\n\n";
+					}
+					//update.bat
+					if (fileExist(executable_path + "\\temp\\plugin\\update.bat")) {
+						cout << "正在运行: update.bat\n";
+						string execpath = executable_path + "\\temp\\plugin\\";
+						string cmd = "cd /d \"" + execpath + "\" && \".\\update.bat\"";
+						system(cmd.c_str());
+					}
+
+					cout << "\n正在复制文件。\n";
+					string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
+					system(rm_command.c_str());
+					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
+					system(cp_command.c_str());
+					cout << "\nDone.\n\n按任意键重载插件和配置文件。\n";
+					_getch();
+				} else { //安装
+					string Name = read_config(executable_path + "\\temp\\plugin\\name.config");
+					if (fileExist(executable_path + "\\temp\\plugin\\name.config") == false or Name.empty()) {
+						cout << "\n错误: 插件结构不完整。\n";
+						system("pause");
+						return;
+					}
+					cout << "\n正在安装: " << Name;
+					if (fileExist(executable_path + "\\temp\\plugin\\version.config")) {
+						cout << " - Version " << read_config(executable_path + "\\temp\\plugin\\version.config");
+					}
+					cout << "\n\n";
+					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
+					system(cp_command.c_str());
+					cout << "\nDone.\n按任意键重载插件和配置文件。\n";
+					_getch();
 				}
 				break;
 			}
-			case PLUGIN_UNINSTALL: {
+			case PLUGIN_UNINSTALL: {//卸载
+				string text = "确实要卸载 \"" + str + "\"吗?\n";
+				if (MessageBox(hwnd, text.c_str(), _T("提示"), MB_YESNO | MB_ICONQUESTION) == IDNO) {
+					cout << "\n操作已取消。\n";
+					system("pause");
+					return;
+				}
+				cout << "\n正在卸载: " << str;
+				string pluginID = plugin.plugin[SearchForAddress(plugin.pluginName, str, true)];
+				string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
+				system(rm_command.c_str());
+				cout << "\nDone.\n\n按任意键重载插件和配置文件。\n";
+				_getch();
 				break;
 			}
 			case PLUGIN_DISABLE: {
