@@ -99,6 +99,7 @@ inline struct DefaultWord {
 inline struct Plugin {
 	std::vector<std::string> pluginName;
 	std::vector<std::string> plugin;//ID
+	std::vector<bool> pluginIsEnabled;
 	std::vector<std::string> pluginType;
 	std::vector<std::vector<std::string>> pluginExec;
 	//std::vector<std::string> pluginExec;//type=exec

@@ -1,23 +1,51 @@
 [
     {
-        "caretX": 24,
-        "caretY": 23,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
+        "caretX": 28,
+        "caretY": 14,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
         "focused": false,
-        "isOpen": true,
+        "isOpen": false,
         "left": 0,
-        "order": 3,
-        "top": 532
+        "top": 0
     },
     {
         "caretX": 20,
-        "caretY": 12,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
+        "caretY": 5,
+        "filename": "E:/devc++/DEV/SeewoKiller/web.h",
         "focused": false,
         "isOpen": true,
         "left": 0,
+        "order": 5,
+        "top": 0
+    },
+    {
+        "caretX": 10,
+        "caretY": 9,
+        "filename": "E:/devc++/DEV/SeewoKiller/game.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 10,
+        "caretY": 78,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 1,
+        "top": 2508
+    },
+    {
+        "caretX": 8,
+        "caretY": 23,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
+        "focused": true,
+        "isOpen": true,
+        "left": 0,
         "order": 0,
-        "top": 228
+        "top": 570
     },
     {
         "caretX": 1,
@@ -29,9 +57,38 @@
         "top": 0
     },
     {
+        "caretX": 15,
+        "caretY": 16,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 3,
+        "top": 190
+    },
+    {
         "caretX": 8,
         "caretY": 4,
         "filename": "E:/devc++/DEV/SeewoKiller/SplashScreen.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 26,
+        "caretY": 401,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 2,
+        "top": 14934
+    },
+    {
+        "caretX": 1,
+        "caretY": 1,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
         "focused": false,
         "isOpen": false,
         "left": 0,
@@ -47,15 +104,6 @@
         "top": 22268
     },
     {
-        "caretX": 1,
-        "caretY": 4,
-        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
         "caretX": 3,
         "caretY": 39,
         "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
@@ -66,57 +114,9 @@
         "top": 760
     },
     {
-        "caretX": 10,
-        "caretY": 9,
-        "filename": "E:/devc++/DEV/SeewoKiller/game.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 28,
-        "caretY": 14,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 38,
-        "caretY": 339,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
-        "focused": true,
-        "isOpen": true,
-        "left": 0,
-        "order": 2,
-        "top": 12616
-    },
-    {
-        "caretX": 10,
-        "caretY": 91,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 1,
-        "top": 0
-    },
-    {
-        "caretX": 20,
-        "caretY": 5,
-        "filename": "E:/devc++/DEV/SeewoKiller/web.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 5,
-        "top": 0
-    },
-    {
         "caretX": 1,
-        "caretY": 1,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
+        "caretY": 4,
+        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
         "focused": false,
         "isOpen": false,
         "left": 0,

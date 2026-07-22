@@ -24,7 +24,8 @@ extern string GBKToUTF8(const string& gbkStr);
 #define PLUGIN_GETINFO 5
 namespace PLUGIN{
 	void PluginMain();
-	void PluginSystem();
+	//void PluginSystem(unsigned int OperationType, string str = "NULL");
+	void PluginManagerUI();
 }
 
 #endif

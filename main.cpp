@@ -1135,7 +1135,12 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if (s == "重载插件与配置文件") {
+			} else if(s=="管理插件>>>"){
+				cls
+				PLUGIN::PluginManagerUI();
+				s="重载插件与配置文件";
+				continue;
+			}else if (s == "重载插件与配置文件") {
 				cls
 				poweron(true);
 				s = "-1";
