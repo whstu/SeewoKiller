@@ -388,6 +388,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	if (SkipCheckWinVer == false and startv == "总是询问") {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
+			//ImmDisableIME(0);
 			if (MessageBox(hwnd, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
 				string guipath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
@@ -1135,12 +1136,12 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if(s=="管理插件>>>"){
+			} else if (s == "管理插件>>>") {
 				cls
 				PLUGIN::PluginManagerUI();
-				s="重载插件与配置文件";
+				s = "重载插件与配置文件";
 				continue;
-			}else if (s == "重载插件与配置文件") {
+			} else if (s == "重载插件与配置文件") {
 				cls
 				poweron(true);
 				s = "-1";
@@ -1455,6 +1456,7 @@ int main(int argc, char *argv[]) {
 	InitTaskbarInterface();
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	taskbarprocess(TBPF_INDETERMINATE);
+	ImmDisableIME(0);
 	info.versionWeb.clear();
 	info.versionNameWeb.clear();
 	info.versionCodeWeb.clear();

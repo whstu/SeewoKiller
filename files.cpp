@@ -464,15 +464,33 @@ namespace PLUGIN {
 		INPUT_RECORD ir;
 
 		while (!exitFlag) {
-			// 清空列表区域（第3行开始）
-			gotoxy(0, 3);
+			gotoxy(0, 0);
+			cout << "===插件管理===\n";
 			SetColorAndBackground(7, 0);
+			cout << "按 ";
+			SetColorAndBackground(0, 7);
+			cout << "w/s/W/S";
+			SetColorAndBackground(7, 0);
+			cout << " 或 ";
+			SetColorAndBackground(0, 7);
+			cout << "上下方向键";
+			SetColorAndBackground(7, 0);
+			cout << " 调整方向, 按";
+			SetColorAndBackground(0, 7);
+			cout << "z/Z";
+			SetColorAndBackground(7, 0);
+			cout << "保存并退出, 按";
+			SetColorAndBackground(0, 7);
+			cout << "c/C";
+			SetColorAndBackground(7, 0);
+			cout << "取消更改并退出。\n按r/R安装新插件, 按f卸载高亮显示的插件。";//todo 安装与卸载
+			gotoxy(0, 3);
 			for (int i = 0; i < n; ++i) {
 				cout << "                                                \n";
 			}
 			gotoxy(0, 0);
-			cout<<" ";
-			gotoxy(0,3);
+			cout << " ";
+			gotoxy(0, 3);
 
 			// 显示所有插件（带状态标记）
 			for (int i = 1; i <= n; ++i) {

@@ -6,13 +6,14 @@
 #include <ctime>
 #include <conio.h>
 #include <string>
+#include <imm.h>
 #include "curl/curl.h"
-//#include <curl/curl.h>
 //任务栏进度条
 #define INITGUID
 #include <shobjidl.h>
 #pragma comment(lib, "Shell32.lib")
 #pragma comment(lib, "Ole32.lib")
+#pragma comment(lib, "imm32.lib")
 inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 	0xea1afb91, 0x9e28, 0x4b86,
 	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
