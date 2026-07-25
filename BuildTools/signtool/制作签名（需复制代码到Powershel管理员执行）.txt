@@ -1,0 +1,5 @@
+@echo off
+echo 正在制作签名
+New-SelfSignedCertificate -Type Custom -Subject "CN=WHSTU, O=WHSTU Studio, C=CN, L=杭州市, S=浙江省" -KeyUsage DigitalSignature -FriendlyName "SeewoKiller" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}") -NotAfter (Get-Date).AddYears(100)
+echo 已完成，请复制Thumbprint的值到“导出签名”处。
+pause

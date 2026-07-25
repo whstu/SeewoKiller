@@ -1,0 +1,6 @@
+"E:\devc++\DEV\SeewoKiller\SeewoKiller.exe"
+"E:\devc++\DEV\SeewoKiller\libwinpthread-1.dll"
+"E:\devc++\DEV\SeewoKiller\app.ico"
+"E:\devc++\DEV\SeewoKiller\seewokiller2.png"
+"E:\devc++\DEV\SeewoKiller\RunAsFastboot.exe"
+"E:\devc++\DEV\SeewoKiller\7za.exe"

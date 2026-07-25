@@ -1,0 +1,6 @@
+#密码114514
+$password = ConvertTo-SecureString -String 114514 -Force -AsPlainText
+Export-PfxCertificate -cert "Cert:\CurrentUser\My\8ED89836C1FD7F271BFC647E2439F97F7DBA76C1" -FilePath "E:\devc++\DEV\SeewoKiller\sign.pfx" -Password $password
+
+start certmgr.msc
+echo 证书已导出，请到cermgr.msc-个人-证书目录，删除证书WHSTU。
