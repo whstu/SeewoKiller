@@ -2,9 +2,9 @@
 > [!NOTE]
 > 希沃克星已于 2026 年 7 月 6 日恢复新功能更新！
 >
-> WHSTU 中考总分 630 / 650，年排 8 ，被杭州市第二中学滨江校区录取
+> WHSTU 中考总分 630 / 650，年排 8，被杭州市第二中学滨江校区录取
 >
-> 希沃克星的工作环境可能没有了，但是这个项目只是一个hobby，
+> 希沃克星的工作环境可能没有了，但是这个项目只是一个 hobby，
 > 一开始就是为了好玩才做的，因此我没事干的时候还是会维护的
 
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
@@ -97,9 +97,14 @@
 > | :-----------------------: | :------: | :---------------------: | :------: | :-: | :-: | :-------:|
 > |SeewoKiller_custom.exe     |可选       |🟢                        |🟢       |可选   |可选 |70MB|
 > |SeewoKiller_with_gui.exe   |🔴        |🟢                         |🟢      |🔴    |🔴  |45MB|
+> |SeewoKiller_with_freeze.exe   |🟢        |🟢                         |🔴      |🔴    |🔴  |17MB|
 > |SeewoKiller_with_gui_and_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |50MB|
-> |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |55MB|
+> |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |60MB|
 > |SeewoKiller_with_nothing.exe|🔴       |🟢                         |🔴      |🔴    |🔴  |3MB|
+> |SeewoKiller_with_gui_and_freeze.tar.gz|🟢 |🟢                         |🟢      |🔴    |🔴  |65MB|
+> |SeewoKiller_with_gui.tar.gz|🔴        |🟢                         |🟢      |🔴    |🔴  |40MB|
+> |SeewoKiller_with_freeze.tar.gz|🟢        |🟢                         |🔴      |🔴    |🔴  |22MB|
+> |SeewoKiller_with_nothing.tar.gz|🔴       |🟢                         |🔴      |🔴    |🔴  |1.5MB|
 > 
 > 除 SeewoKiller_custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
 > 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai.exe)

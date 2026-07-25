@@ -8,8 +8,8 @@
 // TO CHANGE VERSION INFORMATION, EDIT PROJECT OPTIONS...
 //
 1 VERSIONINFO
-FILEVERSION 2,1,1,220
-PRODUCTVERSION 2,1,1,220
+FILEVERSION 2,1,1,221
+PRODUCTVERSION 2,1,1,221
 FILETYPE VFT_APP
 {
   BLOCK "StringFileInfo"
@@ -17,14 +17,14 @@ FILETYPE VFT_APP
     BLOCK "080404e4"
     {
       VALUE "CompanyName", "WHSTU Studio"
-      VALUE "FileVersion", "2.1.1.220"
+      VALUE "FileVersion", "2.1.1.221"
       VALUE "FileDescription", "希沃克星：冰点破解、晚自习制裁和更多！"
       VALUE "InternalName", "SeewoKiller"
       VALUE "LegalCopyright", "Copyright (c) WHSTU Studio 2020-2026"
       VALUE "LegalTrademarks", ""
-      VALUE "OriginalFilename", "SeewoKiller.exe"
+      VALUE "OriginalFilename", "gui.exe"
       VALUE "ProductName", "SeewoKiller"
-      VALUE "ProductVersion", "2.1.1.220"
+      VALUE "ProductVersion", "2.1.1.221"
     }
   }
   BLOCK "VarFileInfo"
