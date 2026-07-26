@@ -183,7 +183,7 @@ string OpenFileDialogModern(
 
 void unzip(string& input, const string& output) {
 	string command = ".\\7za.exe x \"" + input + "\" -o\"" + output + "\" -y";
-	cout << command.c_str();
+	//cout << command.c_str();
 	system(command.c_str());
 }
 
@@ -394,7 +394,7 @@ namespace PLUGIN {
 			cout<<"   "<<ID<<"\n";
 		}*/
 	}
-	void PluginSystem(unsigned int OperationType, string str) {
+	void PluginSystem(unsigned int OperationType, string str) {//todo 返回值处理
 		switch (OperationType) {
 			case PLUGIN_INSTALL: {
 				if (!fileExist(str)) {
@@ -412,19 +412,41 @@ namespace PLUGIN {
 						cout << "\n";
 					}
 					//update.bat
+					int statbat;
 					if (fileExist(executable_path + "\\temp\\plugin\\update.bat")) {
 						cout << "\n正在运行: update.bat\n";
 						string execpath = executable_path + "\\temp\\plugin\\";
 						string cmd = "cd /d \"" + execpath + "\" && \".\\update.bat\"";
-						system(cmd.c_str());
+						statbat = system(cmd.c_str());
 					}
 
 					cout << "\n正在复制文件。\n";
 					string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
-					system(rm_command.c_str());
+					int stat1 = system(rm_command.c_str());
 					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
-					system(cp_command.c_str());
-					cout << "\nDone.\n\n按任意键重载插件和配置文件。\n";
+					int stat2 = system(cp_command.c_str());
+					cout << "\n";
+					S(100);
+					prints("运行update.bat", statbat);
+					cout << "\n";
+					S(100);
+					prints("清理文件夹", stat1);
+					cout << "\n";
+					S(100);
+					prints("复制文件", stat2);
+					cout << "\n";
+					S(100);
+					SetColorAndBackground(7, 0);
+					cout<<"\n更新 "<<plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)]<<" - ";
+					if (stat1 == 0 and stat2 == 0) {
+						SetColorAndBackground(10, 0);
+						cout << "操作已完成。";
+					} else {
+						SetColorAndBackground(0, 12);
+						cout << "发生错误。请重试。";
+					}
+					SetColorAndBackground(7, 0);
+					cout << "\n\n按任意键重载插件和配置文件。\n";
 					_getch();
 				} else { //安装
 					string Name = read_config(executable_path + "\\temp\\plugin\\name.config");
@@ -447,7 +469,20 @@ namespace PLUGIN {
 
 					cout << "\n\n";
 					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
-					system(cp_command.c_str());
+					int stat=system(cp_command.c_str());
+					S(100);
+					prints("复制文件", stat);
+					cout << "\n";
+					S(100);
+					SetColorAndBackground(7, 0);
+					cout<<"\n安装 "<<Name<<" - ";
+					if (stat == 0) {
+						SetColorAndBackground(10, 0);
+						cout << "操作已完成。";
+					} else {
+						SetColorAndBackground(0, 12);
+						cout << "发生错误。请重试。";
+					}
 					cout << "\nDone.\n按任意键重载插件和配置文件。\n";
 					_getch();
 				}
@@ -487,7 +522,6 @@ namespace PLUGIN {
 				break;
 			}
 		}
-		poweron(true);
 		return;
 	}
 	void PluginManagerUI() {
@@ -534,7 +568,7 @@ namespace PLUGIN {
 			SetColorAndBackground(0, 7);
 			cout << "c/C";
 			SetColorAndBackground(7, 0);
-			cout << "取消更改并退出。\n按r/R安装新插件, 按f卸载高亮显示的插件。";//todo 安装与卸载
+			cout << "取消更改并退出。\n按r/R安装新插件, 按f卸载高亮显示的插件。不受保存/取消的影响。";
 			gotoxy(0, 3);
 			for (int i = 0; i < n; ++i) {
 				cout << "                                                \n";
@@ -584,6 +618,7 @@ namespace PLUGIN {
 					for (int i = 0; i < n; ++i) {
 						cout << "                                                \n";
 					}
+					gotoxy(0, 0);
 					gotoxy(0, 3);
 					cout << "请选择插件包路径: ";
 					string path = OpenFileDialogModern({
@@ -596,6 +631,7 @@ namespace PLUGIN {
 						gotoxy(4, 7);
 						cin >> path;
 						if (path == "b") {
+							cls
 							break;
 						}
 						if (path == "r") {
@@ -605,10 +641,17 @@ namespace PLUGIN {
 						cout << path << endl;
 					}
 					PLUGIN::PluginSystem(PLUGIN_INSTALL, path);
-					system("pause");
+					cls
+					poweron(true);
 					cls
 					break;
 				}
+			} else if (ch == 'f' || ch == 'F') {
+				PLUGIN::PluginSystem(PLUGIN_UNINSTALL, names[current]);
+				cls
+				poweron(true);
+				cls
+				continue;
 			}
 		}
 
