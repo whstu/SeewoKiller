@@ -54,5 +54,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='.\\app.ico',  # 应用程序图标
+    icon='E:\\devc++\\DEV\\SeewoKiller\\app.ico',  # 应用程序图标
 )

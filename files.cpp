@@ -1,5 +1,7 @@
 #include "./files.h"
+#include "./main.h"
 #include "./cmdCtrl.h"
+#include <shobjidl.h>
 
 //检查文件是否存在
 bool fileExist(const string& filename) {
@@ -132,8 +134,56 @@ void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 	FindClose(hFind);
 }
 
-void unzip(const string& input, const string& output) {
+string OpenFileDialogModern(
+    const vector<pair<wstring, wstring>>& filters,
+    const wstring& defaultExtension, const wstring& title) {
+	CoInitialize(NULL);
+	string result;
+	IFileOpenDialog* pFileOpen = NULL;
+	if (SUCCEEDED(CoCreateInstance(CLSID_FileOpenDialog, NULL,
+	                               CLSCTX_ALL, IID_IFileOpenDialog,
+	                               (void * *)&pFileOpen))) {
+		// 构建过滤器数组
+		vector<COMDLG_FILTERSPEC> filterSpecs;
+		filterSpecs.reserve(filters.size());
+		for (const auto& [name, spec] : filters) {
+			filterSpecs.push_back({name.c_str(), spec.c_str()});
+		}
+		if (!filterSpecs.empty()) {
+			pFileOpen->SetFileTypes(static_cast<UINT>(filterSpecs.size()), filterSpecs.data());
+			pFileOpen->SetFileTypeIndex(1);
+		}
+		if (!defaultExtension.empty()) {
+			pFileOpen->SetDefaultExtension(defaultExtension.c_str());
+		}
+		if (!title.empty()) {
+			pFileOpen->SetTitle(title.c_str());
+		}
+		if (SUCCEEDED(pFileOpen->Show(NULL))) {
+			IShellItem* pItem;
+			if (SUCCEEDED(pFileOpen->GetResult(&pItem))) {
+				PWSTR pszFilePath;
+				if (SUCCEEDED(pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath))) {
+					int len = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, NULL, 0, NULL, NULL);
+					result.resize(len);
+					WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &result[0], len, NULL, NULL);
+					CoTaskMemFree(pszFilePath);
+				}
+				pItem->Release();
+			}
+		}
+		pFileOpen->Release();
+	}
+	CoUninitialize();
+	while (!result.empty() && result.back() == '\0') {
+		result.pop_back();
+	}
+	return result;
+}
+
+void unzip(string& input, const string& output) {
 	string command = ".\\7za.exe x \"" + input + "\" -o\"" + output + "\" -y";
+	cout << command.c_str();
 	system(command.c_str());
 }
 
@@ -437,6 +487,7 @@ namespace PLUGIN {
 				break;
 			}
 		}
+		poweron(true);
 		return;
 	}
 	void PluginManagerUI() {
@@ -499,7 +550,7 @@ namespace PLUGIN {
 				} else {
 					SetColorAndBackground(7, 0);
 				}
-				// 显示状态：启用为 "[ * ]"，禁用为 "[   ]"
+				// 显示状态：启用为 "[*]"，禁用为 "[ ]"
 				string mark = tempState[i] ? "[*]" : "[ ]";
 				cout << mark << " " << names[i] << "\n";
 			}
@@ -527,6 +578,37 @@ namespace PLUGIN {
 			} else if (ch == 'c' || ch == 'C') {
 				saveFlag = false;
 				exitFlag = true;
+			} else if (ch == 'r' || ch == 'R') {
+				while (true) {
+					gotoxy(0, 3);
+					for (int i = 0; i < n; ++i) {
+						cout << "                                                \n";
+					}
+					gotoxy(0, 3);
+					cout << "请选择插件包路径: ";
+					string path = OpenFileDialogModern({
+						{L"压缩文件", L"*.zip"}//,//使用分号隔开
+						//{L"所有文件", L"*.*"}
+					}, L"压缩文件", L"*.zip");
+					if (path.empty()) {
+						cout << "\n没有获取到路径。\n手动输入路径, 或键入\"b\"返回, 或键入\"r\"重试\n";
+						cout << "\n请键入: \n你也可以把zip文件直接拖入此窗口。";
+						gotoxy(4, 7);
+						cin >> path;
+						if (path == "b") {
+							break;
+						}
+						if (path == "r") {
+							continue;
+						}
+					} else {
+						cout << path << endl;
+					}
+					PLUGIN::PluginSystem(PLUGIN_INSTALL, path);
+					system("pause");
+					cls
+					break;
+				}
 			}
 		}
 

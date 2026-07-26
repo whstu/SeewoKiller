@@ -13,6 +13,7 @@ extern void check_config_avaliable(string PATH,string config[],int config_n,stri
 extern void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH="NULL", const string& name="NULL");
 extern void GetSubFolders(const string& rootPath, vector<string>& outFolders);
 extern void GetFileName(const wstring& rootPath, vector<wstring>& outFiles);
+string OpenFileDialogModern(const vector<pair<wstring, wstring>>& filters = {{L"所有文件", L"*.*"}},const wstring& defaultExtension = L"",const wstring& title = L"选择文件");
 extern void unzip(const string& input, const string& output);
 extern string UTF8ToGBK(const string& utf8Str);
 extern string GBKToUTF8(const string& gbkStr);

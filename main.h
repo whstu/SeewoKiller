@@ -13,6 +13,7 @@
 #include <shobjidl.h>
 #pragma comment(lib, "Shell32.lib")
 #pragma comment(lib, "Ole32.lib")
+#pragma comment(lib, "uuid.lib")
 #pragma comment(lib, "imm32.lib")
 inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 	0xea1afb91, 0x9e28, 0x4b86,
@@ -39,6 +40,7 @@ inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 typedef long long LL;
 //std::string EXECPATH;
 inline std::string executable_path;
+extern void poweron(bool SkipCheckWinVer, bool fb = false);
 
 inline int box = 1/*板块*/, boxn = 4/*板块总数*/;
 inline struct Word {

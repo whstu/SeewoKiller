@@ -291,7 +291,7 @@ void quickstart() {
 	}
 	cls
 }
-void poweron(bool SkipCheckWinVer, bool fb = false) {
+void poweron(bool SkipCheckWinVer, bool fb) {
 	//1深蓝，2深绿，3深青，4深红，5深紫，6深黄，7灰白（默认），8深灰
 	//9浅蓝，10浅绿，11浅青，12浅红，13浅紫，14浅黄，15白色，0黑色
 	if (fb == true) {
@@ -973,17 +973,19 @@ struct Launcher {
 						if (allowA == true) {
 							if (box > 1) {
 								box--;
+								return "-1";
 							}
 						}
-						return "-1";
+						break;
 					}
 					case 'd': {
 						if (allowD == true) {
 							if (box < boxn) {
 								box++;
+								return "-1";
 							}
 						}
-						return "-1";
+						break;
 					}
 					case ' ': {
 						return liststring[channel];
