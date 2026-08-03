@@ -90,6 +90,11 @@
 |卓然第三帝国官网|[**下载**](https://whstu.dpdns.org/download/seewokiller/)|[下载](https://whstu.dpdns.org/download/seewokiller/)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
+> [!CAUTION]
+>
+> 卓然第三帝国官网的渠道正在更新，暂不开放。
+
+
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!TIP]
 > 安装包的区别
@@ -101,9 +106,6 @@
 > |SeewoKiller_with_gui_and_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |50MB|
 > |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |60MB|
 > |SeewoKiller_with_nothing.exe|🔴       |🟢                         |🔴      |🔴    |🔴  |3MB|
-> |SeewoKiller_with_gui_and_freeze.tar.gz|🟢 |🟢                         |🟢      |🔴    |🔴  |65MB|
-> |SeewoKiller_with_gui.tar.gz|🔴        |🟢                         |🟢      |🔴    |🔴  |40MB|
-> |SeewoKiller_with_freeze.tar.gz|🟢        |🟢                         |🔴      |🔴    |🔴  |22MB|
 > |SeewoKiller_with_nothing.tar.gz|🔴       |🟢                         |🔴      |🔴    |🔴  |1.5MB|
 > 
 > 除 SeewoKiller_custom 外，计算π的功能需要另外下载，并手动存至安装目录下。

@@ -60,17 +60,17 @@ echo 打包main-with-nothing.tar.gz
 call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_nothing "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-nothing.txt"
 if errorlevel 1 SET zipstat1=1
 
-echo 打包main-with-gui.tar.gz
-call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_gui "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-gui.txt"
-if errorlevel 1 SET zipstat2=1
+:echo 打包main-with-gui.tar.gz
+:call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_gui "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-gui.txt"
+:if errorlevel 1 SET zipstat2=1
 
-echo 打包main-with-gui-and-freeze.tar.gz
-call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_gui_and_freeze "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-gui-and-freeze.txt"
-if errorlevel 1 SET zipstat3=1
+:echo 打包main-with-gui-and-freeze.tar.gz
+:call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_gui_and_freeze "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-gui-and-freeze.txt"
+:if errorlevel 1 SET zipstat3=1
 
-echo 打包main-with-freeze.tar.gz
-call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_freeze "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-freeze.txt"
-if errorlevel 1 SET zipstat4=1
+:echo 打包main-with-freeze.tar.gz
+:call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_freeze "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-freeze.txt"
+:if errorlevel 1 SET zipstat4=1
 
 REM 输出结果
 call :PrintStatus %stat1% "编译 SeewoKiller_custom.exe" DarkYellow
@@ -88,9 +88,9 @@ call :PrintStatus %sigstat5% "签名 SeewoKiller_with_gui.exe" Yellow
 call :PrintStatus %sigstat6% "签名 SeewoKiller_with_gui_and_nothing.exe" Yellow
 echo ==============
 call :PrintStatus %zipstat1% "压缩 SeewoKiller_with_nothing.tar.gz" DarkCyan
-call :PrintStatus %zipstat2% "压缩 SeewoKiller_with_gui.tar.gz" DarkCyan
-call :PrintStatus %zipstat3% "压缩 SeewoKiller_with_gui_and_freeze.tar.gz" DarkCyan
-call :PrintStatus %zipstat4% "压缩 SeewoKiller_with_freeze.tar.gz" DarkCyan
+:call :PrintStatus %zipstat2% "压缩 SeewoKiller_with_gui.tar.gz" DarkCyan
+:call :PrintStatus %zipstat3% "压缩 SeewoKiller_with_gui_and_freeze.tar.gz" DarkCyan
+:call :PrintStatus %zipstat4% "压缩 SeewoKiller_with_freeze.tar.gz" DarkCyan
 
 set ALL_SUCCESS=1
 if not %stat1%==0 set ALL_SUCCESS=0
@@ -106,9 +106,9 @@ if not %sigstat4%==0 set ALL_SUCCESS=0
 if not %sigstat5%==0 set ALL_SUCCESS=0
 if not %sigstat6%==0 set ALL_SUCCESS=0
 if not %zipstat1%==0 set ALL_SUCCESS=0
-if not %zipstat2%==0 set ALL_SUCCESS=0
-if not %zipstat3%==0 set ALL_SUCCESS=0
-if not %zipstat4%==0 set ALL_SUCCESS=0
+:if not %zipstat2%==0 set ALL_SUCCESS=0
+:if not %zipstat3%==0 set ALL_SUCCESS=0
+:if not %zipstat4%==0 set ALL_SUCCESS=0
 if %ALL_SUCCESS%==1 (
     powershell -command "Write-Host 'Everything' -ForegroundColor DarkYellow -NoNewline; Write-Host ' ' -NoNewline; Write-Host 'Done' -ForegroundColor Black -BackgroundColor Green"
 ) else (
