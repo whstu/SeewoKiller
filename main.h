@@ -7,7 +7,11 @@
 #include <conio.h>
 #include <string>
 #include <imm.h>
+//Open Source libs
 #include "curl/curl.h"
+#include <archive.h>
+#include <libconfig.h++>
+#define LIBCONFIG_STATIC
 //任务栏进度条
 #define INITGUID
 #include <shobjidl.h>

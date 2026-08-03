@@ -70,6 +70,15 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	return;
 }
 
+namespace ConfigNext {
+	bool write_config(string name,string contnet){
+		return true;
+	}
+	string read_config(string name){
+		return "NULL";
+	}
+}
+
 void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
 	string tmp;
 	if (IsConfig) {
@@ -394,7 +403,7 @@ namespace PLUGIN {
 			cout<<"   "<<ID<<"\n";
 		}*/
 	}
-	void PluginSystem(unsigned int OperationType, string str) {//todo 返回值处理
+	void PluginSystem(unsigned int OperationType, string str) {
 		switch (OperationType) {
 			case PLUGIN_INSTALL: {
 				if (!fileExist(str)) {
@@ -437,8 +446,8 @@ namespace PLUGIN {
 					cout << "\n";
 					S(100);
 					SetColorAndBackground(7, 0);
-					cout<<"\n更新 "<<plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)]<<" - ";
-					if (stat1 == 0 and stat2 == 0) {
+					cout << "\n更新 " << plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)] << " - ";
+					if (stat1 == 0 and stat2 == 0 and statbat == 0) {
 						SetColorAndBackground(10, 0);
 						cout << "操作已完成。";
 					} else {
@@ -453,37 +462,51 @@ namespace PLUGIN {
 					if (fileExist(executable_path + "\\temp\\plugin\\name.config") == false or Name.empty()) {
 						cout << "\n错误: 插件结构不完整。\n";
 						system("pause");
-						break;
+						return;
 					}
+					//pluginName去重
+					for (const string& s : plugin.pluginName) {
+						if (Name==s) {
+							cout<<"错误: 重复的插件名称。\n安装已取消。";
+							system("pause");
+							return;
+						}
+					}
+
 					cout << "\n正在安装: " << Name;
 					if (fileExist(executable_path + "\\temp\\plugin\\version.config")) {
 						cout << " - Version " << read_config(executable_path + "\\temp\\plugin\\version.config");
 					}
 					//install.bat
+					int statbat;
 					if (fileExist(executable_path + "\\temp\\plugin\\install.bat")) {
 						cout << "\n\n正在运行: install.bat\n";
 						string execpath = executable_path + "\\temp\\plugin\\";
 						string cmd = "cd /d \"" + execpath + "\" && \".\\install.bat\"";
-						system(cmd.c_str());
+						statbat = system(cmd.c_str());
 					}
 
 					cout << "\n\n";
 					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
-					int stat=system(cp_command.c_str());
+					int stat = system(cp_command.c_str());
+					S(100);
+					prints("运行update.bat", statbat);
+					cout << "\n";
 					S(100);
 					prints("复制文件", stat);
 					cout << "\n";
 					S(100);
 					SetColorAndBackground(7, 0);
-					cout<<"\n安装 "<<Name<<" - ";
-					if (stat == 0) {
+					cout << "\n安装 " << Name << " - ";
+					if (stat == 0 and statbat == 0) {
 						SetColorAndBackground(10, 0);
 						cout << "操作已完成。";
 					} else {
 						SetColorAndBackground(0, 12);
 						cout << "发生错误。请重试。";
 					}
-					cout << "\nDone.\n按任意键重载插件和配置文件。\n";
+					SetColorAndBackground(7, 0);
+					cout << "\n\n按任意键重载插件和配置文件。\n";
 					_getch();
 				}
 				break;
@@ -497,17 +520,35 @@ namespace PLUGIN {
 				}
 				cout << "\n正在卸载: " << str;
 				//uninstall.bat
+				int statbat;
 				if (fileExist(executable_path + "\\temp\\plugin\\update.bat")) {
 					cout << "\n\n正在运行: uninstall.bat\n";
 					string execpath = executable_path + "\\temp\\plugin\\";
 					string cmd = "cd /d \"" + execpath + "\" && \".\\uninstall.bat\"";
-					system(cmd.c_str());
+					statbat = system(cmd.c_str());
 				}
 
 				string pluginID = plugin.plugin[SearchForAddress(plugin.pluginName, str, true)];
 				string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
-				system(rm_command.c_str());
-				cout << "\n\nDone.\n\n按任意键重载插件和配置文件。\n";
+				int stat = system(rm_command.c_str());
+				S(100);
+				prints("运行uninstall.bat", statbat);
+				cout << "\n";
+				S(100);
+				prints("删除文件", stat);
+				cout << "\n";
+				S(100);
+				SetColorAndBackground(7, 0);
+				cout << "\n卸载 " << str << " - ";
+				if (stat == 0 and statbat == 0) {
+					SetColorAndBackground(10, 0);
+					cout << "操作已完成。";
+				} else {
+					SetColorAndBackground(0, 12);
+					cout << "发生错误。请重试。";
+				}
+				SetColorAndBackground(7, 0);
+				cout << "\n\n按任意键重载插件和配置文件。\n";
 				_getch();
 				break;
 			}
@@ -525,9 +566,9 @@ namespace PLUGIN {
 		return;
 	}
 	void PluginManagerUI() {
+startpluginui:
 		// 复制当前启用状态
 		vector<bool> tempState = plugin.pluginIsEnabled;   // 包含索引0占位
-
 		// 获取插件列表（忽略索引0的"NULL"）
 		const vector<string>& names = plugin.pluginName;
 		int n = names.size() - 1;  // 实际插件数量
@@ -539,8 +580,8 @@ namespace PLUGIN {
 			system("pause");
 			return;
 		}
-
 		int current = 1;
+
 		bool exitFlag = false;
 		bool saveFlag = false;
 
@@ -549,8 +590,9 @@ namespace PLUGIN {
 		INPUT_RECORD ir;
 
 		while (!exitFlag) {
+			n = names.size() - 1;
 			gotoxy(0, 0);
-			cout << "===插件管理===\n";
+			cout << " ===插件管理===\n";
 			SetColorAndBackground(7, 0);
 			cout << "按 ";
 			SetColorAndBackground(0, 7);
@@ -644,7 +686,7 @@ namespace PLUGIN {
 					cls
 					poweron(true);
 					cls
-					break;
+					goto startpluginui;
 				}
 			} else if (ch == 'f' || ch == 'F') {
 				PLUGIN::PluginSystem(PLUGIN_UNINSTALL, names[current]);
@@ -672,14 +714,14 @@ namespace PLUGIN {
 			// 提示保存成功
 			gotoxy(0, 3);
 			SetColorAndBackground(10, 0);
-			cout << "状态已保存。\n";
+			cout << "状态已保存。     \n";
 			SetColorAndBackground(7, 0);
 			system("pause");
 		} else {
 			// 取消操作，不做任何修改
 			gotoxy(0, 3);
 			SetColorAndBackground(7, 0);
-			cout << "已取消修改。\n";
+			cout << "已取消修改。     \n";
 			system("pause");
 		}
 	}

@@ -13,8 +13,8 @@ Version 2.0
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.1.1.254";
-	const long long VersionCode = 20101254;
+	const std::string Version = "2.1.1.0";
+	const long long VersionCode = 20101000;
 	const std::string VersionName = "Stupefy";
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -198,7 +198,7 @@ void checkUpdate(bool IsPoweron = false) {
 	//fetch
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 1000);
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 1000);
-	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 2500);
+	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 5000);
 	if (IsPoweron == false && info.versionCodeWeb.empty()) {
 		cout << "错误：未获取到版本信息。请检查网络。\n\n";
 		return;
@@ -430,11 +430,13 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 
 
 	gotoxy(15, 14);
-	cout << "正在进行最后的准备(5/5)  ";
+	cout << "正在清理(5/5)  ";
 	gotoxy(15, 16);
 	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 55);
-	checkUpdate(true);
+	//checkUpdate(true);
+	string rm_command = "rmdir /s /q \"" + executable_path + "\\temp\\\" > nul 2>&1";
+	system(rm_command.c_str());
 	S(200);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
 		cls
@@ -489,7 +491,7 @@ void about() {
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
-	cout << "\n经典界面UI基于SlytherinOS框架\n";
+	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头文件nlohmann/json\n";
 	SetColorAndBackground(10, 0);
 	cout << "      Slytherin ";
 	SetColorAndBackground(0, 2);

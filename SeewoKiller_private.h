@@ -5,19 +5,19 @@
 #define SEEWOKILLER_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"2.1.1.254"
+#define VER_STRING	"2.2.0.0"
 #define VER_MAJOR	2
-#define VER_MINOR	1
-#define VER_RELEASE	1
-#define VER_BUILD	254
+#define VER_MINOR	2
+#define VER_RELEASE	0
+#define VER_BUILD	0
 #define COMPANY_NAME	"WHSTU Studio"
-#define FILE_VERSION	"2.1.1.254"
+#define FILE_VERSION	"2.1.1.265"
 #define FILE_DESCRIPTION	"希沃克星：冰点破解、晚自习制裁和更多！"
 #define INTERNAL_NAME	"SeewoKiller"
 #define LEGAL_COPYRIGHT	"Copyright (c) WHSTU Studio 2020-2026"
 #define LEGAL_TRADEMARKS	""
 #define ORIGINAL_FILENAME	"SeewoKiller.exe"
 #define PRODUCT_NAME	"SeewoKiller"
-#define PRODUCT_VERSION	"2.1.1.254"
+#define PRODUCT_VERSION	"2.1.1.265"
 
 #endif /*SEEWOKILLER_PRIVATE_H*/
