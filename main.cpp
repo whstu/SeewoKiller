@@ -199,6 +199,7 @@ void checkUpdate(bool IsPoweron = false) {
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 1000);
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 1000);
 	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 5000);
+	//cout << info.versionCodeWeb[0];
 	if (IsPoweron == false && info.versionCodeWeb.empty()) {
 		cout << "错误：未获取到版本信息。请检查网络。\n\n";
 		return;
@@ -208,10 +209,17 @@ void checkUpdate(bool IsPoweron = false) {
 		word.recent.push_back("[*]有软件更新");
 		switch (IsPoweron) {
 			case false: {
-				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 2500);
-				cout << "\n发现软件更新: " << info.versionWeb[0] << " (" << info.versionNameWeb[0] << "),";
+				cout << "正在读取网络文件(1/2)\n";
+				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 4000);
+				cout << "正在读取网络文件(2/2)\n";
+				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 4000);
+				if (info.versionWeb.empty() or info.versionNameWeb.empty()) {
+					cout << "\n发现软件更新,";
+				} else {
+					cout << "\n发现软件更新: " << info.versionWeb[0] << " (" << info.versionNameWeb[0] << "),";
+				}
 				cout << "\n当前: " << info.Version << "\n\n";
-				cout << "是否前往网站下载? (Y/y-是, 其它按键-否\n";
+				cout << "是否前往网站下载? (Y/y-是, 其它按键-否)\n";
 				while (true) {
 					char ch = getch();
 					if (ch == 'Y' or ch == 'y') {

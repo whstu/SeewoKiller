@@ -14,10 +14,10 @@ CFLAGS   = $(INCS) "-O2" "-pipe"
 NASM_FLAGS   =  "-f" "elf64"
 WINDRESFLAGS = 
 RES      = SeewoKiller_private.res
-OBJ      = .spl_WHSTU_Rainbow.o cmdCtrl.o game.o main.o CameraRec.o files.o web.o $(RES)
+OBJ      = game.o main.o CameraRec.o cmdCtrl.o web.o files.o .spl_WHSTU_Rainbow.o $(RES)
 BIN      = SeewoKiller.exe
-LINKOBJ  = ".spl_WHSTU_Rainbow.o" "cmdCtrl.o" "game.o" "main.o" "CameraRec.o" "files.o" "web.o" "SeewoKiller_private.res"
-CLEANOBJ = ".spl_WHSTU_Rainbow.o" "cmdCtrl.o" "game.o" "main.o" "CameraRec.o" "files.o" "web.o" "SeewoKiller_private.res" "SeewoKiller.exe"
+LINKOBJ  = "game.o" "main.o" "CameraRec.o" "cmdCtrl.o" "web.o" "files.o" ".spl_WHSTU_Rainbow.o" "SeewoKiller_private.res"
+CLEANOBJ = "game.o" "main.o" "CameraRec.o" "cmdCtrl.o" "web.o" "files.o" ".spl_WHSTU_Rainbow.o" "SeewoKiller_private.res" "SeewoKiller.exe"
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -30,26 +30,26 @@ SeewoKiller.exe: $(OBJ)
 
 	$(CXX) $(LINKOBJ) -o "SeewoKiller.exe" $(LIBS)
 
-.spl_WHSTU_Rainbow.o: .spl_WHSTU_Rainbow.cpp SplashScreen.h cmdCtrl.h main.h
-	$(CXX) -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
-
-cmdCtrl.o: cmdCtrl.cpp cmdCtrl.h main.h
-	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
-
-game.o: game.cpp game.h cmdCtrl.h main.h
+game.o: game.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
 	$(CXX) -c "game.cpp" -o "game.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
 
-main.o: main.cpp web.h SplashScreen.h game.h cmdCtrl.h files.h main.h CameraRec.h
+main.o: main.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
 	$(CXX) -c "main.cpp" -o "main.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
 
-CameraRec.o: CameraRec.cpp cmdCtrl.h main.h CameraRec.h
+CameraRec.o: CameraRec.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
 	$(CXX) -c "CameraRec.cpp" -o "CameraRec.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
 
-files.o: files.cpp cmdCtrl.h files.h main.h
+cmdCtrl.o: cmdCtrl.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
+	$(CXX) -c "cmdCtrl.cpp" -o "cmdCtrl.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
+
+web.o: web.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
+	$(CXX) -c "web.cpp" -o "web.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
+
+files.o: files.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
 	$(CXX) -c "files.cpp" -o "files.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
 
-web.o: web.cpp web.h files.h main.h
-	$(CXX) -c "web.cpp" -o "web.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
+.spl_WHSTU_Rainbow.o: .spl_WHSTU_Rainbow.cpp main.h cmdCtrl.h game.h CameraRec.h files.h SplashScreen.h web.h
+	$(CXX) -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" $(CXXFLAGS)  -finput-charset=UTF-8 -fexec-charset=gbk
 
 SeewoKiller_private.res: SeewoKiller_private.rc 
 	$(WINDRES) -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff $(WINDRESFLAGS) 
