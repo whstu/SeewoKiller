@@ -27,3 +27,20 @@ void setfont(int size) {//字体、大小、粗细
 	CONSOLE_FONT_INFO consoleCurrentFont;
 	GetCurrentConsoleFont(handle, FALSE, &consoleCurrentFont);
 }
+
+void prints(const string& taskname, int result, int taskColorForg, int taskColorBack, const string& connectString) {
+	//Print Status
+	SetColorAndBackground(taskColorForg, taskColorBack);
+	cout << taskname;
+	SetColorAndBackground(7, 0);
+	cout << connectString;
+	if (result == 0) {
+		SetColorAndBackground(0, 10);
+		cout << "Done";
+	} else {
+		SetColorAndBackground(0, 12);
+		cout << "Failed";
+	}
+	SetColorAndBackground(7, 0);
+	return;
+}

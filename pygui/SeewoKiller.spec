@@ -6,7 +6,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('E:\\devc++\\DEV\\SeewoKiller\\pygui\\tengwar.png', '.'),  # 添加图片文件
-        ('E:\\devc++\\DEV\\SeewoKiller\\pygui\\app.ico', '.'),  # 添加图片文件
+        ('E:\\devc++\\DEV\\SeewoKiller\\app.ico', '.'),  # 添加图片文件
     ],
     hiddenimports=[
         'PyQt5',  # PyQt5核心模块
@@ -54,5 +54,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='.\\app.ico',  # 应用程序图标
+    icon='E:\\devc++\\DEV\\SeewoKiller\\app.ico',  # 应用程序图标
 )

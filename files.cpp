@@ -1,5 +1,7 @@
 #include "./files.h"
+#include "./main.h"
 #include "./cmdCtrl.h"
+#include <shobjidl.h>
 
 //检查文件是否存在
 bool fileExist(const string& filename) {
@@ -29,7 +31,7 @@ string read_config(string PATH) {
 	if (fileExist(PATH)) {
 		ifstream file(PATH);
 		getline(file, value);
-		value=UTF8ToGBK(value);
+		value = UTF8ToGBK(value);
 		file.close();
 	}
 	return value;
@@ -41,7 +43,7 @@ bool read_Lines(const string& PATH, vector<string>& lines) {
 	}
 	string line;
 	while (getline(file, line)) {
-		line=UTF8ToGBK(line);
+		line = UTF8ToGBK(line);
 		lines.push_back(line); // 保留空行（push_back 空字符串）
 	}
 	file.close();
@@ -50,7 +52,7 @@ bool read_Lines(const string& PATH, vector<string>& lines) {
 
 void write_config(string PATH, string config) {
 	ofstream file(PATH);
-	config=GBKToUTF8(config);
+	config = GBKToUTF8(config);
 	file << config;
 	file.close();
 	return;
@@ -66,6 +68,15 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	}
 	write_config(PATH, default_config);
 	return;
+}
+
+namespace ConfigNext {
+	bool write_config(string name,string contnet){
+		return true;
+	}
+	string read_config(string name){
+		return "NULL";
+	}
 }
 
 void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
@@ -132,17 +143,70 @@ void GetFileName(const wstring& rootPath, vector<wstring>& outFiles) {
 	FindClose(hFind);
 }
 
+string OpenFileDialogModern(
+    const vector<pair<wstring, wstring>>& filters,
+    const wstring& defaultExtension, const wstring& title) {
+	CoInitialize(NULL);
+	string result;
+	IFileOpenDialog* pFileOpen = NULL;
+	if (SUCCEEDED(CoCreateInstance(CLSID_FileOpenDialog, NULL,
+	                               CLSCTX_ALL, IID_IFileOpenDialog,
+	                               (void * *)&pFileOpen))) {
+		// 构建过滤器数组
+		vector<COMDLG_FILTERSPEC> filterSpecs;
+		filterSpecs.reserve(filters.size());
+		for (const auto& [name, spec] : filters) {
+			filterSpecs.push_back({name.c_str(), spec.c_str()});
+		}
+		if (!filterSpecs.empty()) {
+			pFileOpen->SetFileTypes(static_cast<UINT>(filterSpecs.size()), filterSpecs.data());
+			pFileOpen->SetFileTypeIndex(1);
+		}
+		if (!defaultExtension.empty()) {
+			pFileOpen->SetDefaultExtension(defaultExtension.c_str());
+		}
+		if (!title.empty()) {
+			pFileOpen->SetTitle(title.c_str());
+		}
+		if (SUCCEEDED(pFileOpen->Show(NULL))) {
+			IShellItem* pItem;
+			if (SUCCEEDED(pFileOpen->GetResult(&pItem))) {
+				PWSTR pszFilePath;
+				if (SUCCEEDED(pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath))) {
+					int len = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, NULL, 0, NULL, NULL);
+					result.resize(len);
+					WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &result[0], len, NULL, NULL);
+					CoTaskMemFree(pszFilePath);
+				}
+				pItem->Release();
+			}
+		}
+		pFileOpen->Release();
+	}
+	CoUninitialize();
+	while (!result.empty() && result.back() == '\0') {
+		result.pop_back();
+	}
+	return result;
+}
+
+void unzip(string& input, const string& output) {
+	string command = ".\\7za.exe x \"" + input + "\" -o\"" + output + "\" -y";
+	//cout << command.c_str();
+	system(command.c_str());
+}
+
 string UTF8ToGBK(const string& utf8Str) {
 	// 1. UTF-8 -> UTF-16 (宽字符)
 	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
 	wchar_t* wbuf = new wchar_t[wlen];
 	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wbuf, wlen);
-	
+
 	// 2. UTF-16 -> GBK
 	int glen = WideCharToMultiByte(CP_ACP, 0, wbuf, -1, NULL, 0, NULL, NULL);
 	char* gbuf = new char[glen];
 	WideCharToMultiByte(CP_ACP, 0, wbuf, -1, gbuf, glen, NULL, NULL);
-	
+
 	std::string result(gbuf);
 	delete[] wbuf;
 	delete[] gbuf;
@@ -153,12 +217,12 @@ string GBKToUTF8(const string& gbkStr) {
 	int wlen = MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, NULL, 0);
 	wchar_t* wbuf = new wchar_t[wlen];
 	MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, wbuf, wlen);
-	
+
 	// 2. UTF-16 -> UTF-8
 	int ulen = WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, NULL, 0, NULL, NULL);
 	char* ubuf = new char[ulen];
 	WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, ubuf, ulen, NULL, NULL);
-	
+
 	std::string result(ubuf);
 	delete[] wbuf;
 	delete[] ubuf;
@@ -169,6 +233,7 @@ namespace PLUGIN {
 	bool ReadPluginList() {
 		plugin.errorpath.clear();
 		plugin.plugin.clear();
+		plugin.pluginIsEnabled.clear();
 		plugin.pluginName.clear();
 		plugin.pluginExec.clear();
 		plugin.pluginList.clear();
@@ -265,6 +330,7 @@ namespace PLUGIN {
 
 			if (valid) {
 				//size_t count=plugin.plugin.size()-1;
+				plugin.pluginIsEnabled.push_back(!fileExist(basePath + ".disabled"));
 				plugin.plugin.push_back(ID);
 				plugin.pluginName.push_back(nameContent);
 				plugin.pluginType.push_back(typeContent);
@@ -302,15 +368,25 @@ namespace PLUGIN {
 		if (ReadPluginList() == false) {
 			word.recent.push_back("[*]有插件加载失败>>>");
 		}
-		word.more=def_word.more;
-		if(plugin.plugin.size()<=1){
+		word.more = def_word.more;
+		if (plugin.plugin.empty()) {
+			return;
+		}
+		vector<string> enabledNames;
+		for (size_t i = 0; i < plugin.pluginName.size(); ++i) {
+			if (plugin.pluginIsEnabled[i]) {
+				enabledNames.push_back(plugin.pluginName[i]);
+			}
+		}
+		if (enabledNames.empty()) {
 			return;
 		}
 		word.more.insert(word.more.end(), "---插件---");
-		word.more.insert(word.more.end(), plugin.pluginName.begin(), plugin.pluginName.end());
+		word.more.insert(word.more.end(), enabledNames.begin(), enabledNames.end());
 
 		plugin.plugin.insert(plugin.plugin.begin(), "NULL");
 		plugin.pluginName.insert(plugin.pluginName.begin(), "NULL");
+		plugin.pluginIsEnabled.insert(plugin.pluginIsEnabled.begin(), false);
 		for (size_t i = 0; i < plugin.pluginExec.size(); i++) {
 			plugin.pluginExec[i].insert(plugin.pluginExec[i].begin(), "NULL");
 		}
@@ -327,6 +403,326 @@ namespace PLUGIN {
 			cout<<"   "<<ID<<"\n";
 		}*/
 	}
-	void PluginSystem(unsigned int OperationType){
+	void PluginSystem(unsigned int OperationType, string str) {
+		switch (OperationType) {
+			case PLUGIN_INSTALL: {
+				if (!fileExist(str)) {
+					cout << "\n错误: 找不到指定的文件。" << str << "\n";
+					break;
+				}
+				cout << "Copying zip file to temp...\n";
+				unzip(str, executable_path + "\\temp\\plugin\\");
+				string pluginID = read_config(executable_path + "\\temp\\plugin\\id.config");
+				if (SearchForAddress(plugin.plugin, pluginID, true) != -1) { //更新
+					cout << "\n正在更新: " << plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)] << endl;
+					if (fileExist(executable_path + "\\temp\\plugin\\version.config") or fileExist(executable_path + "\\plugin\\" + pluginID + "\\version.config")) {
+						cout << "From Version " << read_config(executable_path + "\\plugin\\" + pluginID + "\\version.config");
+						cout << " to Version " << read_config(executable_path + "\\temp\\plugin\\version.config");
+						cout << "\n";
+					}
+					//update.bat
+					int statbat;
+					if (fileExist(executable_path + "\\temp\\plugin\\update.bat")) {
+						cout << "\n正在运行: update.bat\n";
+						string execpath = executable_path + "\\temp\\plugin\\";
+						string cmd = "cd /d \"" + execpath + "\" && \".\\update.bat\"";
+						statbat = system(cmd.c_str());
+					}
+
+					cout << "\n正在复制文件。\n";
+					string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
+					int stat1 = system(rm_command.c_str());
+					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
+					int stat2 = system(cp_command.c_str());
+					cout << "\n";
+					S(100);
+					prints("运行update.bat", statbat);
+					cout << "\n";
+					S(100);
+					prints("清理文件夹", stat1);
+					cout << "\n";
+					S(100);
+					prints("复制文件", stat2);
+					cout << "\n";
+					S(100);
+					SetColorAndBackground(7, 0);
+					cout << "\n更新 " << plugin.pluginName[SearchForAddress(plugin.plugin, pluginID, true)] << " - ";
+					if (stat1 == 0 and stat2 == 0 and statbat == 0) {
+						SetColorAndBackground(10, 0);
+						cout << "操作已完成。";
+					} else {
+						SetColorAndBackground(0, 12);
+						cout << "发生错误。请重试。";
+					}
+					SetColorAndBackground(7, 0);
+					cout << "\n\n按任意键重载插件和配置文件。\n";
+					_getch();
+				} else { //安装
+					string Name = read_config(executable_path + "\\temp\\plugin\\name.config");
+					if (fileExist(executable_path + "\\temp\\plugin\\name.config") == false or Name.empty()) {
+						cout << "\n错误: 插件结构不完整。\n";
+						system("pause");
+						return;
+					}
+					//pluginName去重
+					for (const string& s : plugin.pluginName) {
+						if (Name==s) {
+							cout<<"错误: 重复的插件名称。\n安装已取消。";
+							system("pause");
+							return;
+						}
+					}
+
+					cout << "\n正在安装: " << Name;
+					if (fileExist(executable_path + "\\temp\\plugin\\version.config")) {
+						cout << " - Version " << read_config(executable_path + "\\temp\\plugin\\version.config");
+					}
+					//install.bat
+					int statbat;
+					if (fileExist(executable_path + "\\temp\\plugin\\install.bat")) {
+						cout << "\n\n正在运行: install.bat\n";
+						string execpath = executable_path + "\\temp\\plugin\\";
+						string cmd = "cd /d \"" + execpath + "\" && \".\\install.bat\"";
+						statbat = system(cmd.c_str());
+					}
+
+					cout << "\n\n";
+					string cp_command = "xcopy \"" + executable_path + "\\temp\\plugin\\*\" \"" + executable_path + "\\plugin\\" + pluginID + "\" /E /I /H /R /Y";
+					int stat = system(cp_command.c_str());
+					S(100);
+					prints("运行update.bat", statbat);
+					cout << "\n";
+					S(100);
+					prints("复制文件", stat);
+					cout << "\n";
+					S(100);
+					SetColorAndBackground(7, 0);
+					cout << "\n安装 " << Name << " - ";
+					if (stat == 0 and statbat == 0) {
+						SetColorAndBackground(10, 0);
+						cout << "操作已完成。";
+					} else {
+						SetColorAndBackground(0, 12);
+						cout << "发生错误。请重试。";
+					}
+					SetColorAndBackground(7, 0);
+					cout << "\n\n按任意键重载插件和配置文件。\n";
+					_getch();
+				}
+				break;
+			}
+			case PLUGIN_UNINSTALL: {//卸载
+				string text = "确实要卸载 \"" + str + "\"吗?\n";
+				if (MessageBox(hwnd, text.c_str(), _T("提示"), MB_YESNO | MB_ICONQUESTION) == IDNO) {
+					cout << "\n操作已取消。\n";
+					system("pause");
+					return;
+				}
+				cout << "\n正在卸载: " << str;
+				//uninstall.bat
+				int statbat;
+				if (fileExist(executable_path + "\\temp\\plugin\\update.bat")) {
+					cout << "\n\n正在运行: uninstall.bat\n";
+					string execpath = executable_path + "\\temp\\plugin\\";
+					string cmd = "cd /d \"" + execpath + "\" && \".\\uninstall.bat\"";
+					statbat = system(cmd.c_str());
+				}
+
+				string pluginID = plugin.plugin[SearchForAddress(plugin.pluginName, str, true)];
+				string rm_command = "rmdir /s /q \"" + executable_path + "\\plugin\\" + pluginID + "\\\"";
+				int stat = system(rm_command.c_str());
+				S(100);
+				prints("运行uninstall.bat", statbat);
+				cout << "\n";
+				S(100);
+				prints("删除文件", stat);
+				cout << "\n";
+				S(100);
+				SetColorAndBackground(7, 0);
+				cout << "\n卸载 " << str << " - ";
+				if (stat == 0 and statbat == 0) {
+					SetColorAndBackground(10, 0);
+					cout << "操作已完成。";
+				} else {
+					SetColorAndBackground(0, 12);
+					cout << "发生错误。请重试。";
+				}
+				SetColorAndBackground(7, 0);
+				cout << "\n\n按任意键重载插件和配置文件。\n";
+				_getch();
+				break;
+			}
+			case PLUGIN_DISABLE: {
+				string path = executable_path + "\\plugin\\" + plugin.plugin[SearchForAddress(plugin.pluginName, str, true)] + "\\.disabled";
+				write_config(path, "");
+				break;
+			}
+			case PLUGIN_ENABLE: {
+				string cmd = "del \"" + executable_path + "\\plugin\\" + plugin.plugin[SearchForAddress(plugin.pluginName, str, true)] + "\\.disabled\"";
+				system(cmd.c_str());
+				break;
+			}
+		}
+		return;
+	}
+	void PluginManagerUI() {
+startpluginui:
+		// 复制当前启用状态
+		vector<bool> tempState = plugin.pluginIsEnabled;   // 包含索引0占位
+		// 获取插件列表（忽略索引0的"NULL"）
+		const vector<string>& names = plugin.pluginName;
+		int n = names.size() - 1;  // 实际插件数量
+		if (n <= 0) {
+			gotoxy(0, 3);
+			SetColorAndBackground(0, 7);
+			cout << "[暂无插件]\n";
+			SetColorAndBackground(7, 0);
+			system("pause");
+			return;
+		}
+		int current = 1;
+
+		bool exitFlag = false;
+		bool saveFlag = false;
+
+		HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+		DWORD eventsRead;
+		INPUT_RECORD ir;
+
+		while (!exitFlag) {
+			n = names.size() - 1;
+			gotoxy(0, 0);
+			cout << " ===插件管理===\n";
+			SetColorAndBackground(7, 0);
+			cout << "按 ";
+			SetColorAndBackground(0, 7);
+			cout << "w/s/W/S";
+			SetColorAndBackground(7, 0);
+			cout << " 或 ";
+			SetColorAndBackground(0, 7);
+			cout << "上下方向键";
+			SetColorAndBackground(7, 0);
+			cout << " 调整方向, 按";
+			SetColorAndBackground(0, 7);
+			cout << "z/Z";
+			SetColorAndBackground(7, 0);
+			cout << "保存并退出, 按";
+			SetColorAndBackground(0, 7);
+			cout << "c/C";
+			SetColorAndBackground(7, 0);
+			cout << "取消更改并退出。\n按r/R安装新插件, 按f卸载高亮显示的插件。不受保存/取消的影响。";
+			gotoxy(0, 3);
+			for (int i = 0; i < n; ++i) {
+				cout << "                                                \n";
+			}
+			gotoxy(0, 0);
+			cout << " ";
+			gotoxy(0, 3);
+
+			// 显示所有插件（带状态标记）
+			for (int i = 1; i <= n; ++i) {
+				if (i == current) {
+					SetColorAndBackground(0, 7);   // 高亮当前项
+				} else {
+					SetColorAndBackground(7, 0);
+				}
+				// 显示状态：启用为 "[*]"，禁用为 "[ ]"
+				string mark = tempState[i] ? "[*]" : "[ ]";
+				cout << mark << " " << names[i] << "\n";
+			}
+			SetColorAndBackground(7, 0);
+
+			// 读取键盘事件
+			ReadConsoleInput(hInput, &ir, 1, &eventsRead);
+			if (eventsRead == 0 || ir.EventType != KEY_EVENT || !ir.Event.KeyEvent.bKeyDown)
+				continue;
+
+			WORD vk = ir.Event.KeyEvent.wVirtualKeyCode;
+			char ch = ir.Event.KeyEvent.uChar.AsciiChar;
+
+			// 处理方向键 / wasd
+			if (vk == VK_UP || ch == 'w' || ch == 'W') {
+				if (current > 1) current--;
+			} else if (vk == VK_DOWN || ch == 's' || ch == 'S') {
+				if (current < n) current++;
+			} else if (vk == VK_RETURN || ch == ' ') {
+				// 切换当前插件的启用状态
+				tempState[current] = !tempState[current];
+			} else if (ch == 'z' || ch == 'Z') {
+				saveFlag = true;
+				exitFlag = true;
+			} else if (ch == 'c' || ch == 'C') {
+				saveFlag = false;
+				exitFlag = true;
+			} else if (ch == 'r' || ch == 'R') {
+				while (true) {
+					gotoxy(0, 3);
+					for (int i = 0; i < n; ++i) {
+						cout << "                                                \n";
+					}
+					gotoxy(0, 0);
+					gotoxy(0, 3);
+					cout << "请选择插件包路径: ";
+					string path = OpenFileDialogModern({
+						{L"压缩文件", L"*.zip"}//,//使用分号隔开
+						//{L"所有文件", L"*.*"}
+					}, L"压缩文件", L"*.zip");
+					if (path.empty()) {
+						cout << "\n没有获取到路径。\n手动输入路径, 或键入\"b\"返回, 或键入\"r\"重试\n";
+						cout << "\n请键入: \n你也可以把zip文件直接拖入此窗口。";
+						gotoxy(4, 7);
+						cin >> path;
+						if (path == "b") {
+							cls
+							break;
+						}
+						if (path == "r") {
+							continue;
+						}
+					} else {
+						cout << path << endl;
+					}
+					PLUGIN::PluginSystem(PLUGIN_INSTALL, path);
+					cls
+					poweron(true);
+					cls
+					goto startpluginui;
+				}
+			} else if (ch == 'f' || ch == 'F') {
+				PLUGIN::PluginSystem(PLUGIN_UNINSTALL, names[current]);
+				cls
+				poweron(true);
+				cls
+				continue;
+			}
+		}
+
+		// 处理保存操作
+		if (saveFlag) {
+			for (int i = 1; i <= n; ++i) {
+				if (tempState[i] != plugin.pluginIsEnabled[i]) {
+					// 调用 PluginSystem 启用或禁用
+					if (tempState[i]) {
+						PLUGIN::PluginSystem(PLUGIN_ENABLE, names[i]);
+					} else {
+						PLUGIN::PluginSystem(PLUGIN_DISABLE, names[i]);
+					}
+					// 更新内存中的状态
+					plugin.pluginIsEnabled[i] = tempState[i];
+				}
+			}
+			// 提示保存成功
+			gotoxy(0, 3);
+			SetColorAndBackground(10, 0);
+			cout << "状态已保存。     \n";
+			SetColorAndBackground(7, 0);
+			system("pause");
+		} else {
+			// 取消操作，不做任何修改
+			gotoxy(0, 3);
+			SetColorAndBackground(7, 0);
+			cout << "已取消修改。     \n";
+			system("pause");
+		}
 	}
 }

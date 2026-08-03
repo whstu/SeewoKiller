@@ -13,8 +13,8 @@ Version 2.0
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.1.1.147";
-	const long long VersionCode = 020101147;
+	const std::string Version = "2.1.1.0";
+	const long long VersionCode = 20101000;
 	const std::string VersionName = "Stupefy";
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -188,7 +188,7 @@ void checkUpdate(bool IsPoweron = false) {
 		//初始化
 		gotoxy(0, 3);
 		SetColorAndBackground(7, 0);
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 18; i++) {
 			cout << "                                               \n";
 		}
 		gotoxy(0, 3);
@@ -198,7 +198,7 @@ void checkUpdate(bool IsPoweron = false) {
 	//fetch
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 1000);
 	//ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 1000);
-	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 2500);
+	ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionCode.txt", info.versionCodeWeb, 5000);
 	if (IsPoweron == false && info.versionCodeWeb.empty()) {
 		cout << "错误：未获取到版本信息。请检查网络。\n\n";
 		return;
@@ -248,15 +248,15 @@ void quickstart() {
 				break;
 			}
 			case 2: {
-				cout << "按wasd控制上下左右";
+				cout << "按 wasd 或 WASD 或 上下左右方向键 控制上下左右";
 				break;
 			}
 			case 3: {
-				cout << "按空格键确定";
+				cout << "按 空格键 或 回车键 确定";
 				break;
 			}
 			case 4: {
-				cout << "带有\">>>\"的选项包含子项目，可以按空格键打开";
+				cout << "带有\">>>\"的选项包含子项目，可以按 空格键 或 回车键 打开";
 				break;
 			}
 			case 5: {
@@ -291,7 +291,7 @@ void quickstart() {
 	}
 	cls
 }
-void poweron(bool SkipCheckWinVer, bool fb = false) {
+void poweron(bool SkipCheckWinVer, bool fb) {
 	//1深蓝，2深绿，3深青，4深红，5深紫，6深黄，7灰白（默认），8深灰
 	//9浅蓝，10浅绿，11浅青，12浅红，13浅紫，14浅黄，15白色，0黑色
 	if (fb == true) {
@@ -388,6 +388,7 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 	if (SkipCheckWinVer == false and startv == "总是询问") {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
+			//ImmDisableIME(0);
 			if (MessageBox(hwnd, _T("检测到你的系统为Windows 7+，\n是否使用全新UI？"), _T("提示"), MB_OKCANCEL) == 1) {
 				string guipath = executable_path + "\\gui.exe";
 				STARTUPINFO si = { sizeof(si) };//0
@@ -429,11 +430,13 @@ void poweron(bool SkipCheckWinVer, bool fb = false) {
 
 
 	gotoxy(15, 14);
-	cout << "正在进行最后的准备(5/5)  ";
+	cout << "正在清理(5/5)  ";
 	gotoxy(15, 16);
 	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 55);
-	checkUpdate(true);
+	//checkUpdate(true);
+	string rm_command = "rmdir /s /q \"" + executable_path + "\\temp\\\" > nul 2>&1";
+	system(rm_command.c_str());
 	S(200);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
 		cls
@@ -460,7 +463,7 @@ void about() {
 	//初始化
 	gotoxy(0, 3);
 	SetColorAndBackground(7, 0);
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 18; i++) {
 		cout << "                                               \n";
 	}
 	gotoxy(0, 3);
@@ -488,7 +491,7 @@ void about() {
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
-	cout << "\n经典界面UI基于SlytherinOS框架\n";
+	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头文件nlohmann/json\n";
 	SetColorAndBackground(10, 0);
 	cout << "      Slytherin ";
 	SetColorAndBackground(0, 2);
@@ -972,17 +975,19 @@ struct Launcher {
 						if (allowA == true) {
 							if (box > 1) {
 								box--;
+								return "-1";
 							}
 						}
-						return "-1";
+						break;
 					}
 					case 'd': {
 						if (allowD == true) {
 							if (box < boxn) {
 								box++;
+								return "-1";
 							}
 						}
-						return "-1";
+						break;
 					}
 					case ' ': {
 						return liststring[channel];
@@ -1135,6 +1140,11 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
+			} else if (s == "管理插件>>>") {
+				cls
+				PLUGIN::PluginManagerUI();
+				s = "重载插件与配置文件";
+				continue;
 			} else if (s == "重载插件与配置文件") {
 				cls
 				poweron(true);
@@ -1450,6 +1460,7 @@ int main(int argc, char *argv[]) {
 	InitTaskbarInterface();
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	taskbarprocess(TBPF_INDETERMINATE);
+	ImmDisableIME(0);
 	info.versionWeb.clear();
 	info.versionNameWeb.clear();
 	info.versionCodeWeb.clear();

@@ -6,13 +6,19 @@
 #include <ctime>
 #include <conio.h>
 #include <string>
+#include <imm.h>
+//Open Source libs
 #include "curl/curl.h"
-//#include <curl/curl.h>
+#include <archive.h>
+#include <libconfig.h++>
+#define LIBCONFIG_STATIC
 //任务栏进度条
 #define INITGUID
 #include <shobjidl.h>
 #pragma comment(lib, "Shell32.lib")
 #pragma comment(lib, "Ole32.lib")
+#pragma comment(lib, "uuid.lib")
+#pragma comment(lib, "imm32.lib")
 inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 	0xea1afb91, 0x9e28, 0x4b86,
 	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
@@ -38,6 +44,7 @@ inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 typedef long long LL;
 //std::string EXECPATH;
 inline std::string executable_path;
+extern void poweron(bool SkipCheckWinVer, bool fb = false);
 
 inline int box = 1/*板块*/, boxn = 4/*板块总数*/;
 inline struct Word {
@@ -47,11 +54,12 @@ inline struct Word {
 	std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
 	std::vector<std::string> setting = {
 		"NULL", "退出",
-		"---配置文件---",
+		"---插件与配置文件---",
 		"在晚自习制裁/循环清任务时启用日志",
 		"-打开制裁日志文件夹",
 		"允许使用“关闭”按钮",
 		"启动设置",
+		"管理插件>>>",
 		"---帮助---",
 		"启动初学者引导",
 		"冰点还原疑难解答",
@@ -74,11 +82,12 @@ inline struct DefaultWord {
 	const std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
 	const std::vector<std::string> setting = {
 		"NULL", "退出",
-		"---配置文件---",
+		"---插件与配置文件---",
 		"在晚自习制裁/循环清任务时启用日志",
 		"-打开制裁日志文件夹",
 		"允许使用“关闭”按钮",
 		"启动设置",
+		"管理插件>>>",
 		"---帮助---",
 		"启动初学者引导",
 		"冰点还原疑难解答",
@@ -97,6 +106,7 @@ inline struct DefaultWord {
 inline struct Plugin {
 	std::vector<std::string> pluginName;
 	std::vector<std::string> plugin;//ID
+	std::vector<bool> pluginIsEnabled;
 	std::vector<std::string> pluginType;
 	std::vector<std::vector<std::string>> pluginExec;
 	//std::vector<std::string> pluginExec;//type=exec

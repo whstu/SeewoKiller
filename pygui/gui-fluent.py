@@ -86,7 +86,7 @@ class ConfigManager:
     def read_config(path: str) -> str:
         """读取配置文件第一行，文件不存在时返回 'NULL'"""
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, "r", encoding="gbk") as f:
                 return f.readline().strip()
         except Exception:
             return "NULL"
@@ -95,7 +95,7 @@ class ConfigManager:
     def write_config(path: str, config: str):
         """写入配置文件"""
         ConfigManager.ensure_dir()
-        with open(path, "w", encoding="utf-8") as f:
+        with open(path, "w", encoding="gbk") as f:
             f.write(config)
 
     @staticmethod

@@ -11,7 +11,7 @@ ResourceIncludes =
 MakeIncludes = 
 Compiler = 
 CppCompiler = 
-Linker = -lShell32 -lOle32 -lvfw32 -lwinmm -lole32 -lcurl -lwldap32  E:/devc++/C++第三方库/curl-8.21.0_4-win64-mingw/lib/libcurl.a  E:/devc++/C++第三方库/curl-8.21.0_4-win64-mingw/lib/libcurl.dll.a
+Linker = -lShell32 -lOle32 -lvfw32 -lwinmm -lole32 -luuid -lcurl -lwldap32 -limm32 "E:/devc++/.Mingw&Libs/curl-8.21.0_4-win64-mingw/lib/libcurl.a"  "E:/devc++/.Mingw&Libs/curl-8.21.0_4-win64-mingw/lib/libcurl.dll.a"   "E:/devc++/.Mingw&Libs/.a/libarchive.a"  "E:/devc++/.Mingw&Libs/.a/libconfig.dll.a"  "E:/devc++/.Mingw&Libs/.a/libconfig++.dll.a"
 IsCpp = 1
 Icon = app.ico
 ExeOutput = 
@@ -46,79 +46,25 @@ ParellelBuildingJobs = 0
 
 [VersionInfo]
 Major = 2
-Minor = 1
-Release = 1
-Build = 172
+Minor = 2
+Release = 0
+Build = 0
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.1.1.172
+FileVersion = 2.1.1.265
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = SeewoKiller
 LegalCopyright = Copyright (c) WHSTU Studio 2020-2026
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.1.1.172
-AutoIncBuildNr = 1
+ProductVersion = 2.1.1.265
+AutoIncBuildNr = 0
 SyncProduct = 1
 
 
 [Unit1]
-FileName = CameraRec.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-UseUTF8 = 1
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit4]
-FileName = web.cpp
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-UseUTF8 = 1
-CompileCpp = 1
-FileEncoding = PROJECT
-RealEncoding = UTF-8
-
-
-[Unit2]
-FileName = files.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit3]
-FileName = game.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit5]
 FileName = .spl_WHSTU_Rainbow.cpp
 CompileCpp = 1
 Folder = 
@@ -127,11 +73,26 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
+UseUTF8 = 1
 FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit6]
+[Unit4]
+FileName = SplashScreen.h
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+UseUTF8 = 1
+CompileCpp = 0
+FileEncoding = UTF-8
+RealEncoding = ASCII
+
+
+[Unit2]
 FileName = cmdCtrl.cpp
 CompileCpp = 1
 Folder = 
@@ -144,8 +105,8 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit7]
-FileName = SplashScreen.h
+[Unit3]
+FileName = web.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -153,38 +114,12 @@ Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit8]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
+FileEncoding = PROJECT
 RealEncoding = UTF-8
 
 
-[Unit9]
-FileName = files.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit10]
-FileName = main.h
+[Unit5]
+FileName = game.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -196,20 +131,7 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit11]
-FileName = cmdCtrl.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit12]
+[Unit6]
 FileName = game.cpp
 CompileCpp = 1
 Folder = 
@@ -222,8 +144,8 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit13]
-FileName = web.h
+[Unit7]
+FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -231,11 +153,50 @@ Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = PROJECT
+FileEncoding = UTF-8
 RealEncoding = ASCII
 
 
-[Unit14]
+[Unit8]
+FileName = files.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit9]
+FileName = main.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit10]
+FileName = main.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit11]
 FileName = CameraRec.cpp
 CompileCpp = 1
 Folder = 
@@ -248,30 +209,89 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
+[Unit12]
+FileName = files.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit13]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit14]
+FileName = CameraRec.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = ASCII
+
+
+[Unit15]
+FileName = CameraRec.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit16]
+FileName = cmdCtrl.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = ASCII
+
+
+[Unit17]
+FileName = cmdCtrl.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = ASCII
+
+
 [CompilerSettings]
 c_cmd_opt_std = 
-cc_cmd_opt_abort_on_error = 
-cc_cmd_opt_address_sanitizer = 
-cc_cmd_opt_check_iso_conformance = 
 cc_cmd_opt_debug_info = 
-cc_cmd_opt_inhibit_all_warning = 
-cc_cmd_opt_instruction = 
-cc_cmd_opt_no_ms_extensions = 
-cc_cmd_opt_optimize = s
-cc_cmd_opt_pointer_size = 
-cc_cmd_opt_profile_info = 
-cc_cmd_opt_stack_protector = 
+cc_cmd_opt_optimize = 2
 cc_cmd_opt_std = 
-cc_cmd_opt_syntax_only = 
 cc_cmd_opt_use_pipe = on
-cc_cmd_opt_warning_all = 
-cc_cmd_opt_warning_as_error = 
-cc_cmd_opt_warning_extra = 
-cc_opt_enable_gcc_import_std = 
-cc_opt_error_implicit_int = 
-cc_opt_error_return_type = 
-cc_opt_error_vla = 
-link_cmd_opt_no_console = 
-link_cmd_opt_no_link_stdlib = 
-link_cmd_opt_stack_size = 12
+link_cmd_opt_stack_size = 0
 link_cmd_opt_strip_exe = on

@@ -2,9 +2,9 @@
 > [!NOTE]
 > 希沃克星已于 2026 年 7 月 6 日恢复新功能更新！
 >
-> WHSTU 中考总分 630 / 650，年排 8 ，被杭州市第二中学滨江校区录取
+> WHSTU 中考总分 630 / 650，年排 8，被杭州市第二中学滨江校区录取
 >
-> 希沃克星的工作环境可能没有了，但是这个项目只是一个hobby，
+> 希沃克星的工作环境可能没有了，但是这个项目只是一个 hobby，
 > 一开始就是为了好玩才做的，因此我没事干的时候还是会维护的
 
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
@@ -90,6 +90,11 @@
 |卓然第三帝国官网|[**下载**](https://whstu.dpdns.org/download/seewokiller/)|[下载](https://whstu.dpdns.org/download/seewokiller/)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
+> [!CAUTION]
+>
+> 卓然第三帝国官网的渠道正在更新，暂不开放。
+
+
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
 > [!TIP]
 > 安装包的区别
@@ -97,9 +102,11 @@
 > | :-----------------------: | :------: | :---------------------: | :------: | :-: | :-: | :-------:|
 > |SeewoKiller_custom.exe     |可选       |🟢                        |🟢       |可选   |可选 |70MB|
 > |SeewoKiller_with_gui.exe   |🔴        |🟢                         |🟢      |🔴    |🔴  |45MB|
+> |SeewoKiller_with_freeze.exe   |🟢        |🟢                         |🔴      |🔴    |🔴  |17MB|
 > |SeewoKiller_with_gui_and_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |50MB|
-> |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |55MB|
+> |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |60MB|
 > |SeewoKiller_with_nothing.exe|🔴       |🟢                         |🔴      |🔴    |🔴  |3MB|
+> |SeewoKiller_with_nothing.tar.gz|🔴       |🟢                         |🔴      |🔴    |🔴  |1.5MB|
 > 
 > 除 SeewoKiller_custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
 > 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai.exe)
@@ -123,7 +130,7 @@
 
 ## Build by Yourself
 
-本程序使用 Red Panda Dev-C++编译。Python 3.11。
+本程序使用 Red Panda Dev-C++ 编译，MinGW-w64 GCC 11.4.0 64-bit。Python 3.11。
 
 ## Stars 历史
 
