@@ -130,7 +130,7 @@
 
 ## Build by Yourself
 
-本程序使用 Red Panda Dev-C++编译。Python 3.11。
+本程序使用 Red Panda Dev-C++ 编译，MinGW-w64 GCC 11.4.0 64-bit。Python 3.11。
 
 ## Stars 历史
 
