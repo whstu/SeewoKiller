@@ -39,11 +39,12 @@ inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 #include <fstream>
 
 #define S(i) Sleep(i)
-#define cls system("cls");
+#define cls system("cls")
 #define ei else if
 typedef long long LL;
 //std::string EXECPATH;
 inline std::string executable_path;
+inline libconfig::Config cfg;
 extern void poweron(bool SkipCheckWinVer, bool fb = false);
 
 inline int box = 1/*板块*/, boxn = 4/*板块总数*/;

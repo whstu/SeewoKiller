@@ -1,17 +1,26 @@
 [
     {
         "caretX": 1,
-        "caretY": 6,
-        "filename": "E:/devc++/DEV/SeewoKiller/.spl_WHSTU_Rainbow.cpp",
+        "caretY": 4,
+        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
         "focused": false,
         "isOpen": false,
         "left": 0,
         "top": 0
     },
     {
-        "caretX": 24,
-        "caretY": 36,
+        "caretX": 49,
+        "caretY": 87,
         "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.cpp",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 3080
+    },
+    {
+        "caretX": 1,
+        "caretY": 6,
+        "filename": "E:/devc++/DEV/SeewoKiller/.spl_WHSTU_Rainbow.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
@@ -27,13 +36,52 @@
         "top": 0
     },
     {
+        "caretX": 1,
+        "caretY": 15,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 3,
+        "top": 480
+    },
+    {
         "caretX": 8,
-        "caretY": 4,
-        "filename": "E:/devc++/DEV/SeewoKiller/SplashScreen.h",
+        "caretY": 1992,
+        "filename": "E:/devc++/DEV/SeewoKiller/game.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
-        "top": 0
+        "top": 79320
+    },
+    {
+        "caretX": 1,
+        "caretY": 10,
+        "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 360
+    },
+    {
+        "caretX": 21,
+        "caretY": 42,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 1,
+        "top": 1320
+    },
+    {
+        "caretX": 19,
+        "caretY": 112,
+        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 2,
+        "top": 4120
     },
     {
         "caretX": 1,
@@ -45,88 +93,50 @@
         "top": 0
     },
     {
-        "caretX": 17,
-        "caretY": 1,
-        "filename": "E:/devc++/DEV/SeewoKiller/game.cpp",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 26,
-        "caretY": 9,
-        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
         "caretX": 23,
-        "caretY": 14,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 3,
-        "top": 266
-    },
-    {
-        "caretX": 21,
-        "caretY": 12,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.h",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 1,
-        "top": 114
-    },
-    {
-        "caretX": 1,
-        "caretY": 1464,
-        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
+        "caretY": 11,
+        "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
         "focused": true,
         "isOpen": true,
         "left": 0,
-        "order": 0,
-        "top": 55252
+        "order": 4,
+        "top": 0
     },
     {
-        "caretX": 20,
-        "caretY": 601,
+        "caretX": 1,
+        "caretY": 20,
+        "filename": "E:/devc++/DEV/SeewoKiller/SeewoKiller_private.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 400
+    },
+    {
+        "caretX": 8,
+        "caretY": 4,
+        "filename": "E:/devc++/DEV/SeewoKiller/SplashScreen.h",
+        "focused": false,
+        "isOpen": false,
+        "left": 0,
+        "top": 0
+    },
+    {
+        "caretX": 35,
+        "caretY": 1456,
+        "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
+        "focused": false,
+        "isOpen": true,
+        "left": 0,
+        "order": 0,
+        "top": 58120
+    },
+    {
+        "caretX": 6,
+        "caretY": 546,
         "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.cpp",
         "focused": false,
         "isOpen": false,
         "left": 0,
-        "top": 22268
-    },
-    {
-        "caretX": 66,
-        "caretY": 461,
-        "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
-        "focused": false,
-        "isOpen": true,
-        "left": 0,
-        "order": 2,
-        "top": 17214
-    },
-    {
-        "caretX": 1,
-        "caretY": 1,
-        "filename": "E:/devc++/DEV/SeewoKiller/web.cpp",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
-    },
-    {
-        "caretX": 1,
-        "caretY": 4,
-        "filename": "E:/devc++/DEV/SeewoKiller/CameraRec.h",
-        "focused": false,
-        "isOpen": false,
-        "left": 0,
-        "top": 0
+        "top": 21560
     }
 ]

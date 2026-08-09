@@ -2,7 +2,7 @@
 
 namespace GAME {
 	void numberdamn() {
-		cls
+		cls;
 		setfont(300);
 		cout << "数";
 		S(100);
@@ -11,14 +11,14 @@ namespace GAME {
 		cout << "炸";
 		S(150);
 		gotoxy(0, 0);
-		cls
+		cls;
 		S(100);
 		setfont(500);
 		SetColorAndBackground(6, 4);
 		cout << "DAMN";
 		SetColorAndBackground(7, 0);
 		S(700);
-		cls
+		cls;
 		setfont(30);
 		system("title 数字炸damn");
 		long long min = 0, max = 100, ans = 0, input = 0;
@@ -53,7 +53,7 @@ namespace GAME {
 		S(500);
 		cout << "取数完成，开始游戏！\n";
 		S(500);
-		cls
+		cls;
 		while (true) {
 			if (max - min == 1) {
 				cout << "程序错误，请重试\n";
@@ -115,7 +115,7 @@ namespace GAME {
 			string C[20] = {"●", "○", "+", "=", "|", "|", "|", "|", "|", "?"};
 			LL m[50][50], nx, ny;
 			void reset() {
-				system("cls");
+				cls;
 				memset(m, -1, sizeof(m));
 				color(7);
 				for (LL i = 1; i <= N; i++) {
@@ -318,14 +318,14 @@ namespace GAME {
 					Sleep(1000);
 					system("title 棋盘:人机对战");
 					HMAI();
-					cls
+					cls;
 					return;
 				} else if (ch == '2') {
 					cout << "你选择了双人对战。\n";
 					Sleep(1000);
 					system("title 棋盘:人vs人模式");
 					HMHM();
-					cls
+					cls;
 					return;
 				} else if (ch == '3') {
 					cout << "你选择了观看两个AI对战！！！\n";
@@ -333,7 +333,7 @@ namespace GAME {
 					cout << "你需要先在棋盘上随意下2个棋子\n确定？";
 					system("pause");
 					AIAI();
-					cls
+					cls;
 					return;
 				}
 			}
@@ -818,7 +818,7 @@ namespace GAME {
 			}
 		}
 		void Game::GameOver() {
-			system("cls");
+			cls;
 			COORD p1 = {28, 9};
 			COORD p2 = {53, 15};
 			drawFrame(p1, p2, '=', '|');
@@ -829,7 +829,7 @@ namespace GAME {
 				cout << str[i];
 			}
 			Sleep(1000);
-			system("cls");
+			cls;
 			drawFrame(p1, p2, '=', '|');
 			SetPos(31, 11);
 			cout << "击落敌机：" << score / 5 << " 架";
@@ -847,12 +847,12 @@ namespace GAME {
 				return;
 			} else if (x == 'y') {
 				end = false;
-				system("cls");
+				cls;
 				Game game;
 				int a = drawMenu();
 				if (a == 2)
 					game.rank = 20;
-				system("cls");
+				cls;
 				drawPlaying();
 				game.Playing();
 			} else goto as;
@@ -864,7 +864,7 @@ namespace GAME {
 			int a = drawMenu();
 			if (a == 2)
 				game.rank = 20;
-			system("cls");
+			cls;
 			drawPlaying();
 			game.Playing();
 			return;
@@ -933,7 +933,7 @@ namespace GAME {
 			}
 			printf("\n");
 			system("pause");
-			system("cls");
+			cls;
 		}
 		void IsOver() {
 			if (Your <= 0) {
@@ -955,7 +955,7 @@ namespace GAME {
 					Your = 6;
 					Other = 6;
 					system("pause");
-					system("cls");
+					cls;
 					build_gun();
 				} else if (huihe == 1) {
 					printf("进入第二回合\n");
@@ -963,7 +963,7 @@ namespace GAME {
 					Your = 4;
 					Other = 4;
 					system("pause");
-					system("cls");
+					cls;
 					build_gun();
 				}
 			}
@@ -1027,7 +1027,7 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
 			if (x == 1) {
 				printf("你决定向恶魔开枪");
@@ -1124,7 +1124,7 @@ namespace GAME {
 				} else {
 					printf("你现在没有放大镜\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 4) {
 				if (daoju[1]) {
@@ -1138,11 +1138,11 @@ namespace GAME {
 						printf("你已经用过手铐了\n");
 					}
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("你现在没有手铐\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 5) {
 				if (daoju[2]) {
@@ -1153,11 +1153,11 @@ namespace GAME {
 					Hurt *= 2;
 					Yourmoney += 500.0;
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("你现在没有小刀\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 6) {
 				if (daoju[3]) {
@@ -1175,7 +1175,7 @@ namespace GAME {
 				} else {
 					printf("你现在没有烟\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else {
 				if (daoju[4]) {
@@ -1198,11 +1198,11 @@ namespace GAME {
 				} else {
 					printf("你现在没有饮料\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			}
 			Sleep(1000);
-			system("cls");
+			cls;
 		}
 		int Know = 0;
 		int shoukaoemo = 0;
@@ -1321,7 +1321,7 @@ namespace GAME {
 					Other++;
 					Yourmoney += 500.0;
 					Sleep(1145);
-					system("cls");
+					cls;
 					return ;
 				}
 			}
@@ -1343,7 +1343,7 @@ namespace GAME {
 							Know = 2;
 						}
 						Sleep(1145);
-						system("cls");
+						cls;
 						return ;
 					}
 				}
@@ -1356,7 +1356,7 @@ namespace GAME {
 					printf("若下一发为实弹则伤害翻倍");
 					Yourmoney += 500.0;
 					Sleep(1145);
-					system("cls");
+					cls;
 					return;
 				} else {
 					if (shi >= kong + 1 && daoju1[1] && shoukaoemo != 1) {
@@ -1366,11 +1366,11 @@ namespace GAME {
 						printf("恶魔使用了手铐\n");
 						printf("恶魔获得了连开两枪的机会\n");
 						Sleep(1145);
-						system("cls");
+						cls;
 						return ;
 					}
 					fightyou();
-					system("cls");
+					cls;
 					return ;
 				}
 			} else {
@@ -1392,12 +1392,12 @@ namespace GAME {
 					qlen--;
 					Sleep(500);
 					Sleep(1145);
-					system("cls");
+					cls;
 					return ;
 				} else {
 					fightemo();
 					Sleep(1145);
-					system("cls");
+					cls;
 					return ;
 				}
 			}
@@ -1407,7 +1407,7 @@ namespace GAME {
 				fightemo();
 			}
 			Sleep(1145);
-			system("cls");
+			cls;
 		}
 		void Play() {
 			while (1) {
@@ -1443,7 +1443,7 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
 			while (1) {
 				printf("你清楚我们的规则吗？\n1.清楚\n2.不清楚\n");
@@ -1453,7 +1453,7 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
 			if (x == 2) {
 				for (int i = 1; i <= 3; i++) {
@@ -1476,7 +1476,7 @@ namespace GAME {
 				printf("烟：可以回复1点体力\n");
 				printf("饮料：可以退一发子弹\n");
 				system("pause");
-				system("cls");
+				cls;
 			}
 			printf("好吧\n");
 			Sleep(1145);
@@ -1485,7 +1485,7 @@ namespace GAME {
 			huihe = 1;
 			Your = 2;
 			Other = 2;
-			system("cls");
+			cls;
 			Play();
 			return;
 		}
@@ -1546,7 +1546,7 @@ namespace GAME {
 			}
 			printf("\n");
 			system("pause");
-			system("cls");
+			cls;
 		}
 		void Timeyou_duo() {
 			int x;
@@ -1585,7 +1585,7 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
 			if (x == 1) {
 				printf("玩家A决定向玩家B开枪");
@@ -1672,7 +1672,7 @@ namespace GAME {
 				} else {
 					printf("玩家A现在没有放大镜\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 4) {
 				if (daoju[1]) {
@@ -1686,11 +1686,11 @@ namespace GAME {
 						printf("玩家A已经用过手铐了\n");
 					}
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("玩家A现在没有手铐\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 5) {
 				if (daoju[2]) {
@@ -1701,11 +1701,11 @@ namespace GAME {
 					Yourmoney += 500.0;
 					Hurt *= 2;
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("玩家A现在没有小刀\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 6) {
 				if (daoju[3]) {
@@ -1723,7 +1723,7 @@ namespace GAME {
 				} else {
 					printf("玩家A现在没有烟\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else {
 				if (daoju[4]) {
@@ -1746,11 +1746,11 @@ namespace GAME {
 				} else {
 					printf("玩家A现在没有饮料\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			}
 			Sleep(1000);
-			system("cls");
+			cls;
 		}
 		void Timeother_duo() {
 			int x;
@@ -1789,7 +1789,7 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
 			if (x == 1) {
 				printf("玩家B决定向玩家A开枪");
@@ -1876,7 +1876,7 @@ namespace GAME {
 				} else {
 					printf("玩家B现在没有放大镜\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 4) {
 				if (daoju1[1]) {
@@ -1890,11 +1890,11 @@ namespace GAME {
 						printf("玩家B已经用过手铐了\n");
 					}
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("玩家B现在没有手铐\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 5) {
 				if (daoju1[2]) {
@@ -1905,11 +1905,11 @@ namespace GAME {
 					Yourmoney += 500.0;
 					Hurt *= 2;
 					Sleep(1145);
-					system("cls");
+					cls;
 				} else {
 					printf("玩家B现在没有小刀\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else if (x == 6) {
 				if (daoju1[3]) {
@@ -1927,7 +1927,7 @@ namespace GAME {
 				} else {
 					printf("玩家B现在没有烟\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			} else {
 				if (daoju1[4]) {
@@ -1950,11 +1950,11 @@ namespace GAME {
 				} else {
 					printf("玩家B现在没有饮料\n");
 					Sleep(1145);
-					system("cls");
+					cls;
 				}
 			}
 			Sleep(1000);
-			system("cls");
+			cls;
 		}
 		int asdasd = 0;
 		void duorenplay() {
@@ -1987,9 +1987,9 @@ namespace GAME {
 				}
 				printf("输入不合法\n");
 				Sleep(1145);
-				system("cls");
+				cls;
 			}
-			system("cls");
+			cls;
 			if (x == 1) {
 				danrenplay();
 			} else {

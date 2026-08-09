@@ -54,6 +54,8 @@ Name: "pai"; Description:"计算π（附加功能）"; Types: full custom
 Source: "E:\devc++\DEV\SeewoKiller\SeewoKiller.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\gui.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: main
+Source: "E:\devc++\DEV\SeewoKiller\libconfig++.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: main
+Source: "E:\devc++\DEV\SeewoKiller\libcurl-x64.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\app.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\seewokiller2.png"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 Source: "E:\devc++\DEV\SeewoKiller\RunAsFastboot.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: main
