@@ -70,6 +70,25 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	return;
 }
 
+void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
+	string tmp;
+	if (IsConfig) {
+		tmp = def_word.setting[address];
+	} else {
+		tmp = StringClass[address];
+	}
+//如果是config，则不会考虑name
+	if (IsConfig == true) {
+		tmp = tmp + "-当前: " + read_config(PATH);
+		StringClass[address] = tmp;
+		return;
+	} else {
+		tmp = name;
+		StringClass[address] = tmp;
+		return;
+	}
+}
+
 namespace ConfigNext {
 	bool read_cfg_file(Config& cfg) {
 		//构建配置文件路径
@@ -175,6 +194,42 @@ namespace ConfigNext {
 		return 0;
 	}
 
+	namespace ChangeWord {
+		void ChangeWord(vector<string>& StringClass, int address, const string& str) {
+			StringClass[address] = str;
+			return;
+		}
+		void ChangeConfigWordFromString(vector<string>& StringClass, int address, const string& str) {
+			string tmp;
+			tmp = def_word.setting[address];
+			tmp = tmp + "-当前: " + str;
+			StringClass[address] = tmp;
+			return;
+		}
+		void ChangeConfigWordFromConfig(vector<string>& StringClass, int address, const string& CfgPATH) {
+			string tmp;
+			tmp = def_word.setting[address];
+			auto& root = cfg.getRoot();
+			auto& config = root.lookup(CfgPATH);
+			string cfgtmp;
+			if (config.getType() == Setting::TypeBoolean) {
+				cfgtmp = config ? "true" : "false";
+			} else if (config.getType() == Setting::TypeInt or config.getType() == Setting::TypeInt64) {
+				LL number = config;
+				cfgtmp = to_string(number);
+			} else if (config.getType() == Setting::TypeFloat) {
+				float number = config;
+				cfgtmp = to_string(number);
+			} else {
+				string str = config;
+				cfgtmp = str;
+			}
+			tmp = tmp + "-当前: " + cfgtmp;
+			StringClass[address] = tmp;
+			return;
+		}
+	}
+
 	void check_cfg_valid(Config& cfg) {
 		//poweron--------------------------------------------------------
 		Setting& setting = cfg.getRoot();
@@ -214,8 +269,17 @@ namespace ConfigNext {
 				}
 			}
 			if (!found) {
-				WriteConfigValue<string>(cfg, "start.StartOption", "ask");
+				WriteConfigValue(cfg, "start.StartOption", "ask");
+				StartOption = "ask";
 			}
+			if (StartOption == "new") {
+				StartOption = "总是新UI";
+			} else if (StartOption == "old") {
+				StartOption = "总是旧UI";
+			} else if (StartOption == "ask") {
+				StartOption = "每次询问";
+			}
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "启动设置"), StartOption);
 			break;
 		}
 		S(1);
@@ -234,6 +298,9 @@ namespace ConfigNext {
 				start.add("EnableCloseButtonOnConsole", Setting::TypeBoolean);
 				WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
 			}
+			auto& config = start.lookup("EnableCloseButtonOnConsole");
+			string value = config ? "true" : "false";
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "允许使用“关闭”按钮"), value);
 			break;
 		}
 		S(1);
@@ -265,34 +332,15 @@ namespace ConfigNext {
 				logging.add("WriteLogWhenKillApps", Setting::TypeBoolean);
 				WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
 			}
+			auto& config = logging.lookup("WriteLogWhenKillApps");
+			string value = config ? "true" : "false";
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "在晚自习制裁/循环清任务时启用日志"), value);
 			break;
 		}
 		S(1);
 	}
-
-	string read_config(string name) {
-		return "NULL";
-	}
 }
 
-void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
-	string tmp;
-	if (IsConfig) {
-		tmp = def_word.setting[address];
-	} else {
-		tmp = StringClass[address];
-	}
-//如果是config，则不会考虑name
-	if (IsConfig == true) {
-		tmp = tmp + "-当前: " + read_config(PATH);
-		StringClass[address] = tmp;
-		return;
-	} else {
-		tmp = name;
-		StringClass[address] = tmp;
-		return;
-	}
-}
 
 void GetSubFolders(const string& rootPath, vector<string>& outFolders) {
 	// 清空目标容器

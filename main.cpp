@@ -383,7 +383,7 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
-	if (SkipCheckWinVer == false and startv == "ask") {
+	if (SkipCheckWinVer == false and startv == "ask" and testmode==false) {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
 			//ImmDisableIME(0);
@@ -491,7 +491,7 @@ void about() {
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
-	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头文件nlohmann/json\n";
+	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头库libconfig, libcurl\n";
 	SetColorAndBackground(10, 0);
 	cout << "      Slytherin ";
 	SetColorAndBackground(0, 2);
@@ -1154,21 +1154,22 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {
-				string value = read_config(".\\settings\\write-log-when-killapp.seewokiller");
+			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {//[TODO]
+				bool config = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller", "true");
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
+							ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
 							cls;
 							poweron(true);
 						}
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller", "false");
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
 							cls;
 							poweron(true);
