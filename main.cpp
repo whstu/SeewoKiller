@@ -9,13 +9,15 @@ bool testmode = true;
 by WHSTU
 Version 2.0
 */
+//[TODO]重启到Recovery模式
 #include "./main.h"
 #include "./SeewoKiller_private.h"
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
 	const std::string Version = VER_STRING;
-	const long long VersionCode = 20200000;
+	//const long long VersionCode = 20200000;
+	const long long VersionCode = VER_MAJOR * 10000000 + VER_MINOR * 100000 + VER_RELEASE * 1000 + VER_BUILD;
 	const std::string VersionName = INTERNAL_NAME;
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -383,7 +385,7 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
-	if (SkipCheckWinVer == false and startv == "ask" and testmode==false) {
+	if (SkipCheckWinVer == false and startv == "ask" and testmode == false) {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
 			//ImmDisableIME(0);
@@ -1154,15 +1156,15 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
-			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {//[TODO]
+			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {
 				bool config = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
 				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
-							ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
 							cls;
 							poweron(true);
 						}
@@ -1194,19 +1196,20 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s.find("允许使用“关闭”按钮") != string::npos) {
-				string value = read_config(".\\settings\\enable-close-window-button.seewokiller");
+				bool config = cfg.getRoot().lookup("start.EnableCloseButtonOnConsole");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller", "true");
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", true);
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls;
 						poweron(true);
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller", "false");
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
 						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
 						cls;
 						poweron(true);
@@ -1216,8 +1219,17 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s.find("启动设置") != string::npos) {
-				string value = read_config(".\\settings\\start.seewokiller");
-				cout << "当前:" << value ;
+				string StartOption = cfg.getRoot().lookup("start.StartOption");
+				if (StartOption == "new") {
+					StartOption = "总是新UI";
+				} else if (StartOption == "old") {
+					StartOption = "总是旧UI";
+				} else if (StartOption == "ask") {
+					StartOption = "每次询问";
+				} else {
+					StartOption = "总是旧UI";
+				}
+				cout << "当前:" << StartOption ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1227,28 +1239,28 @@ struct Launcher {
 				int ans;
 				cin >> ans;
 				while (ans > 2 or ans < -1 or cin.fail()) {
-					cout << "输入错误，请重试：";
+					cout << "输入错误, 请重试: ";
 					cin.clear();//清除错误数据
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
 					cin >> ans;
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller", "总是询问");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "ask");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
 						cls;
 						poweron(true);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller", "总是新UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "new");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls;
 						poweron(true);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller", "总是旧UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "old");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
 						cls;
 						poweron(true);
@@ -1368,6 +1380,17 @@ struct Launcher {
 				if (d == "释放进度条COM接口") {
 					ReleaseTaskbarInterface();
 					system("pause");
+					continue;
+				}
+				if (d == "版本信息") {
+					cout<<"\nApp Name: "<<info.AppName<<endl;
+					cout<<"App Name (EN): "<<info.AppNameEn<<"\n\n";
+					cout<<"Version: "<<info.Version<<endl;
+					cout<<"Version Code: "<<info.VersionCode<<endl;
+					cout<<"Version Name: "<<info.VersionName<<"\n\n";
+					cout<<"Version Code from Web: "<<info.versionCodeWeb[0]<<endl;
+					system("pause");
+					continue;
 				}
 				if (d == "关闭开发者模式") {
 					auto del = std::find(word.setting.begin(), word.setting.end(), "开发者选项>>>");
@@ -1376,6 +1399,7 @@ struct Launcher {
 					}
 					cout << "操作已完成。\n";
 					system("pause");
+					d = "返回";
 					s = "-1";
 					continue;
 				}
@@ -1581,59 +1605,60 @@ int main(int argc, char *argv[]) {
 			if (argc <= 2) {
 				cout << "参数缺失，程序自动退出\n关于setvalue的使用方法\n";
 				cout << "-log更改日志设置\n";
+				cout << "-start更改启动设置\n";
 			}
 			if (cmd[2] == "-log") {
-				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-				string value;
-				getline(file, value);
-				value = UTF8ToGBK(value);
+				bool config = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << GBKToUTF8("true");
-						file.close();
-						MessageBox(hwnd, _T("设置完成\n日志文件保存在log文件夹下"), _T("修改变量"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
+						MessageBox(hwnd, _T("修改完成\n日志文件保存在log文件夹下"), _T("提示"), MB_OK);
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << GBKToUTF8("false");
-						file.close();
-						MessageBox(hwnd, _T("设置完成"), _T("修改变量"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
 						break;
 					}
 				}
 			}
 			if (cmd[2] == "-button") {
-				ifstream file(".\\settings\\enable-close-window-button.seewokiller");
-				string value;
-				getline(file, value);
-				value = UTF8ToGBK(value);
-				file.close();
-				value = "此设置仅用于旧UI\n当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				bool config = cfg.getRoot().lookup("start.EnableCloseButtonOnConsole");
+				string value = config ? "true" : "false";
+				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << GBKToUTF8("true");
-						file.close();
-						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", true);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << GBKToUTF8("false");
-						file.close();
-						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 				}
 			}
 			if (cmd[2] == "-start") {
-				string value = read_config(".\\settings\\start.seewokiller");
-				cout << "当前:" << value ;
+				string StartOption = cfg.getRoot().lookup("start.StartOption");
+				if (StartOption == "new") {
+					StartOption = "总是新UI";
+				} else if (StartOption == "old") {
+					StartOption = "总是旧UI";
+				} else if (StartOption == "ask") {
+					StartOption = "每次询问";
+				} else {
+					StartOption = "总是旧UI";
+				}
+				cout << "当前:" << StartOption ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1643,25 +1668,31 @@ int main(int argc, char *argv[]) {
 				int ans;
 				cin >> ans;
 				while (ans > 2 or ans < -1 or cin.fail()) {
-					cout << "输入错误，请重试：";
+					cout << "输入错误, 请重试: ";
 					cin.clear();//清除错误数据
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
 					cin >> ans;
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller", "总是询问");
-						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "ask");
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller", "总是新UI");
-						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "new");
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller", "总是旧UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "old");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					default:
@@ -1776,8 +1807,7 @@ int main(int argc, char *argv[]) {
 /*
 This is an example of badges from Maple-Font
 [TRACE][DEBUG][INFO][WARN][ERROR][FATAL]
-[TODO][FIXME][NOTE][HACK][MARK][EROR][WARNING]
-todo))fixme))
+[NOTE][HACK][MARK][EROR][WARNING]
 
 An example for Messagebox()
 if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {

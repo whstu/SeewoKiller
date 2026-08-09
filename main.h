@@ -56,11 +56,11 @@ inline struct Word {
 	std::vector<std::string> setting = {
 		"NULL", "退出",
 		"---插件与配置文件---",
+		"管理插件>>>",
 		"在晚自习制裁/循环清任务时启用日志",
 		"-打开制裁日志文件夹",
 		"允许使用“关闭”按钮",
 		"启动设置",
-		"管理插件>>>",
 		"---帮助---",
 		"启动初学者引导",
 		"冰点还原疑难解答",
@@ -71,12 +71,13 @@ inline struct Word {
 		"重启到fastboot(真的fast!)",
 		"---其它---",
 		"软件更新",
+		"更新渠道",
 		"关于"
 	};
 	std::vector<std::string> game = {"NULL", "返回", "数字炸弹", "五子棋", "飞机大战", "恶魔轮盘赌"};
 	std::vector<std::string> joke = {"NULL", "返回", "杀WPS+希沃白板+希沃视频展台", "提取U盘文件"};
 	std::vector<std::string> reg = {"NULL", "返回", "禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息", "登录时显示提示", "取消登录时显示提示"};
-	std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
+	std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "版本信息", "关闭开发者模式"};
 } word;
 
 inline struct DefaultWord {
@@ -84,11 +85,11 @@ inline struct DefaultWord {
 	const std::vector<std::string> setting = {
 		"NULL", "退出",
 		"---插件与配置文件---",
+		"管理插件>>>",
 		"在晚自习制裁/循环清任务时启用日志",
 		"-打开制裁日志文件夹",
 		"允许使用“关闭”按钮",
 		"启动设置",
-		"管理插件>>>",
 		"---帮助---",
 		"启动初学者引导",
 		"冰点还原疑难解答",
@@ -99,8 +100,10 @@ inline struct DefaultWord {
 		"重启到fastboot(真的fast!)",
 		"---其它---",
 		"软件更新",
+		"更新渠道",
 		"关于"
 	};
+//[TODO]更新渠道配置文件
 	const std::vector<std::string> dev = {"NULL", "返回", "释放进度条COM接口", "关闭开发者模式"};
 } def_word;
 

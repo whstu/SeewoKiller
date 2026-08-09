@@ -36,14 +36,14 @@
         "top": 0
     },
     {
-        "caretX": 1,
-        "caretY": 15,
+        "caretX": 15,
+        "caretY": 18,
         "filename": "E:/devc++/DEV/SeewoKiller/files.h",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 3,
-        "top": 480
+        "order": 4,
+        "top": 360
     },
     {
         "caretX": 8,
@@ -64,24 +64,24 @@
         "top": 360
     },
     {
-        "caretX": 21,
-        "caretY": 42,
+        "caretX": 14,
+        "caretY": 89,
         "filename": "E:/devc++/DEV/SeewoKiller/main.h",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 1,
-        "top": 1320
+        "order": 2,
+        "top": 1440
     },
     {
-        "caretX": 19,
-        "caretY": 112,
+        "caretX": 45,
+        "caretY": 272,
         "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
         "focused": false,
         "isOpen": true,
         "left": 0,
-        "order": 2,
-        "top": 4120
+        "order": 3,
+        "top": 10640
     },
     {
         "caretX": 1,
@@ -96,20 +96,20 @@
         "caretX": 23,
         "caretY": 11,
         "filename": "E:/devc++/DEV/SeewoKiller/cmdCtrl.h",
-        "focused": true,
-        "isOpen": true,
+        "focused": false,
+        "isOpen": false,
         "left": 0,
-        "order": 4,
         "top": 0
     },
     {
         "caretX": 1,
         "caretY": 20,
         "filename": "E:/devc++/DEV/SeewoKiller/SeewoKiller_private.h",
-        "focused": false,
-        "isOpen": false,
+        "focused": true,
+        "isOpen": true,
         "left": 0,
-        "top": 400
+        "order": 1,
+        "top": 0
     },
     {
         "caretX": 8,
@@ -121,14 +121,14 @@
         "top": 0
     },
     {
-        "caretX": 35,
-        "caretY": 1456,
+        "caretX": 15,
+        "caretY": 1392,
         "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
         "focused": false,
         "isOpen": true,
-        "left": 0,
+        "left": 102,
         "order": 0,
-        "top": 58120
+        "top": 54960
     },
     {
         "caretX": 6,

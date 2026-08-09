@@ -48,18 +48,18 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 2
 Release = 0
-Build = 70
+Build = 73
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.2.0.70
+FileVersion = 2.2.0.73
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = Drogo Baggins
 LegalCopyright = Copyright (c) WHSTU Studio 2020-2026
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.2.0.70
+ProductVersion = 2.2.0.73
 AutoIncBuildNr = 1
 SyncProduct = 1
 
@@ -218,8 +218,8 @@ Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = 
+FileEncoding = SYSTEM
+RealEncoding = gbk
 
 
 [Unit13]
@@ -262,16 +262,16 @@ RealEncoding = UTF-8
 
 
 [Unit16]
-FileName = cmdCtrl.h
-CompileCpp = 0
+FileName = CameraRec.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = UTF-8
-RealEncoding = ASCII
+RealEncoding = UTF-8
 
 
 [Unit17]
