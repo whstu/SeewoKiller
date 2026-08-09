@@ -10,7 +10,7 @@
 ![Banner](https://image-whstu.pages.dev/seewokiller2.png)
 <div align="center">
 
-# <image src="https://image-whstu.pages.dev/app.ico" height="35"/> SeewoKiller
+# <image src="https://seewokiller.whstu.dpdns.org/app.ico" height="35"/> SeewoKiller
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/whstu/SeewoKiller)
 ![Visitors](https://api.visitorbadge.io/api/combined?path=https://github.com/whstu/SeewoKiller&label=Visitors&countColor=%23263759&style=flat)
@@ -87,12 +87,8 @@
 |   下载渠道    | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=)](https://github.com/whstu/SeewoKiller/releases/latest) |             🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=)](https://github.com/whstu/SeewoKiller/releases/)              |
 |:-:|:-:|:-:|
 |GitHub|[**下载**](https://github.com/whstu/SeewoKiller/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
-|卓然第三帝国官网|[**下载**](https://whstu.dpdns.org/download/seewokiller/)|[下载](https://whstu.dpdns.org/download/seewokiller/)|
+|卓然第三帝国官网|**下载**(制作中)|下载(制作中)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
-
-> [!CAUTION]
->
-> 卓然第三帝国官网的渠道正在更新，暂不开放。
 
 
 对于下载 Source Code 的用户，解压后打开 SeewoKiller.exe 即可。对于下载 setup 及 setup-small 的用户，按安装程序安装后，点击桌面快捷方式即可使用。
@@ -109,7 +105,7 @@
 > |SeewoKiller_with_nothing.tar.gz|🔴       |🟢                         |🔴      |🔴    |🔴  |1.5MB|
 > 
 > 除 SeewoKiller_custom 外，计算π的功能需要另外下载，并手动存至安装目录下。
-> 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai.exe)
+> 要下载计算π的功能，请点击[**此处**](https://github.com/whstu/SeewoKiller/releases/tag/pai-1.0)
 
 ## 获取帮助
 
@@ -132,9 +128,7 @@
 
 本程序使用 Red Panda Dev-C++ 编译，MinGW-w64 GCC 11.4.0 64-bit。Python 3.11。
 
-## Stars 历史
 
-[![Star 历史](https://starchart.cc/whstu/SeewoKiller.svg?variant=adaptive)](https://starchart.cc/whstu/SeewoKiller)
 
 <div align="center">
 
