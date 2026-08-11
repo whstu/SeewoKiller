@@ -10,13 +10,13 @@ by WHSTU
 Version 2.0
 */
 //[TODO]重启到Recovery模式
+//[TODO]更新渠道
 #include "./main.h"
 #include "./SeewoKiller_private.h"
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
 	const std::string Version = VER_STRING;
-	//const long long VersionCode = 20200000;
 	const long long VersionCode = VER_MAJOR * 10000000 + VER_MINOR * 100000 + VER_RELEASE * 1000 + VER_BUILD;
 	const std::string VersionName = INTERNAL_NAME;
 
@@ -209,10 +209,9 @@ void checkUpdate(bool IsPoweron = false) {
 	}
 	long long versionCodeNumber = stoll(info.versionCodeWeb[0]);
 	if (versionCodeNumber > info.VersionCode) {
-		word.recent.push_back("[*]有软件更新");
 		switch (IsPoweron) {
 			case false: {
-				cout << "正在读取网络文件(1/2)\n";
+				cout << "\n正在读取网络文件(1/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 4000);
 				cout << "正在读取网络文件(2/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 4000);
@@ -223,13 +222,14 @@ void checkUpdate(bool IsPoweron = false) {
 				}
 				cout << "\n当前: " << info.Version << "\n\n";
 				cout << "是否前往网站下载? (Y/y-是, 其它按键-否)\n";
-				while (true) {
-					char ch = getch();
-					if (ch == 'Y' or ch == 'y') {
-						system("start \"https://whstu.dpdns.org/download/seewokiller/\"");
-						break;
-					}
+				char ch = getch();
+				if (ch == 'Y' or ch == 'y') {
+					system("start \"https://whstu.dpdns.org/download/seewokiller/\"");
 				}
+				break;
+			}
+			case true: {
+				word.recent.push_back("[*]有软件更新");
 				break;
 			}
 		}
@@ -857,6 +857,165 @@ struct JOKE { /*恶搞*/
 		system("pause");
 		return;
 	}
+	void MemoryEater() {
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		gotoxy(0, 1);
+		SetColorAndBackground(7, 0);
+		cout << "此功能可以无限占用系统RAM内存，直至内存泄露\n";
+		SetColorAndBackground(12, 0);
+		cout << "[警告]";
+		SetColorAndBackground(7, 0);
+		cout << " 如果你正在使用机械硬盘,请不要使用此功能直至内存泄露。\n";
+		cout << "       如果你正在使用SSD硬盘，请不要频繁使用此功能直至内存泄露。\n";
+		cout << "       如果使用此功能时及时关闭，不会对存储设备造成较大影响。\n";
+		cout << "       如果使用的内存超出机带RAM内存，Windows会使用硬盘作为虚拟内存，\n";
+		cout << "       这可能会缩短SSD的寿命。\n\n";
+		cout << "       内存泄露时，可能导致电脑蓝屏/全白，你将无法进行任何操作，只能断电强制关机。\n";
+		cout << "       因此，不建议在搭载机械硬盘的设备上使用此功能。\n\n";
+		cout << "       如果一定要尝试，请注意保存已打开的文档、图片等数据\n";
+		cout << "       启动后，内存并不会马上被塞满，而是缓慢增加，所以不必担心。\n";
+		cout << "       内存泄露可在电脑重启后自动恢复。\n\n";
+		cout << "       为了退出此功能，你可以在此控制台中";
+		SetColorAndBackground(0, 7);
+		cout << "长按空格键";
+		SetColorAndBackground(7, 0);
+		cout << "(软键盘亦可)，\n";
+		cout << "       或在任务管理器中结束SeewoKiller进程。\n\n";
+		cout << "稍后，你将可以设置程序启动倒计时。\n";
+		SetColorAndBackground(14, 0);
+		cout << "启动后长按空格键退出进程！长按空格键退出进程！长按空格键退出进程！\n";
+		SetColorAndBackground(7, 0);
+		system("pause");
+		long long time;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		SetColorAndBackground(7, 0);
+		while (true) {
+			gotoxy(0, 21);
+			ClearLine();
+			cout << "请输入倒计时时长(秒):";
+			cin >> time;
+			if (cin.fail()) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "输入错误，请重试。输入\"-1\"退出。";
+			} else if (time == -1) {
+				return;
+			} else {
+				break;
+			}
+		}
+		cls;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 20);
+		cout << "设置完成：" << time << "秒\n";
+		system("pause");
+		if (MessageBox(hwnd, _T("本软件不对你使用此功能造成的任何损失(包括但不限于驱逐电教、被叫去和老师喝茶等)负责，请慎重考虑！"), _T("警告"), MB_YESNO | MB_ICONWARNING) == IDNO) {
+			return;
+		}
+		cls;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 6);
+		cout << "倒计时";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 18);
+		cout << "倒计时开始！  长按回车键可以打断计时并马上启动程序。\n[*] 计时器是阻塞式的，可能因为输出速度变化而导致计时不准\n";
+		for (; time >= 0; time--) {
+			ClearLine();
+			gotoxy(0, 20);
+			cout << time;
+			S(1000);
+			// 检测空格键（非阻塞）
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000) {
+				cout << "\n检测到回车键，打断计时...\n";
+				break;
+			}
+		}
+		cls;
+
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 12);
+		cout << "已启动";
+		SetColorAndBackground(7, 0);
+		vector<int*> allocated;
+		long long i = 0;
+		const long long bytesPerAlloc = sizeof(int) * 10000000LL; // 40MB
+		cout << fixed << setprecision(2);
+		while (1) {
+			i++;
+			int* p = (int*)malloc(bytesPerAlloc);
+			if (p == nullptr) {
+				cerr << "内存分配失败! 已分配 " << i << " 次。\n";
+				break;
+			}
+			memset(p, 0, bytesPerAlloc);
+			allocated.push_back(p);      // 保存指针
+			long long totalBytes = i * bytesPerAlloc;
+			double totalMB = totalBytes / (1024.0 * 1024.0);
+			double totalGB = totalMB / 1024.0;
+
+			gotoxy(0, 15);
+			ClearLine();
+			cout << "malloc " << totalBytes << " bytes (已消耗: "
+			     << totalMB << " MiB, or " << totalGB << " GiB)" << "\n";
+
+			Sleep(200);
+			// 检测空格键（非阻塞）
+			if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+				cout << "\n检测到空格键，开始释放内存并退出...\n";
+				break;
+			}
+		}
+
+		size_t freedCount = 0;
+		for (int * ptr : allocated) {
+			free(ptr);
+			freedCount++;
+			if (freedCount > 100) {
+				gotoxy(5, 23);
+				SetColorAndBackground(7, 0);
+				cout << "当前状态: ";
+				SetColorAndBackground(0, 6);
+				cout << "释放中";
+				SetColorAndBackground(7, 0);
+				S(10);
+			}
+			gotoxy(0, 17);
+			ClearLine();
+			cout << "已释放 " << freedCount << " 块内存（ " << bytesPerAlloc*freedCount << " 字节）\n";
+		}
+		allocated.clear();
+
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 10);
+		cout << "已停止";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 17);
+		ClearLine(true);
+		cout << "已释放 " << freedCount << " 块内存（每块 " << bytesPerAlloc << " 字节）\n";
+		ClearLine(true);
+
+		system("pause");
+		return;
+	}
 } joke;
 
 struct Launcher {
@@ -886,7 +1045,6 @@ struct Launcher {
 		HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
 		DWORD eventsRead;
 		INPUT_RECORD ir;
-		DWORD numEvents;
 		while (1) {
 			// 等待并读取一个输入事件（阻塞直到有事件）
 			ReadConsoleInput(hInput, &ir, 1, &eventsRead);
@@ -1310,6 +1468,12 @@ struct Launcher {
 				}
 				if (d == "提取U盘文件") {
 					joke.copy_file();
+					continue;
+				}
+				if (d == "RAM内存消耗器") {
+					cls;
+					joke.MemoryEater();
+					continue;
 				}
 			} else if (s == "注册表>>>") {
 				head(info.AppName, info.AppNameEn);
@@ -1383,12 +1547,12 @@ struct Launcher {
 					continue;
 				}
 				if (d == "版本信息") {
-					cout<<"\nApp Name: "<<info.AppName<<endl;
-					cout<<"App Name (EN): "<<info.AppNameEn<<"\n\n";
-					cout<<"Version: "<<info.Version<<endl;
-					cout<<"Version Code: "<<info.VersionCode<<endl;
-					cout<<"Version Name: "<<info.VersionName<<"\n\n";
-					cout<<"Version Code from Web: "<<info.versionCodeWeb[0]<<endl;
+					cout << "\nApp Name: " << info.AppName << endl;
+					cout << "App Name (EN): " << info.AppNameEn << "\n\n";
+					cout << "Version: " << info.Version << endl;
+					cout << "Version Code: " << info.VersionCode << endl;
+					cout << "Version Name: " << info.VersionName << "\n\n";
+					cout << "Version Code from Web: " << info.versionCodeWeb[0] << endl;
 					system("pause");
 					continue;
 				}

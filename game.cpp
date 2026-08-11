@@ -824,7 +824,7 @@ namespace GAME {
 			drawFrame(p1, p2, '=', '|');
 			SetPos(36, 12);
 			string str = "Game Over!";
-			for (int i = 0; i < str.size(); i++) {
+			for (long long unsigned int i = 0; i < str.size(); i++) {
 				Sleep(80);
 				cout << str[i];
 			}

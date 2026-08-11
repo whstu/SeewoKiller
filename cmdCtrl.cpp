@@ -79,7 +79,7 @@ void ClearLine(bool ClearNextLine) {
 			    hConsole,           // 控制台句柄
 			    ' ',                // 填充字符
 			    charsToWrite,       // 填充数量
-			    startPos,           // 起始位置
+			    startPos2,           // 起始位置
 			    &written            // 实际写入数量
 			);
 		}

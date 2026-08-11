@@ -179,7 +179,8 @@ namespace ConfigNext {
 			system("pause");
 		}
 	}
-	int WriteConfigValue(Config& cfg, const string& CfgName, auto value) {
+	template<typename T>
+	int WriteConfigValue(Config& cfg, const string& CfgName, T value) {
 		try {
 			cfg.lookup(CfgName) = value;
 		} catch (const SettingNotFoundException& e) {
@@ -193,6 +194,9 @@ namespace ConfigNext {
 		WriteToCfgFile(cfg);
 		return 0;
 	}
+	template int WriteConfigValue<bool>(Config&, const string&, bool);
+	template int WriteConfigValue<const char*>(Config&, const string&, const char*);
+	template int WriteConfigValue<string>(Config&, const string&, string);
 
 	namespace ChangeWord {
 		void ChangeWord(vector<string>& StringClass, int address, const string& str) {
@@ -262,7 +266,7 @@ namespace ConfigNext {
 			string StartOption = start.lookup("StartOption");
 			vector<string> def = {"ask", "old", "new"};
 			bool found = false;
-			for (int i = 0; i < def.size(); i++) {
+			for (long long unsigned int i = 0; i < def.size(); i++) {
 				if (StartOption == def[i]) {
 					found = true;
 					break;
