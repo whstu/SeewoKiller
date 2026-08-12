@@ -65,7 +65,7 @@ SyncProduct = 1
 
 
 [Unit1]
-FileName = CameraRec.cpp
+FileName = main.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -79,59 +79,20 @@ RealEncoding = UTF-8
 
 
 [Unit4]
-FileName = cmdCtrl.cpp
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-UseUTF8 = 1
-CompileCpp = 1
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit2]
-FileName = files.h
-CompileCpp = 0
+FileName = SeewoKiller_private.h
 Folder = 
 Compile = 0
 Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
+UseUTF8 = 1
+CompileCpp = 0
+FileEncoding = SYSTEM
+RealEncoding = gbk
 
 
-[Unit3]
-FileName = web.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = UTF-8
-
-
-[Unit5]
-FileName = files.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit6]
+[Unit2]
 FileName = web.h
 CompileCpp = 0
 Folder = 
@@ -144,7 +105,7 @@ FileEncoding = PROJECT
 RealEncoding = UTF-8
 
 
-[Unit7]
+[Unit3]
 FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
@@ -157,72 +118,7 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit8]
-FileName = .spl_WHSTU_Rainbow.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit9]
-FileName = game.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit10]
-FileName = CameraRec.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
-
-
-[Unit11]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit12]
-FileName = SeewoKiller_private.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = SYSTEM
-RealEncoding = gbk
-
-
-[Unit13]
+[Unit5]
 FileName = SplashScreen.h
 CompileCpp = 0
 Folder = 
@@ -235,7 +131,7 @@ FileEncoding = UTF-8
 RealEncoding = ASCII
 
 
-[Unit14]
+[Unit6]
 FileName = main.h
 CompileCpp = 0
 Folder = 
@@ -248,12 +144,116 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit15]
+[Unit7]
+FileName = files.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit8]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit9]
+FileName = .spl_WHSTU_Rainbow.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit10]
+FileName = cmdCtrl.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit11]
 FileName = game.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
 Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit12]
+FileName = CameraRec.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = ASCII
+
+
+[Unit13]
+FileName = CameraRec.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit14]
+FileName = files.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit15]
+FileName = game.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 

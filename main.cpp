@@ -461,6 +461,81 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	return;
 }
 
+void recovery() {
+	cls;
+	gotoxy(0, 3);
+	cout << "   ==希沃克星恢复模式==\n";
+	cout << "  软件版本 " << info.Version << " (" << info.VersionCode << ")\n";
+	cout << "[1] 重置配置文件\n";
+	cout << "[2] 恢复出厂设置\n";
+	cout << "请输入数字: ";
+	int in;
+	while (1) {
+		cin >> in;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "输入错误，请重试。输入\"-1\"退出。\n";
+			cout << "请输入数字: ";
+		} else {
+			break;
+		}
+	}
+	switch (in) {
+		case -1: {
+			return;
+		}
+		case 1: {
+			cout << "确实要重置配置文件吗? (y/n)";
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+			int cp,del;
+			if(fileExist("./settings/settings.cfg")){
+				cp=system("copy /Y ./settings/settings.cfg ./settings/settings.cfg.bak");
+				del=system("del ./settings/settings.cfg");
+			}else{
+				cp=1;
+				del=1;
+				SetColorAndBackground(0,7);
+				cout<<"操作无效: 配置文件不存在\n";
+				SetColorAndBackground(7,0);
+			}
+			prints("备份配置文件",cp);
+			cout<<"\n";
+			prints("删除原文件",del);
+			cout<<"\n\n";
+			if(cp==0 and del==0){
+				cout<<"操作成功完成。\n";
+			}else{
+				cout<<"操作失败。\n";
+			}
+			system("pause");
+			break;
+		}
+		case 2: {
+			cout << "确实要恢复出厂设置吗? 此操作不可恢复。(y/n)";
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+		}
+		default:
+			//TODO
+			break;
+	}
+	return;
+}
+
 void about() {
 	//初始化
 	gotoxy(0, 3);
@@ -1668,6 +1743,9 @@ int main(int argc, char *argv[]) {
 		if (cmd[1] == "run") { //启动
 			if (cmd[2] == "fastboot") {
 				fastboot = true;
+			}
+			if (cmd[2] == "recovery") {
+				recovery();
 			}
 		}
 		if (cmd[1] == "about") {
