@@ -1,4 +1,4 @@
-bool testmode = true;
+bool testmode = true, cmdmode = false;
 /*
 ███████╗███████╗███████╗██╗    ██╗ ██████╗     ██╗  ██╗██╗██╗     ██╗     ███████╗██████╗
 ██╔════╝██╔════╝██╔════╝██║    ██║██╔═══██╗    ██║ ██╔╝██║██║     ██║     ██╔════╝██╔══██╗
@@ -9,7 +9,6 @@ bool testmode = true;
 by WHSTU
 Version 2.0
 */
-//[TODO]重启到Recovery模式
 //[TODO]更新渠道
 #include "./main.h"
 #include "./SeewoKiller_private.h"
@@ -17,7 +16,7 @@ struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
 	const std::string Version = VER_STRING;
-	const long long VersionCode = VER_MAJOR * 10000000 + VER_MINOR * 100000 + VER_RELEASE * 1000 + VER_BUILD;
+	const long long VersionCode = VER_MAJOR * 10000000000 + VER_MINOR * 100000000 + VER_RELEASE * 1000000 + VER_BUILD;
 	const std::string VersionName = INTERNAL_NAME;
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -30,7 +29,6 @@ struct About {
 #include "./SplashScreen.h"
 #include "./CameraRec.h"
 #include "./web.h"
-
 #include "./game.h"
 using namespace GAME;
 
@@ -211,7 +209,7 @@ void checkUpdate(bool IsPoweron = false) {
 	if (versionCodeNumber > info.VersionCode) {
 		switch (IsPoweron) {
 			case false: {
-				cout << "\n正在读取网络文件(1/2)\n";
+				cout << "\n\n正在读取网络文件(1/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 4000);
 				cout << "正在读取网络文件(2/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 4000);
@@ -224,7 +222,7 @@ void checkUpdate(bool IsPoweron = false) {
 				cout << "是否前往网站下载? (Y/y-是, 其它按键-否)\n";
 				char ch = getch();
 				if (ch == 'Y' or ch == 'y') {
-					system("start \"https://whstu.dpdns.org/download/seewokiller/\"");
+					system("start \"\" \"https://whstu.dpdns.org/download/seewokiller/\"");
 				}
 				break;
 			}
@@ -466,27 +464,33 @@ void recovery() {
 	gotoxy(0, 3);
 	cout << "   ==希沃克星恢复模式==\n";
 	cout << "  软件版本 " << info.Version << " (" << info.VersionCode << ")\n";
+	cout << "[0] 退出\n";
 	cout << "[1] 重置配置文件\n";
 	cout << "[2] 恢复出厂设置\n";
+	cout << "[3] 重置新手引导程序状态\n";
 	cout << "请输入数字: ";
 	int in;
 	while (1) {
 		cin >> in;
-		if (cin.fail()) {
+		if (cin.fail() or in > 3 or in < -1) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "输入错误，请重试。输入\"-1\"退出。\n";
+			cout << "输入错误，请重试。输入\"0\"退出。\n";
 			cout << "请输入数字: ";
 		} else {
 			break;
 		}
 	}
 	switch (in) {
-		case -1: {
+		case 0: {
 			return;
 		}
 		case 1: {
-			cout << "确实要重置配置文件吗? (y/n)";
+			cls;
+			gotoxy(0, 3);
+			cout << "确实要重置配置文件吗? (y/n)\n";
+			cout << "原配置文件将备份至: " << executable_path << "\\settings\\settings.cfg.bak";
+			gotoxy(27, 3, false);
 			while (true) {
 				char ch = getch();
 				if (ch == 'y') {
@@ -495,25 +499,24 @@ void recovery() {
 					return;
 				}
 			}
-			int cp,del;
-			if(fileExist("./settings/settings.cfg")){
-				cp=system("copy /Y ./settings/settings.cfg ./settings/settings.cfg.bak");
-				del=system("del ./settings/settings.cfg");
-			}else{
-				cp=1;
-				del=1;
-				SetColorAndBackground(0,7);
-				cout<<"操作无效: 配置文件不存在\n";
-				SetColorAndBackground(7,0);
+			int cp, del;
+			if (fileExist("./settings/settings.cfg")) {
+				cp = system("copy /Y ./settings/settings.cfg ./settings/settings.cfg.bak");
+				del = system("del ./settings/settings.cfg");
+			} else {
+				cp = 1;
+				del = 1;
+				SetColorAndBackground(0, 7);
+				cout << "操作无效: 配置文件不存在\n";
+				SetColorAndBackground(7, 0);
 			}
-			prints("备份配置文件",cp);
-			cout<<"\n";
-			prints("删除原文件",del);
-			cout<<"\n\n";
-			if(cp==0 and del==0){
-				cout<<"操作成功完成。\n";
-			}else{
-				cout<<"操作失败。\n";
+			prints("备份配置文件", cp);
+			cout << "\n";
+			prints("删除原文件", del);
+			if (cp == 0 and del == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
 			}
 			system("pause");
 			break;
@@ -528,10 +531,39 @@ void recovery() {
 					return;
 				}
 			}
-		}
-		default:
-			//TODO
+			int settings = system("rmdir /s /q ./settings/");
+			int rmdir = system("rmdir /s /q ./plugin/");
+			prints("删除配置文件", settings);
+			cout << "\n";
+			prints("删除所有插件", rmdir);
+			if (settings == 0 and rmdir == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+			system("pause");
 			break;
+		}
+		case 3: {
+			cout << "确实要重置新手引导程序状态吗? 此操作不可恢复。(y/n)";
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+			int del = system("del ./settings/already-quick-started.seewokiller");
+			prints("重置状态", del);
+			if (del == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+			system("pause");
+			break;
+		}
 	}
 	return;
 }
@@ -1349,6 +1381,10 @@ struct Launcher {
 				system("pause");
 				s = "-1";
 				continue;
+			} else if (s == "更新渠道") {
+				//[TODO]
+				s = "-1";
+				continue;
 			} else if (s == "关于") {
 				about();
 				s = "-1";
@@ -1385,6 +1421,15 @@ struct Launcher {
 				STARTUPINFO si = { sizeof(si) };//0
 				PROCESS_INFORMATION pi;
 				LPTSTR szCommandLine = _tcsdup(TEXT(fbpath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				if (fSuccess) {
+					return;
+				}
+			} else if (s == "重启到recovery") {
+				string recpath = "./SeewoKiller.exe run recovery";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(recpath.c_str()));//有权限的都可以打开
 				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
 				if (fSuccess) {
 					return;
@@ -1746,6 +1791,7 @@ int main(int argc, char *argv[]) {
 			}
 			if (cmd[2] == "recovery") {
 				recovery();
+				return 0;
 			}
 		}
 		if (cmd[1] == "about") {

@@ -29,12 +29,12 @@ CommandLine =
 Folders = 
 IncludeVersionInfo = 1
 SupportXPThemes = 0
-CompilerSet = 5
+CompilerSet = 4
 UseUTF8 = 1
 UnitCount = 15
 Bins = 
 ResourceCommand = 
-StaticLink = 0
+StaticLink = 1
 AddCharset = 1
 ExecEncoding = SYSTEM
 Encoding = UTF-8
@@ -48,28 +48,28 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 2
 Release = 0
-Build = 117
+Build = 260340
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.2.0.117
+FileVersion = 2.2.0.260340
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = Drogo Baggins
 LegalCopyright = Copyright (c) WHSTU Studio 2020-2026
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.2.0.117
+ProductVersion = 2.2.0.260340
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
-FileName = main.cpp
-CompileCpp = 1
+FileName = SplashScreen.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -79,7 +79,7 @@ RealEncoding = UTF-8
 
 
 [Unit4]
-FileName = SeewoKiller_private.h
+FileName = CameraRec.h
 Folder = 
 Compile = 0
 Link = 0
@@ -88,25 +88,25 @@ OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
 CompileCpp = 0
-FileEncoding = SYSTEM
-RealEncoding = gbk
+FileEncoding = UTF-8
+RealEncoding = UTF-8
 
 
 [Unit2]
-FileName = web.h
-CompileCpp = 0
+FileName = game.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = PROJECT
+FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
 [Unit3]
-FileName = cmdCtrl.h
+FileName = files.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -119,24 +119,24 @@ RealEncoding = UTF-8
 
 
 [Unit5]
-FileName = SplashScreen.h
-CompileCpp = 0
+FileName = main.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = UTF-8
-RealEncoding = ASCII
+RealEncoding = UTF-8
 
 
 [Unit6]
-FileName = main.h
-CompileCpp = 0
+FileName = CameraRec.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -145,11 +145,11 @@ RealEncoding = UTF-8
 
 
 [Unit7]
-FileName = files.h
-CompileCpp = 0
+FileName = cmdCtrl.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -171,46 +171,20 @@ RealEncoding = UTF-8
 
 
 [Unit9]
-FileName = .spl_WHSTU_Rainbow.cpp
-CompileCpp = 1
+FileName = SeewoKiller_private.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
+FileEncoding = SYSTEM
+RealEncoding = gbk
 
 
 [Unit10]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit11]
-FileName = game.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit12]
-FileName = CameraRec.h
+FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -219,15 +193,41 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = UTF-8
-RealEncoding = ASCII
+RealEncoding = UTF-8
+
+
+[Unit11]
+FileName = game.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit12]
+FileName = web.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
 
 
 [Unit13]
-FileName = CameraRec.cpp
-CompileCpp = 1
+FileName = main.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -249,20 +249,7 @@ RealEncoding = UTF-8
 
 
 [Unit15]
-FileName = game.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit16]
-FileName = CameraRec.cpp
+FileName = .spl_WHSTU_Rainbow.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -274,25 +261,48 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit17]
-FileName = cmdCtrl.h
-CompileCpp = 0
+[Unit16]
+FileName = web.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = ASCII
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit17]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit18]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
 
 
 [CompilerSettings]
-cc_cmd_opt_debug_info = on
-cc_cmd_opt_no_ms_extensions = on
+cc_cmd_opt_optimize = fast
+cc_cmd_opt_std = 
 cc_cmd_opt_use_pipe = on
-cc_cmd_opt_warning_all = on
-cc_opt_error_implicit_int = on
-cc_opt_error_return_type = on
-cc_opt_error_vla = on
 link_cmd_opt_stack_size = 12
+link_cmd_opt_strip_exe = on

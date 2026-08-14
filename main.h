@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <ctime>
 #include <conio.h>
-#include <string>
 #include <imm.h>
 //Open Source libs
 #include "curl/curl.h"
