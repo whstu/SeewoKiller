@@ -11,8 +11,13 @@ extern string read_config(string PATH);
 extern bool read_Lines(const string& PATH, vector<string>& lines);
 extern void write_config(string PATH, string config);
 extern void check_config_avaliable(string PATH,string config[],int config_n,string default_config);
-namespace ConfigNext{}
 extern void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH="NULL", const string& name="NULL");
+namespace ConfigNext{
+	bool read_cfg_file(Config& cfg);
+	template<typename T>
+	int WriteConfigValue(Config& cfg, const string& CfgName, T value);
+	void check_cfg_valid(Config& cfg);
+}
 extern void GetSubFolders(const string& rootPath, vector<string>& outFolders);
 extern void GetFileName(const wstring& rootPath, vector<wstring>& outFiles);
 string OpenFileDialogModern(const vector<pair<wstring, wstring>>& filters = {{L"所有文件", L"*.*"}},const wstring& defaultExtension = L"",const wstring& title = L"选择文件");

@@ -1,4 +1,4 @@
-bool testmode = true;
+bool testmode = true, cmdmode = false;
 /*
 ███████╗███████╗███████╗██╗    ██╗ ██████╗     ██╗  ██╗██╗██╗     ██╗     ███████╗██████╗
 ██╔════╝██╔════╝██╔════╝██║    ██║██╔═══██╗    ██║ ██╔╝██║██║     ██║     ██╔════╝██╔══██╗
@@ -9,13 +9,15 @@ bool testmode = true;
 by WHSTU
 Version 2.0
 */
+//[TODO]更新渠道
 #include "./main.h"
+#include "./SeewoKiller_private.h"
 struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
-	const std::string Version = "2.2.0.0";
-	const long long VersionCode = 20200000;
-	const std::string VersionName = "Frodo Baggins";
+	const std::string Version = VER_STRING;
+	const long long VersionCode = VER_MAJOR * 10000000000 + VER_MINOR * 100000000 + VER_RELEASE * 1000000 + VER_BUILD;
+	const std::string VersionName = INTERNAL_NAME;
 
 	std::vector<std::string> versionNameWeb;//版本代号
 	std::vector<std::string> versionWeb;//版本
@@ -27,7 +29,6 @@ struct About {
 #include "./SplashScreen.h"
 #include "./CameraRec.h"
 #include "./web.h"
-
 #include "./game.h"
 using namespace GAME;
 
@@ -206,10 +207,9 @@ void checkUpdate(bool IsPoweron = false) {
 	}
 	long long versionCodeNumber = stoll(info.versionCodeWeb[0]);
 	if (versionCodeNumber > info.VersionCode) {
-		word.recent.push_back("[*]有软件更新");
 		switch (IsPoweron) {
 			case false: {
-				cout << "正在读取网络文件(1/2)\n";
+				cout << "\n\n正在读取网络文件(1/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/version.txt", info.versionWeb, 4000);
 				cout << "正在读取网络文件(2/2)\n";
 				ReadWebFileVector("https://seewokiller.whstu.dpdns.org/installer/versionName.txt", info.versionNameWeb, 4000);
@@ -220,13 +220,14 @@ void checkUpdate(bool IsPoweron = false) {
 				}
 				cout << "\n当前: " << info.Version << "\n\n";
 				cout << "是否前往网站下载? (Y/y-是, 其它按键-否)\n";
-				while (true) {
-					char ch = getch();
-					if (ch == 'Y' or ch == 'y') {
-						system("start \"https://whstu.dpdns.org/download/seewokiller/\"");
-						break;
-					}
+				char ch = getch();
+				if (ch == 'Y' or ch == 'y') {
+					system("start \"\" \"https://whstu.dpdns.org/download/seewokiller/\"");
 				}
+				break;
+			}
+			case true: {
+				word.recent.push_back("[*]有软件更新");
 				break;
 			}
 		}
@@ -243,9 +244,9 @@ void checkUpdate(bool IsPoweron = false) {
 
 void quickstart() {
 	int step = 1;
-	cls
+	cls;
 	while (step <= 6) {
-		cls
+		cls;
 		gotoxy(0, 6);
 		cout << "\n\n\n这是初学者引导程序。按a返回，按d继续，按s跳过所有\n\n";
 		cout << "第" << step << "步，共6步\n\n";
@@ -291,13 +292,13 @@ void quickstart() {
 				break;
 			} else if (ch == 's') {
 				if (MessageBox(hwnd, _T("你确实要跳过吗？\n本引导程序将会保留在设置板块中"), _T("鸡叫"), MB_YESNO) == IDYES) {
-					cls
+					cls;
 					return;
 				}
 			}
 		}
 	}
-	cls
+	cls;
 }
 void poweron(bool SkipCheckWinVer, bool fb) {
 	//1深蓝，2深绿，3深青，4深红，5深紫，6深黄，7灰白（默认），8深灰
@@ -327,34 +328,23 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	WHSTU_Rainbow();
 	//校验文件
 	gotoxy(16, 14);
+	cll;
 	cout << "正在校验配置文件(1/5)";
 	gotoxy(15, 16);
 	cout << "[=                   ]";
 	taskbarprocess(TBPF_NORMAL, 5);
-	S(100);
-	//---变量名称使用UUID生成器前8位
 	CreateDirectory("./settings", NULL);
-	string fe7f8a96[5] = {"true", "false"};
-	string ebf9f2e8 = ".\\settings\\write-log-when-killapp.seewokiller";
-	check_config_avaliable(ebf9f2e8, fe7f8a96, 2, "false");
-	change_word(word.setting, SearchForAddress(word.setting, "在晚自习制裁/循环清任务时启用日志"), true, ebf9f2e8);
-
-	string eacf0909[5] = {"true", "false"};
-	string b7135431 = ".\\settings\\enable-close-window-button.seewokiller";
-	check_config_avaliable(b7135431, eacf0909, 2, "false");
-	change_word(word.setting, SearchForAddress(word.setting, "允许使用“关闭”按钮"), true, b7135431);
-
-	string eb9730d6[5] = {"总是询问", "总是旧UI", "总是新UI"};
-	string a57f2d49 = ".\\settings\\start.seewokiller";
-	check_config_avaliable(a57f2d49, eb9730d6, 3, "总是询问");
-	change_word(word.setting, SearchForAddress(word.setting, "启动设置"), true, a57f2d49);
+	ConfigNext::read_cfg_file(cfg);
+	S(10);
+	ConfigNext::check_cfg_valid(cfg);
 	//-----
 	gotoxy(16, 14);
-	cout << "正在验证系统版本(2/5) ";
+	cll;
+	cout << "正在验证系统版本(2/5)";
 	gotoxy(15, 16);
 	cout << "[=====               ]";
 	taskbarprocess(TBPF_NORMAL, 25);
-	S(100);
+	S(10);
 	//检测Windows版本
 	typedef void(__stdcall * NTPROC)(DWORD*, DWORD*, DWORD*);
 	HINSTANCE hinst = LoadLibrary(TEXT("ntdll.dll"));//加载DLL
@@ -369,8 +359,8 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	taskbarprocess(TBPF_NORMAL, 35);
 	S(100);
 	//总是新UI
-	string startv = read_config(".\\settings\\start.seewokiller");
-	if (startv == "总是新UI") {
+	string startv = cfg.getRoot().lookup("start.StartOption");
+	if (startv == "new") {
 		string guipath = executable_path + "\\gui.exe";
 		STARTUPINFO si = { sizeof(si) };//0
 		PROCESS_INFORMATION pi;
@@ -393,7 +383,7 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	dwMajorInt = static_cast<int>(dwMajor);
 	dwMinorInt = static_cast<int>(dwMinor);
 	float version = dwMajorInt + dwMinorInt * 0.1;
-	if (SkipCheckWinVer == false and startv == "总是询问") {
+	if (SkipCheckWinVer == false and startv == "ask" and testmode == false) {
 		if (version >= 6.1 and fileExist(".\\gui.exe") == true) {
 			taskbarprocess(TBPF_PAUSED, 35);
 			//ImmDisableIME(0);
@@ -429,7 +419,8 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	https://learn.microsoft.com/zh-cn/windows/win32/sysinfo/operating-system-version
 	*/
 	gotoxy(15, 14);
-	cout << "正在加载插件(4/5)             ";
+	cll;
+	cout << "正在加载插件(4/5)";
 	gotoxy(15, 16);
 	cout << "[==============      ]";
 	CreateDirectory("./plugin", NULL);
@@ -438,16 +429,17 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 
 
 	gotoxy(15, 14);
-	cout << "正在清理(5/5)  ";
+	cll;
+	cout << "正在清理(5/5)";
 	gotoxy(15, 16);
 	cout << "[==================  ]";
 	taskbarprocess(TBPF_NORMAL, 55);
 	//checkUpdate(true);
 	string rm_command = "rmdir /s /q \"" + executable_path + "\\temp\\\" > nul 2>&1";
 	system(rm_command.c_str());
-	S(200);
+	S(100);
 	if (fileExist(".\\settings\\already-quick-started.seewokiller") == false) {
-		cls
+		cls;
 		gotoxy(15, 14);
 		cout << "你好";
 		S(2000);
@@ -461,9 +453,118 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	gotoxy(15, 16);
 	cout << "[====================]";
 	taskbarprocess(TBPF_NORMAL, 100);
-	S(100);
+	S(10);
 	setfont(30);
 	taskbarprocess(TBPF_NOPROGRESS);
+	return;
+}
+
+void recovery() {
+	cls;
+	gotoxy(0, 3);
+	cout << "   ==希沃克星恢复模式==\n";
+	cout << "  软件版本 " << info.Version << " (" << info.VersionCode << ")\n";
+	cout << "[0] 退出\n";
+	cout << "[1] 重置配置文件\n";
+	cout << "[2] 恢复出厂设置\n";
+	cout << "[3] 重置新手引导程序状态\n";
+	cout << "请输入数字: ";
+	int in;
+	while (1) {
+		cin >> in;
+		if (cin.fail() or in > 3 or in < -1) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "输入错误，请重试。输入\"0\"退出。\n";
+			cout << "请输入数字: ";
+		} else {
+			break;
+		}
+	}
+	switch (in) {
+		case 0: {
+			return;
+		}
+		case 1: {
+			cls;
+			gotoxy(0, 3);
+			cout << "确实要重置配置文件吗? (y/n)\n";
+			cout << "原配置文件将备份至: " << executable_path << "\\settings\\settings.cfg.bak";
+			gotoxy(27, 3, false);
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+			int cp, del;
+			if (fileExist("./settings/settings.cfg")) {
+				cp = system("copy /Y ./settings/settings.cfg ./settings/settings.cfg.bak");
+				del = system("del ./settings/settings.cfg");
+			} else {
+				cp = 1;
+				del = 1;
+				SetColorAndBackground(0, 7);
+				cout << "操作无效: 配置文件不存在\n";
+				SetColorAndBackground(7, 0);
+			}
+			prints("备份配置文件", cp);
+			cout << "\n";
+			prints("删除原文件", del);
+			if (cp == 0 and del == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+			system("pause");
+			break;
+		}
+		case 2: {
+			cout << "确实要恢复出厂设置吗? 此操作不可恢复。(y/n)";
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+			int settings = system("rmdir /s /q ./settings/");
+			int rmdir = system("rmdir /s /q ./plugin/");
+			prints("删除配置文件", settings);
+			cout << "\n";
+			prints("删除所有插件", rmdir);
+			if (settings == 0 and rmdir == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+			system("pause");
+			break;
+		}
+		case 3: {
+			cout << "确实要重置新手引导程序状态吗? 此操作不可恢复。(y/n)";
+			while (true) {
+				char ch = getch();
+				if (ch == 'y') {
+					break;
+				} else if (ch == 'n') {
+					return;
+				}
+			}
+			int del = system("del ./settings/already-quick-started.seewokiller");
+			prints("重置状态", del);
+			if (del == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+			system("pause");
+			break;
+		}
+	}
 	return;
 }
 
@@ -499,7 +600,7 @@ void about() {
 	cout << "\n卓然第三帝国https://whstu.dpdns.org/提供技术支持";
 	cout << "\n代码仓库：https://github.com/whstu/SeewoKiller/";
 	cout << "\nSeewoKiller QQ 群：664929698";
-	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头文件nlohmann/json\n";
+	cout << "\n经典界面UI基于SlytherinOS框架, 使用开源头库libconfig, libcurl\n";
 	SetColorAndBackground(10, 0);
 	cout << "      Slytherin ";
 	SetColorAndBackground(0, 2);
@@ -574,18 +675,13 @@ bool getadmin() {
 }
 
 void taskkill(bool KillSeewoService, bool Wanzixi) {
-	ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-	string value;
-	getline(file, value);
-	value = UTF8ToGBK(value);
-	bool log = false;
-	if (value == "true") {
+	bool value = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
+	if (value) {
 		CreateDirectory("./log", NULL);
-		log = true;
 	}
 	long long n = 1;
 	while (true) {
-		if (log == true) {
+		if (value) {
 			time_t now = time(nullptr);
 			tm* localTime = localtime(&now);
 			string filename = ".\\log\\log-" + to_string(localTime->tm_year + 1900) + "-" + to_string(localTime->tm_mon + 1) + "-" + to_string(localTime->tm_mday) + ".log";
@@ -654,7 +750,7 @@ void taskkill(bool KillSeewoService, bool Wanzixi) {
 }
 
 void uninstall() {
-	cls
+	cls;
 	cout << "正在卸载轻录播\n";
 	system("\"C:\\Program Files (x86)\\Seewo\\EasiRecorder\\Uninstall.exe\"");
 	cout << "正在卸载Easicare\n";
@@ -667,7 +763,7 @@ void uninstall() {
 }
 
 void liandianqi() {
-	cls
+	cls;
 	int gap;
 	int x, y;
 	SetColorAndBackground(4, 6);
@@ -721,12 +817,12 @@ void liandianqi() {
 
 void help(string name = "seewofreeze") {
 	if (name == "seewofreeze") {
-		cls
+		cls;
 		cout << "欢迎使用冰点还原帮助程序。\n";
 		cout << "正在检测...\n";
 		S(500);
 		if (fileExist(".\\SeewoFreeze\\SeewoFreezeUI.exe") == false) {
-			cls
+			cls;
 			cout << "检测到冰点还原软件不存在。\n";
 			cout << "请检查是否安装了冰点还原模块。\n";
 			cout << "\n如果您确认已经安装过冰点还原模块但仍无法使用，那么可能是杀毒软件问题。\n";
@@ -737,10 +833,10 @@ void help(string name = "seewofreeze") {
 			cout << "找到所有“篡改”“扫描”选项，全部关闭\n";
 			cout << "重新安装希沃克星。";
 			system("pause");
-			cls
+			cls;
 			return;
 		}
-		cls
+		cls;
 		cout << "请尝试执行以下操作。\n";
 		cout << "选择希沃克星安装目录下的SeewoFreeze文件夹，打开属性\n";
 		cout << "选择“安全”选项卡\n";
@@ -758,7 +854,7 @@ void help(string name = "seewofreeze") {
 		return;
 	}
 	if (name == "command") {
-		cls
+		cls;
 		cout << "希沃克星允许使用命令行直接启动指定任务。\n";
 		cout << "晚自习制裁：";
 		SetColorAndBackground(0, 7);
@@ -787,7 +883,7 @@ void help(string name = "seewofreeze") {
 		}
 	}
 	if (name == "plugin") {
-		cls
+		cls;
 		cout << "错误的插件: \n";
 		for (size_t i = 0; i < plugin.errorpath.size(); ++i) {
 			cout << "  - " << plugin.errorpath[i] << endl;
@@ -796,7 +892,7 @@ void help(string name = "seewofreeze") {
 		cout << "按r重试，按其它键返回\n";
 		while (true) {
 			if (getch() == 'r') {
-				cls
+				cls;
 				poweron(true);
 			}
 			return;
@@ -851,7 +947,7 @@ struct JOKE { /*恶搞*/
 		}
 		cout << "设置完成。当U盘插入后（目录存在），希沃克星会自动复制其中的文件。\n按任意键后开始搜索。";
 		getch();
-		cls
+		cls;
 		cout << "开始！！\n------------------\n正在等待目录出现";
 		string existpath = infile + "temp.dat";
 		while (fileExist(existpath.c_str()) == false) {
@@ -865,6 +961,165 @@ struct JOKE { /*恶搞*/
 		command = "xcopy \"" + infile + "\" \"" + outfile + "\" /E /I /H /C /Y";
 		system(command.c_str());
 		cout << "\n";
+		system("pause");
+		return;
+	}
+	void MemoryEater() {
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		gotoxy(0, 1);
+		SetColorAndBackground(7, 0);
+		cout << "此功能可以无限占用系统RAM内存，直至内存泄露\n";
+		SetColorAndBackground(12, 0);
+		cout << "[警告]";
+		SetColorAndBackground(7, 0);
+		cout << " 如果你正在使用机械硬盘,请不要使用此功能直至内存泄露。\n";
+		cout << "       如果你正在使用SSD硬盘，请不要频繁使用此功能直至内存泄露。\n";
+		cout << "       如果使用此功能时及时关闭，不会对存储设备造成较大影响。\n";
+		cout << "       如果使用的内存超出机带RAM内存，Windows会使用硬盘作为虚拟内存，\n";
+		cout << "       这可能会缩短SSD的寿命。\n\n";
+		cout << "       内存泄露时，可能导致电脑蓝屏/全白，你将无法进行任何操作，只能断电强制关机。\n";
+		cout << "       因此，不建议在搭载机械硬盘的设备上使用此功能。\n\n";
+		cout << "       如果一定要尝试，请注意保存已打开的文档、图片等数据\n";
+		cout << "       启动后，内存并不会马上被塞满，而是缓慢增加，所以不必担心。\n";
+		cout << "       内存泄露可在电脑重启后自动恢复。\n\n";
+		cout << "       为了退出此功能，你可以在此控制台中";
+		SetColorAndBackground(0, 7);
+		cout << "长按空格键";
+		SetColorAndBackground(7, 0);
+		cout << "(软键盘亦可)，\n";
+		cout << "       或在任务管理器中结束SeewoKiller进程。\n\n";
+		cout << "稍后，你将可以设置程序启动倒计时。\n";
+		SetColorAndBackground(14, 0);
+		cout << "启动后长按空格键退出进程！长按空格键退出进程！长按空格键退出进程！\n";
+		SetColorAndBackground(7, 0);
+		system("pause");
+		long long time;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		SetColorAndBackground(7, 0);
+		while (true) {
+			gotoxy(0, 21);
+			ClearLine();
+			cout << "请输入倒计时时长(秒):";
+			cin >> time;
+			if (cin.fail()) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "输入错误，请重试。输入\"-1\"退出。";
+			} else if (time == -1) {
+				return;
+			} else {
+				break;
+			}
+		}
+		cls;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 7);
+		cout << "未启动";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 20);
+		cout << "设置完成：" << time << "秒\n";
+		system("pause");
+		if (MessageBox(hwnd, _T("本软件不对你使用此功能造成的任何损失(包括但不限于驱逐电教、被叫去和老师喝茶等)负责，请慎重考虑！"), _T("警告"), MB_YESNO | MB_ICONWARNING) == IDNO) {
+			return;
+		}
+		cls;
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 6);
+		cout << "倒计时";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 18);
+		cout << "倒计时开始！  长按回车键可以打断计时并马上启动程序。\n[*] 计时器是阻塞式的，可能因为输出速度变化而导致计时不准\n";
+		for (; time >= 0; time--) {
+			ClearLine();
+			gotoxy(0, 20);
+			cout << time;
+			S(1000);
+			// 检测空格键（非阻塞）
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000) {
+				cout << "\n检测到回车键，打断计时...\n";
+				break;
+			}
+		}
+		cls;
+
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 12);
+		cout << "已启动";
+		SetColorAndBackground(7, 0);
+		vector<int*> allocated;
+		long long i = 0;
+		const long long bytesPerAlloc = sizeof(int) * 10000000LL; // 40MB
+		cout << fixed << setprecision(2);
+		while (1) {
+			i++;
+			int* p = (int*)malloc(bytesPerAlloc);
+			if (p == nullptr) {
+				cerr << "内存分配失败! 已分配 " << i << " 次。\n";
+				break;
+			}
+			memset(p, 0, bytesPerAlloc);
+			allocated.push_back(p);      // 保存指针
+			long long totalBytes = i * bytesPerAlloc;
+			double totalMB = totalBytes / (1024.0 * 1024.0);
+			double totalGB = totalMB / 1024.0;
+
+			gotoxy(0, 15);
+			ClearLine();
+			cout << "malloc " << totalBytes << " bytes (已消耗: "
+			     << totalMB << " MiB, or " << totalGB << " GiB)" << "\n";
+
+			Sleep(200);
+			// 检测空格键（非阻塞）
+			if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+				cout << "\n检测到空格键，开始释放内存并退出...\n";
+				break;
+			}
+		}
+
+		size_t freedCount = 0;
+		for (int * ptr : allocated) {
+			free(ptr);
+			freedCount++;
+			if (freedCount > 100) {
+				gotoxy(5, 23);
+				SetColorAndBackground(7, 0);
+				cout << "当前状态: ";
+				SetColorAndBackground(0, 6);
+				cout << "释放中";
+				SetColorAndBackground(7, 0);
+				S(10);
+			}
+			gotoxy(0, 17);
+			ClearLine();
+			cout << "已释放 " << freedCount << " 块内存（ " << bytesPerAlloc*freedCount << " 字节）\n";
+		}
+		allocated.clear();
+
+		gotoxy(5, 23);
+		SetColorAndBackground(7, 0);
+		cout << "当前状态: ";
+		SetColorAndBackground(0, 10);
+		cout << "已停止";
+		SetColorAndBackground(7, 0);
+		gotoxy(0, 17);
+		ClearLine(true);
+		cout << "已释放 " << freedCount << " 块内存（每块 " << bytesPerAlloc << " 字节）\n";
+		ClearLine(true);
+
 		system("pause");
 		return;
 	}
@@ -897,7 +1152,6 @@ struct Launcher {
 		HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
 		DWORD eventsRead;
 		INPUT_RECORD ir;
-		DWORD numEvents;
 		while (1) {
 			// 等待并读取一个输入事件（阻塞直到有事件）
 			ReadConsoleInput(hInput, &ir, 1, &eventsRead);
@@ -1008,7 +1262,7 @@ struct Launcher {
 	void head(string WindowTitle = "希沃克星", string cmdTitle = "SeewoKiller") {
 		string cmd = "title " + WindowTitle;
 		system(cmd.c_str());
-		cls
+		cls;
 		gotoxy(0, 0);
 		if (fastboot == true) {
 			cout << cmdTitle;
@@ -1034,7 +1288,7 @@ struct Launcher {
 		while (1) {
 			//主页面
 			if (s == "-1") {
-				cls
+				cls;
 				if (fastboot == true) {
 					head("希沃克星fastboot模式", "SeewoKiller Fastboot");
 				} else {
@@ -1116,7 +1370,7 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s == "录制视频") {
-				cls
+				cls;
 				CamRecMain();
 				s = "-1";
 				continue;
@@ -1125,6 +1379,10 @@ struct Launcher {
 			} else if (s.find("软件更新") != string::npos) {
 				checkUpdate();
 				system("pause");
+				s = "-1";
+				continue;
+			} else if (s == "更新渠道") {
+				//[TODO]
 				s = "-1";
 				continue;
 			} else if (s == "关于") {
@@ -1149,12 +1407,12 @@ struct Launcher {
 					return;
 				}
 			} else if (s == "管理插件>>>") {
-				cls
+				cls;
 				PLUGIN::PluginManagerUI();
 				s = "重载插件与配置文件";
 				continue;
 			} else if (s == "重载插件与配置文件") {
-				cls
+				cls;
 				poweron(true);
 				s = "-1";
 				continue;
@@ -1167,23 +1425,33 @@ struct Launcher {
 				if (fSuccess) {
 					return;
 				}
+			} else if (s == "重启到recovery") {
+				string recpath = "./SeewoKiller.exe run recovery";
+				STARTUPINFO si = { sizeof(si) };//0
+				PROCESS_INFORMATION pi;
+				LPTSTR szCommandLine = _tcsdup(TEXT(recpath.c_str()));//有权限的都可以打开
+				BOOL fSuccess = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);//参数意义
+				if (fSuccess) {
+					return;
+				}
 			} else if (s.find("在晚自习制裁/循环清任务时启用日志") != string::npos) {
-				string value = read_config(".\\settings\\write-log-when-killapp.seewokiller");
+				bool config = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller", "true");
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？\n日志文件保存在log文件夹下"), _T("提示"), MB_YESNO) == IDYES) {
-							cls
+							cls;
 							poweron(true);
 						}
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\write-log-when-killapp.seewokiller", "false");
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
 						if (MessageBox(hwnd, _T("修改完成，是否立即重新加载配置文件？"), _T("提示"), MB_YESNO) == IDYES) {
-							cls
+							cls;
 							poweron(true);
 						}
 						break;
@@ -1206,21 +1474,22 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s.find("允许使用“关闭”按钮") != string::npos) {
-				string value = read_config(".\\settings\\enable-close-window-button.seewokiller");
+				bool config = cfg.getRoot().lookup("start.EnableCloseButtonOnConsole");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller", "true");
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", true);
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
-						cls
+						cls;
 						poweron(true);
 						break;
 					}
 					case IDNO: {
-						write_config(".\\settings\\enable-close-window-button.seewokiller", "false");
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
 						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
-						cls
+						cls;
 						poweron(true);
 						break;
 					}
@@ -1228,8 +1497,17 @@ struct Launcher {
 				s = "-1";
 				continue;
 			} else if (s.find("启动设置") != string::npos) {
-				string value = read_config(".\\settings\\start.seewokiller");
-				cout << "当前:" << value ;
+				string StartOption = cfg.getRoot().lookup("start.StartOption");
+				if (StartOption == "new") {
+					StartOption = "总是新UI";
+				} else if (StartOption == "old") {
+					StartOption = "总是旧UI";
+				} else if (StartOption == "ask") {
+					StartOption = "每次询问";
+				} else {
+					StartOption = "总是旧UI";
+				}
+				cout << "当前:" << StartOption ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1239,30 +1517,30 @@ struct Launcher {
 				int ans;
 				cin >> ans;
 				while (ans > 2 or ans < -1 or cin.fail()) {
-					cout << "输入错误，请重试：";
+					cout << "输入错误, 请重试: ";
 					cin.clear();//清除错误数据
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
 					cin >> ans;
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller", "总是询问");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "ask");
 						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
-						cls
+						cls;
 						poweron(true);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller", "总是新UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "new");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
-						cls
+						cls;
 						poweron(true);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller", "总是旧UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "old");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
-						cls
+						cls;
 						poweron(true);
 						break;
 					}
@@ -1287,13 +1565,13 @@ struct Launcher {
 					setfont(30);
 				}
 				if (d == "飞机大战") {
-					cls
+					cls;
 					setfont(20);
 					game("fjdz");
 					setfont(30);
 				}
 				if (d == "恶魔轮盘赌") {
-					cls
+					cls;
 					setfont(20);
 					game("emlpd");
 					setfont(30);
@@ -1310,6 +1588,12 @@ struct Launcher {
 				}
 				if (d == "提取U盘文件") {
 					joke.copy_file();
+					continue;
+				}
+				if (d == "RAM内存消耗器") {
+					cls;
+					joke.MemoryEater();
+					continue;
 				}
 			} else if (s == "注册表>>>") {
 				head(info.AppName, info.AppNameEn);
@@ -1380,6 +1664,17 @@ struct Launcher {
 				if (d == "释放进度条COM接口") {
 					ReleaseTaskbarInterface();
 					system("pause");
+					continue;
+				}
+				if (d == "版本信息") {
+					cout << "\nApp Name: " << info.AppName << endl;
+					cout << "App Name (EN): " << info.AppNameEn << "\n\n";
+					cout << "Version: " << info.Version << endl;
+					cout << "Version Code: " << info.VersionCode << endl;
+					cout << "Version Name: " << info.VersionName << "\n\n";
+					cout << "Version Code from Web: " << info.versionCodeWeb[0] << endl;
+					system("pause");
+					continue;
 				}
 				if (d == "关闭开发者模式") {
 					auto del = std::find(word.setting.begin(), word.setting.end(), "开发者选项>>>");
@@ -1388,6 +1683,7 @@ struct Launcher {
 					}
 					cout << "操作已完成。\n";
 					system("pause");
+					d = "返回";
 					s = "-1";
 					continue;
 				}
@@ -1418,7 +1714,7 @@ struct Launcher {
 					continue;
 				}
 				if (plugin.pluginIsCls[pos]) {
-					cls
+					cls;
 				}
 				system(cmd.c_str());
 				system("pause");
@@ -1439,7 +1735,7 @@ struct Launcher {
 						string cmd = "cd /d \"" + path + "\" && \"" + exec + "\"";
 						//cout<<cmd<<endl;
 						if(plugin.pluginIsCls[i]==true){
-							cls
+							cls;
 						}
 						system(cmd.c_str());
 						cout << "\n";
@@ -1471,7 +1767,6 @@ int main(int argc, char *argv[]) {
 	ImmDisableIME(0);
 	info.versionWeb.clear();
 	info.versionNameWeb.clear();
-	info.versionCodeWeb.clear();
 	srand((unsigned)time(NULL));
 	system("title 正在检测管理员");
 	//获取程序路径
@@ -1494,6 +1789,10 @@ int main(int argc, char *argv[]) {
 			if (cmd[2] == "fastboot") {
 				fastboot = true;
 			}
+			if (cmd[2] == "recovery") {
+				recovery();
+				return 0;
+			}
 		}
 		if (cmd[1] == "about") {
 			about();
@@ -1505,7 +1804,7 @@ int main(int argc, char *argv[]) {
 				cout << "-wzq五子棋\n-numberdamn数字炸弹\n-fjdz飞机大战\n-emlpd恶魔轮盘赌";
 			}
 			setfont(20);
-			cls
+			cls;
 			if (cmd[2] == "-wzq") {
 				ShowWindow(hwnd, SW_MAXIMIZE);
 				game("wzq");
@@ -1594,59 +1893,60 @@ int main(int argc, char *argv[]) {
 			if (argc <= 2) {
 				cout << "参数缺失，程序自动退出\n关于setvalue的使用方法\n";
 				cout << "-log更改日志设置\n";
+				cout << "-start更改启动设置\n";
 			}
 			if (cmd[2] == "-log") {
-				ifstream file(".\\settings\\write-log-when-killapp.seewokiller");
-				string value;
-				getline(file, value);
-				value = UTF8ToGBK(value);
+				bool config = cfg.getRoot().lookup("logging.WriteLogWhenKillApps");
+				string value = config ? "true" : "false";
 				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << GBKToUTF8("true");
-						file.close();
-						MessageBox(hwnd, _T("设置完成\n日志文件保存在log文件夹下"), _T("修改变量"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", true);
+						MessageBox(hwnd, _T("修改完成\n日志文件保存在log文件夹下"), _T("提示"), MB_OK);
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\write-log-when-killapp.seewokiller");
-						file << GBKToUTF8("false");
-						file.close();
-						MessageBox(hwnd, _T("设置完成"), _T("修改变量"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
 						break;
 					}
 				}
 			}
 			if (cmd[2] == "-button") {
-				ifstream file(".\\settings\\enable-close-window-button.seewokiller");
-				string value;
-				getline(file, value);
-				value = UTF8ToGBK(value);
-				file.close();
-				value = "此设置仅用于旧UI\n当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
+				bool config = cfg.getRoot().lookup("start.EnableCloseButtonOnConsole");
+				string value = config ? "true" : "false";
+				value = "当前:" + value + "\n你要将此设置更改为什么？\n点击\"是\"设置为true，点击\"否\"设置为false，点击\"取消\"忽略修改";
 				int ans = MessageBox(hwnd, value.c_str(), _T("修改变量"), MB_YESNOCANCEL);
 				switch (ans) {
 					case IDYES: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << GBKToUTF8("true");
-						file.close();
-						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", true);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case IDNO: {
-						ofstream file(".\\settings\\enable-close-window-button.seewokiller");
-						file << GBKToUTF8("false");
-						file.close();
-						MessageBox(hwnd, _T("修改完成，重载配置文件后生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 				}
 			}
 			if (cmd[2] == "-start") {
-				string value = read_config(".\\settings\\start.seewokiller");
-				cout << "当前:" << value ;
+				string StartOption = cfg.getRoot().lookup("start.StartOption");
+				if (StartOption == "new") {
+					StartOption = "总是新UI";
+				} else if (StartOption == "old") {
+					StartOption = "总是旧UI";
+				} else if (StartOption == "ask") {
+					StartOption = "每次询问";
+				} else {
+					StartOption = "总是旧UI";
+				}
+				cout << "当前:" << StartOption ;
 				cout << "\n你要将此设置更改为什么？\n";
 				cout << "输入\"0\"设置为“总是询问”，\n";
 				cout << "输入\"1\"设置为“总是新UI”，\n";
@@ -1656,25 +1956,31 @@ int main(int argc, char *argv[]) {
 				int ans;
 				cin >> ans;
 				while (ans > 2 or ans < -1 or cin.fail()) {
-					cout << "输入错误，请重试：";
+					cout << "输入错误, 请重试: ";
 					cin.clear();//清除错误数据
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');//丢弃错误输入
 					cin >> ans;
 				}
 				switch (ans) {
 					case 0: {
-						write_config(".\\settings\\start.seewokiller", "总是询问");
-						MessageBox(hwnd, _T("修改完成，重启软件生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "ask");
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case 1: {
-						write_config(".\\settings\\start.seewokiller", "总是新UI");
-						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "new");
+						MessageBox(hwnd, _T("修改完成"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					case 2: {
-						write_config(".\\settings\\start.seewokiller", "总是旧UI");
+						ConfigNext::WriteConfigValue(cfg, "start.StartOption", "old");
 						MessageBox(hwnd, _T("修改完成，即刻生效。"), _T("提示"), MB_OK);
+						cls;
+						poweron(true);
 						break;
 					}
 					default:
@@ -1780,17 +2086,24 @@ int main(int argc, char *argv[]) {
 	//system(".\\SeewoKiller.exe qwert asdfg");
 	system("title Seewo Killer Starting");
 	poweron(skipcheck, fastboot);
-	cls
-	//S(10);
-	//if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
-	//	return 0;
-	//}//返回IDOK,IDCANCEL
-	//thread用法
-	//thread t(taskbarprocess,TBPF_INDETERMINATE,0);
-	//t.detach();不阻塞主进程
-	//t.join();阻塞主进程
+	cls;
 	system("title 希沃克星");
 	lc.lcmain();
 	ReleaseTaskbarInterface();
 	return 0;
 }
+/*
+This is an example of badges from Maple-Font
+[TRACE][DEBUG][INFO][WARN][ERROR][FATAL]
+[NOTE][HACK][MARK][EROR][WARNING]
+
+An example for Messagebox()
+if (MessageBox(NULL, _T("你干嘛哎呦"), _T("鸡叫"), MB_OKCANCEL) == 2) {
+	return 0;
+}//返回IDOK,IDCANCEL
+
+An example for thread
+thread t(taskbarprocess,TBPF_INDETERMINATE,0);
+t.detach();不阻塞主进程
+t.join();阻塞主进程
+*/

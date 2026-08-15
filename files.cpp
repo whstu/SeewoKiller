@@ -70,15 +70,6 @@ void check_config_avaliable(string PATH, string config[], int config_n, string d
 	return;
 }
 
-namespace ConfigNext {
-	bool write_config(string name,string contnet){
-		return true;
-	}
-	string read_config(string name){
-		return "NULL";
-	}
-}
-
 void change_word(vector<string>& StringClass, int address, bool IsConfig, const string& PATH, const string& name) {
 	string tmp;
 	if (IsConfig) {
@@ -97,6 +88,263 @@ void change_word(vector<string>& StringClass, int address, bool IsConfig, const 
 		return;
 	}
 }
+
+namespace ConfigNext {
+	bool read_cfg_file(Config& cfg) {
+		//构建配置文件路径
+		string config_dir = ".\\settings";
+		string config_file = config_dir + "\\settings.cfg";
+		//检查配置文件是否存在
+		if (!fileExist(config_file)) {
+			// 创建默认配置
+			try {
+				// 获取根设置
+				Setting& root = cfg.getRoot();
+				// for poweron()
+				Setting& start = root.add("start", Setting::TypeGroup);
+				start.add("StartOption", Setting::TypeString) = "ask";
+				start.add("EnableCloseButtonOnConsole", Setting::TypeBoolean) = false;
+
+				// logger
+				Setting& logging = root.add("logging", Setting::TypeGroup);
+				logging.add("WriteLogWhenKillApps", Setting::TypeBoolean) = true;
+
+				// 写入配置文件
+				cfg.writeFile(config_file.c_str());
+
+			} catch (const SettingException& e) {
+				gotoxy(15, 18);
+				cll;
+				cerr << "创建默认配置时发生错误: " << e.what() << endl;
+				return false;
+			} catch (const FileIOException& e) {
+				gotoxy(15, 18);
+				cll;
+				cerr << "写入配置文件时发生I/O错误" << endl;
+				return false;
+			}
+			return true;
+		}
+
+		// 读取现有配置文件
+		try {
+			cfg.readFile(config_file.c_str());
+			gotoxy(15, 18);
+			cll;
+			cout << "成功读取配置文件: " << config_file << endl;
+			return true;
+		} catch (const FileIOException& fioex) {
+			cls;
+			gotoxy(0, 10);
+			cerr << "读取配置文件时发生I/O错误: " << config_file << endl;
+			cout << "可能为配置文件格式错误\n";
+			cout << "按空格键重置配置, 或按其它键退出\n";
+			while (true) {
+				if (_kbhit()) {
+					char ch = getch();
+					if (ch == ' ') {
+						system("del .\\settings\\settings.cfg");
+					}
+					exit(1);
+				}
+			}
+			return false;
+		} catch (const ParseException& pex) {
+			cls;
+			gotoxy(0, 10);
+			cerr << "解析配置文件错误: " << pex.getFile()
+			     << " 第 " << pex.getLine() << " 行 - " << pex.getError() << endl;
+			cout << "按空格键重置配置, 或按其它键退出\n";
+			while (true) {
+				if (_kbhit()) {
+					char ch = getch();
+					if (ch == ' ') {
+						system("del .\\settings\\settings.cfg");
+					}
+					exit(1);
+				}
+			}
+		}
+	}
+
+	void WriteToCfgFile(Config& cfg) {
+		string config_file = ".\\settings\\settings.cfg";
+		try {
+			cfg.writeFile(config_file.c_str());
+			//cout << "配置已保存到 " << config_file << endl;
+		} catch (const FileIOException& e) {
+			cls;
+			gotoxy(0, 10);
+			cerr << "保存配置文件失败: " << e.what() << endl;
+			system("pause");
+		}
+	}
+	template<typename T>
+	int WriteConfigValue(Config& cfg, const string& CfgName, T value) {
+		try {
+			cfg.lookup(CfgName) = value;
+		} catch (const SettingNotFoundException& e) {
+			cerr << "配置项不存在: " << CfgName << endl;
+			return 1;
+		} catch (const SettingTypeException& e) {
+			cerr << "配置项类型错误: " << CfgName << endl;
+			return 1;
+		}
+		// 写回文件
+		WriteToCfgFile(cfg);
+		return 0;
+	}
+	template int WriteConfigValue<bool>(Config&, const string&, bool);
+	template int WriteConfigValue<const char*>(Config&, const string&, const char*);
+	template int WriteConfigValue<string>(Config&, const string&, string);
+
+	namespace ChangeWord {
+		void ChangeWord(vector<string>& StringClass, int address, const string& str) {
+			StringClass[address] = str;
+			return;
+		}
+		void ChangeConfigWordFromString(vector<string>& StringClass, int address, const string& str) {
+			string tmp;
+			tmp = def_word.setting[address];
+			tmp = tmp + "-当前: " + str;
+			StringClass[address] = tmp;
+			return;
+		}
+		void ChangeConfigWordFromConfig(vector<string>& StringClass, int address, const string& CfgPATH) {
+			string tmp;
+			tmp = def_word.setting[address];
+			auto& root = cfg.getRoot();
+			auto& config = root.lookup(CfgPATH);
+			string cfgtmp;
+			if (config.getType() == Setting::TypeBoolean) {
+				cfgtmp = config ? "true" : "false";
+			} else if (config.getType() == Setting::TypeInt or config.getType() == Setting::TypeInt64) {
+				LL number = config;
+				cfgtmp = to_string(number);
+			} else if (config.getType() == Setting::TypeFloat) {
+				float number = config;
+				cfgtmp = to_string(number);
+			} else {
+				string str = config;
+				cfgtmp = str;
+			}
+			tmp = tmp + "-当前: " + cfgtmp;
+			StringClass[address] = tmp;
+			return;
+		}
+	}
+
+	void check_cfg_valid(Config& cfg) {
+		//poweron--------------------------------------------------------
+		Setting& setting = cfg.getRoot();
+		gotoxy(15, 18);
+		cll;
+		cout << "检查配置: start";
+		if (!setting.exists("start")) {//check group "start"
+			setting.add("start", Setting::TypeGroup);
+		}
+		if (setting["start"].getType() != Setting::TypeGroup) {
+			setting.remove("StartOption");
+			setting.add("StartOption", Setting::TypeGroup);
+		}
+		auto& start = setting["start"];
+		S(1);
+		while (true) { //StartOption(string)
+			gotoxy(15, 18);
+			cll;
+			cout << "检查配置: start.StartOption";
+			//check exist & type
+			if (!start.exists("StartOption")) {
+				start.add("StartOption", Setting::TypeString);
+				WriteConfigValue(cfg, "start.StartOption", "old");
+			} else if (start["StartOption"].getType() != Setting::TypeString) {
+				start.remove("StartOption");
+				start.add("StartOption", Setting::TypeString);
+				WriteConfigValue(cfg, "start.StartOption", "old");
+			}
+			//check valid
+			string StartOption = start.lookup("StartOption");
+			vector<string> def = {"ask", "old", "new"};
+			bool found = false;
+			for (long long unsigned int i = 0; i < def.size(); i++) {
+				if (StartOption == def[i]) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				WriteConfigValue(cfg, "start.StartOption", "ask");
+				StartOption = "ask";
+			}
+			if (StartOption == "new") {
+				StartOption = "总是新UI";
+			} else if (StartOption == "old") {
+				StartOption = "总是旧UI";
+			} else if (StartOption == "ask") {
+				StartOption = "每次询问";
+			}
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "启动设置"), StartOption);
+			break;
+		}
+		S(1);
+		//string StartOption = cfg.lookup("start.StartOption");
+		//cout << StartOption;
+		while (true) {//check start.EnableCloseButton(bool)
+			gotoxy(15, 18);
+			cll;
+			cout << "检查配置: start.EnableCloseButtonOnConsole";
+			//check exist & type
+			if (!start.exists("EnableCloseButtonOnConsole")) {
+				start.add("EnableCloseButtonOnConsole", Setting::TypeBoolean);
+				WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
+			} else if (start["EnableCloseButtonOnConsole"].getType() != Setting::TypeBoolean) {
+				start.remove("EnableCloseButtonOnConsole");
+				start.add("EnableCloseButtonOnConsole", Setting::TypeBoolean);
+				WriteConfigValue(cfg, "start.EnableCloseButtonOnConsole", false);
+			}
+			auto& config = start.lookup("EnableCloseButtonOnConsole");
+			string value = config ? "true" : "false";
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "允许使用“关闭”按钮"), value);
+			break;
+		}
+		S(1);
+
+
+		//logging--------------------------------------------------------
+		gotoxy(15, 18);
+		ClearLine(true);
+		cout << "检查配置: logging";
+		if (!setting.exists("logging")) {//check group "start"
+			setting.add("logging", Setting::TypeGroup);
+		}
+		if (setting["logging"].getType() != Setting::TypeGroup) {
+			setting.remove("logging");
+			setting.add("logging", Setting::TypeGroup);
+		}
+		auto& logging = setting["logging"];
+		S(1);
+		while (true) {//check logging.WriteLogWhenKillApps(bool)
+			gotoxy(15, 18);
+			cll;
+			cout << "检查配置: logging.WriteLogWhenKillApps";
+			//check exist & type
+			if (!logging.exists("WriteLogWhenKillApps")) {
+				logging.add("WriteLogWhenKillApps", Setting::TypeBoolean);
+				WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
+			} else if (logging["WriteLogWhenKillApps"].getType() != Setting::TypeBoolean) {
+				logging.remove("WriteLogWhenKillApps");
+				logging.add("WriteLogWhenKillApps", Setting::TypeBoolean);
+				WriteConfigValue(cfg, "logging.WriteLogWhenKillApps", false);
+			}
+			auto& config = logging.lookup("WriteLogWhenKillApps");
+			string value = config ? "true" : "false";
+			ChangeWord::ChangeConfigWordFromString(word.setting, SearchForAddress(def_word.setting, "在晚自习制裁/循环清任务时启用日志"), value);
+			break;
+		}
+		S(1);
+	}
+}
+
 
 void GetSubFolders(const string& rootPath, vector<string>& outFolders) {
 	// 清空目标容器
@@ -273,11 +521,13 @@ namespace PLUGIN {
 			};
 
 			gotoxy(15, 18);
+			ClearLine(true);
 			cout << "正在扫描文件夹: .\\plugin\\" << ID << "\\                 ";
 			S(10);
 
 			// 检查 name.config
 			gotoxy(15, 19);
+			ClearLine(true);
 			cout << "正在扫描文件: " << pathName << "                          ";
 			if (!readIfValid(pathName, nameContent)) {
 				valid = false;
@@ -287,6 +537,7 @@ namespace PLUGIN {
 
 			// 检查 type.config
 			gotoxy(15, 19);
+			ClearLine(true);
 			cout << "正在扫描文件: " << pathType << "                          ";
 			if (!readIfValid(pathType, typeContent) || (typeContent != "list" && typeContent != "exec")) {
 				valid = false;
@@ -296,6 +547,7 @@ namespace PLUGIN {
 
 			// 检查 exec.config与list.config
 			gotoxy(15, 19);
+			ClearLine(true);
 			cout << "正在扫描文件: " << pathExec << "                          ";
 			if (!readIfValidVector(pathExec, execContent, true, false)) {
 				valid = false;
@@ -304,6 +556,7 @@ namespace PLUGIN {
 			S(10);
 
 			gotoxy(15, 19);
+			ClearLine(true);
 			cout << "正在扫描文件: " << pathList << "                          ";
 			if (!readIfValidVector(pathList, listContent, true, true)) {
 				//虽然不可能有这种情况
@@ -322,6 +575,7 @@ namespace PLUGIN {
 
 			// 检查 IsCls.config
 			gotoxy(15, 19);
+			ClearLine(true);
 			cout << "正在扫描文件: " << pathIsCls << "                          ";
 			if (!readIfValid(pathIsCls, isClsContent, true, true)) {
 				isClsContent = "false";   // 默认值
@@ -466,8 +720,8 @@ namespace PLUGIN {
 					}
 					//pluginName去重
 					for (const string& s : plugin.pluginName) {
-						if (Name==s) {
-							cout<<"错误: 重复的插件名称。\n安装已取消。";
+						if (Name == s) {
+							cout << "错误: 重复的插件名称。\n安装已取消。";
 							system("pause");
 							return;
 						}
@@ -673,7 +927,7 @@ startpluginui:
 						gotoxy(4, 7);
 						cin >> path;
 						if (path == "b") {
-							cls
+							cls;
 							break;
 						}
 						if (path == "r") {
@@ -683,16 +937,16 @@ startpluginui:
 						cout << path << endl;
 					}
 					PLUGIN::PluginSystem(PLUGIN_INSTALL, path);
-					cls
+					cls;
 					poweron(true);
-					cls
+					cls;
 					goto startpluginui;
 				}
 			} else if (ch == 'f' || ch == 'F') {
 				PLUGIN::PluginSystem(PLUGIN_UNINSTALL, names[current]);
-				cls
+				cls;
 				poweron(true);
-				cls
+				cls;
 				continue;
 			}
 		}

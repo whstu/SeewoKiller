@@ -2,8 +2,8 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "希沃克星"
-#define MyAppVersion "2.1.1.0"
-#define MyAppProductVersion "2.1.1.0"
+#define MyAppVersion "2.2.1.260343"
+#define MyAppProductVersion "2.2.1"
 #define MyAppPublisher "WHSTU Studio"
 #define MyAppURL "https://whstu.dpdns.org/"
 #define MyAppExeName "SeewoKiller_with_gui_and_ai.exe"
@@ -50,6 +50,8 @@ Source: "E:\devc++\DEV\SeewoKiller\SeewoKiller.exe"; DestDir: "{app}"; Flags: ig
 Source: "E:\devc++\DEV\SeewoKiller\ai.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\devc++\DEV\SeewoKiller\gui.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\devc++\DEV\SeewoKiller\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\devc++\DEV\SeewoKiller\libconfig++.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\devc++\DEV\SeewoKiller\libcurl-x64.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\devc++\DEV\SeewoKiller\app.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\devc++\DEV\SeewoKiller\seewokiller2.png"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\devc++\DEV\SeewoKiller\RunAsFastboot.exe"; DestDir: "{app}"; Flags: ignoreversion
