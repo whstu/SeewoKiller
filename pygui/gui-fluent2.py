@@ -1,884 +1,738 @@
-# coding: utf-8
-"""
-SeewoKiller GUI - 基于 PyQt5 + qfluentwidgets 的新版界面
-架构说明：
-  - MENU_STRUCTURE: 定义所有板块和功能，仅需在此处增减条目
-  - action_handlers: 定义每个功能对应的处理函数，与界面解耦
-  - ConfigManager: 配置文件读写逻辑
-  - SettingCard / ComboSettingCard: 设置页的下拉框组件，不使用 QConfig
-  - 子菜单导航使用 FluentWindow 原生接口 + BreadcrumbBar
-  - 所有危险操作均通过 QThread 调用 SeewoKiller.exe 完成
-"""
-
+import ctypes
 import os
 import sys
-from pathlib import Path
-from uuid import uuid1
-
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
-from qfluentwidgets import (
-    FluentWindow, NavigationItemPosition,
-    ScrollArea, PushButton, CardWidget,
-    TitleLabel, SubtitleLabel, BodyLabel, CaptionLabel,
-    ComboBox, SwitchButton, InfoBar, InfoBarPosition,
-    FluentIcon as FIF, IconWidget, setTheme, Theme,
-    SmoothScrollArea, BreadcrumbBar, MessageBox
-)
-
-# ============================================================
-# 配置文件管理（对应 C++ 中的 files.cpp）
-# ============================================================
-SETTINGS_DIR = Path(".") / "settings"
-
-class ConfigManager:
-    """仿照 C++ files.cpp 的配置读写逻辑"""
-
-    @staticmethod
-    def ensure_dir():
-        SETTINGS_DIR.mkdir(exist_ok=True)
-
-    @staticmethod
-    def file_exist(path: str) -> bool:
-        return Path(path).is_file()
-
-    @staticmethod
-    def read_config(path: str) -> str:
-        """读取配置文件第一行，文件不存在时返回 'NULL'"""
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return f.readline().strip()
-        except Exception:
-            return "NULL"
-
-    @staticmethod
-    def write_config(path: str, config: str):
-        """写入配置文件"""
-        ConfigManager.ensure_dir()
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(config)
-
-    @staticmethod
-    def check_config_available(path: str, valid_values: list, default: str):
-        """检查配置值是否合法，不合法则写入默认值"""
-        value = ConfigManager.read_config(path)
-        if value not in valid_values:
-            ConfigManager.write_config(path, default)
-
-
-# ============================================================
-# 功能菜单结构定义
-# ============================================================
-MENU_STRUCTURE = {
-    "常用": {
-        "icon": FIF.HOME,
-        "visible_count": 4,
-        "items": [
-            {"name": "一键解希沃锁屏",   "icon": FIF.CLOSE,       "desc": "立即终止希沃相关屏幕锁定进程"},
-            {"name": "晚自习制裁模式",   "icon": FIF.CLOSE,      "desc": "终止监控进程，防止被控屏"},
-            {"name": "连点器 (可防屏保)", "icon": FIF.GAME,       "desc": "自动点击，防止屏幕保护程序启动"},
-            {"name": "小游戏>>>",        "icon": FIF.CAFE,       "desc": "迷你游戏合集"},
-        ]
-    },
-    "核心功能": {
-        "icon": FIF.CODE,
-        "visible_count": 9,
-        "items": [
-            {"name": "循环清任务 (上课防屏保)", "icon": FIF.SYNC,      "desc": "循环终止希沃进程，防止屏保激活"},
-            {"name": "一键卸载",               "icon": FIF.BROOM,    "desc": "卸载希沃相关软件"},
-            {"name": "晚自习制裁模式",         "icon": FIF.CLOSE,     "desc": "终止监控进程，防止被控屏"},
-            {"name": "连点器 (可防屏保)",       "icon": FIF.GAME,      "desc": "自动连续点击指定坐标"},
-            {"name": "一键解希沃锁屏",         "icon": FIF.CLOSE,      "desc": "终止希沃锁屏相关进程"},
-            {"name": "录制视频",               "icon": FIF.PLAY,    "desc": "屏幕录制功能"},
-            {"name": "小游戏>>>",              "icon": FIF.CAFE,      "desc": "游戏子菜单"},
-            {"name": "恶搞>>>",                "icon": FIF.ASTERISK, "desc": "整蛊功能子菜单"},
-            {"name": "注册表>>>",              "icon": FIF.EDIT,      "desc": "注册表修改子菜单"},
-        ]
-    },
-    "附加功能": {
-        "icon": FIF.MORE,
-        "visible_count": 3,
-        "items": [
-            {"name": "冰点还原破解", "icon": FIF.BROOM,    "desc": "破解冰点还原软件"},
-            {"name": "AI",           "icon": FIF.EDUCATION,     "desc": "内置 AI 助手"},
-            {"name": "计算π",        "icon": FIF.BOOK_SHELF,   "desc": "计算圆周率"},
-        ]
-    },
-    "设置": {
-        "icon": FIF.SETTING,
-        "visible_count": None,
-        "items": []
-    },
-}
-
-# 子菜单数据
-GAME_ITEMS = [
-    {"name": "数字炸弹", "icon": FIF.GAME,    "desc": "猜数字游戏"},
-    {"name": "五子棋",   "icon": FIF.CHECKBOX,    "desc": "双人五子棋"},
-    {"name": "飞机大战", "icon": FIF.SEND,    "desc": "像素飞机射击游戏"},
-    {"name": "恶魔轮盘赌", "icon": FIF.FLAG, "desc": "运气对决"},
-]
-
-JOKE_ITEMS = [
-    {"name": "杀 WPS+希沃白板 + 希沃视频展台", "icon": FIF.BROOM,  "desc": "一键终止教学软件进程"},
-    {"name": "提取 U 盘文件",                  "icon": FIF.DOWNLOAD,  "desc": "自动检测并复制 U 盘内容"},
-]
-
-REG_ITEMS = [
-    {"name": "禁用任务栏菜单",       "icon": FIF.CLOSE,  "desc": "禁用右键任务栏上下文菜单"},
-    {"name": "启用任务栏菜单",       "icon": FIF.ADD,    "desc": "恢复右键任务栏上下文菜单"},
-    {"name": "禁用快捷键",           "icon": FIF.CLOSE,  "desc": "禁用 Win 键等系统快捷键"},
-    {"name": "启用快捷键",           "icon": FIF.ADD,    "desc": "恢复系统快捷键"},
-    {"name": "启用显示登录详细信息", "icon": FIF.INFO,   "desc": "登录界面显示详细系统信息"},
-    {"name": "禁用显示登录详细信息", "icon": FIF.CLOSE,  "desc": "恢复默认登录界面"},
-    {"name": "登录时显示提示",       "icon": FIF.CHAT,  "desc": "在登录前显示自定义提示"},
-    {"name": "取消登录时显示提示",   "icon": FIF.CLOSE,  "desc": "移除登录前的自定义提示"},
-]
-
-
-# ============================================================
-# QThread 执行器（替代 subprocess）
-# ============================================================
-EXE_PATH = Path(".") / "SeewoKiller.exe"
-
-class ExeRunner(QThread):
-    """在子线程中执行 SeewoKiller.exe 命令"""
-    def __init__(self, args: list):
-        super().__init__()
-        self.args = args
-
-    def run(self):
-        cmd = [str(EXE_PATH)] + self.args
-        # 使用 subprocess.Popen 非阻塞，但放在线程里不会影响 GUI
-        # 为了兼容性，仍然用 subprocess，但这是在线程中执行，符合“不要在主线程用 subprocess”的精神
-        import subprocess
-        try:
-            subprocess.Popen(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)
-        except FileNotFoundError:
-            pass  # exe 不存在时静默失败
-
-
-# ============================================================
-# 功能触发器（Action Handlers）
-# ============================================================
-def action_handlers(name: str, parent_widget: QWidget):
-    """根据功能名称分发对应动作，通过 QThread 启动 exe"""
-
-    # 命令映射表
-    cmd_map = {
-        # 常用 / 核心功能
-        "一键解希沃锁屏":           ["run", "unlock"],
-        "晚自习制裁模式":           ["run", "wanzixi"],
-        "连点器 (可防屏保)":        ["run", "clicker"],
-        "循环清任务 (上课防屏保)":  ["run", "loop"],
-        "一键卸载":                 ["run", "uninstall"],
-        "录制视频":                 ["run", "camrec"],
-        # 小游戏
-        "数字炸弹":                 ["game", "numberdamn"],
-        "五子棋":                   ["game", "gomoku"],
-        "飞机大战":                 ["game", "fjdz"],
-        "恶魔轮盘赌":               ["game", "emlpd"],
-        # 恶搞
-        "杀 WPS+希沃白板 + 希沃视频展台": ["joke", "-killapp"],
-        "提取 U 盘文件":                 ["joke", "-copyfile"],
-        # 注册表
-        "禁用任务栏菜单":           ["regedit", "-NoTrayContextMenu", "true"],
-        "启用任务栏菜单":           ["regedit", "-NoTrayContextMenu", "false"],
-        "禁用快捷键":               ["regedit", "-NoWinKeys", "true"],
-        "启用快捷键":               ["regedit", "-NoWinKeys", "false"],
-        "启用显示登录详细信息":     ["regedit", "-VerboseStatus", "true"],
-        "禁用显示登录详细信息":     ["regedit", "-VerboseStatus", "false"],
-        "登录时显示提示":           ["regedit", "-legalnotice", "true"],
-        "取消登录时显示提示":       ["regedit", "-legalnotice", "false"],
-        # 附加功能
-        "冰点还原破解":             ["run", "freeze"],
-        "AI":                       ["run", "ai"],
-        "计算π":                    ["run", "pi"],
-    }
-
-    args = cmd_map.get(name)
-    if args:
-        runner = ExeRunner(args)
-        # 防止被垃圾回收
-        if not hasattr(parent_widget, '_runners'):
-            parent_widget._runners = []
-        parent_widget._runners.append(runner)
-        runner.start()
-        runner.finished.connect(lambda: parent_widget._runners.remove(runner))
-        InfoBar.success(
-            title="已启动",
-            content=f"「{name}」已执行",
-            orient=Qt.Horizontal,
-            isClosable=True,
-            position=InfoBarPosition.TOP_RIGHT,
-            duration=2000,
-            parent=parent_widget
-        )
-    else:
-        InfoBar.warning(
-            title="提示",
-            content=f"「{name}」暂未配置处理函数",
-            orient=Qt.Horizontal,
-            isClosable=True,
-            position=InfoBarPosition.TOP_RIGHT,
-            duration=2000,
-            parent=parent_widget
-        )
-
-
-# ============================================================
-# 功能卡片组件
-# ============================================================
-class FunctionCard(CardWidget):
-
-    clicked = pyqtSignal(str)
-
-    def __init__(self, name: str, icon, desc: str, parent_window, parent=None):
-        super().__init__(parent)
-
-        self.name = name
-        self.parent_window = parent_window
-        self.setCursor(Qt.PointingHandCursor)
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(16, 12, 16, 12)
-        layout.setSpacing(12)
-
-        icon_widget = IconWidget(icon, self)
-        icon_widget.setFixedSize(28, 28)
-        layout.addWidget(icon_widget)
-
-        text_layout = QVBoxLayout()
-
-        name_label = BodyLabel(name, self)
-        desc_label = CaptionLabel(desc, self)
-
-        text_layout.addWidget(name_label)
-        text_layout.addWidget(desc_label)
-
-        layout.addLayout(text_layout)
-        layout.addStretch()
-
-        arrow = CaptionLabel("›", self)
-        layout.addWidget(arrow)
-
-    def mousePressEvent(self, event):
-
-        if event.button() == Qt.LeftButton:
-            self.clicked.emit(self.name)
-
-        super().mousePressEvent(event)
-
-class SubMenuCard(CardWidget):
-    """带子菜单的卡片，点击后打开子菜单页"""
-    clicked = pyqtSignal(str)
-
-    def __init__(self, name: str, icon, desc: str, parent=None):
-        super().__init__(parent)
-        self.name = name
-        self.setCursor(Qt.PointingHandCursor)
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(16, 12, 16, 12)
-        layout.setSpacing(12)
-
-        icon_widget = IconWidget(icon, self)
-        icon_widget.setFixedSize(28, 28)
-        layout.addWidget(icon_widget)
-
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(2)
-        name_label = BodyLabel(name, self)
-        name_label.setFont(QFont("Microsoft YaHei", 10, QFont.Medium))
-        desc_label = CaptionLabel(desc, self)
-        text_layout.addWidget(name_label)
-        text_layout.addWidget(desc_label)
-        layout.addLayout(text_layout)
-        layout.addStretch()
-
-        arrow = CaptionLabel("›", self)
-        arrow.setFont(QFont("Arial", 14))
-        layout.addWidget(arrow)
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.clicked.emit(self.name)
-
-        super().mousePressEvent(event)
-        print("[INFO] Detected Mouse Event.")
-
-
-# ============================================================
-# 功能列表页（通用板块页面）
-# ============================================================
-class FunctionListPage(SmoothScrollArea):
-    """通用功能列表页，传入 box_key，自动从 MENU_STRUCTURE 读取并渲染"""
-    def __init__(self, box_key: str, main_window, parent=None):
-        super().__init__(parent)
-        self.box_key = box_key
-        self.main_window = main_window
-        self.setObjectName(box_key.replace(" ", "_"))
-
-        container = QWidget()
-        self.setWidget(container)
-        self.setWidgetResizable(True)
-
-        layout = QVBoxLayout(container)
-        layout.setContentsMargins(36, 24, 36, 24)
-        layout.setSpacing(10)
-
-        title = TitleLabel(box_key)
-        layout.addWidget(title)
-        layout.addSpacing(8)
-
-        box_data = MENU_STRUCTURE.get(box_key, {})
-        items = box_data.get("items", [])
-        n = box_data.get("visible_count") or len(items)
-
-        for item in items[:n]:
-            name = item["name"]
-            icon = item["icon"]
-            desc = item["desc"]
-
-            if name.endswith(">>>"):
-                card = SubMenuCard(name, icon, desc)
-                card.clicked.connect(self._open_submenu)
-                print("[INFO] back to __init__")
-            else:
-                card = FunctionCard(name, icon, desc, self.main_window)
-                card.clicked.connect(
-                    lambda n=name: action_handlers(n, self.main_window)
-                )
-            layout.addWidget(card)
-            print("[INFO] Widget Added")
-
-        layout.addStretch()
-        print("[INFO] addStretch() done.")
-
-    def _open_submenu(self, name: str):
-
-        submenu_map = {
-            "小游戏>>>": "小游戏",
-            "恶搞>>>": "恶搞",
-            "注册表>>>": "注册表",
-        }
-
-        if name in submenu_map:
-            print("[INFO] Found Available Interface. Opening Submenu.")
-            self.main_window.show_submenu(submenu_map[name])
-            print(f"[INFO] Opened Submenu {name}.")
-
-
-# ============================================================
-# 子菜单页（带面包屑导航）
-# ============================================================
-class SubMenuPage(SmoothScrollArea):
-
-    def __init__(self, title: str, items: list, main_window, parent=None):
-
-        super().__init__(parent)
-
-        self.main_window = main_window
-
-        # ===== 关键修复 =====
-        # FluentWindow.addSubInterface 必须依赖 objectName
-        self.setObjectName(f"submenu_{title}")
-        #self.setObjectName(uuid1().hex)
-
-        container = QWidget()
-
-        self.setWidget(container)
-
-        self.setWidgetResizable(True)
-
-        layout = QVBoxLayout(container)
-
-        layout.setContentsMargins(36, 24, 36, 24)
-
-        layout.setSpacing(10)
-
-        # 面包屑导航
-        '''breadcrumb = BreadcrumbBar(self)
-
-        breadcrumb.addItem(routeKey="home", text="首页")
-
-        breadcrumb.addItem(routeKey=title, text=title)
-
-        #breadcrumb.clicked.connect(lambda key: main_window.go_back())
-
-        layout.addWidget(breadcrumb)'''
-
-        # 返回按钮
-        back_btn = PushButton(FIF.PAGE_LEFT, "返回")
-
-        back_btn.clicked.connect(main_window.go_back)
-
-        layout.addWidget(back_btn, alignment=Qt.AlignLeft)
-
-        layout.addSpacing(4)
-
-        title_label = TitleLabel(title)
-
-        layout.addWidget(title_label)
-
-        layout.addSpacing(8)
-
-        for item in items:
-
-            card = FunctionCard(
-                item["name"],
-                item["icon"],
-                item["desc"],
-                main_window
-            )
-            card.clicked.connect(
-                lambda checked, n=item["name"]: action_handlers(n, main_window)
-            )
-
-            layout.addWidget(card)
-
-        layout.addStretch()
-        print(f"[INFO] sub_menu '{title}' built.")
-
-
-# ============================================================
-# 设置页 —— 自定义下拉框设置组件
-# ============================================================
-class ComboSettingCard(CardWidget):
-    """带下拉选择框的设置卡片，读写配置文件"""
-    def __init__(self, title: str, desc: str, config_path: str,
-                 options: list, default: str, icon=None, parent=None):
-        super().__init__(parent)
-        self.config_path = config_path
-        self.options = options
-        self.default = default
-
-        ConfigManager.check_config_available(config_path, options, default)
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(16, 14, 16, 14)
-        layout.setSpacing(12)
-
-        if icon:
-            icon_widget = IconWidget(icon, self)
-            icon_widget.setFixedSize(24, 24)
-            layout.addWidget(icon_widget)
-
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(2)
-        title_label = BodyLabel(title, self)
-        title_label.setFont(QFont("Microsoft YaHei", 10, QFont.Medium))
-        desc_label = CaptionLabel(desc, self)
-        text_layout.addWidget(title_label)
-        text_layout.addWidget(desc_label)
-        layout.addLayout(text_layout)
-        layout.addStretch()
-
-        self.combo = ComboBox(self)
-        self.combo.addItems(options)
-        current = ConfigManager.read_config(config_path)
-        if current in options:
-            self.combo.setCurrentText(current)
-        else:
-            self.combo.setCurrentText(default)
-        self.combo.setMinimumWidth(140)
-        self.combo.currentTextChanged.connect(self._on_changed)
-        layout.addWidget(self.combo)
-
-    def _on_changed(self, value: str):
-        ConfigManager.write_config(self.config_path, value)
-
-
-class SwitchSettingCardCustom(CardWidget):
-    """带开关的设置卡片，读写 'true'/'false' 格式的配置文件"""
-    def __init__(self, title: str, desc: str, config_path: str, icon=None, parent=None):
-        super().__init__(parent)
-        self.config_path = config_path
-
-        ConfigManager.check_config_available(config_path, ["true", "false"], "false")
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(16, 14, 16, 14)
-        layout.setSpacing(12)
-
-        if icon:
-            icon_widget = IconWidget(icon, self)
-            icon_widget.setFixedSize(24, 24)
-            layout.addWidget(icon_widget)
-
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(2)
-        title_label = BodyLabel(title, self)
-        title_label.setFont(QFont("Microsoft YaHei", 10, QFont.Medium))
-        desc_label = CaptionLabel(desc, self)
-        text_layout.addWidget(title_label)
-        text_layout.addWidget(desc_label)
-        layout.addLayout(text_layout)
-        layout.addStretch()
-
-        self.switch = SwitchButton(self)
-        current = ConfigManager.read_config(config_path)
-        self.switch.setChecked(current == "true")
-        self.switch.checkedChanged.connect(self._on_changed)
-        layout.addWidget(self.switch)
-
-    def _on_changed(self, checked: bool):
-        ConfigManager.write_config(self.config_path, "true" if checked else "false")
-
-
-class SettingPage(SmoothScrollArea):
-    """设置页面，包含常规设置、高级设置和关于"""
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setObjectName("设置")
-        self.main_window = parent  # 实际上 parent 就是 MainWindow
-        self.about_click_count = 0
-
-        container = QWidget()
-        self.setWidget(container)
-        self.setWidgetResizable(True)
-
-        self.layout = QVBoxLayout(container)
-        self.layout.setContentsMargins(36, 24, 36, 36)
-        self.layout.setSpacing(16)
-
-        self.layout.addWidget(TitleLabel("设置"))
-        self.layout.addSpacing(4)
-
-        # ---- 常规设置组 ----
-        self.layout.addWidget(SubtitleLabel("常规"))
-        self.layout.addWidget(ComboSettingCard(
-            title="启动模式",
-            desc="设置软件启动时的行为",
-            config_path=str(SETTINGS_DIR / "start.seewokiller"),
-            options=["总是询问", "总是新 UI", "总是旧 UI"],
-            default="总是询问",
-            icon=FIF.PLAY,
-        ))
-        self.layout.addWidget(SwitchSettingCardCustom(
-            title="在晚自习制裁/循环清任务时启用日志",
-            desc="杀进程时记录日志到 log 文件夹",
-            config_path=str(SETTINGS_DIR / "write-log-when-killapp.seewokiller"),
-            icon=FIF.DOCUMENT,
-        ))
-        self.layout.addWidget(SwitchSettingCardCustom(
-            title='允许使用"关闭"按钮',
-            desc="允许通过窗口关闭按钮退出程序（默认禁用以防误触）",
-            config_path=str(SETTINGS_DIR / "enable-close-window-button.seewokiller"),
-            icon=FIF.CLOSE,
-        ))
-
-        self.layout.addSpacing(8)
-
-        # ---- 操作按钮组 ----
-        self.layout.addWidget(SubtitleLabel("操作"))
-        open_log_btn_card = CardWidget()
-        open_log_layout = QHBoxLayout(open_log_btn_card)
-        open_log_layout.setContentsMargins(16, 12, 16, 12)
-        open_log_layout.addWidget(IconWidget(FIF.DOWNLOAD, open_log_btn_card))
-        open_log_layout.addSpacing(12)
-        text_l = QVBoxLayout()
-        text_l.addWidget(BodyLabel("打开日志文件夹"))
-        text_l.addWidget(CaptionLabel("查看历史操作记录"))
-        open_log_layout.addLayout(text_l)
-        open_log_layout.addStretch()
-        open_log_btn = PushButton("打开", open_log_btn_card)
-        open_log_btn.clicked.connect(lambda: os.startfile("log") if os.path.isdir("log") else None)
-        open_log_layout.addWidget(open_log_btn)
-        self.layout.addWidget(open_log_btn_card)
-
-        self.layout.addSpacing(8)
-
-        # ---- 高级设置组 ----
-        self.layout.addWidget(SubtitleLabel("高级"))
-
-        # 冰点还原疑难解答
-        freeze_help_card = CardWidget()
-        freeze_layout = QHBoxLayout(freeze_help_card)
-        freeze_layout.setContentsMargins(16, 12, 16, 12)
-        freeze_layout.addWidget(IconWidget(FIF.HELP, freeze_help_card))
-        freeze_layout.addSpacing(12)
-        freeze_text = QVBoxLayout()
-        freeze_text.addWidget(BodyLabel("冰点还原疑难解答"))
-        freeze_text.addWidget(CaptionLabel("解决冰点还原无法破解的问题"))
-        freeze_layout.addLayout(freeze_text)
-        freeze_layout.addStretch()
-        freeze_btn = PushButton("查看", freeze_help_card)
-        freeze_btn.clicked.connect(self.show_freeze_help)
-        freeze_layout.addWidget(freeze_btn)
-        self.layout.addWidget(freeze_help_card)
-
-        # 命令行帮助
-        cmd_help_card = CardWidget()
-        cmd_layout = QHBoxLayout(cmd_help_card)
-        cmd_layout.setContentsMargins(16, 12, 16, 12)
-        cmd_layout.addWidget(IconWidget(FIF.COMMAND_PROMPT, cmd_help_card))
-        cmd_layout.addSpacing(12)
-        cmd_text = QVBoxLayout()
-        cmd_text.addWidget(BodyLabel("命令行帮助"))
-        cmd_text.addWidget(CaptionLabel("查看 SeewoKiller.exe 命令行用法"))
-        cmd_layout.addLayout(cmd_text)
-        cmd_layout.addStretch()
-        cmd_btn = PushButton("查看", cmd_help_card)
-        cmd_btn.clicked.connect(self.show_cmd_help)
-        cmd_layout.addWidget(cmd_btn)
-        self.layout.addWidget(cmd_help_card)
-
-        # 重启到 fastboot
-        fastboot_card = CardWidget()
-        fastboot_layout = QHBoxLayout(fastboot_card)
-        fastboot_layout.setContentsMargins(16, 12, 16, 12)
-        fastboot_layout.addWidget(IconWidget(FIF.ROBOT, fastboot_card))
-        fastboot_layout.addSpacing(12)
-        fastboot_text = QVBoxLayout()
-        fastboot_text.addWidget(BodyLabel("重启到 fastboot 模式"))
-        fastboot_text.addWidget(CaptionLabel("以快速启动模式重启 SeewoKiller"))
-        fastboot_layout.addLayout(fastboot_text)
-        fastboot_layout.addStretch()
-        fastboot_btn = PushButton("重启", fastboot_card)
-        fastboot_btn.clicked.connect(self.restart_fastboot)
-        fastboot_layout.addWidget(fastboot_btn)
-        self.layout.addWidget(fastboot_card)
-
-        self.layout.addSpacing(8)
-
-        # ---- 关于 ----
-        self.layout.addWidget(SubtitleLabel("关于"))
-        about_card = CardWidget()
-        # 为 about_card 添加点击计数（开发者模式）
-        about_card.mousePressEvent = self.on_about_clicked
-        about_layout = QVBoxLayout(about_card)
-        about_layout.setContentsMargins(20, 16, 20, 16)
-        about_layout.setSpacing(4)
-        about_layout.addWidget(BodyLabel("SeewoKiller"))
-        about_layout.addWidget(CaptionLabel("Version 2.1 (Expelliarmus)  ·  by WHSTU"))
-        about_layout.addWidget(CaptionLabel("卓然第三帝国  https://whstu.dpdns.org/"))
-        about_layout.addWidget(CaptionLabel("代码仓库：https://github.com/whstu/SeewoKiller/"))
-        about_layout.addWidget(CaptionLabel("SeewoKiller QQ 群：664929698"))
-        about_layout.addWidget(CaptionLabel("新版界面基于 PyQt5 和 qfluentwidgets"))
-        self.layout.addWidget(about_card)
-
-        self.layout.addStretch()
-
-        # 开发者模式相关变量
-        self.dev_section_added = False
-
-    # ---------- 高级功能实现 ----------
-    def show_freeze_help(self):
-        text = (
-            "请尝试执行以下操作：\n\n"
-            "1. 打开 SeewoFreeze 文件夹属性\n"
-            "2. 打开“安全”\n"
-            "3. 点击“高级”\n"
-            "4. 禁用继承\n"
-            "5. 删除所有继承权限\n"
-            "6. 添加当前用户完全控制权限\n"
-            "7. 应用于子文件和子文件夹"
-        )
-        MessageBox("冰点还原疑难解答", text, self).exec()
-
-    def show_cmd_help(self):
-        exe = os.path.abspath("SeewoKiller.exe")
-        text = f"""
-晚自习制裁：
-{exe} run wanzixi
-
-循环清任务：
-{exe} run loop
-
-连点器：
-{exe} run clicker
-
-冰点破解：
-{exe} run freeze
-
-解锁：
-{exe} run unlock
-
-录制视频：
-{exe} run camrec
-
-AI：
-{exe} run ai
-
-计算π：
-{exe} run pi
-"""
-        MessageBox("命令行帮助", text, self).exec()
-
-    def restart_fastboot(self):
-        """重启 SeewoKiller.exe 并传入 fastboot 参数，然后退出当前 GUI"""
-        import subprocess
-        exe = os.path.abspath("SeewoKiller.exe")
-        subprocess.Popen([exe, "run", "fastboot"], creationflags=subprocess.CREATE_NEW_CONSOLE)
-        QApplication.quit()
-
-    # ---------- 开发者模式 ----------
-    def on_about_clicked(self, event):
-        self.about_click_count += 1
-        remain = 10 - self.about_click_count
-        if remain > 0:
-            InfoBar.info(
-                title="开发者模式",
-                content=f"再点击 {remain} 次开启开发者模式",
-                parent=self,
-                position=InfoBarPosition.TOP_RIGHT,
-                duration=1000
-            )
-        else:
-            # 开启开发者模式
-            if hasattr(self.main_window, 'set_dev_mode'):
-                self.main_window.set_dev_mode(True)
-            InfoBar.success(
-                title="开发者模式",
-                content="开发者模式已开启，请重新进入设置页查看开发者选项",
-                parent=self,
-                position=InfoBarPosition.TOP_RIGHT,
-                duration=3000
-            )
-            # 刷新设置页，显示开发者选项
-            self.add_dev_options()
-
-    def add_dev_options(self):
-        """动态添加开发者选项（不持久化）"""
-        if self.dev_section_added:
-            return
-
-        # 在关于之前插入开发者选项组
-        # 找到关于标题的位置
-        about_subtitle_index = -1
-        for i in range(self.layout.count()):
-            item = self.layout.itemAt(i)
-            if item and isinstance(item.widget(), SubtitleLabel) and item.widget().text() == "关于":
-                about_subtitle_index = i
-                break
-
-        if about_subtitle_index == -1:
-            return
-
-        # 插入开发者选项组
-        dev_subtitle = SubtitleLabel("开发者选项")
-        self.layout.insertWidget(about_subtitle_index, dev_subtitle)
-        about_subtitle_index += 1
-
-        # 释放进度条 COM 接口
-        com_card = CardWidget()
-        com_layout = QHBoxLayout(com_card)
-        com_layout.setContentsMargins(16, 12, 16, 12)
-        com_layout.addWidget(IconWidget(FIF.CLOSE, com_card))
-        com_layout.addSpacing(12)
-        com_text = QVBoxLayout()
-        com_text.addWidget(BodyLabel("释放进度条 COM 接口"))
-        com_text.addWidget(CaptionLabel("手动释放任务栏进度条 COM 接口"))
-        com_layout.addLayout(com_text)
-        com_layout.addStretch()
-        com_btn = PushButton("执行", com_card)
-        com_btn.clicked.connect(self.release_com_interface)
-        com_layout.addWidget(com_btn)
-        self.layout.insertWidget(about_subtitle_index, com_card)
-        about_subtitle_index += 1
-
-        self.dev_section_added = True
-
-    def release_com_interface(self):
-        """释放任务栏 COM 接口 (模拟原 C++ 的 ReleaseTaskbarInterface)"""
-        # 原 C++ 中是通过 CoUninitialize 释放，这里仅做提示
-        MessageBox("提示", "COM 接口释放操作已完成（模拟）", self).exec()
-
-
-# ============================================================
-# 主窗口
-# ============================================================
-class MainWindow(FluentWindow):
+import threading
+# 获取更新
+import urllib.request
+import warnings
+from threading import Thread
+
+from bs4 import BeautifulSoup
+
+from os import system
+from PyQt5 import QtWidgets,QtCore
+from PyQt5.QtCore import Qt, QProcess, QEasingCurve
+from PyQt5.QtGui import QFont, QPixmap,QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QPushButton, QVBoxLayout, QListWidget, \
+    QListWidgetItem, QMessageBox, QFrame, QHBoxLayout
+from qfluentwidgets import PushButton, ListWidget, MessageBox, FluentWindow, SubtitleLabel, setFont, PushSettingCard, \
+    NavigationItemPosition, ScrollArea, HeaderCardWidget, BodyLabel, InfoBarIcon, HyperlinkLabel
+from qfluentwidgets import FluentIcon as FIF
+
+localversion1,localversion2,localversion3,localversion4=2,0,1,63
+#QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+#QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+def QhGetScreenResolution():
+    # 获取屏幕分辨率（显示&物理）
+    import tkinter as tk
+    #import pyautogui
+    # 创建一个隐藏的 Tkinter 根窗口
+    QhRoot = tk.Tk()
+    QhRoot.withdraw()  # 隐藏根窗口
+    # 获取屏幕显示分辨率
+    QhXSwidth = QhRoot.winfo_screenwidth()
+    QhXSheight = QhRoot.winfo_screenheight()
+    # 关闭 Tkinter 根窗口
+    QhRoot.destroy()
+    print(f"屏幕显示分辨率 QH: {QhXSwidth}x{QhXSheight}")
+    # 获取屏幕物理分辨率
+    #size = pyautogui.size()
+    #QhWLwidth = size.width
+    #QhWLheight = size.height
+    #print(f"屏幕物理分辨率 QH: {QhWLwidth}x{QhWLheight}")
+    return QhXSwidth, QhXSheight#, QhWLwidth, QhWLheight
+
+#管理员
+'''
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+    sys.exit()
+'''
+
+class SeewoKiller_run():
+    class Wanzixi(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe wanzixi")
+    class Pingbao(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe liandianqi")
+    class AI(threading.Thread):
+        def run(self):
+            system(".\\ai.exe")
+    class pai(threading.Thread):
+        def run(self):
+            system(".\\pai.exe")
+    class Taskkill(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe taskkill")
+    class Uninstall(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe uninstall")
+    class SeewoFreeze(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe seewofreeze")
+    class SeewoLock(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe wanzixi")
+    class OldUI(threading.Thread):
+        def run(self):
+            system(".\\SeewoKiller.exe ui -oldui")
+    class Run():
+        class Fastboot(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe run fastboot")
+    class Setvalue():
+        class Log(threading.Thread):
+            def run(self):
+                system(".\\Seewokiller.exe setvalue -log")
+        class Button(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe setvalue -button")
+        class Start(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe setvalue -start")
+    class Regedit():
+        class NoTrayContextMenu_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
+        class NoTrayContextMenu_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
+        class NoWinKeys_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoWinKeys true")
+        class NoWinKeys_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -NoWinKeys false")
+        class VerboseStatus_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -VerboseStatus true")
+        class VerboseStatus_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -VerboseStatus false")
+        class legalnotice_True(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -legalnotice true")
+        class legalnotice_False(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe regedit -legalnotice false")
+    class Joke():
+        class Killapp(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe joke -killapp")
+        class Copyfile(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe joke -copyfile")
+    class Game():
+        class Wzq(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game -wzq")
+        class NumberDamn(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game -numberdamn")
+        class Fjdz(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game -fjdz")
+        class Emlpd(threading.Thread):
+            def run(self):
+                system(".\\SeewoKiller.exe game -emlpd")
+class MainWindowNext(FluentWindow):
     def __init__(self):
         super().__init__()
+        self.allInterface=AllInterface(self)
+        #self.regInterface=
+        #self.JokeInterface=
+        #self.gameInterface=
+        self.SettingsInterface=SettingsInterface(self)
+
+        self.addSubInterface(self.allInterface,FIF.HOME,'功能')
+        #self.addSubInterface(self.regInterface,FIF.EDIT,"注册表",parent=self.allInterface)
+        #self.navigationInterface.addSeparator()
+        #self.addSubInterface(self.JokeInterface,FIF.EDIT,"恶搞",parent=self.allInterface)
+        #self.addSubInterface(self.gameInterface,FIF.GAME,"游戏",parent=self.allInterface)
+        self.addSubInterface(self.SettingsInterface,FIF.SETTING,"设置",NavigationItemPosition.BOTTOM)
+        self.setWindowIcon(QIcon("./app.ico"))
         self.setWindowTitle("希沃克星")
-        self.setMinimumSize(800, 560)
-        self.resize(960, 640)
+class AllInterface(QFrame):
+    def __init__(self,parent=None):
+        super().__init__(parent=parent)
+        self.setObjectName("AllInterface")
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = SubtitleLabel("  功能", self)
+        self.main_layout.addWidget(self.label)
 
-        # 开发者模式标志
-        self._dev_mode = False
+        self.scrolllayout = QFrame()
+        self.hbox=QVBoxLayout(self.scrolllayout)
+        self.hbox.setContentsMargins(10, 10, 10, 10)
 
-        # 动态页面缓存
-        self._dynamic_pages = {}
-
-        # 创建各板块页面
-        self._pages = {}
-
-        # 主页面
-        for box_key, box_data in MENU_STRUCTURE.items():
-
-            if box_key == "设置":
-                page = SettingPage(self)
-            else:
-                page = FunctionListPage(box_key, self)
-
-            self._pages[box_key] = page
-
-            self.addSubInterface(
-                interface=page,
-                icon=box_data["icon"],
-                text=box_key,
-                position=NavigationItemPosition.SCROLL,
-            )
-
-        # ===== 预注册子菜单页面 =====
-
-        submenu_data = {
-            "小游戏": GAME_ITEMS,
-            "恶搞": JOKE_ITEMS,
-            "注册表": REG_ITEMS,
+        self.list_all={
+            "循环清任务 (可解屏保)":"",
+            "一键卸载":"",
+            "晚自习制裁模式":"",
+            "连点器 (自习课防屏保)":"",
+            "一键解希沃锁屏":"",
+            "小游戏":"",
+            "恶搞":"",
+            "注册表":""
         }
+        for key in self.list_all.keys():
+            self.card = PushSettingCard(
+                icon=FIF.MENU,
+                title=key,
+                content=self.list_all[key],
+                text="启动"
+            )
+            self.hbox.addWidget(self.card)
+        self.hbox.addStretch()
+        self.scroll = ScrollArea(self)
+        self.scroll.setWidget(self.scrolllayout)
+        self.scroll.enableTransparentBackground()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setStyleSheet("QScrollArea{background: transparent; border: none}")
+        self.main_layout.addWidget(self.scroll)
 
-        for title, items in submenu_data.items():
-            page = SubMenuPage(title, items, self)
+class SettingsInterface(QFrame):
+    def __init__(self,parent=None):
+        super().__init__(parent=parent)
+        self.setObjectName("SettingsInterface")
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = SubtitleLabel("  设置", self)
+        self.main_layout.addWidget(self.label)
 
-            self._pages[title] = page
-            page.setObjectName(uuid1().hex)
-            self.stackedWidget.addWidget(page)
-            #self.stackedWidget.setCurrentWidget(page)
-            '''self.addSubInterface(
-                interface=page,
-                icon=FIF.RIGHT_ARROW,
-                text=title,
-                position=NavigationItemPosition.BOTTOM,
-            )'''
+        self.scrolllayout = QFrame()
+        self.hbox = QVBoxLayout(self.scrolllayout)
+        self.hbox.setContentsMargins(10, 10, 10, 10)
 
-        setTheme(Theme.AUTO)
+        self.list_all={
+            "在晚自习制裁/循环清任务时启用日志":"",
+            "允许使用“关闭”按钮 (仅适用旧 UI)":"",
+            "启动设置":"",
+            "检查更新":"",
+            "使用经典界面":"",
+            "重启到 fastboot":"",
+            "关于":""
+        }
+        for key in self.list_all.keys():
+            self.card = PushSettingCard(
+                icon=FIF.MENU,
+                title=key,
+                content=self.list_all[key],
+                text="启动"
+            )
+            self.hbox.addWidget(self.card)
+        self.hbox.addStretch()
+        self.scroll = ScrollArea(self)
+        self.scroll.setWidget(self.scrolllayout)
+        self.scroll.enableTransparentBackground()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setStyleSheet("QScrollArea{background: transparent; border: none}")
+        self.main_layout.addWidget(self.scroll)
 
-    def set_dev_mode(self, enabled: bool):
-        self._dev_mode = enabled
+#info
+class Header(HeaderCardWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTitle('关于')
 
-    def show_submenu(self, title: str):
-        print("[INFO] page_name set.")
-        page_name = self._pages.get(title)
+        self.infoLabel = BodyLabel('此产品适用于你的设备。具有复选标记的项目符合开发人员的系统要求。', self)
+        self.detailButton = HyperlinkLabel('详细信息', self)
 
-        if page_name:
-            print("[INFO] setting current widget.")
-            #self.stackedWidget.setCurrentWidget(page_name)
-            self.switchTo(page)
+        self.vBoxLayout = QVBoxLayout()
+        self.hBoxLayout = QHBoxLayout()
 
-    def go_back(self):
-        """返回首页（常用）"""
-        self.switchTo(self._pages["常用"])
+        self.successIcon.setFixedSize(16, 16)
+        self.hBoxLayout.setSpacing(10)
+        self.vBoxLayout.setSpacing(16)
+        self.hBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.hBoxLayout.addWidget(self.successIcon)
+        self.hBoxLayout.addWidget(self.infoLabel)
+        self.vBoxLayout.addLayout(self.hBoxLayout)
+        self.vBoxLayout.addWidget(self.detailButton)
+
+        self.viewLayout.addLayout(self.vBoxLayout)
+class InfoInterface(QFrame):
+    def __init__(self,parent=None):
+        super().__init__(parent=parent)
+        self.setObjectName("InfoInterface")
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = Header(self)
+        self.main_layout.addWidget(self.label)
+
+        self.scrolllayout = QFrame()
+        self.hbox = QVBoxLayout(self.scrolllayout)
+        self.hbox.setContentsMargins(10, 10, 10, 10)
+
+        self.list_all={
+            "在晚自习制裁/循环清任务时启用日志":"",
+            "允许使用“关闭”按钮 (仅适用旧 UI)":"",
+            "启动设置":"",
+            "检查更新":"",
+            "使用经典界面":"",
+            "重启到 fastboot":"",
+            "关于":""
+        }
+        for key in self.list_all.keys():
+            self.card = PushSettingCard(
+                icon=FIF.MENU,
+                title=key,
+                content=self.list_all[key],
+                text="启动"
+            )
+            self.hbox.addWidget(self.card)
+        self.hbox.addStretch()
+        self.scroll = ScrollArea(self)
+        self.scroll.setWidget(self.scrolllayout)
+        self.scroll.enableTransparentBackground()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setStyleSheet("QScrollArea{background: transparent; border: none}")
+        self.main_layout.addWidget(self.scroll)
 
 
-# ============================================================
-# 入口
-# ============================================================
-def main():
-    QApplication.setHighDpiScaleFactorRoundingPolicy(
-        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
-    app = QApplication(sys.argv)
-    app.setFont(QFont("Microsoft YaHei UI", 10))
 
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.process = QProcess(self)
+        self.setWindowTitle("希沃克星")
+        self.setGeometry(100, 500, 600, 400)
+        # 创建选项卡组件
+        self.tab_widget = QTabWidget()
+        self.setCentralWidget(self.tab_widget)
+
+        # 按钮名称数组
+        self.common_buttons = ["一键解希沃锁屏","晚自习制裁模式", "一键防屏保", "小游戏"]
+        # 创建“常用”选项卡
+        self.tab_common = QWidget()
+        self.tab_widget.addTab(self.tab_common, "常用")
+        self.setup_common_tab()
+
+        # 列表项名称数组（所有和设置选项卡共用）
+        self.list_items_all = ["循环清任务 (可解屏保)", "一键卸载","晚自习制裁模式", "连点器 (自习课防屏保)","一键解希沃锁屏", "小游戏", "恶搞","注册表"]
+        self.list_items_more = ["冰点还原破解","AI","计算π"]
+        self.list_items_settings = ["在晚自习制裁/循环清任务时启用日志","允许使用“关闭”按钮 (仅适用旧 UI)","启动设置","检查更新", "使用经典界面","重启到 fastboot","关于"]
+
+        # 创建“所有”选项卡
+        self.tab_all = QWidget()
+        self.tab_widget.addTab(self.tab_all, "核心功能")
+        self.setup_all_tab()
+
+        #创建“更多”选项卡
+        self.tab_more=QWidget()
+        self.tab_widget.addTab(self.tab_more,"附加功能")
+        self.setup_more_tab()
+
+        # 创建“设置”选项卡
+        self.tab_settings = QWidget()
+        self.tab_widget.addTab(self.tab_settings, "设置")
+        self.setup_settings_tab()
+    #def run_command(self,command):
+        #self.process.start('cmd', ['/c', '.\\SeewoKiller.exe', command])
+        #system(command)
+    def setup_common_tab(self):
+        layout = QVBoxLayout()
+        layout.setSpacing(20)
+        # 使用数组中的按钮名称创建按钮
+        for button_name in self.common_buttons:
+            button = PushButton(button_name)
+            button.setMinimumHeight(50)
+            button.setFont(QFont("微软雅黑",10))
+            button_number = self.common_buttons.index(button_name) + 1  # 获取按钮编号（从 1 开始）
+            button.clicked.connect(lambda _, x=button_number: self.on_common_button_clicked(x))
+            layout.addWidget(button)
+        self.tab_common.setLayout(layout)
+
+    def setup_all_tab(self):
+        layout = QVBoxLayout()
+
+        # 创建列表并添加项（使用数组中的项名称）
+        self.list_widget = ListWidget()
+        self.list_widget.setSpacing(5)
+        for item_name in self.list_items_all:
+            item = QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑",10))
+            if item_name == "小游戏":
+                item.setData(Qt.UserRole, "open_new_window_game")
+            if item_name == "恶搞":
+                item.setData(Qt.UserRole,"open_new_window_joke")
+            if item_name == "注册表":
+                item.setData(Qt.UserRole,"open_new_window_regedit")
+            self.list_widget.addItem(item)
+
+        self.list_widget.itemClicked.connect(self.on_list_item_clicked)
+
+        layout.addWidget(self.list_widget)
+        self.tab_all.setLayout(layout)
+
+    def setup_more_tab(self):
+        layout = QVBoxLayout()
+
+        # 创建列表并添加项（与“所有”选项卡相同，使用数组中的项名称）
+        self.more_list_widget = ListWidget()
+        self.more_list_widget.setSpacing(5)
+        for item_name in self.list_items_more:
+            item = QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑", 10))
+            # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
+            self.more_list_widget.addItem(item)
+        self.more_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.more_list_widget)
+        self.tab_more.setLayout(layout)
+
+    def setup_settings_tab(self):
+        layout = QVBoxLayout()
+
+        # 创建列表并添加项（与“所有”选项卡相同，使用数组中的项名称）
+        self.settings_list_widget = ListWidget()
+        self.settings_list_widget.setSpacing(5)
+        for item_name in self.list_items_settings:
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑",10))
+            # 这里不设置特殊项的数据，因为设置选项卡不需要打开新窗口的功能
+            self.settings_list_widget.addItem(item)
+
+        self.settings_list_widget.itemClicked.connect(self.on_list_item_clicked)
+
+        layout.addWidget(self.settings_list_widget)
+        self.tab_settings.setLayout(layout)
+
+    def on_common_button_clicked(self, button_number):
+        if button_number==1:
+            self.seewolock=SeewoKiller_run.SeewoLock()
+            self.seewolock.start()
+        if button_number==2:
+            self.wanzixi=SeewoKiller_run.Wanzixi()
+            self.wanzixi.start()
+            #system(".\\SeewoKiller.exe wanzixi")
+        if button_number==3:
+            self.pingbao=SeewoKiller_run.Pingbao()
+            self.pingbao.start()
+            #system(".\\SeewoKiller.exe pingbao")
+        if button_number==4:
+            self.open_new_window_game()
+        '''print("123", button_number)'''
+
+    def on_list_item_clicked(self, item):
+        # 检查项文本或数据以确定是否打开新窗口
+        if item.text() == "小游戏" or item.data(Qt.UserRole) == "open_new_window_game":
+            self.open_new_window_game()
+        if item.text()== "恶搞" or item.data(Qt.UserRole) == "open_new_window_joke":
+            self.open_new_window_joke()
+        if item.text()== "注册表" or item.data(Qt.UserRole) == "open_new_window_regedit":
+            self.open_new_window_regedit()
+        if item.text() == "循环清任务 (可解屏保)":
+            self.taskkill=SeewoKiller_run.Taskkill()
+            self.taskkill.start()
+        if item.text() == "一键卸载":
+            self.uninstall=SeewoKiller_run.Uninstall()
+            self.uninstall.start()
+        if item.text() == "冰点还原破解":
+            self.seewofreeze=SeewoKiller_run.SeewoFreeze()
+            self.seewofreeze.start()
+            #system(".\\SeewoFreeze\\SeewoFreezeUI.exe --startup-with-main-window")
+        if item.text()=="一键解希沃锁屏":
+            self.seewolock=SeewoKiller_run.SeewoLock()
+            self.seewolock.start()
+        if item.text()=="AI":
+            self.ai=SeewoKiller_run.AI()
+            self.ai.start()
+        if item.text()=="计算π":
+            self.pai=SeewoKiller_run.pai()
+            self.pai.start()
+        if item.text() == "晚自习制裁模式":
+            self.wanzixi=SeewoKiller_run.Wanzixi()
+            self.wanzixi.start()
+            #system(".\\SeewoKiller.exe wanzixi")
+        if item.text() == "连点器 (自习课防屏保)":
+            self.pingbao=SeewoKiller_run.Pingbao()
+            self.pingbao.start()
+            #system(".\\SeewoKiller.exe pingbao")
+            #print("456", item.text().split(' ')[1])
+            # 打印项文本（去掉前面的“项”字和编号后的空格）
+        if item.text()=="在晚自习制裁/循环清任务时启用日志":
+            self.setvalue_log=SeewoKiller_run.Setvalue.Log()
+            self.setvalue_log.start()
+        if item.text()=="允许使用“关闭”按钮 (仅适用旧 UI)":
+            self.setvale_button=SeewoKiller_run.Setvalue.Button()
+            self.setvale_button.start()
+        if item.text()=="启动设置":
+            self.setvale_start=SeewoKiller_run.Setvalue.Start()
+            self.setvale_start.start()
+        if item.text()=="重启到 fastboot":
+            self.fastboot=SeewoKiller_run.Run.Fastboot()
+            self.fastboot.start()
+            system("TASKKILL /F /IM gui.exe")
+        if item.text()=="检查更新":
+            self.new_window_checkupdate=NewWindow_Update()
+            self.new_window_checkupdate.show()
+        if item.text() == "关于":
+            self.new_window_about=NewWindow_About()
+            self.new_window_about.show()
+        if item.text() == "使用经典界面":
+            self.oldui=SeewoKiller_run.OldUI()
+            self.oldui.start()
+
+    def open_new_window_game(self):
+        self.new_window_game = NewWindow_game()
+        self.new_window_game.show()
+    def open_new_window_joke(self):
+        self.new_window_joke = NewWindow_joke()
+        self.new_window_joke.show()
+    def open_new_window_regedit(self):
+        self.new_window_regedit = NewWindow_regedit()
+        self.new_window_regedit.show()
+
+class NewWindow_game(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("小游戏")
+        self.setGeometry(750, 500, 300, 200)
+
+        layout = QVBoxLayout()
+
+        # 新窗口的列表项名称数组
+        self.new_list_items = ["数字炸弹", "五子棋","飞机大战","恶魔轮盘赌"]
+
+        # 创建列表并添加项（使用数组中的项名称）
+        self.new_list_widget = ListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
+        for item_name in self.new_list_items:
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑",10))
+            self.new_list_widget.addItem(item)
+        self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.new_list_widget)
+        self.setLayout(layout)
+    def on_list_item_clicked(self, item):
+        if item.text() == "五子棋":
+            self.wzq=SeewoKiller_run.Game.Wzq()
+            self.wzq.start()
+            #system(".\\SeewoKiller.exe game -wzq")
+        if item.text()=="数字炸弹":
+            self.numberdamn=SeewoKiller_run.Game.NumberDamn()
+            self.numberdamn.start()
+            #system(".\\SeewoKiller.exe game -numberdamn")
+        if item.text()=="飞机大战":
+            self.fjdz=SeewoKiller_run.Game.Fjdz()
+            self.fjdz.start()
+        if item.text()=="恶魔轮盘赌":
+            self.emlpd=SeewoKiller_run.Game.Emlpd()
+            self.emlpd.start()
+class NewWindow_regedit(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("注册表")
+        self.setGeometry(750, 500, 300, 200)
+
+        layout = QVBoxLayout()
+
+        # 新窗口的列表项名称数组
+        self.new_list_items = ["禁用任务栏菜单", "启用任务栏菜单", "禁用快捷键", "启用快捷键", "启用显示登录详细信息", "禁用显示登录详细信息","登录时显示提示","取消登录时显示提示"]
+
+        # 创建列表并添加项（使用数组中的项名称）
+        self.new_list_widget = ListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
+        for item_name in self.new_list_items:
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑",10))
+            self.new_list_widget.addItem(item)
+        self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.new_list_widget)
+        self.setLayout(layout)
+    def on_list_item_clicked(self, item):
+        if item.text() == "禁用任务栏菜单":
+            self.regedit=SeewoKiller_run.Regedit.NoTrayContextMenu_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoTrayContextMenu true")
+        if item.text()=="启用任务栏菜单":
+            self.regedit = SeewoKiller_run.Regedit.NoTrayContextMenu_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoTrayContextMenu false")
+        if item.text()=="禁用快捷键":
+            self.regedit = SeewoKiller_run.Regedit.NoWinKeys_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoWinKeys true")
+        if item.text()=="启用快捷键":
+            self.regedit = SeewoKiller_run.Regedit.NoWinKeys_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -NoWinKeys false")
+        if item.text()=="启用显示登录详细信息":
+            self.regedit = SeewoKiller_run.Regedit.VerboseStatus_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -VerboseStatus true")
+        if item.text()=="禁用显示登录详细信息":
+            self.regedit = SeewoKiller_run.Regedit.VerboseStatus_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -VerboseStatus false")
+        if item.text()=="登录时显示提示":
+            self.regedit=SeewoKiller_run.Regedit.legalnotice_True()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -legalnotice true")
+        if item.text()=="取消登录时显示提示":
+            self.regedit=SeewoKiller_run.Regedit.legalnotice_False()
+            self.regedit.start()
+            #system(".\\SeewoKiller.exe regedit -legalnotice false")
+class NewWindow_joke(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("恶搞")
+        self.setGeometry(750, 500, 300, 200)
+
+        layout = QVBoxLayout()
+
+        # 新窗口的列表项名称数组
+        self.new_list_items = ["杀死所有有用的进程","自动复制 U 盘文件"]
+
+        # 创建列表并添加项（使用数组中的项名称）
+        self.new_list_widget = ListWidget()
+        self.new_list_widget.setSpacing(5)
+        self.new_list_widget.setMinimumSize(300,200)
+        for item_name in self.new_list_items:
+            item=QListWidgetItem(item_name)
+            item.setFont(QFont("微软雅黑",10))
+            self.new_list_widget.addItem(item)
+        self.new_list_widget.itemClicked.connect(self.on_list_item_clicked)
+        layout.addWidget(self.new_list_widget)
+        self.setLayout(layout)
+
+    def on_list_item_clicked(self, item):
+        if item.text() == "杀死所有有用的进程":
+            self.killapp=SeewoKiller_run.Joke.Killapp()
+            self.killapp.start()
+        if item.text()=="自动复制 U 盘文件":
+            self.copyfile=SeewoKiller_run.Joke.Copyfile()
+            self.copyfile.start()
+            #system(".\\SeewoKiller.exe joke -killapp")
+class NewWindow_About(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("关于")
+        self.setGeometry(100, 100, 500, 400)
+        layout = QVBoxLayout()
+        self.label=QtWidgets.QLabel()
+        #self.label.setGeometry(QRect(30,30,81,41))
+        self.label.setPixmap(QPixmap('.\\seewokiller2.png'))
+        self.label2=QtWidgets.QLabel()
+        self.label2.setWordWrap(True)
+        self.label2.setFont(QFont("微软雅黑",10))
+        self.label2.setText("SeewoKiller 2.0\n希沃克星 2.0\n版本代号：Engorgio\n卓然第三帝国 https://whstu.dpdns.org/提供技术支持\nhttps://github.com/whstu/SeewoKiller/\nSeewoKiller QQ 群：664929698\n\n技巧：通过 Windows“任务视图”将希沃克星转移至另一个桌面以躲避大部分老师的检查\n瓦特工具箱 Watt Toolkit 可以加速对 Steam、Github 的访问，网址 https://steampp.net/\n\n应用图标“勤奋蛇”来自广东小天才(R)科技有限公司")
+        layout.addWidget(self.label)
+        layout.addWidget(self.label2)
+        self.setLayout(layout)
+class NewWindow_Update(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.layout = QVBoxLayout()
+        self.layout.setSpacing(20)
+        self.setWindowTitle("检查更新")
+        self.setGeometry(800, 800, 350, 30)
+        self.button = PushButton("点此检查更新")
+        self.button.setMinimumHeight(50)
+        self.button.setFont(QFont("微软雅黑", 10))
+        self.button.clicked.connect(self.check_update)
+        self.layout.addWidget(self.button)  # 正确添加按钮到布局
+        self.setLayout(self.layout)  # 布局设置给窗口而非按钮
+    def message_true(self):
+        print("有可用更新")
+        dialog=MessageBox("提示",
+                          f"有可用更新{self.version1}.{self.version2}.{self.version3}.{self.version4}\n是否前往网页下载？",
+                          self)
+        if dialog.exec():
+            import webbrowser
+            webbrowser.open("https://whstu.dpdns.org/download/SeewoKiller")
+    def message_false(self):
+        print("暂无更新")
+        self.msg_box = QMessageBox(QMessageBox.Information, "提示", "暂无可用更新。")
+        self.msg_box.exec_()
+    def check_update(self):
+        response = urllib.request.urlopen("https://seewokiller.whstu.dpdns.org/installer/index.html")
+        html = response.read()
+        soup = BeautifulSoup(html, 'html.parser')
+        p_tags = soup.find_all('p')
+        self.version1, self.version2, self.version3, self.version4 = -1, -1, -1, -1
+        if len(p_tags) >= 4:
+            for i, p_tag in enumerate(p_tags[:4]):
+                text = p_tag.get_text().strip()
+                try:
+                    number = int(text)
+                    if i == 0:
+                        self.version1 = number
+                    elif i == 1:
+                        self.version2 = number
+                    elif i == 2:
+                        self.version3 = number
+                    elif i == 3:
+                        self.version4 = number
+                except ValueError:
+                    continue
+        else:
+            print("Error:<p>Not Found.")
+        print(f"Version Check Website: {self.version1}.{self.version2}.{self.version3}.{self.version4}")
+        print(f"Local Version: {localversion1}.{localversion2}.{localversion3}.{localversion4}")
+        if localversion1<self.version1:
+            self.message_true()
+        elif localversion1==self.version1:
+            if localversion2<self.version2:
+                self.message_true()
+            elif localversion2==self.version2:
+                if localversion3<self.version3:
+                    self.message_true()
+                elif localversion3==self.version3:
+                    if localversion4<self.version4:
+                        self.message_true()
+                    else:
+                        self.message_false()
+                else:
+                    self.message_false()
+            else:
+                self.message_false()
+        else:
+            self.message_false()
+
 
 if __name__ == "__main__":
-    main()
+    QhXSwidth, QhXSheight= QhGetScreenResolution()
+    if QhXSwidth > 1920:
+        os.environ["QT_SCALE_FACTOR"] = "1"
+        QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)  # 适应高 DPI 设备
+        QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    else:
+        os.environ["QT_SCALE_FACTOR"] = "0.75"
+        QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+        QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+        pass
+    app = QApplication(sys.argv)
+    #设置图标
+    app.setWindowIcon(QIcon('SeewoKiller.ico'))
+    #设置字体
+    font = QFont()
+    font.setFamily("微软雅黑")
+    font.setPointSize(10)
+    app.setFont(font)
+    #-------
+    window = MainWindowNext()
+    window.show()
+    sys.exit(app.exec_())
+#pyinstaller -F -w -i SeewoKiller.ico gui.py
