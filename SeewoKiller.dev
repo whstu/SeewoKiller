@@ -29,7 +29,7 @@ CommandLine =
 Folders = 
 IncludeVersionInfo = 1
 SupportXPThemes = 0
-CompilerSet = 4
+CompilerSet = 0
 UseUTF8 = 1
 UnitCount = 15
 Bins = 
@@ -48,24 +48,24 @@ ParellelBuildingJobs = 0
 Major = 2
 Minor = 2
 Release = 1
-Build = 260343
+Build = 260350
 LanguageID = 2052
 CharsetID = 1252
 CompanyName = WHSTU Studio
-FileVersion = 2.2.1.260343
+FileVersion = 2.2.1.260350
 FileDescription = 希沃克星：冰点破解、晚自习制裁和更多！
 InternalName = Drogo Baggins
 LegalCopyright = Copyright (c) WHSTU Studio 2020-2026
 LegalTrademarks = 
 OriginalFilename = SeewoKiller.exe
 ProductName = SeewoKiller
-ProductVersion = 2.2.1.260343
+ProductVersion = 2.2.1.260350
 AutoIncBuildNr = 1
 SyncProduct = 1
 
 
 [Unit1]
-FileName = SplashScreen.h
+FileName = CameraRec.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -79,21 +79,21 @@ RealEncoding = UTF-8
 
 
 [Unit4]
-FileName = game.cpp
+FileName = SeewoKiller_private.h
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-CompileCpp = 1
-FileEncoding = UTF-8
-RealEncoding = UTF-8
+CompileCpp = 0
+FileEncoding = SYSTEM
+RealEncoding = gbk
 
 
 [Unit2]
-FileName = web.cpp
+FileName = .spl_WHSTU_Rainbow.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -101,16 +101,16 @@ Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = PROJECT
+FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
 [Unit3]
-FileName = main.cpp
-CompileCpp = 1
+FileName = files.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -132,84 +132,6 @@ RealEncoding = UTF-8
 
 
 [Unit6]
-FileName = web.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = UTF-8
-
-
-[Unit7]
-FileName = SeewoKiller_private.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = SYSTEM
-RealEncoding = gbk
-
-
-[Unit8]
-FileName = files.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit9]
-FileName = files.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit10]
-FileName = CameraRec.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit11]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit12]
 FileName = game.h
 CompileCpp = 0
 Folder = 
@@ -222,7 +144,59 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit13]
+[Unit7]
+FileName = CameraRec.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit8]
+FileName = main.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit9]
+FileName = game.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit10]
+FileName = files.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit11]
 FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
@@ -235,8 +209,8 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit14]
-FileName = CameraRec.h
+[Unit12]
+FileName = SplashScreen.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -248,8 +222,34 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
+[Unit13]
+FileName = web.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit14]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
 [Unit15]
-FileName = .spl_WHSTU_Rainbow.cpp
+FileName = cmdCtrl.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -301,8 +301,29 @@ RealEncoding = UTF-8
 
 
 [CompilerSettings]
+c_cmd_opt_std = 
+cc_cmd_opt_abort_on_error = 
+cc_cmd_opt_address_sanitizer = 
+cc_cmd_opt_check_iso_conformance = 
+cc_cmd_opt_debug_info = 
+cc_cmd_opt_inhibit_all_warning = 
+cc_cmd_opt_instruction = 
+cc_cmd_opt_no_ms_extensions = 
 cc_cmd_opt_optimize = fast
+cc_cmd_opt_pointer_size = 
+cc_cmd_opt_profile_info = 
+cc_cmd_opt_stack_protector = 
 cc_cmd_opt_std = 
+cc_cmd_opt_syntax_only = 
 cc_cmd_opt_use_pipe = on
-link_cmd_opt_stack_size = 12
+cc_cmd_opt_warning_all = 
+cc_cmd_opt_warning_as_error = 
+cc_cmd_opt_warning_extra = 
+cc_opt_enable_gcc_import_std = 
+cc_opt_error_implicit_int = 
+cc_opt_error_return_type = 
+cc_opt_error_vla = 
+link_cmd_opt_no_console = 
+link_cmd_opt_no_link_stdlib = 
+link_cmd_opt_stack_size = 0
 link_cmd_opt_strip_exe = on

@@ -16,7 +16,8 @@ struct About {
 	const std::string AppName = "希沃克星";
 	const std::string AppNameEn = "SeewoKiller";
 	const std::string Version = VER_STRING;
-	const long long VersionCode = VER_MAJOR * 10000000000 + VER_MINOR * 100000000 + VER_RELEASE * 1000000 + VER_BUILD;
+	const long long VersionCodeFull = VER_MAJOR * 10000000000 + VER_MINOR * 100000000 + VER_RELEASE * 1000000 + VER_BUILD;
+	const long long VersionCode = VER_MAJOR * 10000 + VER_MINOR * 100 + VER_RELEASE;
 	const std::string VersionName = INTERNAL_NAME;
 
 	std::vector<std::string> versionNameWeb;//版本代号
@@ -194,6 +195,7 @@ void checkUpdate(bool IsPoweron = false) {
 		}
 		gotoxy(0, 3);
 		//--------
+		cout<<"\n版本更新功能还在测试中，请不要使用\n";
 		cout << "\n正在获取版本信息...";
 	}
 	//fetch
@@ -222,7 +224,7 @@ void checkUpdate(bool IsPoweron = false) {
 				cout << "是否前往网站下载? (Y/y-是, 其它按键-否)\n";
 				char ch = getch();
 				if (ch == 'Y' or ch == 'y') {
-					system("start \"\" \"https://whstu.dpdns.org/download/seewokiller/\"");
+					system("start \"\" \"https://seewokiller.whstu.dpdns.org/web/\"");
 				}
 				break;
 			}
@@ -1670,7 +1672,7 @@ struct Launcher {
 					cout << "\nApp Name: " << info.AppName << endl;
 					cout << "App Name (EN): " << info.AppNameEn << "\n\n";
 					cout << "Version: " << info.Version << endl;
-					cout << "Version Code: " << info.VersionCode << endl;
+					cout << "Version Code: " << info.VersionCode<<" (Build "<<info.VersionCodeFull%1000000<<")" << endl;
 					cout << "Version Name: " << info.VersionName << "\n\n";
 					cout << "Version Code from Web: " << info.versionCodeWeb[0] << endl;
 					system("pause");

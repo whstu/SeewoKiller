@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>希沃克星 · 下载</title>
+    <!-- 字体与图标库 (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ====== 自定义字体 (根目录 font.ttf) ====== */
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('./font.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* ----- 全局重置 & 基础 ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'CustomFont', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0b0e14;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 1.5rem;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(180, 0, 255, 0.06) 0%, transparent 50%);
+        }
+
+        /* ----- 主容器 (毛玻璃卡片) ----- */
+        .glass-container {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(18px) saturate(1.4);
+            -webkit-backdrop-filter: blur(18px) saturate(1.4);
+            border-radius: 48px;
+            padding: 0 2.5rem 3rem 2.5rem;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+        }
+
+        /* ====== 顶部导航栏 (参考 ClassIsland) ====== */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 0 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: -0.01em;
+            transition: opacity 0.2s;
+        }
+
+        .navbar-brand:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-brand i {
+            color: #7cb9ff;
+            font-size: 1.6rem;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .navbar-links li a {
+            display: block;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            letter-spacing: 0.2px;
+        }
+
+        .navbar-links li a:hover {
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .navbar-links li a.active {
+            color: #fff;
+            background: rgba(124, 185, 255, 0.10);
+            border: 1px solid rgba(124, 185, 255, 0.08);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .navbar-right .btn-ghost {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .navbar-right .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-right .btn-primary {
+            padding: 0.4rem 1.4rem;
+            border-radius: 40px;
+            border: none;
+            background: linear-gradient(135deg, rgba(124, 185, 255, 0.25), rgba(100, 150, 255, 0.15));
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(124, 185, 255, 0.10);
+        }
+
+        .navbar-right .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(124, 185, 255, 0.35), rgba(100, 150, 255, 0.25));
+            box-shadow: 0 0 30px rgba(124, 185, 255, 0.05);
+        }
+
+        /* ====== Banner ====== */
+        .banner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.8rem 0 1.2rem 0;
+        }
+
+        .banner-icon {
+            font-size: 3.6rem;
+            color: #7cb9ff;
+            margin-bottom: 0.4rem;
+            filter: drop-shadow(0 8px 20px rgba(60, 160, 255, 0.2));
+        }
+
+        .banner h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f0f7ff 0%, #b6d6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.2rem;
+        }
+
+        .banner .sub {
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.3px;
+        }
+
+        .banner .sub i {
+            margin-right: 6px;
+            color: #7cb9ff;
+        }
+
+        /* ====== 下载板块 ====== */
+        .download-section {
+            margin-top: 1.8rem;
+        }
+
+        /* 通道切换 (三个tab) */
+        .channel-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .channel-tabs .tab {
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.2px;
+            font-family: inherit;
+        }
+
+        .channel-tabs .tab:hover {
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .channel-tabs .tab.active {
+            color: #fff;
+            background: rgba(124, 185, 255, 0.12);
+            border-color: rgba(124, 185, 255, 0.2);
+            box-shadow: 0 0 30px rgba(124, 185, 255, 0.04);
+        }
+
+        .channel-tabs .tab i {
+            margin-right: 8px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .channel-tabs .tab .badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 400;
+            margin-left: 6px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .channel-tabs .tab.active .badge {
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(124, 185, 255, 0.08);
+        }
+
+        /* 版本信息条 */
+        .version-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.6rem 1.8rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 60px;
+            padding: 0.5rem 2rem;
+            margin-bottom: 2.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(4px);
+            min-height: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .version-bar .ver-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .version-bar .ver-item i {
+            color: #7cb9ff;
+            font-size: 0.7rem;
+        }
+
+        .version-bar .ver-item strong {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+        .version-bar .ver-item .tag {
+            background: rgba(124, 185, 255, 0.10);
+            padding: 0.1rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            color: #7cb9ff;
+            font-weight: 500;
+        }
+
+        /* 下载卡片网格 */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.6rem 1.4rem 1.8rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .download-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(124, 185, 255, 0.12);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .download-card .platform-icon {
+            font-size: 2rem;
+            color: #7cb9ff;
+            margin-bottom: 0.4rem;
+            opacity: 0.8;
+        }
+
+        .download-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .download-card .platform-desc {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .download-card .system-req {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.15rem 0.7rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            margin-bottom: 1.2rem;
+            display: inline-block;
+        }
+
+        .download-card .btn-download {
+            margin-top: auto;
+            width: 100%;
+            padding: 0.6rem 0;
+            border-radius: 60px;
+            border: none;
+            background: rgba(124, 185, 255, 0.08);
+            color: #b6d6ff;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid rgba(124, 185, 255, 0.06);
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            letter-spacing: 0.2px;
+            text-decoration: none;
+        }
+
+        .download-card .btn-download i {
+            font-size: 0.85rem;
+            transition: transform 0.2s;
+        }
+
+        .download-card .btn-download:hover {
+            background: rgba(124, 185, 255, 0.16);
+            border-color: rgba(124, 185, 255, 0.2);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(124, 185, 255, 0.04);
+        }
+
+        .download-card .btn-download:hover i {
+            transform: translateX(4px);
+        }
+
+        .download-card .btn-download.primary {
+            background: rgba(124, 185, 255, 0.16);
+            border-color: rgba(124, 185, 255, 0.15);
+            color: #fff;
+        }
+
+        .download-card .btn-download.primary:hover {
+            background: rgba(124, 185, 255, 0.26);
+        }
+
+        /* 底部小字 */
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.12);
+            letter-spacing: 0.3px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 1.8rem;
+        }
+
+        .footer-note a {
+            color: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-note a:hover {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ----- 响应式微调 ----- */
+        @media (max-width: 768px) {
+            .glass-container {
+                padding: 0 1.2rem 2rem 1.2rem;
+                border-radius: 32px;
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.6rem;
+            }
+            .navbar-left {
+                justify-content: space-between;
+            }
+            .navbar-links {
+                justify-content: center;
+            }
+            .navbar-right {
+                justify-content: center;
+            }
+            .banner h1 {
+                font-size: 2.2rem;
+            }
+            .banner-icon {
+                font-size: 2.8rem;
+            }
+            .version-bar {
+                padding: 0.5rem 1.2rem;
+                border-radius: 30px;
+                gap: 0.4rem 1rem;
+            }
+            .download-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .channel-tabs .tab {
+                padding: 0.4rem 1.2rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .banner h1 {
+                font-size: 1.7rem;
+            }
+            .glass-container {
+                padding: 0 0.8rem 1.5rem 0.8rem;
+                border-radius: 24px;
+            }
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar-links li a {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+
+        <!-- ====== 顶部导航栏 ====== -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <a href="#" class="navbar-brand">
+                    <i class="fas fa-skull-crossbones"></i>
+                    <span>希沃克星</span>
+                </a>
+                <ul class="navbar-links">
+                    <li><a href="#" class="active">下载</a></li>
+                    <li><a href="#">文档(开发中)</a></li>
+                    <li><a href="https://github.com/whstu/SeewoKiller">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="navbar-right">
+                <a href="https://github.com/whstu/SeewoKiller" class="btn-primary"><i class="fab fa-github"></i> Star</a>
+            </div>
+        </nav>
+
+        <!-- ====== BANNER ====== -->
+        <div class="banner">
+            <div class="banner-icon">
+                <i class="fas fa-skull-crossbones"></i>
+            </div>
+            <h1>希沃克星</h1>
+            <div class="sub">
+                <i class="fas fa-bolt"></i> 轻量 · 高效
+            </div>
+        </div>
+
+        <!-- ====== 下载板块 ====== -->
+        <div class="download-section">
+
+            <!-- 通道切换 -->
+            <div class="channel-tabs" id="channelTabs">
+                <button class="tab active" data-channel="stable">
+                    <i class="fas fa-check-circle"></i> 稳定通道 <span class="badge">加载中</span>
+                </button>
+                <button class="tab" data-channel="preview">
+                    <i class="fas fa-flask"></i> 预览通道 <span class="badge">加载中</span>
+                </button>
+                <button class="tab" data-channel="nightly">
+                    <i class="fas fa-code-branch"></i> 测试通道 <span class="badge">暂无</span>
+                </button>
+            </div>
+
+            <!-- 版本信息条（日期已删除） -->
+            <div class="version-bar" id="versionBar">
+                <span class="ver-item">
+                    <i class="fas fa-tag"></i> 当前版本 <strong id="currentVersion">加载中</strong>
+                    <span class="tag" id="channelTag">推荐</span>
+                </span>
+                <span class="ver-item">
+                    <i class="fas fa-microchip"></i> x64 / ARM64
+                </span>
+            </div>
+
+            <!-- 下载卡片网格 -->
+            <div class="download-grid" id="downloadGrid">
+                <!-- 由 JavaScript 动态渲染 -->
+            </div>
+
+        </div>
+
+        <!-- 底部信息 -->
+        <div class="footer-note">
+            <i class="fas fa-shield-alt" style="margin-right: 6px;"></i>
+            希沃克星 · 开源免费
+            <span style="margin: 0 10px; opacity: 0.2;">|</span>
+            <a href="#"><i class="fas fa-book"></i> 文档</a>
+            <span style="margin: 0 6px; opacity: 0.1;">·</span>
+            <a href="https://github.com/whstu/SeewoKiller"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+
+            const channelData = {
+                stable: {
+                    label: '稳定通道',
+                    version: '加载中',
+                    tag: '推荐',
+                    platforms: [
+                        { id: 'win-custom', icon: 'fab fa-windows', name: 'Windows 自定义版', desc: '含冰点破解程序、π计算程序、AI', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_custom.exe' },
+                        { id: 'win-freeze', icon: 'fab fa-windows', name: 'Windows 冰点版', desc: '含冰点破解程序，不含新版界面', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_freeze.exe' },
+                        { id: 'win-gui', icon: 'fab fa-windows', name: 'Windows GUI版', desc: '含新版界面，不含冰点破解程序', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_gui.exe' },
+                        { id: 'win-gui-freeze', icon: 'fab fa-windows', name: 'Windows GUI冰点版', desc: '含新版界面、冰点破解程序', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_gui_and_freeze.exe' },
+                        { id: 'win-ai', icon: 'fab fa-windows', name: 'Windows AI版', desc: '含AI，不含新版界面、冰点破解程序', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_ai.exe' },
+                        { id: 'win', icon: 'fab fa-windows', name: 'Windows 简易版', desc: '只含基础运行程序', req: 'Windows 7+',
+                            url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_nothing.exe' },
+                        { id: 'portable', icon: 'fas fa-file-zipper', name: 'Windows 便携版 tar.gz', desc: '免安装 · 内容物与 Windows 简易版相同',
+                            req: 'Windows 7+', url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_nothing.tar.gz' },
+                        { id: 'source', icon: 'fas fa-code', name: '源代码', desc: 'GitHub 仓库', req: 'Apache License',
+                            url: 'https://github.com/whstu/SeewoKiller' }
+                    ]
+                },
+                preview: {
+                    label: '预览通道',
+                    version: '加载中',
+                    tag: '预览',
+                    platforms: [
+                        { id: 'portable', icon: 'fas fa-file-zipper', name: 'Windows 便携版 tar.gz', desc: '免安装 · 内容物与 Windows 简易版相同',
+                            req: 'Windows 7+', url: 'https://seewokiller.whstu.dpdns.org/installer/SeewoKiller_with_nothing_preview.tar.gz' }
+                    ]
+                },
+                nightly: {
+                    label: '测试通道',
+                    version: '暂无',
+                    tag: '测试版',
+                    platforms: [
+                        //{ id: 'win', icon: 'fab fa-windows', name: 'Windows', desc: 'Windows 11 及更高版本', req: 'x64',
+                        //    url: '#download-nightly-win' },
+                        //{ id: 'source', icon: 'fas fa-code', name: '源代码', desc: 'GitHub 仓库 (开发分支)',
+                        //    req: 'MIT License', url: '#download-nightly-source' },
+                        //{ id: 'portable', icon: 'fas fa-file-zipper', name: '便携版', desc: '免安装 · 测试版', req: 'Windows / macOS',
+                        //    url: '#download-nightly-portable' }
+                    ]
+                }
+            };
+
+            // ---------- DOM 引用 ----------
+            const tabs = document.querySelectorAll('#channelTabs .tab');
+            const currentVersionEl = document.getElementById('currentVersion');
+            const channelTagEl = document.getElementById('channelTag');
+            const gridContainer = document.getElementById('downloadGrid');
+
+            // ---------- 渲染下载卡片 ----------
+            function renderCards(platforms) {
+                if (!gridContainer) return;
+                let html = '';
+                platforms.forEach(p => {
+                    const isPrimary = (p.id === 'win' || p.id === 'mac' || p.id === 'linux');
+                    const btnClass = isPrimary ? 'btn-download primary' : 'btn-download';
+                    html += `
+                        <div class="download-card">
+                            <div class="platform-icon"><i class="${p.icon}"></i></div>
+                            <h3>${p.name}</h3>
+                            <div class="platform-desc">${p.desc}</div>
+                            <span class="system-req"><i class="fas fa-info-circle"></i> ${p.req}</span>
+                            <a href="${p.url}" class="${btnClass}">
+                                <i class="fas fa-download"></i> 下载
+                            </a>
+                        </div>
+                    `;
+                });
+                gridContainer.innerHTML = html;
+            }
+
+            // ---------- 切换通道 ----------
+            function switchChannel(channelKey) {
+                const data = channelData[channelKey];
+                if (!data) return;
+
+                // 更新版本信息（不再更新日期）
+                currentVersionEl.textContent = data.version;
+                channelTagEl.textContent = data.tag;
+
+                // 更新卡片
+                renderCards(data.platforms);
+
+                // 更新 tab 激活状态
+                tabs.forEach(tab => {
+                    const key = tab.getAttribute('data-channel');
+                    if (key === channelKey) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+
+            // ---------- 获取当前激活的渠道 ----------
+            function getActiveChannel() {
+                for (const tab of tabs) {
+                    if (tab.classList.contains('active')) {
+                        return tab.getAttribute('data-channel');
+                    }
+                }
+                return 'stable';
+            }
+
+            // ---------- 更新某个 tab 上的 badge ----------
+            function updateTabBadge(channelKey, versionWithV) {
+                const tab = document.querySelector(`#channelTabs .tab[data-channel="${channelKey}"]`);
+                if (!tab) return;
+                const badge = tab.querySelector('.badge');
+                if (badge) {
+                    badge.textContent = versionWithV;
+                }
+            }
+
+            // ---------- 从远程获取版本号并更新界面 ----------
+            async function fetchAndUpdateVersions() {
+                const stableUrl = 'https://seewokiller.whstu.eu.org/installer/version.txt';
+                const previewUrl = 'https://seewokiller.whstu.eu.org/installer/versionpre.txt';
+
+                try {
+                    const stableResp = await fetch(stableUrl);
+                    if (stableResp.ok) {
+                        const raw = (await stableResp.text()).trim();
+                        if (raw) {
+                            const ver = 'v' + raw;
+                            channelData.stable.version = ver;
+                            updateTabBadge('stable', ver);
+                            if (getActiveChannel() === 'stable') {
+                                currentVersionEl.textContent = ver;
+                            }
+                        }
+                    } else {
+                        console.warn('[希沃克星] 获取稳定版版本号失败，HTTP状态:', stableResp.status);
+                    }
+                } catch (e) {
+                    console.warn('[希沃克星] 获取稳定版版本号网络错误:', e.message);
+                }
+
+                try {
+                    const previewResp = await fetch(previewUrl);
+                    if (previewResp.ok) {
+                        const raw = (await previewResp.text()).trim();
+                        if (raw) {
+                            const ver = 'v' + raw;
+                            channelData.preview.version = ver;
+                            updateTabBadge('preview', ver);
+                            if (getActiveChannel() === 'preview') {
+                                currentVersionEl.textContent = ver;
+                            }
+                        }
+                    } else {
+                        console.warn('[希沃克星] 获取预览版版本号失败，HTTP状态:', previewResp.status);
+                    }
+                } catch (e) {
+                    console.warn('[希沃克星] 获取预览版版本号网络错误:', e.message);
+                }
+            }
+
+            // ---------- 绑定 Tab 点击事件 ----------
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    const channel = this.getAttribute('data-channel');
+                    if (channel) {
+                        switchChannel(channel);
+                    }
+                });
+            });
+
+            // ---------- 默认加载稳定通道，并异步获取最新版本号 ----------
+            switchChannel('stable');
+
+            if (document.readyState === 'complete') {
+                fetchAndUpdateVersions();
+            } else {
+                window.addEventListener('load', fetchAndUpdateVersions);
+            }
+
+        })();
+    </script>
+
+</body>
+</html>

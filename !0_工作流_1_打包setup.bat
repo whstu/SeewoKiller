@@ -14,8 +14,8 @@ call iscc "E:\devc++\DEV\SeewoKiller\installer\main-with-gui-and-freeze.iss"
 if errorlevel 1 SET stat2=1
 
 timeout /t 3 /nobreak
-echo ∆Ù∂Ø±‡“Î main-with-gui-and-ai.exe
-call iscc "E:\devc++\DEV\SeewoKiller\installer\main-with-gui-and-ai.iss"
+echo ∆Ù∂Ø±‡“Î main-with-ai.exe
+call iscc "E:\devc++\DEV\SeewoKiller\installer\main-with-ai.iss"
 if errorlevel 1 SET stat3=1
 
 timeout /t 3 /nobreak
