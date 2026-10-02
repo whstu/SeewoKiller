@@ -87,7 +87,7 @@
 |   下载渠道    | **🚀 正式版**<br/>[![正式版](https://img.shields.io/github/v/release/whstu/SeewoKiller?style=flat-square&color=%233fb950&label=)](https://github.com/whstu/SeewoKiller/releases/latest) |             🚧 测试版<br/>[![测试版](https://img.shields.io/github/v/release/whstu/SeewoKiller?include_prereleases&style=flat-square&label=)](https://github.com/whstu/SeewoKiller/releases/)              |
 |:-:|:-:|:-:|
 |GitHub|[**下载**](https://github.com/whstu/SeewoKiller/latest)|[下载](https://github.com/whstu/SeewoKiller/releases)|
-|卓然第三帝国官网|**下载**(制作中)|下载(制作中)|
+|卓然第三帝国官网|[**下载**](https://seewokiller.whstu.dpdns.org/web)|[下载](https://seewokiller.whstu.dpdns.org/web)|
 |蓝奏云 密码:0000|[**下载**](https://whstu.lanzouq.com/b00jdqzn5i)|[下载](https://whstu.lanzouq.com/b00jdqzn5i)|
 
 
@@ -99,7 +99,7 @@
 > |SeewoKiller_custom.exe     |可选       |🟢                        |🟢       |可选   |可选 |70MB|
 > |SeewoKiller_with_gui.exe   |🔴        |🟢                         |🟢      |🔴    |🔴  |45MB|
 > |SeewoKiller_with_freeze.exe   |🟢        |🟢                         |🔴      |🔴    |🔴  |17MB|
-> |SeewoKiller_with_gui_and_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |50MB|
+> |SeewoKiller_with_ai.exe|🔴    |🟢                         |🟢      |🟢     |🔴  |12MB|
 > |SeewoKiller_with_gui_and_freeze.exe|🟢 |🟢                         |🟢      |🔴    |🔴  |60MB|
 > |SeewoKiller_with_nothing.exe|🔴       |🟢                         |🔴      |🔴    |🔴  |3MB|
 > |SeewoKiller_with_nothing.tar.gz|🔴       |🟢                         |🔴      |🔴    |🔴  |1.5MB|

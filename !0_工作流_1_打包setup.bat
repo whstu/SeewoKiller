@@ -45,7 +45,7 @@ set INSTALLER_DIR=E:\devc++\DEV\SeewoKiller\installer
 if errorlevel 1 SET sigstat1=1
 .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%INSTALLER_DIR%\SeewoKiller_with_gui.exe"
 if errorlevel 1 SET sigstat2=1
-.\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%INSTALLER_DIR%\SeewoKiller_with_gui_and_ai.exe"
+.\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%INSTALLER_DIR%\SeewoKiller_with_ai.exe"
 if errorlevel 1 SET sigstat3=1
 .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%INSTALLER_DIR%\SeewoKiller_with_gui_and_freeze.exe"
 if errorlevel 1 SET sigstat4=1
