@@ -21,17 +21,39 @@ jobs:
       - name: Download and Setup MinGW 16.2.0
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
+
           $url = "https://github.com/niXman/mingw-builds-binaries/releases/download/16.2.0-rt_v14-rev1/x86_64-16.2.0-release-win32-seh-msvcrt-rt_v14-rev1.7z"
           $outFile = "$env:RUNNER_TEMP\mingw.7z"
-          $extractDir = "$env:RUNNER_TEMP\mingw64"
+          $extractDir = "$env:RUNNER_TEMP\mingw-extract"
+
           Invoke-WebRequest -Uri $url -OutFile $outFile -UseBasicParsing
-          7z x $outFile -o$extractDir -y | Out-Null
-          # 将 MinGW 的 bin 目录写入 GITHUB_PATH，后续步骤可直接调用 g++/windres/mingw32-make
-          $mingwBin = "$extractDir\mingw64\bin"
+
+          # 清空并创建解压目录
+          if (Test-Path $extractDir) { Remove-Item $extractDir -Recurse -Force }
+          New-Item -ItemType Directory -Path $extractDir -Force | Out-Null
+
+          7z x $outFile -o"$extractDir" -y | Out-Null
+
+          # 打印解压后的目录结构，便于排查
+          Write-Host "===== Extracted tree (2 levels) ====="
+          Get-ChildItem $extractDir -Recurse -Depth 2 | Select-Object FullName
+
+          # 动态查找 g++.exe
+          $gpp = Get-ChildItem -Path $extractDir -Recurse -Filter "g++.exe" -File | Select-Object -First 1
+          if (-not $gpp) {
+            Write-Error "g++.exe not found under $extractDir"
+          }
+          $mingwBin = $gpp.Directory.FullName
+          Write-Host "Found MinGW bin dir: $mingwBin"
+
+          # 写入 GITHUB_PATH
           Add-Content -Path $env:GITHUB_PATH -Value $mingwBin
-          # 验证安装
+
+          # 验证
           & "$mingwBin\g++.exe" --version
           & "$mingwBin\mingw32-make.exe" --version
+          & "$mingwBin\windres.exe" --version
 
       # 3. 克隆依赖仓库 (包含 lib/.a/.dll, bin, include)
       - name: Clone SeewoKiller-BuildDependency
