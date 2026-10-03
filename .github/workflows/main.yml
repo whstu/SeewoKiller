@@ -61,41 +61,57 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/whstu/SeewoKiller-BuildDependency.git "$env:GITHUB_WORKSPACE\BuildDependency"
 
+      # 3.5 打印依赖仓库结构，确认 include/lib 布局
+      - name: Inspect BuildDependency layout
+        shell: pwsh
+        run: |
+          $dep = "$env:GITHUB_WORKSPACE\BuildDependency"
+          Write-Host "===== Top level ====="
+          Get-ChildItem $dep | Select-Object Name, Mode
+          Write-Host "===== include (2 levels) ====="
+          if (Test-Path "$dep\include") {
+            Get-ChildItem "$dep\include" -Recurse -Depth 1 | Select-Object FullName
+          }
+          Write-Host "===== lib ====="
+          if (Test-Path "$dep\lib") {
+            Get-ChildItem "$dep\lib" | Select-Object Name
+          }
+
       # 4. 编译目标文件
-      #    使用你提供的 Dev-C++ 编译参数：-IE:/devc++/.Mingw&Libs/...
-      #    这里将路径改为从 BuildDependency 仓库读取
       - name: Compile object files
         shell: cmd
         run: |
           cd /d "%GITHUB_WORKSPACE%"
-          
-          REM 设置依赖库路径
+
           set "DEP_DIR=%GITHUB_WORKSPACE%\BuildDependency"
-          set "INC_CURL=%DEP_DIR%\include"
-          set "INC_ARCHIVE=%DEP_DIR%\include"
-          set "INC_CONFIG=%DEP_DIR%\include"
-          
-          REM 编译每个 .cpp -> .o
-          g++.exe -c "files.cpp" -o "files.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c "game.cpp" -o "game.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c "CameraRec.cpp" -o "CameraRec.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c "cmdCtrl.cpp" -o "cmdCtrl.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c "web.cpp" -o "web.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-          
-          g++.exe -c "main.cpp" -o "main.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
-          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          set "INC_ROOT=%DEP_DIR%\include"
+          set "INC_CURL=%DEP_DIR%\include\curl"
+          set "INC_ARCHIVE=%DEP_DIR%\include\libarchive"
+          set "INC_CONFIG=%DEP_DIR%\include\libconfig"
+
+          REM 若 curl 头文件直接在 include 根目录，可同时给出两条 -I，GCC 会自动找到
+          set "INCS=-I"%INC_ROOT%" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%""
+
+          g++.exe -c "files.cpp" -o "files.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c "game.cpp" -o "game.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c "CameraRec.cpp" -o "CameraRec.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c "cmdCtrl.cpp" -o "cmdCtrl.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c "web.cpp" -o "web.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
+
+          g++.exe -c "main.cpp" -o "main.o" %INCS% -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if errorlevel 1 exit /b 1
 
       # 5. 编译资源文件 (.rc -> .res)
       - name: Compile resource
