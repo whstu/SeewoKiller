@@ -1,0 +1,96 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build SeewoKiller (MinGW-w64 GCC 11.4.0 x64 Release)
+    runs-on: windows-latest
+
+    steps:
+      # 1. 拉取源码
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      # 2. 拉取构建依赖（lib / bin / include）
+      - name: Checkout build dependencies
+        uses: actions/checkout@v4
+        with:
+          repository: whstu/SeewoKiller-BuildDependency
+          path: dependency
+
+      # 3. 安装 MinGW-w64 GCC 11.4.0 64-bit (posix-seh, ucrt)
+      - name: Setup MinGW-w64 GCC 11.4.0
+        shell: pwsh
+        run: |
+          $url = "https://github.com/niXman/mingw-builds-binaries/releases/download/11.4.0-rt_v11-rev1/x86_64-11.4.0-release-posix-seh-ucrt-rt_v11-rev1.7z"
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\mingw.7z"
+          7z x "$env:RUNNER_TEMP\mingw.7z" -o"C:\" -y | Out-Null
+          "C:\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          & "C:\mingw64\bin\g++.exe" --version
+          & "C:\mingw64\bin\windres.exe" --version
+
+      # 4. 编译所有 .cpp -> .o  +  编译 rc
+      - name: Compile sources
+        shell: pwsh
+        run: |
+          $inc   = @("-Idependency/include")
+          $flags = @("-Ofast", "-pipe", "-Wno-narrowing",
+                     "-finput-charset=UTF-8", "-fexec-charset=gbk")
+
+          $srcs = @(
+            "files.cpp",
+            "game.cpp",
+            "CameraRec.cpp",
+            "cmdCtrl.cpp",
+            ".spl_WHSTU_Rainbow.cpp",
+            "web.cpp",
+            "main.cpp"
+          )
+
+          foreach ($s in $srcs) {
+            $o = [System.IO.Path]::GetFileNameWithoutExtension($s) + ".o"
+            Write-Host ">>> g++ -c $s -o $o"
+            g++ -c $s -o $o @inc @flags
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+          Write-Host ">>> windres SeewoKiller_private.rc"
+          windres -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      # 5. 链接（静态链接所有库，Win32 Console 子系统）
+      - name: Link
+        shell: pwsh
+        run: |
+          $linkArgs = @(
+            "files.o", "game.o", "CameraRec.o", "cmdCtrl.o",
+            ".spl_WHSTU_Rainbow.o", "web.o", "main.o",
+            "SeewoKiller_private.res",
+            "-o", "SeewoKiller.exe",
+            "-Ldependency/lib",
+            "-s",
+            "-lShell32", "-lOle32", "-lvfw32", "-lwinmm",
+            "-lole32", "-luuid", "-lcurl", "-lwldap32", "-limm32",
+            "dependency/lib/libcurl.a",
+            "dependency/lib/libcurl.dll.a",
+            "dependency/lib/libarchive.a",
+            "dependency/lib/libconfig.dll.a",
+            "dependency/lib/libconfig++.dll.a",
+            "-static"
+          )
+          Write-Host ">>> g++ $($linkArgs -join ' ')"
+          g++ @linkArgs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      # 6. 上传产物（不提交、不推送）
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SeewoKiller-exe
+          path: SeewoKiller.exe
+          if-no-files-found: error
