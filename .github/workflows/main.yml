@@ -15,7 +15,7 @@ jobs:
     steps:
       # 1. 检出当前仓库
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 2. 下载并安装 MinGW 16.2.0 (x86_64-16.2.0-release-win32-seh-msvcrt-rt_v14-rev1)
       - name: Download and Setup MinGW 16.2.0
@@ -166,7 +166,7 @@ jobs:
 
       # 9. 上传 Artifacts (不执行 Commit)
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-Build
           path: SeewoKiller-Build.zip
