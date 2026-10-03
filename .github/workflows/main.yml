@@ -4,93 +4,132 @@ on:
   push:
     branches: [ main, master ]
   pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build SeewoKiller (MinGW-w64 GCC 11.4.0 x64 Release)
     runs-on: windows-latest
+    name: Build SeewoKiller
 
     steps:
-      # 1. 拉取源码
-      - name: Checkout source
+      # 1. 检出当前仓库
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. 拉取构建依赖（lib / bin / include）
-      - name: Checkout build dependencies
-        uses: actions/checkout@v4
-        with:
-          repository: whstu/SeewoKiller-BuildDependency
-          path: dependency
-
-      # 3. 安装 MinGW-w64 GCC 11.4.0 64-bit (posix-seh, ucrt)
-      - name: Setup MinGW-w64 GCC 11.4.0
+      # 2. 下载并安装 MinGW 16.2.0 (x86_64-16.2.0-release-win32-seh-msvcrt-rt_v14-rev1)
+      - name: Download and Setup MinGW 16.2.0
         shell: pwsh
         run: |
-          $url = "https://github.com/niXman/mingw-builds-binaries/releases/download/11.4.0-rt_v11-rev1/x86_64-11.4.0-release-posix-seh-ucrt-rt_v11-rev1.7z"
-          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\mingw.7z"
-          7z x "$env:RUNNER_TEMP\mingw.7z" -o"C:\" -y | Out-Null
-          "C:\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          & "C:\mingw64\bin\g++.exe" --version
-          & "C:\mingw64\bin\windres.exe" --version
+          $url = "https://github.com/niXman/mingw-builds-binaries/releases/download/16.2.0-rt_v14-rev1/x86_64-16.2.0-release-win32-seh-msvcrt-rt_v14-rev1.7z"
+          $outFile = "$env:RUNNER_TEMP\mingw.7z"
+          $extractDir = "$env:RUNNER_TEMP\mingw64"
+          Invoke-WebRequest -Uri $url -OutFile $outFile -UseBasicParsing
+          7z x $outFile -o$extractDir -y | Out-Null
+          # 将 MinGW 的 bin 目录写入 GITHUB_PATH，后续步骤可直接调用 g++/windres/mingw32-make
+          $mingwBin = "$extractDir\mingw64\bin"
+          Add-Content -Path $env:GITHUB_PATH -Value $mingwBin
+          # 验证安装
+          & "$mingwBin\g++.exe" --version
+          & "$mingwBin\mingw32-make.exe" --version
 
-      # 4. 编译所有 .cpp -> .o  +  编译 rc
-      - name: Compile sources
+      # 3. 克隆依赖仓库 (包含 lib/.a/.dll, bin, include)
+      - name: Clone SeewoKiller-BuildDependency
         shell: pwsh
         run: |
-          $inc   = @("-Idependency/include")
-          $flags = @("-Ofast", "-pipe", "-Wno-narrowing",
-                     "-finput-charset=UTF-8", "-fexec-charset=gbk")
+          git clone --depth 1 https://github.com/whstu/SeewoKiller-BuildDependency.git "$env:GITHUB_WORKSPACE\BuildDependency"
 
-          $srcs = @(
-            "files.cpp",
-            "game.cpp",
-            "CameraRec.cpp",
-            "cmdCtrl.cpp",
-            ".spl_WHSTU_Rainbow.cpp",
-            "web.cpp",
-            "main.cpp"
-          )
+      # 4. 编译目标文件
+      #    使用你提供的 Dev-C++ 编译参数：-IE:/devc++/.Mingw&Libs/...
+      #    这里将路径改为从 BuildDependency 仓库读取
+      - name: Compile object files
+        shell: cmd
+        run: |
+          cd /d "%GITHUB_WORKSPACE%"
+          
+          REM 设置依赖库路径
+          set "DEP_DIR=%GITHUB_WORKSPACE%\BuildDependency"
+          set "INC_CURL=%DEP_DIR%\include"
+          set "INC_ARCHIVE=%DEP_DIR%\include"
+          set "INC_CONFIG=%DEP_DIR%\include"
+          
+          REM 编译每个 .cpp -> .o
+          g++.exe -c "files.cpp" -o "files.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c "game.cpp" -o "game.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c "CameraRec.cpp" -o "CameraRec.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c "cmdCtrl.cpp" -o "cmdCtrl.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c ".spl_WHSTU_Rainbow.cpp" -o ".spl_WHSTU_Rainbow.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c "web.cpp" -o "web.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+          
+          g++.exe -c "main.cpp" -o "main.o" -I"%INC_CURL%" -I"%INC_ARCHIVE%" -I"%INC_CONFIG%" -Ofast -pipe -Wno-narrowing -finput-charset=UTF-8 -fexec-charset=gbk
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-          foreach ($s in $srcs) {
-            $o = [System.IO.Path]::GetFileNameWithoutExtension($s) + ".o"
-            Write-Host ">>> g++ -c $s -o $o"
-            g++ -c $s -o $o @inc @flags
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      # 5. 编译资源文件 (.rc -> .res)
+      - name: Compile resource
+        shell: cmd
+        run: |
+          cd /d "%GITHUB_WORKSPACE%"
+          windres.exe -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+
+      # 6. 链接生成可执行文件
+      #    注意：-static 静态链接所有库，字符集已在编译阶段通过 -fexec-charset=gbk 控制
+      - name: Link executable
+        shell: cmd
+        run: |
+          cd /d "%GITHUB_WORKSPACE%"
+          
+          set "DEP_DIR=%GITHUB_WORKSPACE%\BuildDependency"
+          set "CURL_LIB=%DEP_DIR%\lib"
+          set "EXTRA_LIB=%DEP_DIR%\lib"
+          
+          g++.exe "files.o" "game.o" "CameraRec.o" "cmdCtrl.o" ".spl_WHSTU_Rainbow.o" "web.o" "main.o" "SeewoKiller_private.res" -o "SeewoKiller.exe" -L"%CURL_LIB%" -L"%EXTRA_LIB%" -s -lShell32 -lOle32 -lvfw32 -lwinmm -lole32 -luuid -lcurl -lwldap32 -limm32 "%CURL_LIB%\libcurl.a" "%CURL_LIB%\libcurl.dll.a" "%EXTRA_LIB%\libarchive.a" "%EXTRA_LIB%\libconfig.dll.a" "%EXTRA_LIB%\libconfig++.dll.a" -static
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+
+      # 7. 收集所有需要打包的文件 (exe + 依赖库)
+      - name: Collect artifacts
+        shell: pwsh
+        run: |
+          $staging = "$env:GITHUB_WORKSPACE\staging"
+          New-Item -ItemType Directory -Path $staging -Force | Out-Null
+          
+          # 复制可执行文件
+          Copy-Item "$env:GITHUB_WORKSPACE\SeewoKiller.exe" -Destination $staging
+          
+          # 复制依赖仓库中的 lib (包含 .a / .dll / .dll.a) 和 bin (运行时 dll)
+          $depDir = "$env:GITHUB_WORKSPACE\BuildDependency"
+          if (Test-Path "$depDir\lib") {
+            Copy-Item "$depDir\lib\*" -Destination $staging -Recurse -Force
           }
+          if (Test-Path "$depDir\bin") {
+            Copy-Item "$depDir\bin\*" -Destination $staging -Recurse -Force
+          }
+          
+          # 列出打包内容
+          Get-ChildItem $staging -Recurse | Select-Object FullName
 
-          Write-Host ">>> windres SeewoKiller_private.rc"
-          windres -i "SeewoKiller_private.rc" --input-format=rc -o "SeewoKiller_private.res" -O coff
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-      # 5. 链接（静态链接所有库，Win32 Console 子系统）
-      - name: Link
+      # 8. 将 staging 目录打包为 zip
+      - name: Package to zip
         shell: pwsh
         run: |
-          $linkArgs = @(
-            "files.o", "game.o", "CameraRec.o", "cmdCtrl.o",
-            ".spl_WHSTU_Rainbow.o", "web.o", "main.o",
-            "SeewoKiller_private.res",
-            "-o", "SeewoKiller.exe",
-            "-Ldependency/lib",
-            "-s",
-            "-lShell32", "-lOle32", "-lvfw32", "-lwinmm",
-            "-lole32", "-luuid", "-lcurl", "-lwldap32", "-limm32",
-            "dependency/lib/libcurl.a",
-            "dependency/lib/libcurl.dll.a",
-            "dependency/lib/libarchive.a",
-            "dependency/lib/libconfig.dll.a",
-            "dependency/lib/libconfig++.dll.a",
-            "-static"
-          )
-          Write-Host ">>> g++ $($linkArgs -join ' ')"
-          g++ @linkArgs
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Compress-Archive -Path "$env:GITHUB_WORKSPACE\staging\*" -DestinationPath "$env:GITHUB_WORKSPACE\SeewoKiller-Build.zip" -Force
+          Get-Item "$env:GITHUB_WORKSPACE\SeewoKiller-Build.zip" | Select-Object Name, Length
 
-      # 6. 上传产物（不提交、不推送）
+      # 9. 上传 Artifacts (不执行 Commit)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SeewoKiller-exe
-          path: SeewoKiller.exe
-          if-no-files-found: error
+          name: SeewoKiller-Build
+          path: SeewoKiller-Build.zip
+          retention-days: 7
