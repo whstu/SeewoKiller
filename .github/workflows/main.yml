@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    name: Build SeewoKiller
+    name: Build SeewoKiller C++
 
     steps:
       # 1. 检出当前仓库
@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v5
 
       # 2. 下载并安装 MinGW 16.2.0 (x86_64-16.2.0-release-win32-seh-msvcrt-rt_v14-rev1)
-      - name: Download and Setup MinGW 16.2.0
+      - name: 下载并安装 MinGW 16.2.0
         shell: pwsh
         run: |
           $ErrorActionPreference = "Stop"
@@ -56,7 +56,7 @@ jobs:
           & "$mingwBin\windres.exe" --version
 
       # 3. 克隆依赖仓库 (包含 lib/.a/.dll, bin, include)
-      - name: Clone SeewoKiller-BuildDependency
+      - name: 下载依赖
         shell: pwsh
         run: |
           git clone --depth 1 https://github.com/whstu/SeewoKiller-BuildDependency.git "$env:GITHUB_WORKSPACE\BuildDependency"
@@ -78,7 +78,7 @@ jobs:
           }
 
       # 4. 编译目标文件
-      - name: Compile object files
+      - name: 编译主程序
         shell: cmd
         run: |
           cd /d "%GITHUB_WORKSPACE%"
@@ -114,7 +114,7 @@ jobs:
           if errorlevel 1 exit /b 1
 
       # 5. 编译资源文件 (.rc -> .res)
-      - name: Compile resource
+      - name: 编译res文件
         shell: cmd
         run: |
           cd /d "%GITHUB_WORKSPACE%"
@@ -123,7 +123,7 @@ jobs:
 
       # 6. 链接生成可执行文件
       #    注意：-static 静态链接所有库，字符集已在编译阶段通过 -fexec-charset=gbk 控制
-      - name: Link executable
+      - name: 链接生成exe文件
         shell: cmd
         run: |
           cd /d "%GITHUB_WORKSPACE%"
@@ -158,14 +158,14 @@ jobs:
           Get-ChildItem $staging -Recurse | Select-Object FullName
 
       # 8. 将 staging 目录打包为 zip
-      - name: Package to zip
+      - name: 打包
         shell: pwsh
         run: |
           Compress-Archive -Path "$env:GITHUB_WORKSPACE\staging\*" -DestinationPath "$env:GITHUB_WORKSPACE\SeewoKiller-Build.zip" -Force
           Get-Item "$env:GITHUB_WORKSPACE\SeewoKiller-Build.zip" | Select-Object Name, Length
 
       # 9. 上传 Artifacts (不执行 Commit)
-      - name: Upload artifact
+      - name: 上传 artifact
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-Build
