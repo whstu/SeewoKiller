@@ -46,7 +46,7 @@ inline int box = 1/*板块*/, boxn = 4/*板块总数*/;
 inline struct Word {
 	std::vector<std::string> box = {"NULL", "常用", "核心功能", "附加功能", "设置"};
 	std::vector<std::string> recent = {"NULL", "一键解希沃锁屏", "晚自习制裁模式", "连点器(可防屏保)", "小游戏>>>"};
-	std::vector<std::string> all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频", "小游戏>>>", "恶搞>>>", "注册表>>>"};
+	std::vector<std::string> all = {"NULL", "循环清任务(上课防屏保)", "一键卸载", "晚自习制裁模式", "连点器(可防屏保)", "一键解希沃锁屏", "录制视频", "应用占用限制器","小游戏>>>", "恶搞>>>", "注册表>>>"};
 	std::vector<std::string> more = {"NULL", "冰点还原破解", "AI", "计算π"};
 	std::vector<std::string> setting = {
 		"NULL", "退出",
