@@ -3,8 +3,8 @@ cd ".\BuildTools\Inno Setup 编译器\"
 set zipstat1=0 & set zipstat2=0 & set zipstat3=0 & set zipstat4=0
 cd "E:\devc++\DEV\SeewoKiller\installer\"
 
-echo 打包main-with-nothing.tar.gz
-call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_nothing "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-nothing.txt"
+echo 打包SeewoKiller_with_nothing_preview.tar.gz
+call "E:\devc++\DEV\SeewoKiller\!0_工作流_1a_7za打包targz.bat" SeewoKiller_with_nothing_preview "E:\devc++\DEV\SeewoKiller\installer\pack_file_list_main-with-nothing.txt"
 if errorlevel 1 SET zipstat1=1
 
 :echo 打包main-with-gui.tar.gz
