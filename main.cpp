@@ -1,4 +1,4 @@
-bool testmode = true, cmdmode = false;
+bool testmode = false, cmdmode = false;
 /*
 ███████╗███████╗███████╗██╗    ██╗ ██████╗     ██╗  ██╗██╗██╗     ██╗     ███████╗██████╗
 ██╔════╝██╔════╝██╔════╝██║    ██║██╔═══██╗    ██║ ██╔╝██║██║     ██║     ██╔════╝██╔══██╗
@@ -31,7 +31,6 @@ struct About {
 #include "./CameraRec.h"
 #include "./web.h"
 #include "./game.h"
-#include "./exeWatcher.h"
 using namespace GAME;
 
 using namespace std;
@@ -196,7 +195,7 @@ void checkUpdate(bool IsPoweron = false) {
 		}
 		gotoxy(0, 3);
 		//--------
-		cout<<"\n版本更新功能还在测试中，请不要使用\n";
+		cout << "\n版本更新功能还在测试中，请不要使用\n";
 		cout << "\n正在获取版本信息...";
 	}
 	//fetch
@@ -462,7 +461,31 @@ void poweron(bool SkipCheckWinVer, bool fb) {
 	return;
 }
 
-void recovery() {
+void recovery(string type = "") {
+	if (type != "") {
+		cout << type << endl;
+		if (type == "uninstall") {
+			system(".\\procgov.exe --unstall-all");
+			system("rmdir /s /q \".\\seewofreeze\\\"");
+			system("del \".\\ai.exe\"");
+			system("del \".\\gui.exe\"");
+			system("del \".\\pai.exe\"");
+		} else if (type == "factoryreset") {
+			int settings = system("rmdir /s /q \".\\settings\\\"");
+			int rmdir = system("rmdir /s /q \".\\plugin\\\"");
+			prints("删除配置文件", settings);
+			cout << "\n";
+			prints("删除所有插件", rmdir);
+			if (settings == 0 and rmdir == 0) {
+				cout << "\n\n操作已完成。\n";
+			} else {
+				cout << "\n\n操作失败。\n";
+			}
+		} else {
+			cout << "Error.";
+		}
+		return;
+	}
 	cls;
 	gotoxy(0, 3);
 	cout << "   ==希沃克星恢复模式==\n";
@@ -534,8 +557,8 @@ void recovery() {
 					return;
 				}
 			}
-			int settings = system("rmdir /s /q ./settings/");
-			int rmdir = system("rmdir /s /q ./plugin/");
+			int settings = system("rmdir /s /q \".\\settings\\\"");
+			int rmdir = system("rmdir /s /q \".\\plugin\\\"");
 			prints("删除配置文件", settings);
 			cout << "\n";
 			prints("删除所有插件", rmdir);
@@ -816,6 +839,166 @@ void liandianqi() {
 		i++;
 		S(gap);
 	}
+}
+
+void ExeLimitor() {
+	gotoxy(2, 2);
+	cout << "===应用占用限制-配置程序===\n";
+	cout << "这是一个限制应用CPU、物理内存占用的程序。\n";
+	cout << "每当启动你要求的应用时，应用会自动被限制，\n";
+	cout << "而不需要启动希沃克星。\n";
+	cout << "在你要求时，或卸载希沃克星时，这些限制会被移除。\n\n";
+	system("pause");
+	cls;
+	gotoxy(0, 2);
+	cout << "  ";
+	SetColorAndBackground(0, 7);
+	cout << " 选择操作 ";
+	SetColorAndBackground(7, 0);
+	cout << " - 输入数据 - 执行！";
+	cout << "\n\n 选择你想要进行的操作\n\n";
+	cout << "   0 退出\n";
+	cout << "   1 启用对某应用的限制\n";
+	cout << "   2 移除对某应用的限制\n";
+	cout << "   3 移除对所有应用的限制\n";
+	cout << "   10 挂起某个已启动的应用(实验性)\n";
+	cout << "   11 取消挂起某个已启动的应用(实验性)\n";
+	cout << "\n请输入选项(0-3/10/11)";
+	int type;
+	cin >> type;
+	while (cin.fail() or type < 0 or type>11 or (type > 3 && type < 10)) {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "输入错误，请重试:";
+		cin >> type;
+	}
+	if (type == 0) return;
+
+	cls;
+	gotoxy(0, 2);
+	cout << "   选择操作  -";
+	SetColorAndBackground(0, 7);
+	cout << " 输入数据 ";
+	SetColorAndBackground(7, 0);
+	cout << "- 执行！";
+	string exename = "";
+	int cpuRate = -1, cpuCount = -1;
+	LL maxmem = -1, maxjobmem = -1;
+	if (type == 1 or type == 2 or type==10 or type==11) {
+		cout << "\n\n请输入要限制的exe程序(输入路径请用双反斜杠,并加双引号): ";
+		cout << "\n示例: java.exe  \"D:\\\\ClassIsland\\\\ClassIsland.exe\"";
+		gotoxy(28, 4);
+		cin >> exename;
+		if (type == 1) {
+			cout << "\n\n请输入应用运行时限制的cpu核心数(输入-1跳过): \n";
+			cout << "请输入应用运行时限制的cpu占用量(输入-1跳过): \n";
+			cout << " [*] cpu占用量指的是在已限制的cpu核心数内的占用量\n\n";
+			cout << "请输入应用运行时单个线程限制的运行内存(输入-1跳过): \n";
+			cout << "请输入应用运行时所有线程限制的运行内存的总和(输入-1跳过): \n";
+			cout<<" [*] 示例: 10K   4096M   32G";
+
+			gotoxy(23, 7);
+			cin >> cpuCount;
+			while (cin.fail() or cpuCount < -1) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				gotoxy(23, 7);
+				cout << "输入错误，请重试:";
+				cin >> cpuCount;
+			}
+
+			gotoxy(23, 8);
+			cin >> cpuRate;
+			while (cin.fail() or cpuRate < -1) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				gotoxy(23, 8);
+				cout << "输入错误，请重试:";
+				cin >> cpuRate;
+			}
+
+			gotoxy(26, 11);
+			cin >> maxmem;
+			gotoxy(29,12);
+			cin>>maxjobmem;
+		}
+	}
+	cout<<"\n\n";
+
+	string cmd = ".\\procgov.exe";
+	switch (type) {
+		case 1: {
+			cmd=cmd+" --install";
+			if (cpuRate == -1 and cpuCount == -1 and maxmem == -1 and maxjobmem == -1) {
+				cout << "没有设置数据。不需要进行任何操作。\n";
+				break;
+			}
+			if (cpuRate != -1) {
+				/*
+				--cpurate: The maximum CPU rate in % for the process.
+				If you also set the affinity,the rate will apply only to
+				the selected CPU cores. (Windows 8.1+)
+												--From procgov.exe --help
+				*/
+				cmd = cmd + " --cpurate " + to_string(cpuRate);
+			}
+			if (cpuCount != -1) {
+				cmd = cmd + " --cpu " + to_string(cpuCount);
+			}
+			if (maxmem != -1) {
+				cmd = cmd + " --maxmem " + to_string(maxmem);
+			}
+			if (maxjobmem != -1) {
+				/*
+				Max committed memory usage for all the processes in the job.
+				(accepted suffixes: K, M, or G)
+												--From procgov.exe --help
+				*/
+				cmd = cmd + " --maxjobmem " + to_string(maxjobmem);
+			}
+			cmd = cmd + " " + exename;
+			int stat = system(cmd.c_str());
+			cout << "\n";
+			prints("执行限制指令", stat);
+			break;
+		}
+		case 2: {
+			cmd = cmd + " --uninstall " + exename;
+			int stat = system(cmd.c_str());
+			cout << "\n";
+			prints("执行卸载限制指令", stat);
+			break;
+		}
+		case 3: {
+			cmd = cmd + " --uninstall-all";
+			int stat = system(cmd.c_str());
+			cout << "\n";
+			prints("执行卸载限制指令", stat);
+			break;
+		}
+		case 10: {
+			/*
+			Freezes (suspends) the process or
+			group of processes (EXPERIMENTAL).
+					--From procgov.exe --help
+			*/
+			cmd = cmd + " --freeze " + exename;
+			int stat = system(cmd.c_str());
+			cout << "\n";
+			prints("执行挂起指令", stat);
+			break;
+		}
+		case 11: {
+			cmd = cmd + " --thaw " + exename;
+			int stat = system(cmd.c_str());
+			cout << "\n";
+			prints("执行取消挂起指令", stat);
+			break;
+		}
+		default:
+			break;
+	}
+	return;
 }
 
 void help(string name = "seewofreeze") {
@@ -1377,6 +1560,12 @@ struct Launcher {
 				CamRecMain();
 				s = "-1";
 				continue;
+			} else if (s == "应用占用限制器") {
+				cls;
+				ExeLimitor();
+				system("pause");
+				s = "-1";
+				continue;
 			} else if (s == "退出") {
 				return;
 			} else if (s.find("软件更新") != string::npos) {
@@ -1673,7 +1862,7 @@ struct Launcher {
 					cout << "\nApp Name: " << info.AppName << endl;
 					cout << "App Name (EN): " << info.AppNameEn << "\n\n";
 					cout << "Version: " << info.Version << endl;
-					cout << "Version Code: " << info.VersionCode<<" (Build "<<info.VersionCodeFull%1000000<<")" << endl;
+					cout << "Version Code: " << info.VersionCode << " (Build " << info.VersionCodeFull % 1000000 << ")" << endl;
 					cout << "Version Name: " << info.VersionName << "\n\n";
 					cout << "Version Code from Web: " << info.versionCodeWeb[0] << endl;
 					system("pause");
@@ -1763,9 +1952,6 @@ struct Launcher {
 } lc;
 
 int main(int argc, char *argv[]) {
-	ProcessLimiter::WatchAndLimit("java.exe",50,1024);
-	system("pause");
-	return 0;
 	system("title 正在初始化");
 	InitTaskbarInterface();
 	curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -1796,7 +1982,11 @@ int main(int argc, char *argv[]) {
 				fastboot = true;
 			}
 			if (cmd[2] == "recovery") {
-				recovery();
+				if (argc <= 3) {
+					recovery();
+				} else {
+					recovery(cmd[3]);
+				}
 				return 0;
 			}
 		}
