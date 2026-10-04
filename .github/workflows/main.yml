@@ -158,19 +158,16 @@ jobs:
           Get-ChildItem $staging -Recurse | Select-Object FullName
 
       # 7.5 条件复制 7z.exe (仅 main/master 分支加入)
-      - name: 条件复制 7z.exe
+      - name: 条件复制 7z
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.base_ref == 'main' || github.base_ref == 'master'
         shell: pwsh
         run: |
           $staging = "$env:GITHUB_WORKSPACE\staging"
           # 假设 7z.exe 位于仓库根目录，如在不同子目录请调整路径
-          $sevenZipPath = "$env:GITHUB_WORKSPACE\7z.exe"
-          if (Test-Path $sevenZipPath) {
-            Copy-Item $sevenZipPath -Destination $staging -Force
-            Write-Host "7z.exe copied to staging."
-          } else {
-            Write-Error "7z.exe not found at $sevenZipPath"
-          }
+          $sevenZipPath = "$env:GITHUB_WORKSPACE\7za.exe"
+          $procgovPath="$env:GITHUB_WORKSPACE\procgov.exe"
+          Copy-Item $sevenZipPath -Destination $staging -Force
+          Cope-Item $procgovPath -Destination $staging -Force
 
       # 8. 将 staging 目录打包为 zip
       - name: 打包
