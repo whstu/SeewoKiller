@@ -31,6 +31,7 @@ struct About {
 #include "./CameraRec.h"
 #include "./web.h"
 #include "./game.h"
+#include "./exeWatcher.h"
 using namespace GAME;
 
 using namespace std;
@@ -1762,6 +1763,9 @@ struct Launcher {
 } lc;
 
 int main(int argc, char *argv[]) {
+	SetupLimiter("SeewoKiller.exe");
+	system("pause");
+	return 0;
 	system("title 正在初始化");
 	InitTaskbarInterface();
 	curl_global_init(CURL_GLOBAL_DEFAULT);

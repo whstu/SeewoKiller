@@ -18,7 +18,7 @@ inline const GUID IID_ITaskbarList3 = {// 手动定义IID_ITaskbarList3
 	0xea1afb91, 0x9e28, 0x4b86,
 	{0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf}
 };
-//重启explorer.exe
+//重启explorer.exe & exeWatcher.cpp
 #include <tlhelp32.h>
 //注册表修改
 #include <tchar.h>
