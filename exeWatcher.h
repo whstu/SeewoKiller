@@ -2,8 +2,10 @@
 #define EXEWATCHER_H
 
 #include "./main.h"
+#include <atomic>
 
 using namespace std;
+
 namespace ProcessLimiter {
 	bool WatchAndLimit(const wstring& exeName,
 					   DWORD cpuPercent = 50,
