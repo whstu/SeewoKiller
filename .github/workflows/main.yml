@@ -167,7 +167,7 @@ jobs:
           $sevenZipPath = "$env:GITHUB_WORKSPACE\7za.exe"
           $procgovPath="$env:GITHUB_WORKSPACE\procgov.exe"
           Copy-Item $sevenZipPath -Destination $staging -Force
-          Cope-Item $procgovPath -Destination $staging -Force
+          Copy-Item $procgovPath -Destination $staging -Force
 
       # 8. 将 staging 目录打包为 zip
       - name: 打包
