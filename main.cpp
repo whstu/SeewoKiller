@@ -1763,7 +1763,7 @@ struct Launcher {
 } lc;
 
 int main(int argc, char *argv[]) {
-	SetupLimiter("SeewoKiller.exe");
+	ProcessLimiter::WatchAndLimit("java.exe",50,1024);
 	system("pause");
 	return 0;
 	system("title 正在初始化");
