@@ -272,7 +272,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -284,7 +284,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -292,7 +292,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
 
 
@@ -383,7 +383,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -395,7 +395,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -403,7 +403,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
 
 
@@ -495,7 +495,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -507,7 +507,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -515,7 +515,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
 
 
@@ -608,7 +608,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -620,7 +620,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -628,7 +628,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
 
 
@@ -723,7 +723,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -735,7 +735,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -743,7 +743,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
 
 
@@ -838,7 +838,7 @@ jobs:
         shell: cmd
         run: |
           cd /d "%TARGET_DIR%"
-          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "$env:ISS_FILENAME"
+          "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "%ISS_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 7. 使用 signtool 签名
@@ -850,7 +850,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\$env:OUT_FILENAME"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\%OUT_FILENAME%"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -858,5 +858,5 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\installer\$env:OUT_FILENAME
+          path: E:\devc++\DEV\SeewoKiller\installer\${{ env.OUT_FILENAME }}
           retention-days: 7
