@@ -257,7 +257,8 @@ jobs:
           Copy-Item "$repo\procgov.exe"       $dst -Force
           Copy-Item "$repo\!Licence.txt"      $dst -Force
           Copy-Item "$repo\installer\main-custom.iss" $dst -Force
-          mkdir "$dst\icon\"
+
+          New-Item -ItemType Directory -Path "$dst\icon" -Force | Out-Null
           Copy-Item "$repo\icon\seewokiller-icon-20260725.bmp" "$dst\icon\seewokiller-icon-20260725.bmp" -Force
 
       # 6. 使用 Inno Setup 编译 main-custom.iss
