@@ -254,7 +254,7 @@ jobs:
           Copy-Item "$repo\pai.exe"           $dst -Force
           Copy-Item "$repo\7za.exe"           $dst -Force
           Copy-Item "$repo\procgov.exe"       $dst -Force
-          Copy-Item "$repo\!Licence.exe"      $dst -Force
+          Copy-Item "$repo\!Licence.txt"      $dst -Force
           Copy-Item "$repo\installer\main-custom.iss" $dst -Force
 
       # 6. 使用 Inno Setup 编译 main-custom.iss
