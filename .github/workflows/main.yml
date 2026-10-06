@@ -183,3 +183,89 @@ jobs:
           name: SeewoKiller-Build
           path: SeewoKiller-Build.zip
           retention-days: 7
+
+
+  build-setup-custom:
+    runs-on: windows-latest
+    name: Build setup-custom.exe
+    needs: build
+
+    steps:
+      # 1. 下载并解包第一个 job 的 artifact
+      - name: 下载 artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: SeewoKiller-Build
+          path: ${{ github.workspace }}\artifact-download
+
+      - name: 解包 artifact 到工作区根目录
+        shell: pwsh
+        run: |
+          $zipPath = "${{ github.workspace }}\artifact-download\SeewoKiller-Build.zip"
+          if (-not (Test-Path $zipPath)) {
+            # 若 artifact 直接解包为文件而非 zip，则直接复制
+            $items = Get-ChildItem "${{ github.workspace }}\artifact-download" -File
+            if ($items.Count -eq 1 -and $items[0].Extension -eq '.zip') {
+              $zipPath = $items[0].FullName
+            } else {
+              # 否则假设 artifact 已解包，直接复制内容
+              Copy-Item "${{ github.workspace }}\artifact-download\*" "${{ github.workspace }}" -Recurse -Force
+              exit 0
+            }
+          }
+          Expand-Archive -Path $zipPath -DestinationPath "${{ github.workspace }}" -Force
+
+      # 2. 克隆 whstu/SeewoKiller 仓库 (根据当前分支自动选择)
+      - name: 克隆 SeewoKiller 仓库
+        shell: pwsh
+        run: |
+          $branch = "${{ github.ref_name }}"
+          $target = "${{ github.workspace }}\SeewoKillerRepo"
+          git clone --depth 1 --branch $branch https://github.com/whstu/SeewoKiller.git $target
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "分支 $branch 克隆失败，回退到 main 分支"
+            git clone --depth 1 --branch main https://github.com/whstu/SeewoKiller.git $target
+          }
+
+      # 3. 复制所需文件到工作区根目录
+      - name: 复制必要文件
+        shell: pwsh
+        run: |
+          $repo = "${{ github.workspace }}\SeewoKillerRepo"
+          $dst  = "${{ github.workspace }}"
+          Copy-Item "$repo\ai.exe"          $dst -Force
+          Copy-Item "$repo\gui.exe"         $dst -Force
+          Copy-Item "$repo\RunAsFastboot.exe" $dst -Force
+          Copy-Item "$repo\SeewoFreeze"     $dst -Recurse -Force
+          Copy-Item "$repo\pai.exe"         $dst -Force
+          Copy-Item "$repo\7za.exe"         $dst -Force
+          Copy-Item "$repo\procgov.exe"     $dst -Force
+          Copy-Item "$repo\installer\main-custom.iss" $dst -Force
+
+      # 4. 使用 Inno Setup 编译 main-custom.iss
+      - name: 编译 Inno Setup 脚本
+        shell: cmd
+        run: |
+          cd /d "%GITHUB_WORKSPACE%"
+          ".\SeewoKillerRepo\BuildTools\Inno Setup 编译器\ISCC.exe" "main-custom.iss"
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+
+      # 5. 使用 signtool 签名
+      - name: 签名 SeewoKiller_custom.exe
+        shell: cmd
+        run: |
+          cd /d "%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\signtool"
+          set PFX=%GITHUB_WORKSPACE%\SeewoKillerRepo\BuildTools\signtool\sign-password114514.pfx
+          set PASS=114514
+          set TIMESTAMP=http://timestamp.digicert.com
+          set ALG=SHA512
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%GITHUB_WORKSPACE%\SeewoKiller_custom.exe"
+          if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+
+      # 6. 上传 artifact
+      - name: 上传 SeewoKiller_custom.exe
+        uses: actions/upload-artifact@v6
+        with:
+          name: SeewoKiller-custom
+          path: SeewoKiller_custom.exe
+          retention-days: 7

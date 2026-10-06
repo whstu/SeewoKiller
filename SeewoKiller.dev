@@ -65,7 +65,7 @@ SyncProduct = 1
 
 
 [Unit1]
-FileName = web.h
+FileName = game.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -74,12 +74,12 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 UseUTF8 = 1
-FileEncoding = PROJECT
+FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
 [Unit4]
-FileName = CameraRec.cpp
+FileName = game.cpp
 Folder = 
 Compile = 1
 Link = 1
@@ -93,7 +93,7 @@ RealEncoding = UTF-8
 
 
 [Unit2]
-FileName = CameraRec.h
+FileName = files.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -106,7 +106,7 @@ RealEncoding = UTF-8
 
 
 [Unit3]
-FileName = main.h
+FileName = SplashScreen.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -119,20 +119,20 @@ RealEncoding = UTF-8
 
 
 [Unit5]
-FileName = SeewoKiller_private.h
-CompileCpp = 0
+FileName = main.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = SYSTEM
-RealEncoding = gbk
+FileEncoding = UTF-8
+RealEncoding = UTF-8
 
 
 [Unit6]
-FileName = .spl_WHSTU_Rainbow.cpp
+FileName = files.cpp
 CompileCpp = 1
 Folder = 
 Compile = 1
@@ -145,16 +145,16 @@ RealEncoding = UTF-8
 
 
 [Unit7]
-FileName = cmdCtrl.cpp
-CompileCpp = 1
+FileName = SeewoKiller_private.h
+CompileCpp = 0
 Folder = 
-Compile = 1
-Link = 1
+Compile = 0
+Link = 0
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
+FileEncoding = SYSTEM
+RealEncoding = gbk
 
 
 [Unit8]
@@ -171,11 +171,11 @@ RealEncoding = UTF-8
 
 
 [Unit9]
-FileName = game.h
-CompileCpp = 0
+FileName = .spl_WHSTU_Rainbow.cpp
+CompileCpp = 1
 Folder = 
-Compile = 0
-Link = 0
+Compile = 1
+Link = 1
 Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
@@ -184,58 +184,6 @@ RealEncoding = UTF-8
 
 
 [Unit10]
-FileName = exeWatcher.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = ASCII
-
-
-[Unit11]
-FileName = game.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit12]
-FileName = web.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = PROJECT
-RealEncoding = UTF-8
-
-
-[Unit13]
-FileName = files.h
-CompileCpp = 0
-Folder = 
-Compile = 0
-Link = 0
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit14]
 FileName = cmdCtrl.h
 CompileCpp = 0
 Folder = 
@@ -248,34 +196,8 @@ FileEncoding = UTF-8
 RealEncoding = UTF-8
 
 
-[Unit15]
-FileName = main.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit16]
-FileName = files.cpp
-CompileCpp = 1
-Folder = 
-Compile = 1
-Link = 1
-Priority = 1000
-OverrideBuildCmd = 0
-BuildCmd = 
-FileEncoding = UTF-8
-RealEncoding = UTF-8
-
-
-[Unit17]
-FileName = SplashScreen.h
+[Unit11]
+FileName = main.h
 CompileCpp = 0
 Folder = 
 Compile = 0
@@ -284,6 +206,84 @@ Priority = 1000
 OverrideBuildCmd = 0
 BuildCmd = 
 FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit12]
+FileName = cmdCtrl.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit13]
+FileName = exeWatcher.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit14]
+FileName = CameraRec.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit15]
+FileName = CameraRec.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = UTF-8
+RealEncoding = UTF-8
+
+
+[Unit16]
+FileName = web.h
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
+
+[Unit17]
+FileName = web.cpp
+CompileCpp = 1
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
 RealEncoding = UTF-8
 
 

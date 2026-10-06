@@ -36,23 +36,22 @@
         "top": 0
     },
     {
-        "caretX": 16,
-        "caretY": 2008,
+        "caretX": 25,
+        "caretY": 931,
         "filename": "E:/devc++/DEV/SeewoKiller/main.cpp",
-        "focused": false,
+        "focused": true,
         "isOpen": true,
         "left": 0,
         "order": 2,
-        "top": 80120
+        "top": 36960
     },
     {
         "caretX": 1,
         "caretY": 201,
         "filename": "E:/devc++/DEV/SeewoKiller/files.cpp",
-        "focused": true,
-        "isOpen": true,
+        "focused": false,
+        "isOpen": false,
         "left": 0,
-        "order": 3,
         "top": 10160
     },
     {
