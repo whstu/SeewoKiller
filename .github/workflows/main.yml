@@ -231,7 +231,8 @@ jobs:
       - name: 克隆 SeewoKiller 仓库
         shell: pwsh
         run: |
-          $branch = "${{ github.ref_name }}"
+          # $branch = "${{ github.ref_name }}"
+          $branch = "dev"
           $repo = "${{ github.workspace }}\SeewoKillerRepo"
           git clone --depth 1 --branch $branch https://github.com/whstu/SeewoKiller.git $repo
           if ($LASTEXITCODE -ne 0) {
