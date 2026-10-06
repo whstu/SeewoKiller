@@ -1,6 +1,5 @@
 \!logo.png
 \!logo2.png
-.bin
 .SeewoFreeze/
 .settings/
 .log/
@@ -8,10 +7,8 @@
 !install.txt
 .xwbb/
 .备份/
-LICENSE
 clabel_friends_badge.png
 .idea/
-\!Licence.txt
 \!install.txt
 pygui/ai.py
 desktop.ini
