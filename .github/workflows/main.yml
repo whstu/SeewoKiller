@@ -194,7 +194,7 @@ jobs:
 
     steps:
       # 1. 创建目标目录并将 E 盘映射到 D 盘，使 E:\devc++\DEV\SeewoKiller 可用
-      - name: 准备目标目录并映射 E 盘
+      - name: 准备目标目录并映射 E:\
         shell: pwsh
         run: |
           if (Test-Path "E:\") { subst E: /D }
@@ -245,6 +245,8 @@ jobs:
         run: |
           $repo = "${{ github.workspace }}\SeewoKillerRepo"
           $dst  = $env:TARGET_DIR
+          Copy-Item "$repo\app.ico"           $dst -Force
+          Copy-Item "$repo\seewokiller2.png"  $dst -Force
           Copy-Item "$repo\ai.exe"            $dst -Force
           Copy-Item "$repo\gui.exe"           $dst -Force
           Copy-Item "$repo\RunAsFastboot.exe" $dst -Force
@@ -252,6 +254,7 @@ jobs:
           Copy-Item "$repo\pai.exe"           $dst -Force
           Copy-Item "$repo\7za.exe"           $dst -Force
           Copy-Item "$repo\procgov.exe"       $dst -Force
+          Copy-Item "$repo\!Licence.exe"      $dst -Force
           Copy-Item "$repo\installer\main-custom.iss" $dst -Force
 
       # 6. 使用 Inno Setup 编译 main-custom.iss
