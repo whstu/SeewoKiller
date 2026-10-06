@@ -185,6 +185,8 @@ jobs:
           retention-days: 7
 
 
+# ===================================================================================================
+
   build-setup-custom:
     runs-on: windows-latest
     name: Build setup-custom.exe
@@ -261,6 +263,8 @@ jobs:
           New-Item -ItemType Directory -Path "$dst\icon" -Force | Out-Null
           Copy-Item "$repo\icon\seewokiller-icon-20260725.bmp" "$dst\icon\seewokiller-icon-20260725.bmp" -Force
 
+          New-Item -ItemType Directory -Path "$dst\installer" -Force | Out-Null
+
       # 6. 使用 Inno Setup 编译 main-custom.iss
       - name: 编译 Inno Setup 脚本
         shell: cmd
@@ -278,7 +282,7 @@ jobs:
           set PASS=114514
           set TIMESTAMP=http://timestamp.digicert.com
           set ALG=SHA512
-          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\SeewoKiller_custom.exe"
+          .\signtool.exe sign /f "%PFX%" /p %PASS% /t %TIMESTAMP% /fd %ALG% /v "%TARGET_DIR%\installer\SeewoKiller_custom.exe"
           if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
       # 8. 上传 SeewoKiller_custom.exe 到 artifacts
@@ -286,5 +290,5 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SeewoKiller-custom
-          path: E:\devc++\DEV\SeewoKiller\SeewoKiller_custom.exe
+          path: E:\devc++\DEV\SeewoKiller\installer\SeewoKiller_custom.exe
           retention-days: 7
