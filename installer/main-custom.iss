@@ -34,7 +34,7 @@ SetupIconFile=E:\devc++\DEV\SeewoKiller\app.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern dynamic windows11
-WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\icon\seewokiller-icon-beta-55x58.bmp"
+WizardSmallImageFile="E:\devc++\DEV\SeewoKiller\icon\seewokiller-icon-20260725.bmp"
 
 [Languages]
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"

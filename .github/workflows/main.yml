@@ -257,6 +257,7 @@ jobs:
           Copy-Item "$repo\procgov.exe"       $dst -Force
           Copy-Item "$repo\!Licence.txt"      $dst -Force
           Copy-Item "$repo\installer\main-custom.iss" $dst -Force
+          Copy-Item "$repo\icon\seewokiller-icon-20260725.bmp" "$dst\icon\seewokiller-icon-20260725.bmp" -Force
 
       # 6. 使用 Inno Setup 编译 main-custom.iss
       - name: 编译 Inno Setup 脚本
