@@ -208,7 +208,7 @@ jobs:
 
       # 2. 下载第一个 job 的 artifact
       - name: 下载 artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8.0.1
         with:
           name: SeewoKiller-Build
           path: ${{ github.workspace }}\artifact-download
