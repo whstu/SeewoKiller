@@ -1,0 +1,6 @@
+你好！欢迎使用希沃克星。想要使用希沃克星，你必须同意以下协议。
+I am your father.
+
+本软件是由WHSTU开发的免费软件SeewoKiller。
+SeewoKiller仓库地址：https://github.com/whstu/SeewoKiller
+本软件不包含任何病毒、木马或劫持内容，请放心使用！
